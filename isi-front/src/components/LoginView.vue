@@ -9,7 +9,7 @@
                         </v-card-title>
                         <v-form>
                             <v-text-field prepend-icon="person" name="Username" label="Имя пользователя"
-                                          v-model="email"
+                                          v-model="name"
                             ></v-text-field>
                             <v-text-field prepend-icon="email" name="Email" label="E@mail"
                                           v-model="email"
