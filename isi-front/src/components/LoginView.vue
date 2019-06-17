@@ -11,9 +11,9 @@
                             <v-text-field prepend-icon="person" name="Username" label="Имя пользователя"
                                           v-model="name"
                             ></v-text-field>
-                            <v-text-field prepend-icon="email" name="Email" label="E@mail"
-                                          v-model="email"
-                            ></v-text-field>
+<!--                            <v-text-field prepend-icon="email" name="Email" label="E@mail"-->
+<!--                                          v-model="email"-->
+<!--                            ></v-text-field>-->
                             <v-text-field prepend-icon="lock" name="Password" label="Пароль" type="password"
                                           v-model="password"
                             ></v-text-field>
@@ -37,7 +37,7 @@
         }),
         methods: {
             logIn () {
-                this.$store.dispatch('logIn', {email: this.email, password: this.password})
+                this.$store.dispatch('logIn', {name: this.name, password: this.password})
                     .then(() => {
                         this.$router.push('/home')
                     })

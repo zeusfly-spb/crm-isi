@@ -16,7 +16,7 @@ export const store = new Vuex.Store({
         logIn ({commit, dispatch}, query) {
             return new Promise ((resolve, reject) => {
                 commit('SET_STATUS', 'request')
-                Vue.axios.post('/api/login', {email: query.email, password: query.password})
+                Vue.axios.post('/api/login', {name: query.name, password: query.password})
                     .then(res => {
                         let token = res.data.success.token
                         Cookies.set('isi-token', token)
