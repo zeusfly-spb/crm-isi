@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        authUser: null
+        authUser: null,
+        accountingDate: null
     },
     actions: {
         logOut ({commit}) {
@@ -34,13 +35,33 @@ export const store = new Vuex.Store({
             Vue.axios.post('/api/details')
                 .then(res => commit('SET_AUTH_USER', res.data.success))
                 .catch(e => commit('AUTH_LOGOUT'))
+        },
+        setAccountingDate ({commit}) {
+            let savedDate = Cookies.get('accounting_date')
+            if (savedDate) {
+                commit('SET_ACCOUNTING_DATE', savedDate)
+            } else {
+                Vue.axios.post('/api/get_accounting_date')
+                    .then(res => commit('SET_ACCOUNTING_DATE', res.data.date))
+                    .catch(e => {
+                        console.error(e)
+                    })
+            }
+        },
+        changeAccountingDate ({commit}, date) {
+            Cookies.set('accounting_date', date)
+            commit('SET_ACCOUNTING_DATE', date)
         }
     },
     mutations: {
+        SET_ACCOUNTING_DATE (state, date) {
+            state.accountingDate = date
+        },
         SET_STATUS (state, status) {
             state.status = status
         },
         AUTH_LOGOUT (state) {
+            Cookies.remove('accounting_date')
             Cookies.remove('isi-token')
             delete Vue.axios.defaults.headers.common['Authorization']
             state.authUser = null
@@ -52,7 +73,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
-        isAuth: state => state.status === 'success',
+        isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null
     }
 })

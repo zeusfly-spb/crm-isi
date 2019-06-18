@@ -1,7 +1,6 @@
 <template>
     <div>
         Личный кабинет {{ user && user.name || ''}}
-        <button @click="logOut">Выход</button>
     </div>
 </template>
 <script>

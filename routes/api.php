@@ -18,6 +18,8 @@ Route::post('register', 'API\UserController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
+    Route::post('get_accounting_date', 'API\AccountingController@getAccountingDate');
+    Route::post('set_accounting_date', 'API\AccountingController@setAccountingDate');
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {

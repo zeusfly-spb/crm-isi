@@ -6,9 +6,26 @@ import './plugins/vuetify'
 import App from './App.vue'
 
 import {store} from './store'
+
 import {createRouter} from './router'
 const router = createRouter()
 
+import VeeValidate from 'vee-validate';
+import VeeValidate_RU from 'vee-validate/dist/locale/ru';
+Vue.use(VeeValidate, {
+    locale:     'ru',
+    dictionary: {
+        ru: VeeValidate_RU,
+    },
+});
+
+import 'moment/locale/ru';
+import moment from 'moment';
+moment.locale('ru');
+import VueMoment from 'vue-moment';
+Vue.use(VueMoment, {
+    moment,
+});
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -34,7 +51,10 @@ const token = Cookies.get('isi-token')
 if (token) {
     Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
     store.dispatch('setAuthUser')
-        .then(() => router.push('/home'))
+        .then(() => {
+            store.dispatch('setAccountingDate')
+            router.push('/home')
+        })
 } else {
     store.dispatch('logOut')
         .then(() => router.push('/login'))

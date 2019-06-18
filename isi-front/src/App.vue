@@ -3,16 +3,19 @@
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Островки</span>
-<!--        <span class="font-weight-light">MATERIAL DESIGN</span>-->
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Новая версия</span>
-      </v-btn>
+        <date-selector v-if="isAuth"/>
+
+<!--      <v-spacer></v-spacer>-->
+
+    <v-btn v-if="isAuth" flat
+           @click="logOut"
+           title="Выход"
+    >
+        Выход &nbsp;
+        <v-icon large color="orange darken-2">exit_to_app</v-icon>
+    </v-btn>
+
     </v-toolbar>
 
     <v-content>
@@ -22,17 +25,35 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import DateSelector from './components/DateSelector'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  },
-  data () {
-    return {
-      //
+    name: 'App',
+    data () {
+        return {
+          //
+        }
+    },
+    computed: {
+      isAuth () {
+          return this.$store.getters.isAuth
+      },
+      authUser () {
+          return this.$store.state.authUser
+      },
+      accountingDate () {
+          return this.$store.state.accountingDate
+      }
+
+    },
+    methods: {
+        logOut () {
+            this.$store.dispatch('logOut')
+            this.$router.push('/login')
+        }
+    },
+    components: {
+        DateSelector
     }
-  }
 }
 </script>
