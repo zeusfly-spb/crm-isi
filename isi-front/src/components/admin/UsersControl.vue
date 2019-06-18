@@ -43,11 +43,11 @@
 
         <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="addUser">Новый сотрудник</v-btn>
             </template>
             <v-card>
                 <v-card-title>
-                    <span class="headline">Редактировать сотрудника</span>
+                    <span class="headline">{{ {add: 'Добавить', edit: 'Редактировать'}[mode] }} сотрудника</span>
                 </v-card-title>
 
                 <v-card-text>
@@ -75,6 +75,7 @@
 <script>
     export default {
         data: () => ({
+            mode: '',
             editedUser: {
                 name: ''
             },
@@ -127,7 +128,12 @@
         },
         methods: {
             editUser (user) {
+                this.mode = 'edit'
                 this.editedUser = user
+                this.dialog = true
+            },
+            addUser () {
+                this.mode = 'add'
                 this.dialog = true
             }
         }
