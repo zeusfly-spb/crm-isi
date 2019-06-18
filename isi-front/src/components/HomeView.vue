@@ -1,12 +1,27 @@
 <template>
-    <div>
-        Личный кабинет {{ user && user.name || ''}}
-    </div>
+    <v-flex align-center row>
+        <v-tabs fixed-tabs>
+            <v-tab
+                v-for="(item, index) in tabs"
+                :key="index"
+            >
+                {{ item }}
+            </v-tab>
+            <v-tab-item
+                v-for="(item, index) in tabs"
+                :key="index"
+            >
+                <admin-panel v-if="index === 4"></admin-panel>
+            </v-tab-item>
+        </v-tabs>
+    </v-flex>
 </template>
 <script>
+    import AdminPanel from './admin/AdminPanel'
     export default {
+        name: 'HomeView',
         data: () => ({
-            data: null
+            tabs: ['Учет на день', 'База клиентов', 'Стельки', 'Зарплата', 'Администрирование']
         }),
         computed: {
             user () {
@@ -14,19 +29,13 @@
             }
         },
         methods: {
-            getData () {
-                this.axios.post('/api/details')
-                    .then(res => this.data = res.data.success)
-                    .catch(e => console.dir(e))
-            },
-            logOut () {
-                this.$store.dispatch('logOut')
-                this.$router.push('/login')
-            }
+
         },
         mounted () {
-            this.getData()
             console.log('Я дома ))')
+        },
+        components: {
+            AdminPanel
         }
     }
 </script>
