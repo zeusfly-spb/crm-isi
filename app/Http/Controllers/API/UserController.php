@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -62,5 +63,10 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], $this-> successStatus);
+    }
+
+    public function getUsers()
+    {
+        return response()->json(User::get()->toArray());
     }
 }

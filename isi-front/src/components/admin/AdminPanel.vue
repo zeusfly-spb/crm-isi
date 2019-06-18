@@ -1,7 +1,7 @@
 <template>
-    <v-app>
-        <v-tabs fixed-tab
-                slider-color="red"
+    <v-flex>
+        <v-tabs
+            slider-color="red"
         >
             <v-tab
                 v-for="item in sections"
@@ -13,13 +13,15 @@
                 v-for="item in sections"
                 :key="item.id"
             >
-                
+                <users-control v-if="item.id === 1"></users-control>
             </v-tab-item>
         </v-tabs>
-    </v-app>
+    </v-flex>
+
 </template>
 
 <script>
+    import UsersControl from './UsersControl'
     export default {
         name: 'AdminPanel',
         data: () => ({
@@ -30,6 +32,14 @@
                 {id: 4, label: 'Доступы'},
             ],
             activeSection: 1
-        })
+        }),
+        computed: {
+            users () {
+                return this.$store.state.users
+            }
+        },
+        components: {
+            UsersControl
+        }
     }
 </script>

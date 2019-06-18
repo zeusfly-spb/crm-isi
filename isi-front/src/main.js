@@ -53,6 +53,7 @@ if (token) {
     store.dispatch('setAuthUser')
         .then(() => {
             store.dispatch('setAccountingDate')
+            store.dispatch('setUsers')
             router.push('/home')
         })
 } else {

@@ -8,9 +8,14 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         authUser: null,
-        accountingDate: null
+        accountingDate: null,
+        users: []
     },
     actions: {
+        setUsers ({commit}) {
+             Vue.axios.post('/api/get_users')
+                 .then(res => commit('SET_USERS', res.data))
+        },
         logOut ({commit}) {
             commit('AUTH_LOGOUT')
         },
@@ -54,6 +59,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_USERS (state, users) {
+            state.users = users
+        },
         SET_ACCOUNTING_DATE (state, date) {
             state.accountingDate = date
         },

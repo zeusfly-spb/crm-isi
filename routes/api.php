@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
     Route::post('get_accounting_date', 'API\AccountingController@getAccountingDate');
     Route::post('set_accounting_date', 'API\AccountingController@setAccountingDate');
+    Route::post('get_users', 'API\UserController@getUsers');
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
