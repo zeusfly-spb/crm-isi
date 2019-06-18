@@ -69,4 +69,11 @@ class UserController extends Controller
     {
         return response()->json(User::get()->toArray());
     }
+
+    public function saveUser(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->update($request->all());
+        return $user;
+    }
 }
