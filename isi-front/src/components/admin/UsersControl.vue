@@ -54,7 +54,7 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" dark class="mb-2" @click="addUser">Новый сотрудник</v-btn>
             </template>
@@ -150,8 +150,8 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="blue darken-1" flat @click="saveUser(editedUser)">Сохранить</v-btn>
+                    <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="saveUser(editedUser)">Сохранить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

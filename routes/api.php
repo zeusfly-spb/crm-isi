@@ -25,9 +25,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_user', 'API\UserController@deleteUser');
     // GROUPS
     Route::post('get_groups', 'GroupController@all');
+    Route::post('create_group', 'GroupController@create');
+    Route::post('update_group', 'GroupController@update');
+    Route::post('delete_group', 'GroupController@delete');
 
 });
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});

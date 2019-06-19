@@ -13,9 +13,43 @@ export const store = new Vuex.Store({
         groups: []
     },
     actions: {
+        deleteGroup ({commit}, id) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_group', {id: id})
+                    .then(res => {
+                        if (res.data.result) {
+                            commit('DELETE_GROUP', id)
+                            resolve(res)
+                        }
+                        reject({error: 'Ошибка удаления группы'})
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        updateGroup ({commit}, group) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_group', {...group})
+                    .then(res => {
+                        commit('UPDATE_GROUP', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addGroup ({commit}, group) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_group', {...group})
+                    .then(res => {
+                        commit('ADD_GROUP', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setGroups ({commit}) {
             Vue.axios.post('/api/get_groups')
                 .then(res => commit('SET_GROUPS', res.data))
+                .catch(e => console.error(e))
         },
         deleteUser ({commit}, id) {
             return new Promise((resolve, reject) => {
@@ -105,6 +139,15 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        DELETE_GROUP (state, id) {
+            state.groups = state.groups.filter(group => group.id !== id)
+        },
+        UPDATE_GROUP (state, group) {
+            state.groups = state.groups.map(item => item.id === group.id ? group : item)
+        },
+        ADD_GROUP (state, group) {
+            state.groups.push(group)
+        },
         SET_GROUPS (state, groups) {
             state.groups = groups
         },
