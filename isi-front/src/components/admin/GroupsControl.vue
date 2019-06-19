@@ -20,7 +20,7 @@
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.description }}</td>
-                <td>Сотрудники</td>
+                <td><group-users-column :users="props.item.users"/></td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+    import GroupUsersColumn from './GroupUsersColumn'
     export default {
         name: 'GroupsControl',
         data: () => ({
@@ -216,6 +217,12 @@
         },
         created () {
             this.resetGroup()
+        },
+        mounted () {
+            this.$store.dispatch('setGroups')
+        },
+        components: {
+            GroupUsersColumn
         }
     }
 </script>

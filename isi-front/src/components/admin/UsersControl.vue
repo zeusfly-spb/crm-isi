@@ -28,7 +28,7 @@
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
                 <td>{{ props.item.phone }}</td>
                 <td>{{ props.item.island_id }}</td>
-                <td>{{ props.item.group_id }}</td>
+                <td>{{ groupName(props.item.group_id) }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -112,7 +112,6 @@
                                 <v-text-field v-model="editedUser.patronymic" label="Отчество"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-<!--                                <v-text-field v-model="editedUser.birth_date" label="Дата рождения"></v-text-field>-->
                                 <v-menu
                                     :close-on-content-click="false"
                                     :nudge-right="40"
@@ -262,9 +261,16 @@
         computed: {
             users () {
                 return this.$store.state.users
+            },
+            groups () {
+                return this.$store.state.groups
             }
         },
         methods: {
+            groupName (id) {
+                let group = this.groups.find(group => group.id === id)
+                return group && group.name || ' - '
+            },
             deleteUser () {
                 this.$store.dispatch('deleteUser', this.toDeleteUserId)
                     .then(() => {

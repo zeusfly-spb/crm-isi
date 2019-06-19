@@ -62,7 +62,6 @@ export const store = new Vuex.Store({
                     })
                     .catch(e => reject(e))
             })
-
         },
         updateUser ({commit}, user) {
             return new Promise((resolve, reject) => {

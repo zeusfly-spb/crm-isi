@@ -23,7 +23,7 @@ const routes = [
     {
         path: '/home',
         component: HomeView,
-        meta: {title: 'Личный кабинет', auth: true}
+        meta: {title: '', auth: true}
     },
 ]
 
@@ -32,7 +32,7 @@ export function createRouter() {
         routes
     })
     router.beforeEach((to, from, next) => {
-        document.title = to.meta.title + ' - ОСТРОВКИ'
+        document.title = to.meta.title + ' ОСТРОВКИ'
         next()
     })
     return router

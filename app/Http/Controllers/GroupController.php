@@ -40,6 +40,6 @@ class GroupController extends Controller
 
     public function all()
     {
-        return response()->json(Group::get()->toArray()) ;
+        return response()->json(Group::with('users')->get()->toArray()) ;
     }
 }

@@ -18,9 +18,6 @@ class User extends Authenticatable
      *
      * @var array
      */
-//    protected $fillable = [
-//        'name', 'email', 'password',
-//    ];
 
     protected $guarded = [];
     /**
@@ -32,11 +29,20 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    protected $appends = [
+        'full_name'
+    ];
+
+    public function getFullNameAttribute()
+    {
+        return collect([
+            $this->last_name,
+            $this->first_name,
+            $this->patronymic,
+        ])->filter(static function($str) {
+            return mb_strlen($str) > 0;
+        })->implode(' ');
+    }
 
     public static function getUserByNameAndPassword($name, $password)
     {
@@ -47,5 +53,10 @@ class User extends Authenticatable
             }
         }
         return null;
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

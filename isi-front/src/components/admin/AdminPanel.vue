@@ -2,6 +2,7 @@
     <v-flex>
         <v-tabs
             slider-color="red"
+            @change="loadTabContent"
         >
             <v-tab
                 v-for="item in sections"
@@ -39,6 +40,16 @@
         computed: {
             users () {
                 return this.$store.state.users
+            }
+        },
+        methods: {
+            loadTabContent (index) {
+                switch (index) {
+                    case 0: this.$store.dispatch('setUsers')
+                        break
+                    case 1: this.$store.dispatch('setGroups')
+                        break
+                }
             }
         },
         components: {

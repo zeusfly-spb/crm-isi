@@ -103,7 +103,7 @@ class UserController extends Controller
             $user->update(['password' => bcrypt($request->password)]);
         }
 
-        $user->update(Arr::except($request->all(), ['password', 'c_password']));
+        $user->update(Arr::except($request->all(), ['password', 'c_password', 'full_name']));
         return $user;
     }
 
