@@ -65,6 +65,17 @@
 
                 <v-card-text>
                     <v-container grid-list-md>
+                        <v-flex xs12 sm6 md4>
+                            <v-select
+                                label="Группа"
+                                v-model="editedUser.group_id"
+                                :items="groups"
+                                item-text="name"
+                                item-value="id"
+                                single-line
+                            >
+                            </v-select>
+                        </v-flex>
                         <v-layout wrap>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.name"
@@ -156,29 +167,28 @@
         </v-dialog>
 
         <v-dialog v-model="confirm"
-                  max-width="290"
+                  max-width="500"
         >
             <v-card>
-                <v-card-title>
-                    <v-card-title class="subheading">
-                        {{ confirmText }}
-                    </v-card-title>
-                    <v-card-actions>
-                        <v-btn
-                            flat="flat"
-                            @click="confirm = false"
-                        >
-                            Отмена
-                        </v-btn>
-                        <v-btn
-                            color="red darken-1"
-                            flat="flat"
-                            @click="deleteUser"
-                        >
-                            Удалить
-                        </v-btn>
-                    </v-card-actions>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
                 </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteUser"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
             </v-card>
 
         </v-dialog>
@@ -281,7 +291,7 @@
             },
             showDeleteConfirm (user) {
                 this.toDeleteUserId = user.id
-                this.confirmText = `Удалить сотрудника ${user.first_name}?`
+                this.confirmText = `Удалить сотрудника ${user.full_name}?`
                 this.confirm = true
             },
             showSuccess (text) {

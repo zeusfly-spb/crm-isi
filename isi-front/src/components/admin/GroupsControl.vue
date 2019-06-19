@@ -91,26 +91,25 @@
                   max-width="290"
         >
             <v-card>
-                <v-card-title>
-                    <v-card-title class="subheading">
-                        {{ confirmText }}
-                    </v-card-title>
-                    <v-card-actions>
-                        <v-btn
-                            flat="flat"
-                            @click="confirm = false"
-                        >
-                            Отмена
-                        </v-btn>
-                        <v-btn
-                            color="red darken-1"
-                            flat="flat"
-                            @click="deleteGroup"
-                        >
-                            Удалить
-                        </v-btn>
-                    </v-card-actions>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
                 </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteGroup"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
             </v-card>
 
         </v-dialog>
