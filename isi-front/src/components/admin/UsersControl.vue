@@ -9,7 +9,7 @@
             :timeout="3000"
             :color="snackColor"
         >
-            {{ errorText }}
+            <span>{{ errorText }}</span>
         </v-snackbar>
 
         <v-data-table

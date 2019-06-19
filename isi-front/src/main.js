@@ -54,6 +54,8 @@ if (token) {
         .then(() => {
             store.dispatch('setAccountingDate')
             store.dispatch('setUsers')
+            store.dispatch('setGroups')
+
             router.push('/home')
         })
 } else {

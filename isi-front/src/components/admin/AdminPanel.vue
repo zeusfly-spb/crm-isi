@@ -14,6 +14,7 @@
                 :key="item.id"
             >
                 <users-control v-if="item.id === 1"></users-control>
+                <groups-control v-if="item.id === 2"></groups-control>
             </v-tab-item>
         </v-tabs>
     </v-flex>
@@ -22,6 +23,8 @@
 
 <script>
     import UsersControl from './UsersControl'
+    import GroupsControl from './GroupsControl'
+
     export default {
         name: 'AdminPanel',
         data: () => ({
@@ -39,7 +42,8 @@
             }
         },
         components: {
-            UsersControl
+            UsersControl,
+            GroupsControl
         }
     }
 </script>

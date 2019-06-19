@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Group;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class GroupController extends Controller
+{
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+        $group = Group::create($request->all());
+        return response()->json($group->toArray());
+    }
+
+    public function all()
+    {
+        return response()->json(Group::get()->toArray()) ;
+    }
+}

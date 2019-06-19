@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_users', 'API\UserController@getUsers');
     Route::post('save_user', 'API\UserController@saveUser');
     Route::post('delete_user', 'API\UserController@deleteUser');
+    // GROUPS
+    Route::post('get_groups', 'GroupController@all');
+
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -9,9 +9,14 @@ export const store = new Vuex.Store({
     state: {
         authUser: null,
         accountingDate: null,
-        users: []
+        users: [],
+        groups: []
     },
     actions: {
+        setGroups ({commit}) {
+            Vue.axios.post('/api/get_groups')
+                .then(res => commit('SET_GROUPS', res.data))
+        },
         deleteUser ({commit}, id) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_user', {id: id})
@@ -100,6 +105,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_GROUPS (state, groups) {
+            state.groups = groups
+        },
         DELETE_USER (state, id) {
             state.users = state.users.filter(user => user.id !== id)
         },
