@@ -2,6 +2,16 @@
     <v-flex
         align-center
     >
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            vertical
+            top
+            :timeout="3000"
+            color="red"
+        >
+            {{ errorText }}
+        </v-snackbar>
         <v-data-table
             :headers="headers"
             :items="users"
@@ -60,10 +70,12 @@
                                 <v-text-field v-model="editedUser.name" label="Логин"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.password" label="Пароль"></v-text-field>
+                                <v-text-field v-model="editedUser.password" label="Пароль" type="password"
+                                ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.c_password" label="Повторите пароль"></v-text-field>
+                                <v-text-field v-model="editedUser.c_password" label="Повторите пароль" type="password"
+                                ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.last_name" label="Фамилия"></v-text-field>
@@ -125,6 +137,7 @@
 <script>
     export default {
         data: () => ({
+            errorText: '',
             menu: false,
             date: '',
             mode: '',
@@ -142,6 +155,7 @@
                 group_id: '',
                 island_id: ''
             },
+            snackbar: false,
             dialog: false,
             headers: [
                 {
@@ -194,24 +208,33 @@
             }
         },
         methods: {
+            showError (text) {
+                this.errorText = text
+                this.snackbar = true
+            },
             datePicked (date) {
                 this.editedUser.birth_date = new Date(date).toISOString().split('T')[0]
                 this.menu = false
             },
             saveUser (user) {
                 if (this.mode === 'edit') {
-                    // this.axios.post('/api/save_user', {...user})
-                    //     .then(res => {
-                    //         this.dialog = false
-                    //     })
-                    //     .catch(e => console.error(e.data))
                     this.$store.dispatch('updateUser', user)
                         .then(() => this.dialog = false)
-                        .catch(e => console.error(e))
+                        .catch(e => {
+                            if (e.error) {
+                                this.showError(e.error)
+                            }
+                            console.error(e)
+                        })
                 } else {
                     this.$store.dispatch('addUser', user)
                         .then(() => this.dialog = false)
-                        .catch(e => console.error(e))
+                        .catch(e => {
+                            if (e.error) {
+                                this.showError(e.error)
+                            }
+                            console.error(e)
+                        })
                 }
             },
             editUser (user) {

@@ -16,6 +16,9 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/save_user', {...user})
                     .then(res => {
+                        if (res.data.error) {
+                            reject(res.data)
+                        }
                         commit('UPDATE_USER', res.data)
                         resolve(res)
                     })
@@ -26,11 +29,13 @@ export const store = new Vuex.Store({
             return new Promise ((resolve, reject) => {
                 Vue.axios.post('/api/register', {...user})
                     .then(res => {
+                        if (res.data.error) {
+                            reject(res.data)
+                        }
                         commit('ADD_USER', res.data.success.user)
                         resolve(res)
                     })
                     .catch(e => {
-                        console.error(e.data)
                         reject(e)
                     })
             })

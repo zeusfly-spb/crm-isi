@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
@@ -55,6 +56,14 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+
+        $users = User::where('name', $request->name)->get();
+        foreach ($users as $user) {
+            if (Hash::check($request->password, $user->password)) {
+                return response()->json(['error' => 'Пользователь с такими данными уже зарегистрирован  ']);
+            }
+        }
+
         $input = Arr::except($request->all(), ['c_password']);
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -83,7 +92,18 @@ class UserController extends Controller
     public function saveUser(Request $request)
     {
         $user = User::find($request->id);
-        $user->update($request->all());
+
+        if ($request->password && $request->c_password && $request->password === $request->c_password) {
+            $users = User::where('name', $request->name)->get();
+            foreach ($users as $user) {
+                if (Hash::check($request->password, $user->password)) {
+                    return response()->json(['error' => 'Пользователь с такими данными уже зарегистрирован  ']);
+                }
+            }
+            $user->update(['password' => bcrypt($request->password)]);
+        }
+
+        $user->update(Arr::except($request->all(), ['password', 'c_password']));
         return $user;
     }
 
