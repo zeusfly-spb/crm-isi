@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('set_accounting_date', 'API\AccountingController@setAccountingDate');
     Route::post('get_users', 'API\UserController@getUsers');
     Route::post('save_user', 'API\UserController@saveUser');
+    Route::post('delete_user', 'API\UserController@deleteUser');
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {

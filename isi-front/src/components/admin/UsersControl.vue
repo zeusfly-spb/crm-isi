@@ -5,13 +5,13 @@
         <v-snackbar
             v-model="snackbar"
             auto-height
-            vertical
             top
             :timeout="3000"
-            color="red"
+            :color="snackColor"
         >
             {{ errorText }}
         </v-snackbar>
+
         <v-data-table
             :headers="headers"
             :items="users"
@@ -41,7 +41,7 @@
                     <v-icon
                         class="red--text"
                         small
-                        @click=""
+                        @click="showDeleteConfirm(props.item)"
                         title="Удалить"
                     >
                         delete
@@ -67,21 +67,46 @@
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.name" label="Логин"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.password" label="Пароль" type="password"
+                                <v-text-field v-model="editedUser.name"
+                                              label="Логин"
+                                              data-vv-as="Логин"
+                                              data-vv-name="name"
+                                              :error-messages="errors.collect('name')"
+                                              v-validate="mode === 'add' ? 'required|max:10' : null"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.c_password" label="Повторите пароль" type="password"
+                                <v-text-field v-model="editedUser.password"
+                                              label="Пароль"
+                                              type="password"
+                                              data-vv-as="Пароль"
+                                              data-vv-name="password"
+                                              :error-messages="errors.collect('password')"
+                                              v-validate="mode === 'add' ? 'required' : null"
+                                              ref="password"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <v-text-field v-model="editedUser.c_password"
+                                              label="Повторите пароль"
+                                              type="password"
+                                              data-vv-as="Подтверждение пароля"
+                                              data-vv-name="password_confirm"
+                                              :error-messages="errors.collect('password_confirm')"
+                                              v-validate="mode === 'add' ? 'required|confirmed:password' : null"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.last_name" label="Фамилия"></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.first_name" label="Имя"></v-text-field>
+                                <v-text-field v-model="editedUser.first_name"
+                                              label="Имя"
+                                              data-vv-as="Имя"
+                                              data-vv-name="first_name"
+                                              :error-messages="errors.collect('first_name')"
+                                              v-validate="'required'"
+                                ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.patronymic" label="Отчество"></v-text-field>
@@ -131,12 +156,44 @@
             </v-card>
         </v-dialog>
 
+        <v-dialog v-model="confirm"
+                  max-width="290"
+        >
+            <v-card>
+                <v-card-title>
+                    <v-card-title class="subheading">
+                        {{ confirmText }}
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-btn
+                            flat="flat"
+                            @click="confirm = false"
+                        >
+                            Отмена
+                        </v-btn>
+                        <v-btn
+                            color="red darken-1"
+                            flat="flat"
+                            @click="deleteUser"
+                        >
+                            Удалить
+                        </v-btn>
+                    </v-card-actions>
+                </v-card-title>
+            </v-card>
+
+        </v-dialog>
+
     </v-flex>
 </template>
 
 <script>
     export default {
         data: () => ({
+            toDeleteUserId: null,
+            confirmText: '',
+            confirm: false,
+            snackColor: 'green',
             errorText: '',
             menu: false,
             date: '',
@@ -208,7 +265,26 @@
             }
         },
         methods: {
+            deleteUser () {
+                this.$store.dispatch('deleteUser', this.toDeleteUserId)
+                    .then(() => {
+                        this.confirm = false
+                        this.showSuccess('Пользователь удален')
+                    })
+                    .catch(e => console.error(e))
+            },
+            showDeleteConfirm (user) {
+                this.toDeleteUserId = user.id
+                this.confirmText = `Удалить сотрудника ${user.first_name}?`
+                this.confirm = true
+            },
+            showSuccess (text) {
+                this.snackColor = 'green'
+                this.errorText = text
+                this.snackbar = true
+            },
             showError (text) {
+                this.snackColor = 'red'
                 this.errorText = text
                 this.snackbar = true
             },
@@ -219,7 +295,10 @@
             saveUser (user) {
                 if (this.mode === 'edit') {
                     this.$store.dispatch('updateUser', user)
-                        .then(() => this.dialog = false)
+                        .then(() => {
+                            this.dialog = false
+                            this.showSuccess('Данные пользователя обновлены')
+                        })
                         .catch(e => {
                             if (e.error) {
                                 this.showError(e.error)
@@ -227,29 +306,39 @@
                             console.error(e)
                         })
                 } else {
-                    this.$store.dispatch('addUser', user)
-                        .then(() => this.dialog = false)
-                        .catch(e => {
-                            if (e.error) {
-                                this.showError(e.error)
+                    this.$validator.validate()
+                        .then(res => {
+                            if (res) {
+                                this.$store.dispatch('addUser', user)
+                                    .then(() => {
+                                        this.dialog = false
+                                        this.showSuccess('Пользователь добавлен')
+                                    })
+                                    .catch(e => {
+                                        if (e.error) {
+                                            this.showError(e.error)
+                                        }
+                                        console.error(e)
+                                    })
                             }
-                            console.error(e)
                         })
                 }
             },
             editUser (user) {
+                this.errors.clear()
                 this.mode = 'edit'
                 this.editedUser = JSON.parse(JSON.stringify(user))
                 this.dialog = true
             },
             addUser () {
-                this.editedUser = this.defaultUser
+                this.errors.clear()
+                this.editedUser = JSON.parse(JSON.stringify(this.defaultUser))
                 this.mode = 'add'
                 this.dialog = true
             }
         },
         created () {
-            this.editedUser = this.defaultUser
+            this.editedUser = JSON.parse(JSON.stringify(this.defaultUser))
         }
 
     }

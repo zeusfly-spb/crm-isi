@@ -107,4 +107,9 @@ class UserController extends Controller
         return $user;
     }
 
+    public function deleteUser(Request $request)
+    {
+        return response()->json(['result' => User::destroy($request->id)]);
+    }
+
 }
