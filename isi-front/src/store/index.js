@@ -12,6 +12,29 @@ export const store = new Vuex.Store({
         users: []
     },
     actions: {
+        updateUser ({commit}, user) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/save_user', {...user})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addUser ({commit}, user) {
+            return new Promise ((resolve, reject) => {
+                Vue.axios.post('/api/register', {...user})
+                    .then(res => {
+                        commit('ADD_USER', res.data.success.user)
+                        resolve(res)
+                    })
+                    .catch(e => {
+                        console.error(e.data)
+                        reject(e)
+                    })
+            })
+        },
         setUsers ({commit}) {
              Vue.axios.post('/api/get_users')
                  .then(res => commit('SET_USERS', res.data))
@@ -59,6 +82,12 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_USER (state, user) {
+            state.users = state.users.map(item => item.id === user.id ? user : item)
+        },
+        ADD_USER (state, user) {
+            state.users.push(user)
+        },
         SET_USERS (state, users) {
             state.users = users
         },

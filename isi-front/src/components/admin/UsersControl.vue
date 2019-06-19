@@ -24,6 +24,7 @@
                         small
                         class="mr-2 green--text"
                         @click="editUser(props.item)"
+                        title="Редактировать"
                     >
                         edit
                     </v-icon>
@@ -31,6 +32,7 @@
                         class="red--text"
                         small
                         @click=""
+                        title="Удалить"
                     >
                         delete
                     </v-icon>
@@ -197,11 +199,20 @@
                 this.menu = false
             },
             saveUser (user) {
-                this.axios.post('/api/save_user', {...user})
-                    .then(res => {
-                        this.dialog = false
-                    })
-                    .catch(e => console.error(e.data))
+                if (this.mode === 'edit') {
+                    // this.axios.post('/api/save_user', {...user})
+                    //     .then(res => {
+                    //         this.dialog = false
+                    //     })
+                    //     .catch(e => console.error(e.data))
+                    this.$store.dispatch('updateUser', user)
+                        .then(() => this.dialog = false)
+                        .catch(e => console.error(e))
+                } else {
+                    this.$store.dispatch('addUser', user)
+                        .then(() => this.dialog = false)
+                        .catch(e => console.error(e))
+                }
             },
             editUser (user) {
                 this.mode = 'edit'

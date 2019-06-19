@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 use Illuminate\Notifications\Notifiable;
@@ -36,7 +37,15 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+
+    public static function getUserByNameAndPassword($name, $password)
+    {
+        $users = self::where('name', $name)->get();
+        foreach ($users as $user) {
+            if (Hash::check($password, $user->password)) {
+                return $user;
+            }
+        }
+        return null;
+    }
 }
