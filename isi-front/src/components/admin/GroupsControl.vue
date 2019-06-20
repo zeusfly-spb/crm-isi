@@ -48,7 +48,7 @@
 
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" @click="showAddDialog">
+                <v-btn flat color="primary" dark class="mb-2" @click="showAddDialog">
                     Новая группа
                 </v-btn>
             </template>
@@ -174,17 +174,20 @@
                 this.snackbar = true
             },
             submitForm () {
+                let request = JSON.parse(JSON.stringify(this.editedGroup))
+                delete(request.users)
+
                 this.$validator.validate()
                     .then(res => {
                         if (res) {
                             if (this.mode === 'add') {
-                                this.$store.dispatch('addGroup', this.editedGroup)
+                                this.$store.dispatch('addGroup', request)
                                     .then(() => {
                                         this.dialog = false
                                         this.showSuccess('Новая группа создана')
                                     })
                             } else {
-                                this.$store.dispatch('updateGroup', this.editedGroup)
+                                this.$store.dispatch('updateGroup', request)
                                     .then(() => {
                                         this.dialog = false
                                         this.showSuccess('Группа обновлена')

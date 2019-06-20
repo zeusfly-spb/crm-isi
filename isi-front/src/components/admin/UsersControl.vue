@@ -62,7 +62,7 @@
 
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" @click="addUser">Новый сотрудник</v-btn>
+                <v-btn color="primary" flat dark class="mb-2" @click="addUser">Новый сотрудник</v-btn>
             </template>
             <v-card>
                 <v-card-title>
@@ -334,9 +334,6 @@
             },
             groupName (id) {
                 let group = this.groups.find(group => +group.id === +id)
-                console.dir(this.groups)
-                console.dir(id)
-                console.dir(group)
                 return group && group.name || ' - '
             },
             deleteUser () {

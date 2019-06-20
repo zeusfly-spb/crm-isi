@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
@@ -34,6 +35,7 @@ class GroupController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+        $input = Arr::except($request->all(), ['users']);
         $group = Group::create($request->all());
         return response()->json($group->toArray());
     }
