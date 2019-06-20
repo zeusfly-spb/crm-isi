@@ -79,7 +79,7 @@ export const store = new Vuex.Store({
         },
         addUser ({commit}, user) {
             return new Promise ((resolve, reject) => {
-                Vue.axios.post('/api/register', {...user})
+                Vue.axios.post('/api/register', user)
                     .then(res => {
                         if (res.data.error) {
                             reject(res.data)

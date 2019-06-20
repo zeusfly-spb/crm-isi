@@ -66,6 +66,15 @@ class UserController extends Controller
         }
 
         $input = Arr::except($request->all(), ['c_password']);
+
+        if ($request->hasFile('avatar')) {
+            $fileName = 'avatar_' . $request->id;
+            $request->file('avatar')->storeAs(
+                'public/avatars', $fileName
+            );
+            $input['avatar'] = '/storage/avatars/' . $fileName;
+        }
+
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')-> accessToken;

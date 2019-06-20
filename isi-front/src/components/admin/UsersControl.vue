@@ -19,7 +19,13 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <td>{{ props.item.id }}</td>
+                <td>
+                    <v-avatar
+                        size="36px"
+                    >
+                        <img :src="basePath + props.item.avatar" alt="Аватар">
+                    </v-avatar>
+                </td>
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.last_name }}</td>
@@ -148,7 +154,8 @@
 
                             <v-flex xs12 sm6 md8>
                                 <img
-                                    :src="editedUser.avatar && `${basePath}${editedUser.avatar}` || `${basePath}/img/default.jpg`"
+                                    v-if="editedUser.avatar"
+                                    :src="basePath + editedUser.avatar"
                                     :alt="'Нет фото'"
                                     width="150px"
                                     style="cursor: pointer"
@@ -156,6 +163,18 @@
                                     ref="avatarPhoto"
                                     title="Изменить фото"
                                 />
+                                <img
+                                    v-else
+                                    :src="`${basePath}/img/default.jpg`"
+                                    :alt="'Нет фото'"
+                                    width="150px"
+                                    style="cursor: pointer"
+                                    @click="$refs.avatarInput.click()"
+                                    ref="avatarPhoto"
+                                    title="Изменить фото"
+                                />
+
+
                                 <br>
                                 <sup>Фото</sup>
                                 <input type="file"
@@ -248,7 +267,7 @@
                 phone: '',
                 group_id: '',
                 island_id: '',
-                avatar: ''
+                avatar: null
             },
             snackbar: false,
             dialog: false,
@@ -314,7 +333,10 @@
                 this.avatarFileReader.readAsDataURL(this.$refs.avatarInput.files[0])
             },
             groupName (id) {
-                let group = this.groups.find(group => group.id === id)
+                let group = this.groups.find(group => +group.id === +id)
+                console.dir(this.groups)
+                console.dir(id)
+                console.dir(group)
                 return group && group.name || ' - '
             },
             deleteUser () {
@@ -345,13 +367,14 @@
                 this.menu = false
             },
             saveUser (user) {
-                if (this.mode === 'edit') {
-                    let data = new FormData
-                    for (let key in user) {
-                        if (user[key]){
-                            data.append(key, user[key])
-                        }
+                let data = new FormData
+                for (let key in user) {
+                    if (user[key]){
+                        data.append(key, user[key])
                     }
+                }
+                if (this.mode === 'edit') {
+
                     this.$store.dispatch('updateUser', data)
                         .then(() => {
                             this.dialog = false
@@ -368,7 +391,7 @@
                         .then(res => {
                             if (res) {
 
-                                this.$store.dispatch('addUser', user)
+                                this.$store.dispatch('addUser', data)
                                     .then(() => {
                                         this.dialog = false
                                         this.showSuccess('Пользователь добавлен')
@@ -384,14 +407,13 @@
                 }
             },
             editUser (user) {
-                this.$refs.avatarPhoto.src = ''
                 this.errors.clear()
                 this.mode = 'edit'
+                user = {... user, group_id: + user.group_id}
                 this.editedUser = JSON.parse(JSON.stringify(user))
                 this.dialog = true
             },
             addUser () {
-                this.$refs.avatarPhoto.src = ''
                 this.errors.clear()
                 this.editedUser = JSON.parse(JSON.stringify(this.defaultUser))
                 this.mode = 'add'
