@@ -66,8 +66,8 @@
                 <v-card-text>
                     <v-container grid-list-md>
                         <v-flex xs12 sm6 md4>
+                            <sub>Группа</sub>
                             <v-select
-                                label="Группа"
                                 v-model="editedUser.group_id"
                                 :items="groups"
                                 item-text="name"
@@ -146,6 +146,8 @@
                                     >
                                     </v-date-picker>
                                 </v-menu>
+                                <sup>Дата рождения </sup>
+
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.phone" label="Телефон"></v-text-field>
