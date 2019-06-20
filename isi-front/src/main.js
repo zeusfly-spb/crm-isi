@@ -52,6 +52,7 @@ if (token) {
     Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
     store.dispatch('setAuthUser')
         .then(() => {
+            store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
             store.dispatch('setAccountingDate')
             store.dispatch('setUsers')
             store.dispatch('setGroups')

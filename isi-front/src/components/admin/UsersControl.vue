@@ -65,18 +65,8 @@
 
                 <v-card-text>
                     <v-container grid-list-md>
-                        <v-flex xs12 sm6 md4>
-                            <sub>Группа</sub>
-                            <v-select
-                                v-model="editedUser.group_id"
-                                :items="groups"
-                                item-text="name"
-                                item-value="id"
-                                single-line
-                            >
-                            </v-select>
-                        </v-flex>
                         <v-layout wrap>
+
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.name"
                                               label="Логин"
@@ -156,6 +146,41 @@
                                 <v-text-field v-model="editedUser.address" label="Адрес"></v-text-field>
                             </v-flex>
 
+                            <v-flex xs12 sm6 md8>
+                                <img
+                                    :src="editedUser.avatar && `${basePath}${editedUser.avatar}` || `${basePath}/img/default.jpg`"
+                                    :alt="'Нет фото'"
+                                    width="150px"
+                                    style="cursor: pointer"
+                                    @click="$refs.avatarInput.click()"
+                                    ref="avatarPhoto"
+                                    title="Изменить фото"
+                                />
+                                <br>
+                                <sup>Фото</sup>
+                                <input type="file"
+                                       name="avatar"
+                                       ref="avatarInput"
+                                       accept="image/*"
+                                       @change="loadAvatar"
+                                       style="display: none"
+                                >
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Группа</sub>
+                                <v-select
+                                    v-model="editedUser.group_id"
+                                    :items="groups"
+                                    item-text="name"
+                                    item-value="id"
+                                    single-line
+                                    data-vv-name="group"
+                                    data-vv-as="Группа"
+                                    :error-messages="errors.collect('group')"
+                                    v-validate="'required'"
+                                >
+                                </v-select>
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -201,6 +226,7 @@
 <script>
     export default {
         data: () => ({
+            avatarFileReader: {},
             toDeleteUserId: null,
             confirmText: '',
             confirm: false,
@@ -221,7 +247,8 @@
                 address: '',
                 phone: '',
                 group_id: '',
-                island_id: ''
+                island_id: '',
+                avatar: ''
             },
             snackbar: false,
             dialog: false,
@@ -271,6 +298,9 @@
             ]
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             users () {
                 return this.$store.state.users
             },
@@ -279,6 +309,10 @@
             }
         },
         methods: {
+            loadAvatar () {
+                this.editedUser.avatar = this.$refs.avatarInput.files[0]
+                this.avatarFileReader.readAsDataURL(this.$refs.avatarInput.files[0])
+            },
             groupName (id) {
                 let group = this.groups.find(group => group.id === id)
                 return group && group.name || ' - '
@@ -312,7 +346,13 @@
             },
             saveUser (user) {
                 if (this.mode === 'edit') {
-                    this.$store.dispatch('updateUser', user)
+                    let data = new FormData
+                    for (let key in user) {
+                        if (user[key]){
+                            data.append(key, user[key])
+                        }
+                    }
+                    this.$store.dispatch('updateUser', data)
                         .then(() => {
                             this.dialog = false
                             this.showSuccess('Данные пользователя обновлены')
@@ -327,6 +367,7 @@
                     this.$validator.validate()
                         .then(res => {
                             if (res) {
+
                                 this.$store.dispatch('addUser', user)
                                     .then(() => {
                                         this.dialog = false
@@ -343,12 +384,14 @@
                 }
             },
             editUser (user) {
+                this.$refs.avatarPhoto.src = ''
                 this.errors.clear()
                 this.mode = 'edit'
                 this.editedUser = JSON.parse(JSON.stringify(user))
                 this.dialog = true
             },
             addUser () {
+                this.$refs.avatarPhoto.src = ''
                 this.errors.clear()
                 this.editedUser = JSON.parse(JSON.stringify(this.defaultUser))
                 this.mode = 'add'
@@ -357,6 +400,11 @@
         },
         created () {
             this.editedUser = JSON.parse(JSON.stringify(this.defaultUser))
+
+            this.avatarFileReader = new FileReader()
+            this.avatarFileReader.onload = (e)=> {
+                this.$refs.avatarPhoto.src = e.target.result
+            }
         }
 
     }

@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
+        basePath: '',
         authUser: null,
         accountingDate: null,
         users: [],
@@ -65,7 +66,7 @@ export const store = new Vuex.Store({
         },
         updateUser ({commit}, user) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/save_user', {...user})
+                Vue.axios.post('/api/save_user', user)
                     .then(res => {
                         if (res.data.error) {
                             reject(res.data)
@@ -138,6 +139,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_BASE_PATH (state, path) {
+            state.basePath = path
+        },
         DELETE_GROUP (state, id) {
             state.groups = state.groups.filter(group => group.id !== id)
         },

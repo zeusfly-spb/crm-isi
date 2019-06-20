@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
@@ -92,6 +93,7 @@ class UserController extends Controller
     public function saveUser(Request $request)
     {
         $user = User::find($request->id);
+        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name']);
 
         if ($request->password && $request->c_password && $request->password === $request->c_password) {
             $users = User::where('name', $request->name)->get();
@@ -103,7 +105,15 @@ class UserController extends Controller
             $user->update(['password' => bcrypt($request->password)]);
         }
 
-        $user->update(Arr::except($request->all(), ['password', 'c_password', 'full_name']));
+        if ($request->hasFile('avatar')) {
+            $fileName = 'avatar_' . $request->id;
+            $request->file('avatar')->storeAs(
+                'public/avatars', $fileName
+            );
+            $input['avatar'] = '/storage/avatars/' . $fileName;
+        }
+
+        $user->update($input);
         return $user;
     }
 
