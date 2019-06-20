@@ -49,7 +49,7 @@
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
                 <v-btn flat color="primary" dark class="mb-2" @click="showAddDialog">
-                    Новая группа
+                    Добавить группу
                 </v-btn>
             </template>
             <v-card>

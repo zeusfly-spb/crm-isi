@@ -23,7 +23,8 @@
                     <v-avatar
                         size="36px"
                     >
-                        <img :src="basePath + props.item.avatar" alt="Аватар">
+                        <img :src="basePath + props.item.avatar" alt="Фото" v-if="props.item.avatar">
+                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
                     </v-avatar>
                 </td>
                 <td>{{ props.item.name }}</td>
@@ -32,7 +33,7 @@
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.patronymic }}</td>
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
-                <td>{{ props.item.phone }}</td>
+                <td><span v-if="props.item.phone && props.item.phone.length === 10">{{ props.item.phone | phone }}</span></td>
                 <td>{{ props.item.island_id }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
                 <td class="justify-center layout px-0">
@@ -62,7 +63,7 @@
 
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="addUser">Новый сотрудник</v-btn>
+                <v-btn color="primary" flat dark class="mb-2" @click="addUser">Добавить сотрудника</v-btn>
             </template>
             <v-card>
                 <v-card-title>
@@ -146,7 +147,15 @@
 
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.phone" label="Телефон"></v-text-field>
+                                <v-text-field
+                                    v-model="editedUser.phone"
+                                    label="Телефон"
+                                    data-vv-as="Номер телефона"
+                                    data-vv-name="phone"
+                                    :error-messages="errors.collect('phone')"
+                                    v-validate="'min:10|max:10'"
+                                    mask="(###) ### - ####"
+                                ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.address" label="Адрес"></v-text-field>
@@ -366,7 +375,7 @@
             saveUser (user) {
                 let data = new FormData
                 for (let key in user) {
-                    if (user[key]){
+                    if (user[key] || key === 'phone'){
                         data.append(key, user[key])
                     }
                 }
@@ -423,6 +432,12 @@
             this.avatarFileReader = new FileReader()
             this.avatarFileReader.onload = (e)=> {
                 this.$refs.avatarPhoto.src = e.target.result
+            }
+        },
+        filters: {
+            phone: function (val) {
+                return '+7 ' + val.replace(/[^0-9]/g, '')
+                    .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
             }
         }
 
