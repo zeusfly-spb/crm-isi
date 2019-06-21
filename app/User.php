@@ -33,6 +33,10 @@ class User extends Authenticatable
         'full_name'
     ];
 
+    protected $casts = [
+        'is_superadmin' => 'boolean'
+    ];
+
     public function getFullNameAttribute()
     {
         return collect([
