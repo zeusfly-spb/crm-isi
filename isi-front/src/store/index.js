@@ -167,7 +167,7 @@ export const store = new Vuex.Store({
             state.accessRequests = accesses
         },
         SET_DEVICE_ID (state, deviceId) {
-            console.log('Setting cookue ' + deviceId)
+            console.log('Setting cookie ' + deviceId)
             Cookies.set('isi-access', deviceId)
         },
         SET_ACCESS (state, access) {
@@ -221,6 +221,6 @@ export const store = new Vuex.Store({
     getters: {
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
-        isAllowed: state => !!state.authUser && state.authUser.is_superadmin || state.status === 'allowed'
+        isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed')
     }
 })
