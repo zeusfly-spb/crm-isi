@@ -1,5 +1,14 @@
 <template>
         <v-layout align-center justify-center row fill-height>
+            <v-snackbar
+                v-model="snackbar"
+                auto-height
+                top
+                :timeout="3000"
+                :color="snackColor"
+            >
+                <span>{{ snackText }}</span>
+            </v-snackbar>
 
             <v-flex xs12 md3 class="grey lighten-4">
                 <v-container class="text-xs-center">
@@ -38,21 +47,43 @@
 <script>
     export default {
         data: () => ({
+            snackbar: false,
+            snackColor: 'red',
+            snackText: 'Ошибка авторизации! Проверьте правильность учетных данных.',
             name: '',
             email: '',
             password: ''
         }),
         methods: {
+            showError () {
+                this.snackbar = true
+            },
             logIn () {
                 this.$validator.validate()
                     .then((valid) => {
                         if (!valid) return
                         this.$store.dispatch('logIn', {name: this.name, password: this.password})
                             .then(() => {
-                                this.$store.dispatch('setAccountingDate')
-                                this.$router.push('/home')
+                                this.$store.dispatch('setAuthUser')
+                                    .then(() => {
+                                        if (this.$store.getters.isAllowed) {
+                                            this.$store.dispatch('setAccountingDate')
+                                            this.$store.dispatch('setUsers')
+                                            this.$store.dispatch('setGroups')
+
+                                            this.$router.push('/home')
+                                        } else {
+                                            this.$store.dispatch('checkAccess')
+
+                                            this.$router.push('/access')
+                                        }
+                                    })
+
                             })
-                            .catch(() => this.email = this.password = '')
+                            .catch(() => {
+                                this.showError()
+                                this.email = this.password = ''
+                            })
                     })
 
             }

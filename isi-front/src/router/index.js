@@ -5,6 +5,7 @@ import {store} from '../store'
 const RegisterView = require('../components/RegisterView.vue').default
 const LoginView = require('../components/LoginView.vue').default
 const HomeView = require('../components/HomeView.vue').default
+const AccessView = require('../components/AccessView.vue').default
 
 
 Vue.use(VueRouter)
@@ -25,6 +26,11 @@ const routes = [
         component: HomeView,
         meta: {title: '', auth: true}
     },
+    {
+        path: '/access',
+        component: AccessView,
+        meta: {title: 'Доступы'}
+    }
 ]
 
 export function createRouter() {
@@ -37,3 +43,4 @@ export function createRouter() {
     })
     return router
 }
+

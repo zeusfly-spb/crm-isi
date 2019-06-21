@@ -11,9 +11,20 @@ export const store = new Vuex.Store({
         authUser: null,
         accountingDate: null,
         users: [],
-        groups: []
+        groups: [],
+        access: null
     },
     actions: {
+        checkAccess: async function ({commit}) {
+            let exists = Cookies.get('isi-access')
+            if (!exists) {
+                commit('SET_ACCESS', 'none')
+            } else {
+                let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
+                commit('SET_ACCESS', res.data.status)
+
+            }
+        },
         deleteGroup ({commit}, id) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_group', {id: id})
@@ -117,9 +128,18 @@ export const store = new Vuex.Store({
             })
         },
         setAuthUser ({commit}) {
-            Vue.axios.post('/api/details')
-                .then(res => commit('SET_AUTH_USER', res.data.success))
-                .catch(e => commit('AUTH_LOGOUT'))
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/details')
+                    .then(res => {
+                        commit('SET_AUTH_USER', res.data.success)
+                        resolve(res)
+                    })
+                    .catch(e => {
+                        commit('AUTH_LOGOUT')
+                        reject(e)
+                    })
+            })
+
         },
         setAccountingDate ({commit}) {
             let savedDate = Cookies.get('accounting_date')
@@ -139,6 +159,13 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_DEVICE_ID (state, deviceId) {
+            console.log('Setting cookue ' + deviceId)
+            Cookies.set('isi-access', deviceId)
+        },
+        SET_ACCESS (state, access) {
+            state.access = access
+        },
         SET_BASE_PATH (state, path) {
             state.basePath = path
         },
@@ -186,6 +213,7 @@ export const store = new Vuex.Store({
     },
     getters: {
         isAuth: state => !!state.authUser,
-        token: () => Cookies.get('isi-token') || null
+        token: () => Cookies.get('isi-token') || null,
+        isAllowed: state => !!state.authUser && state.authUser.is_superadmin
     }
 })

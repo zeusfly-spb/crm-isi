@@ -50,14 +50,22 @@ Vue.axios.interceptors.response.use(
 const token = Cookies.get('isi-token')
 if (token) {
     Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
+
     store.dispatch('setAuthUser')
         .then(() => {
-            store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
-            store.dispatch('setAccountingDate')
-            store.dispatch('setUsers')
-            store.dispatch('setGroups')
 
-            router.push('/home')
+            if (store.getters.isAllowed) {
+                store.dispatch('setAccountingDate')
+                store.dispatch('setUsers')
+                store.dispatch('setGroups')
+
+                router.push('/home')
+            } else {
+                store.dispatch('checkAccess')
+                router.push('/access')
+            }
+
         })
 } else {
     store.dispatch('logOut')
