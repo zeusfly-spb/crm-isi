@@ -71,10 +71,11 @@
                                                 this.$store.dispatch('setAccountingDate')
                                                 this.$store.dispatch('setUsers')
                                                 this.$store.dispatch('setGroups')
+                                                this.$store.dispatch('setIslands')
 
                                                 this.$router.push('/home')
                                             } else {
-                                                this.$store.dispatch('checkAccess')
+//                                                this.$store.dispatch('checkAccess')
 
                                                 this.$router.push('/access')
                                             }

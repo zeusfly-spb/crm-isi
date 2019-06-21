@@ -30,10 +30,14 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_group', 'GroupController@update');
     Route::post('delete_group', 'GroupController@delete');
 
-    //ACCESSES
+    // ACCESSES
     Route::post('create_access_request', 'AccessController@create');
     Route::post('check_access_status', 'AccessController@getAccessStatus');
     Route::post('get_accesses', 'AccessController@getAllAccesses');
     Route::post('set_access_status', 'AccessController@setStatus');
+
+    // ISLANDS
+    Route::post('get_islands', 'IslandController@getAll');
+    Route::post('create_island', 'IslandController@create');
 
 });

@@ -17,6 +17,8 @@
                 <users-control v-if="item.id === 1"></users-control>
                 <groups-control v-if="item.id === 2"></groups-control>
                 <accesses-control v-if="item.id === 4"></accesses-control>
+                <islands-control v-if="item.id === 3"></islands-control>
+
             </v-tab-item>
         </v-tabs>
     </v-flex>
@@ -27,6 +29,7 @@
     import UsersControl from './UsersControl'
     import GroupsControl from './GroupsControl'
     import AccessesControl from './AccessesControl'
+    import IslandsControl from './IslandsControl.vue'
 
     export default {
         name: 'AdminPanel',
@@ -59,7 +62,8 @@
         components: {
             UsersControl,
             GroupsControl,
-            AccessesControl
+            AccessesControl,
+            IslandsControl
         }
     }
 </script>

@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function island()
+    {
+        return $this->belongsTo(Island::class)->withDefault(['name' => 'Без островка']);
+    }
 }
