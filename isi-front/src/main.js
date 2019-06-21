@@ -61,6 +61,7 @@ if (token) {
                 store.dispatch('setAccountingDate')
                 store.dispatch('setUsers')
                 store.dispatch('setGroups')
+                store.dispatch('setIslands')
 
                 router.push('/home')
             } else {

@@ -13,9 +13,30 @@ export const store = new Vuex.Store({
         users: [],
         groups: [],
         access: null,
-        accessRequests: []
+        accessRequests: [],
+        islands: []
     },
     actions: {
+        addIsland ({commit}, island) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_island', {...island})
+                    .then(res => {
+                        commit('ADD_ISLAND', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        setIslands ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_islands')
+                    .then(res => {
+                        commit('SET_ISLANDS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setAccessRequests ({commit}) {
             Vue.axios.post('/api/get_accesses')
                 .then(res => commit('SET_ACCESS_REQUESTS', res.data))
@@ -163,6 +184,12 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        ADD_ISLAND(state, island) {
+            state.islands.push(island)
+        },
+        SET_ISLANDS (state, islands) {
+            state.islands = islands
+        },
         SET_ACCESS_REQUESTS (state, accesses) {
             state.accessRequests = accesses
         },
