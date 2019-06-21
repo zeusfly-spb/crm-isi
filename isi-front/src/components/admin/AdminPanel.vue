@@ -16,6 +16,7 @@
             >
                 <users-control v-if="item.id === 1"></users-control>
                 <groups-control v-if="item.id === 2"></groups-control>
+                <accesses-control v-if="item.id === 4"></accesses-control>
             </v-tab-item>
         </v-tabs>
     </v-flex>
@@ -25,6 +26,7 @@
 <script>
     import UsersControl from './UsersControl'
     import GroupsControl from './GroupsControl'
+    import AccessesControl from './AccessesControl'
 
     export default {
         name: 'AdminPanel',
@@ -49,12 +51,15 @@
                         break
                     case 1: this.$store.dispatch('setGroups')
                         break
+                    case 3: this.$store.dispatch('setAccessRequests')
+                        break
                 }
             }
         },
         components: {
             UsersControl,
-            GroupsControl
+            GroupsControl,
+            AccessesControl
         }
     }
 </script>

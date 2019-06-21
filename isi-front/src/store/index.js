@@ -12,9 +12,14 @@ export const store = new Vuex.Store({
         accountingDate: null,
         users: [],
         groups: [],
-        access: null
+        access: null,
+        accessRequests: []
     },
     actions: {
+        setAccessRequests ({commit}) {
+            Vue.axios.post('/api/get_accesses')
+                .then(res => commit('SET_ACCESS_REQUESTS', res.data))
+        },
         checkAccess: async function ({commit}) {
             let exists = Cookies.get('isi-access')
             if (!exists) {
@@ -22,7 +27,6 @@ export const store = new Vuex.Store({
             } else {
                 let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
                 commit('SET_ACCESS', res.data.status)
-
             }
         },
         deleteGroup ({commit}, id) {
@@ -159,6 +163,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_ACCESS_REQUESTS (state, accesses) {
+            state.accessRequests = accesses
+        },
         SET_DEVICE_ID (state, deviceId) {
             console.log('Setting cookue ' + deviceId)
             Cookies.set('isi-access', deviceId)
@@ -214,6 +221,6 @@ export const store = new Vuex.Store({
     getters: {
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
-        isAllowed: state => !!state.authUser && state.authUser.is_superadmin
+        isAllowed: state => !!state.authUser && state.authUser.is_superadmin || state.status === 'allowed'
     }
 })

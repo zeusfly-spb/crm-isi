@@ -23,6 +23,10 @@
                     <div class="title">Запрос отправлен</div>
                     <div class="title red--text">Ожидайте получения доступа</div>
                 </v-card>
+                <v-card flat v-if="access === 'denied'">
+                    <div class="headline red--text">Доступ запрещен!</div>
+                </v-card>
+
             </v-container>
         </v-flex>
 
@@ -57,11 +61,17 @@
         },
         watch: {
             access (value) {
-                if (value === 'requested') {
-                    setInterval(() => this.$store.dispatch('checkAccess'), 5000)
+                if (value === 'allowed') {
+                    this.$store.dispatch('setAccountingDate')
+                    this.$store.dispatch('setUsers')
+                    this.$store.dispatch('setGroups')
+
+                    this.$router.push('/home')
                 }
-                if (value === 'allowed') this.$router.push('/home')
             }
+        },
+        mounted () {
+                setInterval(() => this.$store.dispatch('checkAccess'), 5000)
         }
     }
 </script>

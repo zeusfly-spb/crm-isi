@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //ACCESSES
     Route::post('create_access_request', 'AccessController@create');
     Route::post('check_access_status', 'AccessController@getAccessStatus');
-
+    Route::post('get_accesses', 'AccessController@getAllAccesses');
+    Route::post('set_access_status', 'AccessController@setStatus');
 
 });

@@ -65,19 +65,20 @@
                         this.$store.dispatch('logIn', {name: this.name, password: this.password})
                             .then(() => {
                                 this.$store.dispatch('setAuthUser')
-                                    .then(() => {
-                                        if (this.$store.getters.isAllowed) {
-                                            this.$store.dispatch('setAccountingDate')
-                                            this.$store.dispatch('setUsers')
-                                            this.$store.dispatch('setGroups')
+                                this.$store.dispatch('checkAccess')
+                                        .then(() => {
+                                            if (this.$store.getters.isAllowed || this.$store.state.access === 'allowed') {
+                                                this.$store.dispatch('setAccountingDate')
+                                                this.$store.dispatch('setUsers')
+                                                this.$store.dispatch('setGroups')
 
-                                            this.$router.push('/home')
-                                        } else {
-                                            this.$store.dispatch('checkAccess')
+                                                this.$router.push('/home')
+                                            } else {
+                                                this.$store.dispatch('checkAccess')
 
-                                            this.$router.push('/access')
-                                        }
-                                    })
+                                                this.$router.push('/access')
+                                            }
+                                        })
 
                             })
                             .catch(() => {

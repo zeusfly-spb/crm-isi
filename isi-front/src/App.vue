@@ -4,7 +4,7 @@
       <v-toolbar-title class="headline text-uppercase">
         <span>Островки</span>
       </v-toolbar-title>
-        <date-selector v-if="isAuth && $store.getters.isAllowed"/>
+        <date-selector v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"/>
         <v-spacer v-else></v-spacer>
 
     <v-btn v-if="isAuth" flat

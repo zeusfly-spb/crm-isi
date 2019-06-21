@@ -53,9 +53,11 @@ if (token) {
     store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
 
     store.dispatch('setAuthUser')
+    store.dispatch('checkAccess')
+
         .then(() => {
 
-            if (store.getters.isAllowed) {
+            if (store.getters.isAllowed || store.state.access === 'allowed') {
                 store.dispatch('setAccountingDate')
                 store.dispatch('setUsers')
                 store.dispatch('setGroups')

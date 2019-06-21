@@ -28,4 +28,16 @@ class AccessController extends Controller
         }
         return response()->json(['status' => $access->status]);
     }
+
+    public function getAllAccesses()
+    {
+        return response()->json(Access::all()->toArray());
+    }
+
+    public function setStatus(Request $request)
+    {
+        $access = Access::find($request->access_id);
+        $access->update(['status' => $request->status]);
+        return response()->json(['access' => $access->toArray()]);
+    }
 }
