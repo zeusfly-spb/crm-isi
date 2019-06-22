@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use Webpatser\Uuid\Uuid;
 
 
 class UserController extends Controller
@@ -68,7 +69,7 @@ class UserController extends Controller
         $input = Arr::except($request->all(), ['c_password']);
 
         if ($request->hasFile('avatar')) {
-            $fileName = 'avatar_' . $request->id;
+            $fileName = (string) Uuid::generate(4);
             $request->file('avatar')->storeAs(
                 'public/avatars', $fileName
             );
@@ -115,7 +116,7 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('avatar')) {
-            $fileName = 'avatar_' . $request->id;
+            $fileName = (string) Uuid::generate(4);
             $request->file('avatar')->storeAs(
                 'public/avatars', $fileName
             );
