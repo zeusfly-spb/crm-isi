@@ -248,6 +248,7 @@ export const store = new Vuex.Store({
     getters: {
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
-        isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed')
+        isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed'),
+        isSuperadmin: state => !!state.authUser && state.authUser.is_superadmin
     }
 })

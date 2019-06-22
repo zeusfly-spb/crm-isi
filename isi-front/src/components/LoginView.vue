@@ -65,7 +65,11 @@
                         this.$store.dispatch('logIn', {name: this.name, password: this.password})
                             .then(() => {
                                 this.$store.dispatch('setAuthUser')
-                                this.$store.dispatch('checkAccess')
+                                    .then(() => {
+
+                                        this.$store.dispatch('checkAccess')
+                                    })
+
                                         .then(() => {
                                             if (this.$store.getters.isAllowed || this.$store.state.access === 'allowed') {
                                                 this.$store.dispatch('setAccountingDate')

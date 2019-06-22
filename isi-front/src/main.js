@@ -53,22 +53,24 @@ if (token) {
     store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
 
     store.dispatch('setAuthUser')
-    store.dispatch('checkAccess')
+        .then(() => {
+            if (!store.getters.isSuperadmin) {
+                store.dispatch('checkAccess')
+            }
+        })
 
         .then(() => {
-
-            if (store.getters.isAllowed || store.state.access === 'allowed') {
+            console.dir(store.getters.isSuperadmin || store.getters.isAllowed)
+            if (store.getters.isSuperadmin || store.getters.isAllowed) {
                 store.dispatch('setAccountingDate')
                 store.dispatch('setUsers')
                 store.dispatch('setGroups')
                 store.dispatch('setIslands')
-
                 router.push('/home')
             } else {
                 store.dispatch('checkAccess')
                 router.push('/access')
             }
-
         })
 } else {
     store.dispatch('logOut')

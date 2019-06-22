@@ -56,6 +56,9 @@
 
                 </td>
             </template>
+            <template v-slot:no-data>
+                <span class="red--text">Нет запросов на доступ</span>
+            </template>
 
         </v-data-table>
 
