@@ -26,6 +26,12 @@
                 <v-card flat v-if="access === 'denied'">
                     <div class="headline red--text">Доступ запрещен!</div>
                 </v-card>
+                <v-card flat v-if="!access">
+                    Проверка доступа
+                    <v-progress-circular
+                        indeterminate
+                    ></v-progress-circular>
+                </v-card>
 
             </v-container>
         </v-flex>
