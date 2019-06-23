@@ -54,6 +54,8 @@
                         break
                     case 1: this.$store.dispatch('setGroups')
                         break
+                    case 2: this.$store.dispatch('setIslands')
+                        break
                     case 3: this.$store.dispatch('setAccessRequests')
                         break
                 }
