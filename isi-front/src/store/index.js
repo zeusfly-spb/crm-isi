@@ -17,6 +17,19 @@ export const store = new Vuex.Store({
         islands: []
     },
     actions: {
+        setUserIsland ({commit}, islandId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/set_user_island', {
+                    user_id: this.state.authUser.id,
+                    island_id: islandId
+                })
+                    .then(res => {
+                        commit('SET_AUTH_USER_ISLAND', res.data.island_id)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addIsland ({commit}, island) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_island', {...island})
@@ -41,13 +54,16 @@ export const store = new Vuex.Store({
             Vue.axios.post('/api/get_accesses')
                 .then(res => commit('SET_ACCESS_REQUESTS', res.data))
         },
-        checkAccess: async function ({commit}) {
+        checkAccess: async function ({commit, dispatch}) {
             let exists = Cookies.get('isi-access')
             if (!exists) {
                 commit('SET_ACCESS', 'none')
             } else {
                 let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
                 commit('SET_ACCESS', res.data.status)
+                if (this.state.authUser.island_id !== res.data.island_id) {
+                    dispatch('setUserIsland', res.data.island_id)
+                }
             }
         },
         deleteGroup ({commit}, id) {
@@ -184,6 +200,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_AUTH_USER_ISLAND (state, islandId) {
+            state.authUser = {... state.authUser, island_id: islandId}
+        },
         ADD_ISLAND(state, island) {
             state.islands.push(island)
         },

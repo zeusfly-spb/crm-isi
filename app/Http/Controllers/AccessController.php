@@ -26,7 +26,7 @@ class AccessController extends Controller
         if (!$access) {
             return response()->json(['status' => 'none']);
         }
-        return response()->json(['status' => $access->status]);
+        return response()->json($access->toArray());
     }
 
     public function getAllAccesses()
@@ -37,7 +37,7 @@ class AccessController extends Controller
     public function setStatus(Request $request)
     {
         $access = Access::find($request->access_id);
-        $access->update(['status' => $request->status]);
+        $access->update(['status' => $request->status, 'island_id' => $request->island_id]);
         return response()->json(['access' => $access->toArray()]);
     }
 }

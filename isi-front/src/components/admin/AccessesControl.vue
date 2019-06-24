@@ -62,12 +62,53 @@
 
         </v-data-table>
 
+        <v-dialog v-model="confirm"
+                  max-width="500"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    Выберите островок для привязки устройства
+                </v-card-title>
+
+                <v-card-text>
+                    <v-select
+                        v-model="selectedIslandId"
+                        :items="islands"
+                        item-text="name"
+                        item-value="id"
+                        single-line
+                    >
+                    </v-select>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="green darken-1"
+                        flat="flat"
+                        @click="setAccessToIsland"
+                    >
+                        Сохранить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
     export default {
         name: 'AccessesControl',
         data: () => ({
+            currentAccessId: null,
+            selectedIslandId: null,
+            confirm: false,
             snackbar: false,
             snackColor: 'green',
             snackText: '',
@@ -82,6 +123,9 @@
             ]
         }),
         computed: {
+            islands () {
+                return [...this.$store.state.islands, {id: null, name: 'Без островка'}]
+            },
             users () {
                 return this.$store.state.users
             },
@@ -95,7 +139,27 @@
                 this.snackText = text
                 this.snackbar = true
             },
+            setAccessToIsland () {
+                this.axios.post('/api/set_access_status', {
+                    access_id: this.currentAccessId,
+                    status: 'allowed',
+                    island_id: this.selectedIslandId
+                })
+                    .then(() => {
+                        this.$store.dispatch('setAccessRequests')
+                        let island = this.islands.find(island => +island.id === +this.selectedIslandId)
+                        let islandName = island && island.name || ''
+                        this.showSuccess(`Статус доступа изменент на Разрешен с привязкой к сотровку "${islandName}"`)
+                        this.confirm = false
+                    })
+
+            },
             setStatus (access, val) {
+                if (val === 'allowed') {
+                    this.currentAccessId = access.id
+                    this.confirm = true
+                    return
+                }
                 this.axios.post('/api/set_access_status', {
                     access_id: access.id,
                     status: val

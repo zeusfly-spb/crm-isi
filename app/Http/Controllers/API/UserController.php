@@ -132,4 +132,11 @@ class UserController extends Controller
         return response()->json(['result' => User::destroy($request->id)]);
     }
 
+    public function setUserIsland(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update(['island_id' => $request->island_id]);
+        return response()->json($user);
+    }
+
 }
