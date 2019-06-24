@@ -286,7 +286,8 @@
                 },
                 {
                     text: 'Логин',
-                    sortable: false
+                    sortable: false,
+                    value: 'name'
                 },
                 {
                     text: 'Фамилия',
@@ -298,7 +299,8 @@
                 },
                 {
                     text: 'Отчество',
-                    sortable: false
+                    sortable: false,
+                    value: 'patronymic'
                 },
                 {
                     text: 'Дата рождения',
@@ -306,17 +308,21 @@
                 },
                 {
                     text: 'Телефон',
-                    sortable: false
+                    sortable: false,
+                    value: 'phone'
                 },
                 {
-                    text: 'Островок'
+                    text: 'Островок',
+                    value: null
                 },
                 {
-                    text: 'Группа'
+                    text: 'Группа',
+                    value: null
                 },
                 {
                     text: 'Действия',
-                    sortable: false
+                    sortable: false,
+                    value: null
                 }
             ]
         }),

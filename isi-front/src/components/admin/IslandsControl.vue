@@ -141,7 +141,7 @@
                 {text: 'Название', value: 'name'},
                 {text: 'Описание', value: 'description'},
                 {text: 'Сотрудники', value: 'users'},
-                {text: 'Действия', align: 'center'}
+                {text: 'Действия', align: 'center', value: null}
             ]
         }),
         computed: {

@@ -60,7 +60,6 @@ if (token) {
         })
 
         .then(() => {
-            console.dir(store.getters.isSuperadmin || store.getters.isAllowed)
             if (store.getters.isSuperadmin || store.getters.isAllowed) {
                 store.dispatch('setAccountingDate')
                 store.dispatch('setUsers')
