@@ -22,7 +22,7 @@ class AccessController extends Controller
 
     public function getAccessStatus(Request $request)
     {
-        $access = Access::where('device_id', $request->device_id)->last();
+        $access = Access::where('device_id', $request->device_id)->first();
         if (!$access) {
             return response()->json(['status' => 'none']);
         }
