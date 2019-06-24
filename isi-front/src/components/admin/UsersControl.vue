@@ -33,7 +33,7 @@
                 <td>{{ props.item.patronymic }}</td>
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
                 <td><span v-if="props.item.phone && props.item.phone.length === 10">{{ props.item.phone | phone }}</span></td>
-                <td>{{ props.item.island_id }}</td>
+                <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
@@ -338,6 +338,10 @@
             }
         },
         methods: {
+            islandName (id) {
+                let island = this.islands && this.islands.find(island.id === id)
+                return island && island.name || ''
+            },
             loadAvatar () {
                 this.editedUser.avatar = this.$refs.avatarInput.files[0]
                 this.avatarFileReader.readAsDataURL(this.$refs.avatarInput.files[0])

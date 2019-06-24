@@ -21,9 +21,16 @@
     export default {
         name: 'HomeView',
         data: () => ({
-            tabs: ['Учет на день', 'База клиентов', 'Склад', 'Зарплата', 'Администрирование']
+            regularTabs: ['Учет на день', 'База клиентов'],
+            adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            tabs () {
+                return this.isSuperadmin ? this.adminTabs : this.regularTabs
+            },
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             user () {
                 return this.$store.state.authUser || null
             }
