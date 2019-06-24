@@ -20,8 +20,9 @@
                <td>{{ props.item.id }}</td>
                <td>{{ props.item.name }}</td>
                <td>{{ props.item.description }}</td>
-               <!--<td><group-users-column :users="props.item.users"/></td>-->
-               <td>сотрудники</td>
+               <td>
+                   <island-users-column :users="props.item.users"></island-users-column>
+               </td>
                <td class="justify-center layout px-0">
                    <v-icon
                            small
@@ -119,6 +120,7 @@
 </template>
 
 <script>
+    import IslandUsersColumn from './IslandUsersColumn'
     export default {
         name: 'IslandsControl',
         data: () => ({
@@ -138,7 +140,7 @@
                 {text: '#', value: 'id'},
                 {text: 'Название', value: 'name'},
                 {text: 'Описание', value: 'description'},
-                {text: '', value: 'users'},
+                {text: 'Сотрудники', value: 'users'},
                 {text: 'Действия', align: 'center'}
             ]
         }),
@@ -172,6 +174,9 @@
         },
         created () {
             this.editedIsland = JSON.parse(JSON.stringify(this.defaultIsland))
+        },
+        components: {
+            IslandUsersColumn
         }
     }
 </script>
