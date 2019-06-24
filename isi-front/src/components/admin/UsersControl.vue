@@ -28,7 +28,6 @@
                     </v-avatar>
                 </td>
                 <td>{{ props.item.name }}</td>
-                <td>{{ props.item.id }}</td>
                 <td>{{ props.item.last_name }}</td>
                 <td>{{ props.item.first_name }}</td>
                 <td>{{ props.item.patronymic }}</td>
@@ -287,10 +286,6 @@
                 },
                 {
                     text: 'Логин',
-                    sortable: false
-                },
-                {
-                    text: 'Пароль',
                     sortable: false
                 },
                 {
