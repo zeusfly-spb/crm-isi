@@ -54,12 +54,12 @@
                     >
                         hourglass_empty
                     </v-icon>
+
                     <v-icon
                         small
                         class="mr-2 red--text"
                         @click="showDeleteConfirm(props.item)"
                         title="Удалить"
-                        v-if="props.item.status !== 'requested'"
                     >
                         delete_forever
                     </v-icon>
