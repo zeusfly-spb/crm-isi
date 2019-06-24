@@ -376,7 +376,7 @@
             saveUser (user) {
                 let data = new FormData
                 for (let key in user) {
-                    if (user[key] || key === 'phone'){
+                    if (user[key] || key === 'phone' || key === 'first_name' || key === 'last_name' || key === 'patronymic') {
                         data.append(key, user[key])
                     }
                 }

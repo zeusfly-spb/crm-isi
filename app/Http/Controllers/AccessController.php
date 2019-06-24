@@ -40,4 +40,9 @@ class AccessController extends Controller
         $access->update(['status' => $request->status, 'island_id' => $request->island_id]);
         return response()->json(['access' => $access->toArray()]);
     }
+
+    public function delete(Request $request)
+    {
+        return response()->json(['result' => Access::destroy($request->access_id)]);
+    }
 }

@@ -17,6 +17,16 @@ export const store = new Vuex.Store({
         islands: []
     },
     actions: {
+        deleteAccess ({commit}, accessId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_access', {access_id: accessId})
+                    .then((res) => {
+                        commit('REMOVE_ACCESS_REQUEST', accessId)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setUserIsland ({commit}, islandId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/set_user_island', {
@@ -200,6 +210,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        REMOVE_ACCESS_REQUEST (state, accessId) {
+            state.accessRequests = state.accessRequests.filter(item => item.id !== accessId)
+        },
         SET_AUTH_USER_ISLAND (state, islandId) {
             state.authUser = {... state.authUser, island_id: islandId}
         },

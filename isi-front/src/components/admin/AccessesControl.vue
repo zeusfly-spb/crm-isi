@@ -54,6 +54,15 @@
                     >
                         hourglass_empty
                     </v-icon>
+                    <v-icon
+                        small
+                        class="mr-2 red--text"
+                        @click="showDeleteConfirm(props.item)"
+                        title="Удалить"
+                        v-if="props.item.status !== 'requested'"
+                    >
+                        delete_forever
+                    </v-icon>
 
                 </td>
             </template>
@@ -101,12 +110,41 @@
             </v-card>
         </v-dialog>
 
+        <v-dialog v-model="deleteConfirm"
+                  max-width="500"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    Удалить выбранный доступ "<strong>{{ accessToDelete && accessToDelete.comment || '' }}</strong>"
+                </v-card-title>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="deleteConfirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteAccess"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
     export default {
         name: 'AccessesControl',
         data: () => ({
+            deleteConfirm: false,
+            accessToDelete: null,
             currentAccessId: null,
             selectedIslandId: null,
             confirm: false,
@@ -136,6 +174,17 @@
             }
         },
         methods: {
+            deleteAccess () {
+                this.$store.dispatch('deleteAccess', this.accessToDelete.id)
+                    .then(() => {
+                        this.deleteConfirm = false
+                        this.showSuccess('Доступ удален')
+                    })
+            },
+            showDeleteConfirm (access) {
+                this.accessToDelete = access
+                this.deleteConfirm = true
+            },
             islandName (id) {
                 let island = this.islands.find(island => +island.id === +id)
                 return island && island.name || ''
