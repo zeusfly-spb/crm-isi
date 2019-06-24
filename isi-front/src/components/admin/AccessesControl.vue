@@ -78,7 +78,7 @@
                 {text: 'Отправитель', value: 'user_id'},
                 {text: 'Комментарий', value: 'comment'},
                 {text: 'Статус', value: 'status'},
-                {text: 'Дествия', align: 'center', value: null}
+                {text: 'Действия', align: 'center', value: null}
             ]
         }),
         computed: {
