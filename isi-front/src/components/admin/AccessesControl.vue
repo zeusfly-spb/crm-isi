@@ -22,6 +22,7 @@
                 <td>{{ props.item.device_id }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
+                <td>{{ islandName(props.item.island_id) }}</td>
                 <td :class="{'blue--text': props.item.status === 'requested', 'green--text': props.item.status === 'allowed', 'red--text': props.item.status === 'denied'}">
                         {{ {requested: 'Ожидает', allowed: 'Разрешен', denied: 'Запрещен'}[props.item.status] }}
                 </td>
@@ -118,6 +119,7 @@
                 {text: 'Идентификатор утройства', value: 'device_id'},
                 {text: 'Отправитель', value: 'user_id'},
                 {text: 'Комментарий', value: 'comment'},
+                {text: 'Островок привязки', value: null},
                 {text: 'Статус', value: 'status'},
                 {text: 'Действия', align: 'center', value: null}
             ]
@@ -134,6 +136,10 @@
             }
         },
         methods: {
+            islandName (id) {
+                let island = this.islands.find(island => +island.id === +id)
+                return island && island.name || ''
+            },
             showSuccess (text) {
                 this.snackColor = 'green'
                 this.snackText = text
