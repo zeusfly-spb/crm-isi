@@ -2,8 +2,20 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline">
-        <span>Островки</span>
-        <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
+        <v-layout>
+          <img :src="`${basePath}/img/logo.png`" alt="" height="45px">
+          &nbsp;
+          <div>
+            <div>
+              <span>Островки</span>
+              <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
+            </div>
+          </div>
+        </v-layout>
+
+
+
+
       </v-toolbar-title>
         <date-selector v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"/>
         <v-spacer v-else></v-spacer>
@@ -35,6 +47,9 @@ export default {
         }
     },
     computed: {
+        basePath () {
+            return this.$store.state.basePath
+        },
       isAuth () {
           return this.$store.getters.isAuth
       },
