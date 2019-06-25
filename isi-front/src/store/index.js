@@ -15,9 +15,20 @@ export const store = new Vuex.Store({
         access: null,
         accessRequests: [],
         islands: [],
-        insoles: []
+        insoles: [],
+        customers: []
     },
     actions: {
+        setCustomers ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_customers')
+                    .then(res => {
+                        commit('SET_CUSTOMERS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setInsoles ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_insoles')
@@ -26,7 +37,6 @@ export const store = new Vuex.Store({
                         resolve(res)
                     })
                     .catch(e => reject(e))
-
             })
         },
         deleteAccess ({commit}, accessId) {
@@ -222,6 +232,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_CUSTOMERS (state, customers) {
+            state.customers = customers
+        },
         SET_INSOLES (state, insoles) {
             state.insoles = insoles
         },

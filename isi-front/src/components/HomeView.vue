@@ -13,8 +13,10 @@
                 v-for="(item, index) in tabs"
                 :key="index"
             >
-                <admin-panel v-if="index === 4"></admin-panel>
+                <customer-panel v-if="index === 1"></customer-panel>
                 <stock-panel v-if="index === 2"></stock-panel>
+                <admin-panel v-if="index === 4"></admin-panel>
+
             </v-tab-item>
         </v-tabs>
     </v-flex>
@@ -22,6 +24,8 @@
 <script>
     import AdminPanel from './admin/AdminPanel'
     import StockPanel from './stock/StockPanel'
+    import CustomerPanel from './customers/CustomerPanel'
+
     export default {
         name: 'HomeView',
         data: () => ({
@@ -42,6 +46,8 @@
         methods: {
             loadContent (index) {
                 switch (index) {
+                    case 1: this.$store.dispatch('setCustomers')
+                        break
                     case 2: this.$store.dispatch('setInsoles')
                         break
                 }
@@ -52,7 +58,8 @@
         },
         components: {
             AdminPanel,
-            StockPanel
+            StockPanel,
+            CustomerPanel
         }
     }
 </script>

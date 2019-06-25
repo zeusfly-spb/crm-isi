@@ -45,4 +45,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // INSOLES
     Route::post('get_insoles', 'InsoleController@index');
 
+    // CUSTOMERS
+    Route::post('get_customers', 'CustomerController@index');
+
 });

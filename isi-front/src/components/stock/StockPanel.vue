@@ -1,6 +1,6 @@
 <template>
     <v-flex align-center>
-        <span class="title">Каталог продукции</span>
+        <span class="title ml-2">Каталог продукции</span>
         <v-data-table
             :headers="headers"
             :items="insoles"
