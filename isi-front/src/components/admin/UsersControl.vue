@@ -335,12 +335,15 @@
             },
             groups () {
                 return this.$store.state.groups
+            },
+            islands () {
+                return this.$store.state.islands
             }
         },
         methods: {
             islandName (id) {
-                let island = this.islands && this.islands.find(island.id === id)
-                return island && island.name || ''
+                let island = this.islands && this.islands.find(island => island.id === id)
+                return island && island.name || '-'
             },
             loadAvatar () {
                 this.editedUser.avatar = this.$refs.avatarInput.files[0]
