@@ -83,7 +83,7 @@ export const store = new Vuex.Store({
             } else {
                 let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
                 commit('SET_ACCESS', res.data.status)
-                if (this.state.authUser.island_id !== res.data.island_id) {
+                if (!this.state.authUser.is_superadmin && (this.state.authUser.island_id !== res.data.island_id)) {
                     dispatch('setUserIsland', res.data.island_id)
                 }
             }
