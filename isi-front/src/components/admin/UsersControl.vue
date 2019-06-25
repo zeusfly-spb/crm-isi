@@ -152,7 +152,7 @@
                                     data-vv-as="Номер телефона"
                                     data-vv-name="phone"
                                     :error-messages="errors.collect('phone')"
-                                    v-validate="'min:10|max:10'"
+                                    v-validate="'digits:10'"
                                     mask="(###) ### - ####"
                                 ></v-text-field>
                             </v-flex>

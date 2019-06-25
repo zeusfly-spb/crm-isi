@@ -6,6 +6,7 @@
         <v-dialog
             v-model="dialog"
             max-width="600px"
+            @update:returnValue="closeDialog"
         >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
@@ -80,9 +81,19 @@
 
                             <v-flex xs12 sm6 md4>
                                 <v-text-field
-                                    v-model="editedCustomer.address"
+                                    v-if="mode === 'add'"
+                                    v-model="editedCustomer.phone"
                                     label="Телефон"
+                                    data-vv-as="Номер телефона"
+                                    data-vv-name="phone"
+                                    :error-messages="errors.collect('phone')"
+                                    v-validate="mode === 'add' ? 'digits:10' : null"
+                                    mask="(###) ### - ####"
                                 ></v-text-field>
+                                <customer-phones-editor
+                                    v-if="mode === 'edit'"
+                                    :customer="editedCustomer"
+                                ></customer-phones-editor>
                             </v-flex>
 
                         </v-layout>
@@ -91,13 +102,55 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="">Сохранить</v-btn>
+                    <v-btn color="green darken-1" flat @click="submitForm">Сохранить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-data-table
+            :headers="headers"
+            :items="customers"
+            hide-actions
+            class="elevation-1"
+        >
+            <template v-slot:items="props">
+                <td>{{ props.item. id }}</td>
+                <td>{{ props.item.last_name }}</td>
+                <td>{{ props.item.first_name }}</td>
+                <td>{{ props.item.patronymic }}</td>
+                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
+                <td>{{ props.item.address }}</td>
+                <td>
+                    <customer-phones-column :phones="props.item.phones"/>
+                </td>
+                <td class="justify-center layout px-0">
+                    <v-icon
+                        small
+                        class="mr-2 green--text"
+                        @click="showEditDialog(props.item)"
+                        title="Редактировать"
+                    >
+                        edit
+                    </v-icon>
+                    <v-icon
+                        class="red--text"
+                        small
+                        @click=""
+                        title="Удалить"
+                    >
+                        delete
+                    </v-icon>
+                </td>
+            </template>
+            <template v-slot:no-data>
+                <span class="red--text">Нет клиентов</span>
+            </template>
+        </v-data-table>
     </v-flex>
 </template>
 <script>
+    import CustomerPhonesColumn from './CustomerPhonesColumn'
+    import CustomerPhonesEditor from './CustomerPhonesEditor'
+
     export default {
         name: 'CustomersControl',
         data: () => ({
@@ -113,25 +166,57 @@
                 address: '',
                 birth_date: '',
                 phone: ''
-            }
+            },
+            headers: [
+                {text: '#', value: 'id'},
+                {text: 'Фамилия', value: 'last_name'},
+                {text: 'Имя', value: 'first_name'},
+                {text: 'Отчество', value: 'patronymic'},
+                {text: 'Дата рождения', value: 'birth_date'},
+                {text: 'Адрес', value: 'address'},
+                {text: 'Телефоны', value: null},
+                {text: 'Действия', value: null, align: 'center'}
+            ]
         }),
         computed: {
             customers () {
-                return this.$state.customers
+                return this.$store.state.customers
             }
         },
         methods:{
+            closeDialog () {
+                this.mode = null
+            },
+            showEditDialog (customer) {
+                this.mode = 'edit'
+                this.editedCustomer = JSON.parse(JSON.stringify(customer))
+                this.dialog = true
+            },
+            submitForm () {
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) return
+                        let action = this.mode === 'add' ? 'addCustomer' : 'updateCustomer'
+                        this.$store.dispatch(action, this.editedCustomer)
+                            .then(() => this.dialog = false)
+                    })
+            },
             datePicked (date) {
                 this.editedCustomer.birth_date = new Date(date).toISOString().split('T')[0]
                 this.menu = false
             },
             showAddDialog () {
                 this.mode = 'add'
+                this.editedCustomer = JSON.parse(JSON.stringify(this.defaultCustomer))
                 this.dialog = true
             }
         },
         created () {
             this.editedCustomer = JSON.parse(JSON.stringify(this.defaultCustomer))
+        },
+        components: {
+            CustomerPhonesColumn,
+            CustomerPhonesEditor
         }
     }
 </script>

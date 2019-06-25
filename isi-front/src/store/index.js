@@ -19,6 +19,36 @@ export const store = new Vuex.Store({
         customers: []
     },
     actions: {
+        deleteCustomerPhone ({commit}, params) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_phone', {...params})
+                    .then(res => {
+                        commit('UPDATE_CUSTOMER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        updateCustomer ({commit}, customer) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_customer', {...customer})
+                    .then(res => {
+                        commit('UPDATE_CUSTOMER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addCustomer ({commit}, customer) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_customer', {...customer})
+                    .then(res => {
+                        commit('ADD_CUSTOMER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setCustomers ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_customers')
@@ -232,6 +262,12 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_CUSTOMER (state, customer) {
+            state.customers = state.customers.map(item => +item.id === +customer.id ? customer : item)
+        },
+        ADD_CUSTOMER (state, customer) {
+            state.customers.push(customer)
+        },
         SET_CUSTOMERS (state, customers) {
             state.customers = customers
         },

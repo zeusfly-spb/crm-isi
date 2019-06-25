@@ -47,5 +47,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     // CUSTOMERS
     Route::post('get_customers', 'CustomerController@index');
+    Route::post('create_customer', 'CustomerController@create');
+    Route::post('update_customer', 'CustomerController@update');
+    Route::post('delete_phone', 'CustomerController@deletePhone');
 
 });
