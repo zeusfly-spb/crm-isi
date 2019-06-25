@@ -3,7 +3,7 @@
         <v-layout>
             <span class="title ml-2">Клиенты</span>
         </v-layout>
-        <v-dialog
+        <v-dialog persistent
             v-model="dialog"
             max-width="600px"
             @update:returnValue="closeDialog"
@@ -87,12 +87,14 @@
                                     data-vv-as="Номер телефона"
                                     data-vv-name="phone"
                                     :error-messages="errors.collect('phone')"
-                                    v-validate="mode === 'add' ? 'digits:10' : null"
+                                    v-validate="mode === 'add' ? 'required|digits:10' : null"
                                     mask="(###) ### - ####"
                                 ></v-text-field>
                                 <customer-phones-editor
                                     v-if="mode === 'edit'"
                                     :customer="editedCustomer"
+                                    @addOn="addPhoneEnabled = true"
+                                    @addOff="addPhoneEnabled = false"
                                 ></customer-phones-editor>
                             </v-flex>
 
@@ -101,8 +103,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="submitForm">Сохранить</v-btn>
+                    <v-btn color="darken-1" flat @click="dialog = false">Закрыть</v-btn>
+                    <v-btn color="green darken-1" flat @click="submitForm" :disabled="addPhoneEnabled">Сохранить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -154,6 +156,7 @@
     export default {
         name: 'CustomersControl',
         data: () => ({
+            addPhoneEnabled: false,
             date: '',
             menu: false,
             dialog: false,

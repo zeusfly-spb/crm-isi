@@ -50,5 +50,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('create_customer', 'CustomerController@create');
     Route::post('update_customer', 'CustomerController@update');
     Route::post('delete_phone', 'CustomerController@deletePhone');
+    Route::post('add_phone', 'CustomerController@addPhone');
 
 });

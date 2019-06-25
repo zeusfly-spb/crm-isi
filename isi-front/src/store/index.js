@@ -19,6 +19,16 @@ export const store = new Vuex.Store({
         customers: []
     },
     actions: {
+        addCustomerPhone ({commit}, params) {
+          return new Promise((resolve, reject) => {
+              Vue.axios.post('/api/add_phone', {... params})
+                  .then(res => {
+                      commit('UPDATE_CUSTOMER', res.data)
+                      resolve(res)
+                  })
+                  .catch(e => reject(e))
+          })
+        },
         deleteCustomerPhone ({commit}, params) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_phone', {...params})

@@ -44,4 +44,12 @@ class CustomerController extends Controller
         Phone::destroy($request->phone_id);
         return response()->json(Customer::with('phones')->find($request->customer_id)->toArray());
     }
+
+    public function addPhone(Request $request)
+    {
+        $customer = Customer::find($request->customer_id);
+        $customer->phones()->create(['number' => $request->number]);
+        $customer->load('phones');
+        return response()->json($customer->toArray());
+    }
 }

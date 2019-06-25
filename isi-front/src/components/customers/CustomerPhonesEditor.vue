@@ -8,6 +8,7 @@
                 small
                 @click="deletePhone(phone.id)"
                 title="Удалить"
+                v-if="customer.phones.length > 1"
             >
                 delete
             </v-icon>
@@ -16,24 +17,26 @@
         <v-text-field
             label="Номер"
             v-show="adding"
-            v-model="newPhone"
+            v-model="newNumber"
             data-vv-as="Номер телефона"
             data-vv-name="phone"
             :error-messages="errors.collect('phone')"
+            v-validate="'required|digits:10'"
+            mask="(###) ### - ####"
             ref="newNumber"
         ></v-text-field>
         &nbsp;
         <v-icon
             class="green--text"
             small
-            @click=""
+            @click="addPhone"
             title="Сохранить"
             v-if="adding"
         >
             save
         </v-icon>
 
-        <a href="#" @click="addModeOn" v-if="!adding" style="text-decoration: none">
+        <a href="#" @click="turnAddingOn" v-if="!adding" style="text-decoration: none">
             Добавить номер
         </a>
 
@@ -56,17 +59,28 @@
         props: ['customer'],
         data: () => ({
             adding: false,
-            newPhone: ''
+            newNumber: ''
         }),
         methods: {
+            turnAddingOn () {
+                this.newNumber = ''
+                this.adding = true
+            },
+            addPhone () {
+                this.$validator.validate()
+                    .then(valid => {
+                        if (!valid) return
+                        this.$store.dispatch('addCustomerPhone', {customer_id: this.customer.id, number: this.newNumber})
+                            .then((res) => {
+                                this.customer.phones = res.data.phones
+                                this.adding = false
+                            })
+                    })
+            },
             deletePhone (id) {
                 let params = {customer_id: this.customer.id, phone_id: id}
                 this.$store.dispatch('deleteCustomerPhone', params)
                     .then(() => this.customer.phones = this.customer.phones.filter(item => +item.id !== +id))
-            },
-            addModeOn () {
-                this.adding = true
-                this.$refs.newNumber.focus()
             }
         },
         filters: {
@@ -76,6 +90,15 @@
             }
         },
         updated () {
+        },
+        watch: {
+            adding (val) {
+                if (val) {
+                    this.$emit('addOn')
+                } else {
+                    this.$emit('addOff')
+                }
+            }
         }
     }
 </script>
