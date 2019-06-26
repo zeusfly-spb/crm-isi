@@ -10,16 +10,18 @@
             >
                 {{ item.label }}
             </v-tab>
-            <v-tab-item
-                v-for="item in sections"
-                :key="item.id"
-            >
-                <users-control v-if="item.id === 1"></users-control>
-                <groups-control v-if="item.id === 2"></groups-control>
-                <accesses-control v-if="item.id === 4"></accesses-control>
-                <islands-control v-if="item.id === 3"></islands-control>
+            <v-tabs-items touchless>
+                <v-tab-item
+                    v-for="item in sections"
+                    :key="item.id"
+                >
+                    <users-control v-if="item.id === 1"></users-control>
+                    <groups-control v-if="item.id === 2"></groups-control>
+                    <accesses-control v-if="item.id === 4"></accesses-control>
+                    <islands-control v-if="item.id === 3"></islands-control>
 
-            </v-tab-item>
+                </v-tab-item>
+            </v-tabs-items>
         </v-tabs>
     </v-flex>
 

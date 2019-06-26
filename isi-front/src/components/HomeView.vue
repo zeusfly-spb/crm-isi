@@ -9,15 +9,18 @@
             >
                 {{ item }}
             </v-tab>
-            <v-tab-item
-                v-for="(item, index) in tabs"
-                :key="index"
-            >
-                <customer-panel v-if="index === 1"></customer-panel>
-                <stock-panel v-if="index === 2"></stock-panel>
-                <admin-panel v-if="index === 4"></admin-panel>
+            <v-tabs-items touchless>
+                <v-tab-item
+                    v-for="(item, index) in tabs"
+                    :key="index"
+                >
+                    <customer-panel v-if="index === 1"></customer-panel>
+                    <stock-panel v-if="index === 2"></stock-panel>
+                    <admin-panel v-if="index === 4"></admin-panel>
 
-            </v-tab-item>
+                </v-tab-item>
+            </v-tabs-items>
+
         </v-tabs>
     </v-flex>
 </template>
