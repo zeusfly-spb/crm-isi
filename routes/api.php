@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // ISLANDS
     Route::post('get_islands', 'IslandController@getAll');
     Route::post('create_island', 'IslandController@create');
+    Route::post('delete_island', 'IslandController@delete');
 
     // INSOLES
     Route::post('get_insoles', 'InsoleController@index');

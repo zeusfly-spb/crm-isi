@@ -19,6 +19,16 @@ export const store = new Vuex.Store({
         customers: []
     },
     actions: {
+        deleteIsland ({commit}, islandId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_island', {island_id: islandId})
+                    .then(res => {
+                        commit('DELETE_ISLAND', islandId)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addCustomerPhone ({commit}, params) {
           return new Promise((resolve, reject) => {
               Vue.axios.post('/api/add_phone', {... params})
@@ -272,6 +282,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        DELETE_ISLAND (state, islandId) {
+            state.islands = state.islands.filter(island => island.id !== islandId)
+        },
         UPDATE_CUSTOMER (state, customer) {
             state.customers = state.customers.map(item => +item.id === +customer.id ? customer : item)
         },

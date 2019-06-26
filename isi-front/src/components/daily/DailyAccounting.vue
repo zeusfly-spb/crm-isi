@@ -24,14 +24,16 @@
                             :key="user.id"
                             class="ml-1"
                         >
-                            <img :src="`${basePath}${user.avatar}`"
+                            <img :src="`${basePath}${user.avatar ? user.avatar : '/img/default.jpg'}`"
                                  alt="Фото"
                                  :title="user.full_name"
-                                 class="ml-1"
+                                 class="ml-1 mr-1"
                             />
                         </v-avatar>
 
-                        <v-card-actions class="m-0 p-0" style="padding: 5px!important;">
+                        <v-card-actions class="m-0 p-0" style="padding: 5px!important;"
+                                        :class="{'mt-2': !tab.users.length && tab.id !== 0}"
+                        >
                             <div class="text-center">{{ tab.name }}</div>
                         </v-card-actions>
 

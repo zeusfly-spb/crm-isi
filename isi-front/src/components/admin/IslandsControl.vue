@@ -106,7 +106,7 @@
                     <v-btn
                             color="red darken-1"
                             flat="flat"
-                            @click=""
+                            @click="deleteIsland"
                     >
                         Удалить
                     </v-btn>
@@ -124,6 +124,7 @@
     export default {
         name: 'IslandsControl',
         data: () => ({
+            islandIdToDelete: null,
             confirm: false,
             confirmText: '',
             mode: null,
@@ -150,7 +151,12 @@
             }
         },
         methods: {
+            deleteIsland () {
+                this.$store.dispatch('deleteIsland', this.islandIdToDelete)
+                    .then(() => this.confirm = false)
+            },
             showDeleteConfirm (island) {
+                this.islandIdToDelete = island.id
                 this.confirmText = `Удалить островок ${island.name}`
                 this.confirm = true
             },

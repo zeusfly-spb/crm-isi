@@ -19,4 +19,9 @@ class IslandController extends Controller
     {
         return response()->json(Island::with('users')->get()->toArray());
     }
+
+    public function delete(Request $request)
+    {
+        return response()->json(['result' => Island::destroy($request->island_id)]);
+    }
 }
