@@ -3,6 +3,45 @@
         <v-layout>
             <span class="title ml-2">Клиенты</span>
         </v-layout>
+        <v-data-table
+                :headers="headers"
+                :items="customers"
+                hide-actions
+                class="elevation-1"
+        >
+            <template v-slot:items="props">
+                <td>{{ props.item. id }}</td>
+                <td>{{ props.item.last_name }}</td>
+                <td>{{ props.item.first_name }}</td>
+                <td>{{ props.item.patronymic }}</td>
+                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
+                <td>{{ props.item.address }}</td>
+                <td>
+                    <customer-phones-column :phones="props.item.phones"/>
+                </td>
+                <td class="justify-center layout px-0">
+                    <v-icon
+                            small
+                            class="mr-2 green--text"
+                            @click="showEditDialog(props.item)"
+                            title="Редактировать"
+                    >
+                        edit
+                    </v-icon>
+                    <v-icon
+                            class="red--text"
+                            small
+                            @click=""
+                            title="Удалить"
+                    >
+                        delete
+                    </v-icon>
+                </td>
+            </template>
+            <template v-slot:no-data>
+                <span class="red--text">Нет клиентов</span>
+            </template>
+        </v-data-table>
         <v-dialog persistent
             v-model="dialog"
             max-width="600px"
@@ -108,45 +147,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-data-table
-            :headers="headers"
-            :items="customers"
-            hide-actions
-            class="elevation-1"
-        >
-            <template v-slot:items="props">
-                <td>{{ props.item. id }}</td>
-                <td>{{ props.item.last_name }}</td>
-                <td>{{ props.item.first_name }}</td>
-                <td>{{ props.item.patronymic }}</td>
-                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
-                <td>{{ props.item.address }}</td>
-                <td>
-                    <customer-phones-column :phones="props.item.phones"/>
-                </td>
-                <td class="justify-center layout px-0">
-                    <v-icon
-                        small
-                        class="mr-2 green--text"
-                        @click="showEditDialog(props.item)"
-                        title="Редактировать"
-                    >
-                        edit
-                    </v-icon>
-                    <v-icon
-                        class="red--text"
-                        small
-                        @click=""
-                        title="Удалить"
-                    >
-                        delete
-                    </v-icon>
-                </td>
-            </template>
-            <template v-slot:no-data>
-                <span class="red--text">Нет клиентов</span>
-            </template>
-        </v-data-table>
+
     </v-flex>
 </template>
 <script>
