@@ -5,7 +5,7 @@
             fixed-tabs
             centered
             slider-color="green"
-            height="120"
+            height="70"
             @change="setCurrentIslandId"
             hide-slider
         >
@@ -15,10 +15,11 @@
             >
                 <v-card
                     :class="{'blue lighten-3': tab.id === currentIslandId}"
+                    height="65"
                 >
-                    <v-card-text>
+                    <v-card-text style="padding: 10px!important;">
                         <v-avatar
-                            size="36px"
+                            size="30px"
                             v-for="user in tab.users"
                             :key="user.id"
                             class="ml-1"
@@ -26,12 +27,18 @@
                             <img :src="`${basePath}${user.avatar}`"
                                  alt="Фото"
                                  :title="user.full_name"
+                                 class="ml-1"
                             />
                         </v-avatar>
+
+                        <v-card-actions class="m-0 p-0" style="padding: 5px!important;">
+                            <div class="text-center">{{ tab.name }}</div>
+                        </v-card-actions>
+
                     </v-card-text>
-                    <v-card-actions>
-                        <span class="text-center">{{ tab.name }}</span>
-                    </v-card-actions>
+
+<!--                    <v-card-actions>-->
+<!--                    </v-card-actions>-->
                 </v-card>
             </v-tab>
 
@@ -42,7 +49,7 @@
     export default {
         name: 'DailyAccounting',
         data: () => ({
-            currentIslandId: 0
+            currentIslandId: 0,
         }),
         computed: {
             basePath () {
