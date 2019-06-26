@@ -21,6 +21,7 @@
                             size="36px"
                             v-for="user in tab.users"
                             :key="user.id"
+                            class="ml-1"
                         >
                             <img :src="`${basePath}${user.avatar}`"
                                  alt="Фото"
