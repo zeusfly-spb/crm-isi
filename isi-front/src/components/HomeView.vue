@@ -14,10 +14,10 @@
                     v-for="(item, index) in tabs"
                     :key="index"
                 >
+                    <daily-accounting v-if="index === 0"></daily-accounting>
                     <customer-panel v-if="index === 1"></customer-panel>
                     <stock-panel v-if="index === 2"></stock-panel>
                     <admin-panel v-if="index === 4"></admin-panel>
-
                 </v-tab-item>
             </v-tabs-items>
 
@@ -28,6 +28,7 @@
     import AdminPanel from './admin/AdminPanel'
     import StockPanel from './stock/StockPanel'
     import CustomerPanel from './customers/CustomerPanel'
+    import DailyAccounting from './daily/DailyAccounting'
 
     export default {
         name: 'HomeView',
@@ -62,7 +63,8 @@
         components: {
             AdminPanel,
             StockPanel,
-            CustomerPanel
+            CustomerPanel,
+            DailyAccounting
         }
     }
 </script>
