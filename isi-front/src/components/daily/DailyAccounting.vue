@@ -38,9 +38,6 @@
                         </v-card-actions>
 
                     </v-card-text>
-
-<!--                    <v-card-actions>-->
-<!--                    </v-card-actions>-->
                 </v-card>
             </v-tab>
 

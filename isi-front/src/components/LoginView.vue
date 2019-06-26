@@ -79,8 +79,6 @@
 
                                                 this.$router.push('/home')
                                             } else {
-//                                                this.$store.dispatch('checkAccess')
-
                                                 this.$router.push('/access')
                                             }
                                         })
