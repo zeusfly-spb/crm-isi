@@ -14,7 +14,7 @@
                 :key="tab.id"
             >
                 <v-card
-                    :class="{'blue lighten-3': tab.id === currentIslandId}"
+                    :class="{'blue lighten-3': tab.id === workingIslandId}"
                     height="65"
                 >
                     <v-card-text style="padding: 10px!important;">
@@ -22,12 +22,11 @@
                             size="30px"
                             v-for="user in tab.users"
                             :key="user.id"
-                            class="ml-1"
+                            style="margin-right: .1em; margin-left: .1em"
                         >
                             <img :src="`${basePath}${user.avatar ? user.avatar : '/img/default.jpg'}`"
                                  alt="Фото"
                                  :title="user.full_name"
-                                 class="ml-1 mr-1"
                             />
                         </v-avatar>
 
@@ -51,6 +50,9 @@
             currentIslandId: 0,
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -70,6 +72,7 @@
         methods: {
             setCurrentIslandId (index) {
                 this.currentIslandId = this.tabs[index].id
+                this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
         }
     }

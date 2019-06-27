@@ -16,9 +16,13 @@ export const store = new Vuex.Store({
         accessRequests: [],
         islands: [],
         insoles: [],
-        customers: []
+        customers: [],
+        workingIslandId: 0
     },
     actions: {
+        setWorkingIslandId ({commit}, id) {
+            commit('SET_WORKING_ISLAND_ID', id)
+        },
         deleteIsland ({commit}, islandId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_island', {island_id: islandId})
@@ -282,6 +286,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_WORKING_ISLAND_ID (state, id) {
+            state.workingIslandId = id
+        },
         DELETE_ISLAND (state, islandId) {
             state.islands = state.islands.filter(island => island.id !== islandId)
         },
