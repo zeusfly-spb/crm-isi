@@ -19,11 +19,20 @@
                     <span class="red--text">Нет записей</span>
                 </template>
             </v-data-table>
-            <div class="text-xs-center">
+            <div class="text-xs-center"
+                 v-if="isToday"
+            >
                 <v-btn flat color="primary darken-1"
                        @click="startDay"
+                       v-if="!isWorking"
                 >
                     Начать рабочий день
+                </v-btn>
+                <v-btn flat color="primary darken-1"
+                       @click=""
+                       v-if="isWorking"
+                >
+                    Закончить рабочий день
                 </v-btn>
             </div>
         </v-card>
@@ -44,6 +53,12 @@
             ]
         }),
         computed: {
+            isToday () {
+                return this.$store.state.accountingDate === new Date().toISOString().split('T')[0]
+            },
+            isWorking () {
+                return this.$store.getters.isWorking
+            },
             workdays () {
                 return this.$store.state.workdays
             }

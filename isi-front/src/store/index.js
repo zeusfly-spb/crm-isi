@@ -424,6 +424,12 @@ export const store = new Vuex.Store({
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
         isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed'),
-        isSuperadmin: state => !!state.authUser && state.authUser.is_superadmin
+        isSuperadmin: state => !!state.authUser && state.authUser.is_superadmin,
+        isWorking: state => {
+            let currentDate = new Date().toISOString().split('T')[0]
+            let today = state.accountingDate === currentDate
+            let usersWorkDay = state.workdays.find(item => item.user_id === state.authUser.id)
+            return !!usersWorkDay && !!usersWorkDay.time_start && !usersWorkDay.time_finish && today
+        }
     }
 })
