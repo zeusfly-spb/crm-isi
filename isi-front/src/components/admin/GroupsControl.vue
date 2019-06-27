@@ -123,7 +123,7 @@
     export default {
         name: 'GroupsControl',
         data: () => ({
-            toDeleteGroupId: '',
+            toDeleteGroup: null,
             confirmText: '',
             confirm: false,
             editedGroup: null,
@@ -151,10 +151,10 @@
         },
         methods: {
             deleteGroup () {
-                this.$store.dispatch('deleteGroup', this.toDeleteGroupId)
+                this.$store.dispatch('deleteGroup', this.toDeleteGroup.id)
                     .then(() => {
                         this.confirm = false
-                        this.showSuccess('Группа удалена')
+                        this.showSuccess(`Группа "${this.toDeleteGroup.name}" удалена`)
                     })
                     .catch(e => {
                         if (e.error) {
@@ -209,8 +209,8 @@
                 this.dialog = true
             },
             showDeleteConfirm (group) {
-                this.toDeleteGroupId = group.id
-                this.confirmText = `Удалить группу ${group.name}`
+                this.toDeleteGroup = group
+                this.confirmText = `Удалить группу "${group.name}"`
                 this.confirm = true
             },
             resetGroup () {
