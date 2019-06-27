@@ -39,11 +39,12 @@
                     </v-card-text>
                 </v-card>
             </v-tab>
-
         </v-tabs>
+        <work-days-table/>
     </v-flex>
 </template>
 <script>
+    import WorkDaysTable from './WorkDaysTable'
     export default {
         name: 'DailyAccounting',
         data: () => ({
@@ -72,6 +73,9 @@
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
+        },
+        components: {
+            WorkDaysTable
         }
     }
 </script>
