@@ -53,4 +53,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_phone', 'CustomerController@deletePhone');
     Route::post('add_phone', 'CustomerController@addPhone');
 
+    // WORKDAYS
+    Route::post('get_workdays', 'WorkDayController@index');
+
 });

@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Island::class)->withDefault(['name' => 'Без островка']);
     }
+
+    public function workdays()
+    {
+        return $this->hasMany(WorkDay::class);
+    }
 }

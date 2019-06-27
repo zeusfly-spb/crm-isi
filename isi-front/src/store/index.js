@@ -17,9 +17,24 @@ export const store = new Vuex.Store({
         islands: [],
         insoles: [],
         customers: [],
-        workingIslandId: 0
+        workingIslandId: 0,
+        workdays: []
     },
     actions: {
+        setWorkDays ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_workdays', {
+                    date: state.accountingDate,
+                    island_id: state.workingIslandId
+                })
+                    .then(res => {
+                        commit('SET_WORK_DAYS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+
+        },
         setWorkingIslandId ({commit}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
         },
@@ -286,6 +301,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_WORK_DAYS (state, workdays) {
+            state.workdays = workdays
+        },
         SET_OWN_ISLAND_AS_WORKING (state) {
             state.workingIslandId = state.authUser.island_id
         },
