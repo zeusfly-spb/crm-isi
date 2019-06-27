@@ -9,10 +9,12 @@ class IslandController extends Controller
 {
     public function create(Request $request)
     {
-        return response()->json(Island::create([
+        $island = Island::create([
             'name' => $request->name,
             'description' => $request->description
-        ])->toArray());
+        ]);
+        $island->load('users');
+        return response()->json($island->toArray());
     }
 
     public function getAll()

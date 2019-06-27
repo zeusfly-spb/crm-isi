@@ -124,7 +124,7 @@
     export default {
         name: 'IslandsControl',
         data: () => ({
-            islandIdToDelete: null,
+            islandToDelete: null,
             confirm: false,
             confirmText: '',
             mode: null,
@@ -151,12 +151,20 @@
             }
         },
         methods: {
+            showSuccess (text) {
+                this.snackColor = 'green'
+                this.snackText = text
+                this.snackbar = true
+            },
             deleteIsland () {
-                this.$store.dispatch('deleteIsland', this.islandIdToDelete)
-                    .then(() => this.confirm = false)
+                this.$store.dispatch('deleteIsland', this.islandToDelete.id)
+                    .then(() => {
+                        this.confirm = false
+                        this.showSuccess(`Островок "${this.islandToDelete.name}" удален`)
+                    })
             },
             showDeleteConfirm (island) {
-                this.islandIdToDelete = island.id
+                this.islandToDelete = island
                 this.confirmText = `Удалить островок ${island.name}`
                 this.confirm = true
             },
@@ -174,7 +182,11 @@
             submitForm () {
                 if (this.mode === 'add') {
                     this.$store.dispatch('addIsland', this.editedIsland)
-                        .then(() => this.dialog = false)
+                        .then((res) => {
+                            this.dialog = false
+                            this.showSuccess(`Островок "${res.data.name}" добавлен`)
+
+                        })
                 }
             }
         },
