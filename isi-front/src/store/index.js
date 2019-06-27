@@ -21,12 +21,24 @@ export const store = new Vuex.Store({
         workdays: []
     },
     actions: {
+        startUserDay ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/start_day', {user_id: this.state.authUser.id})
+                    .then(res => {
+                        commit('ADD_WORK_DAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         enterCRM ({dispatch}) {
             dispatch('setAccountingDate')
-            dispatch('setUsers')
-            dispatch('setGroups')
-            dispatch('setIslands')
-            dispatch('setWorkDays')
+                .then(() => {
+                    dispatch('setUsers')
+                    dispatch('setGroups')
+                    dispatch('setIslands')
+                    dispatch('setWorkDays')
+                })
         },
         setWorkDays ({commit}) {
             return new Promise((resolve, reject) => {
@@ -40,7 +52,6 @@ export const store = new Vuex.Store({
                     })
                     .catch(e => reject(e))
             })
-
         },
         setWorkingIslandId ({commit}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
@@ -291,16 +302,23 @@ export const store = new Vuex.Store({
 
         },
         setAccountingDate ({commit}) {
-            let savedDate = Cookies.get('accounting_date')
-            if (savedDate) {
-                commit('SET_ACCOUNTING_DATE', savedDate)
-            } else {
-                Vue.axios.post('/api/get_accounting_date')
-                    .then(res => commit('SET_ACCOUNTING_DATE', res.data.date))
-                    .catch(e => {
-                        console.error(e)
-                    })
-            }
+            return new Promise((resolve, reject) => {
+                let savedDate = Cookies.get('accounting_date')
+                if (savedDate) {
+                    commit('SET_ACCOUNTING_DATE', savedDate)
+                    resolve(savedDate)
+                } else {
+                    Vue.axios.post('/api/get_accounting_date')
+                        .then(res => {
+                            commit('SET_ACCOUNTING_DATE', res.data.date)
+                            resolve(res)
+                        })
+                        .catch(e => {
+                            console.error(e)
+                            reject(e)
+                        })
+                }
+            })
         },
         changeAccountingDate ({commit}, date) {
             Cookies.set('accounting_date', date)
@@ -308,6 +326,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        ADD_WORK_DAY (state, workday) {
+            state.workdays.push(workday)
+        },
         SET_WORK_DAYS (state, workdays) {
             state.workdays = workdays
         },

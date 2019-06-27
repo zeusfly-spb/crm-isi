@@ -16,6 +16,7 @@ class WorkDayController extends Controller
                 $query->where('island_id', $island_id);
             });
         }
-        return response()->json($queryBuilder->get()->toArray());
+        $workdays = $queryBuilder->get();
+        return response()->json($workdays->toArray());
     }
 }

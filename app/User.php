@@ -73,4 +73,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(WorkDay::class);
     }
+
+    public function startDay()
+    {
+        $now = now();
+        $workday = $this->workdays()->create([
+            'date' => $now->toDateString(),
+            'time_start' => $now->toTimeString()
+        ]);
+        $workday->load('user');
+        return $workday;
+    }
+
+    public function finishDay()
+    {
+        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString)->first();
+        $currentWorkDay->update(['time_finish' => now()->toTimeString()]);
+        return $currentWorkDay;
+    }
 }

@@ -19,7 +19,7 @@ class CreateWorkDaysTable extends Migration
             $table->date('date');
             $table->time('time_start');
             $table->time('time_finish')->nullable()->default(null);
-            $table->decimal('working_hours', 8, 2);
+            $table->decimal('working_hours', 8, 2)->nullable()->default(null);
             $table->time('dinner_start')->nullable()->default(null);
             $table->time('dinner_finish')->nullable()->default(null);
             $table->timestamps();
