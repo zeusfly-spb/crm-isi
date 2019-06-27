@@ -286,6 +286,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_OWN_ISLAND_AS_WORKING (state) {
+            state.workingIslandId = state.authUser.island_id
+        },
         SET_WORKING_ISLAND_ID (state, id) {
             state.workingIslandId = id
         },

@@ -71,6 +71,7 @@
                     this.$store.dispatch('setAccountingDate')
                     this.$store.dispatch('setUsers')
                     this.$store.dispatch('setGroups')
+                    this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
 
                     this.$router.push('/home')
                 }

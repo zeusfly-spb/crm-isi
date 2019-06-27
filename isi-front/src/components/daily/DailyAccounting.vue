@@ -47,7 +47,6 @@
     export default {
         name: 'DailyAccounting',
         data: () => ({
-            currentIslandId: 0,
         }),
         computed: {
             workingIslandId () {
@@ -71,7 +70,6 @@
         },
         methods: {
             setCurrentIslandId (index) {
-                this.currentIslandId = this.tabs[index].id
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
         }
