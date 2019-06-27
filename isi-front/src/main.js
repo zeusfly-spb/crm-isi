@@ -61,13 +61,10 @@ if (token) {
 
         .then(() => {
             if (store.getters.isSuperadmin || store.getters.isAllowed) {
-                store.dispatch('setAccountingDate')
-                store.dispatch('setUsers')
-                store.dispatch('setGroups')
-                store.dispatch('setIslands')
+                store.dispatch('enterCRM')
                 router.push('/home')
             } else {
-                store.dispatch('checkAccess')
+                // store.dispatch('checkAccess')
                 router.push('/access')
             }
         })

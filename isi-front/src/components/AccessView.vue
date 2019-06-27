@@ -68,16 +68,13 @@
         watch: {
             access (value) {
                 if (value === 'allowed') {
-                    this.$store.dispatch('setAccountingDate')
-                    this.$store.dispatch('setUsers')
-                    this.$store.dispatch('setGroups')
+                    this.$store.dispatch('enterCRM')
                     this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
-
                     this.$router.push('/home')
                 }
             }
         },
-        mounted () {
+        created () {
                 setInterval(() => this.$store.dispatch('checkAccess'), 5000)
         }
     }

@@ -21,11 +21,18 @@ export const store = new Vuex.Store({
         workdays: []
     },
     actions: {
+        enterCRM ({dispatch}) {
+            dispatch('setAccountingDate')
+            dispatch('setUsers')
+            dispatch('setGroups')
+            dispatch('setIslands')
+            dispatch('setWorkDays')
+        },
         setWorkDays ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_workdays', {
-                    date: state.accountingDate,
-                    island_id: state.workingIslandId
+                    date: this.state.accountingDate,
+                    island_id: this.state.workingIslandId
                 })
                     .then(res => {
                         commit('SET_WORK_DAYS', res.data)

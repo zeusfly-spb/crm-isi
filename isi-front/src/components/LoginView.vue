@@ -70,11 +70,7 @@
                                     })
                                         .then(() => {
                                             if (this.$store.getters.isAllowed || this.$store.state.access === 'allowed') {
-                                                this.$store.dispatch('setAccountingDate')
-                                                this.$store.dispatch('setUsers')
-                                                this.$store.dispatch('setGroups')
-                                                this.$store.dispatch('setIslands')
-
+                                                this.$store.dispatch('enterCRM')
                                                 this.$router.push('/home')
                                             } else {
                                                 this.$router.push('/access')
