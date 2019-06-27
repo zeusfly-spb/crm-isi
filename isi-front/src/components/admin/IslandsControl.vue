@@ -165,7 +165,7 @@
             },
             showDeleteConfirm (island) {
                 this.islandToDelete = island
-                this.confirmText = `Удалить островок ${island.name}`
+                this.confirmText = `Удалить островок "${island.name}"`
                 this.confirm = true
             },
             showEditDialog (island) {
