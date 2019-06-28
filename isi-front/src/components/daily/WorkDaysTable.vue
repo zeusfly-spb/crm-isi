@@ -1,5 +1,5 @@
 <template>
-    <v-flex justify-center class="mt-2">
+    <v-flex xs 12 md6 offset-md3 justify-center class="mt-2">
             <v-data-table
                 :headers="headers"
                 :items="workdays"
