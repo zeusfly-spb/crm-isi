@@ -21,6 +21,21 @@ export const store = new Vuex.Store({
         workdays: []
     },
     actions: {
+        finishUserDay ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/finish_day', {
+                    user_id: this.state.authUser.id,
+                    working_hours: data.working_hours,
+                    dinner_start: data.dinner_start,
+                    dinner_finish: data.dinner_finish
+                })
+                    .then(res => {
+                        commit('UPDATE_WORK_DAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         startUserDay ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/start_day', {user_id: this.state.authUser.id})
@@ -336,6 +351,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_WORK_DAY (state, workday) {
+            state.workdays = state.workdays.map(item => item.id === workday.id ? workday : item)
+        },
         ADD_WORK_DAY (state, workday) {
             state.workdays.push(workday)
         },
@@ -435,7 +453,7 @@ export const store = new Vuex.Store({
         token: () => Cookies.get('isi-token') || null,
         isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed'),
         isSuperadmin: state => !!state.authUser && state.authUser.is_superadmin,
-        isWorking: state => {
+        isDayOpen: state => {
             let currentDate = new Date().toISOString().split('T')[0]
             let today = state.accountingDate === currentDate
             let usersWorkDay = state.workdays.find(item => item.user_id === state.authUser.id)
@@ -445,7 +463,8 @@ export const store = new Vuex.Store({
             return state.workdays.find(item => item.user.id === state.authUser.id) || null
         },
         isDayClosed: state => {
-
+            let currentWorkDay = state.workdays.find(item => item.user.id === state.authUser.id) || null
+            return !!currentWorkDay && currentWorkDay.time_start && !!currentWorkDay && !!currentWorkDay.time_finish
         }
     }
 })

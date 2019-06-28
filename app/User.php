@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function finishDay(Array $data)
     {
-        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString)->first();
+        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString())->first();
         $currentWorkDay->update([
             'time_finish' => now()->toTimeString(),
             'working_hours' => $data['working_hours'] ?? null,

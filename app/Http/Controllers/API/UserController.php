@@ -145,4 +145,11 @@ class UserController extends Controller
         $workday = $user->startDay();
         return response()->json($workday->toArray());
     }
+
+    public function finishDay(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $currentWorkDay = $user->finishDay($request->all());
+        return response()->json($currentWorkDay->toArray());
+    }
 }

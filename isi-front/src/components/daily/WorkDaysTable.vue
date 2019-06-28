@@ -17,43 +17,49 @@
             >
                 <template v-slot:items="props">
                     <tr :class="{'working': props.item.working && isToday}"
-                        style="background: #EF9A9A"
+                        :style="{'background: #EF9A9A': props.item.working, 'background: #FFF': props.item.closed}"
                     >
                         <td>
                             {{ props.item.user.full_name }}
                         </td>
                         <td>
-                            <input v-if="props.item.user.id === authUser.id || isSuperAdmin"
+                            <v-text-field v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
                                         type="text"
                                         maxlength="2"
-                                        style="width: 2em; border: 1px solid dimgrey"
+                                        style="width: 2em"
                                         v-model="props.item.working_hours"
                                         ref="hoursInput"
+                                        height="1em"
                                         @keyup.enter="attemptToCloseDay"
-                            />
+                            ></v-text-field>
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
                         <td>{{ hideSeconds(props.item.time_start) }}</td>
                         <td>{{ props.item.time_finish}}</td>
                         <td align="center">
-                                <input
+                            <v-layout>
+                                <v-text-field
                                         type="text"
-                                        maxlength="4"
-                                        style="width: 4em; border: 1px solid dimgrey"
+                                        maxlength="5"
+                                        style="width: 2em"
+                                        height="1em"
                                         v-model="props.item.dinner_start"
-                                        v-if="props.item.user.id === authUser.id"
+                                        v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
+                                        mask="##:##"
                                 />
                                 <span v-else>{{ props.item.dinner_start }}</span>
-
-                            -
-                                <input
+                                -
+                                <v-text-field
                                         type="text"
-                                        max-length="4"
-                                        style="width: 4em; border: 1px solid dimgrey"
+                                        maxlength="5"
+                                        style="width: 2em"
                                         v-model="props.item.dinner_finish"
-                                        v-if="props.item.user.id === authUser.id"
+                                        v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
+                                        height="1em"
+                                        mask="##:##"
                                 />
                                 <span v-else>{{ props.item.dinner_finish }}</span>
+                            </v-layout>
                         </td>
 
                     </tr>
@@ -67,15 +73,21 @@
             >
                 <v-btn flat color="primary darken-1"
                        @click="startDay"
-                       v-if="!isWorking"
+                       v-if="!isDayOpen && !isDayClosed"
                 >
                     Начать рабочий день
                 </v-btn>
                 <v-btn flat :color="canCloseDay ? 'primary darken-1' : 'grey'"
                        @click="attemptToCloseDay"
-                       v-if="isWorking"
+                       v-if="isDayOpen"
                 >
                     Закончить рабочий день
+                </v-btn>
+                <v-btn flat color="primary darken-1"
+                       @click="resumeDay"
+                       v-if="isDayClosed"
+                >
+                    Продолжить рабочий день
                 </v-btn>
             </div>
     </v-flex>
@@ -101,7 +113,7 @@
                 return this.$store.getters.isDayClosed
             },
             canCloseDay () {
-                return this.isWorking && !!this.currentWorkDay && !!this.currentWorkDay.working_hours
+                return this.isDayOpen && !!this.currentWorkDay && !!this.currentWorkDay.working_hours
             },
             currentWorkDay () {
                 return this.$store.getters.currentWorkDay
@@ -115,18 +127,27 @@
             isToday () {
                 return this.$store.state.accountingDate === new Date().toISOString().split('T')[0]
             },
-            isWorking () {
-                return this.$store.getters.isWorking
+            isDayOpen () {
+                return this.$store.getters.isDayOpen
             },
             workdays () {
                 const addWorkState = (workday) => {
                     workday.working = !!workday.time_start && !workday.time_finish
+                    workday.closed = !!workday.time_start && !!workday.time_finish
                     return workday
                 }
                 return this.$store.state.workdays.map(item => addWorkState(item))
             }
         },
         methods: {
+            resumeDay () {
+                console.log('To resume day')
+            },
+            showSnack (text, color) {
+                this.snackColor = color
+                this.snackText = text
+                this.snackbar = true
+            },
             attemptToCloseDay () {
                 if (!this.canCloseDay) {
                     this.snackText = 'Чтобы закончить рабочий день введите количество отработанных часов'
@@ -135,6 +156,12 @@
                     this.$refs.hoursInput.focus()
                     return
                 }
+            this.$store.dispatch('finishUserDay', {
+                working_hours: this.currentWorkDay.working_hours,
+                dinner_start: this.currentWorkDay.dinner_start,
+                dinner_finish: this.currentWorkDay.dinner_finish
+            })
+                .then(() => this.showSnack('Спасибо за работу', 'green'))
 
             },
             hideSeconds (time) {
