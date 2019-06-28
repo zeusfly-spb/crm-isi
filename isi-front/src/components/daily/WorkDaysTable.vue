@@ -20,7 +20,7 @@
                 </template>
             </v-data-table>
             <div class="text-xs-center"
-                 v-if="isToday"
+                 v-if="isToday && !isSuperAdmin"
             >
                 <v-btn flat color="primary darken-1"
                        @click="startDay"
@@ -53,6 +53,9 @@
             ]
         }),
         computed: {
+            isSuperAdmin () {
+                return this.$store.getters.isSuperadmin
+            },
             isToday () {
                 return this.$store.state.accountingDate === new Date().toISOString().split('T')[0]
             },
