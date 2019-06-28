@@ -303,6 +303,16 @@ export const store = new Vuex.Store({
         },
         setAccountingDate ({commit}) {
             return new Promise((resolve, reject) => {
+                // Verify that current date changed
+                let now = new Date().toISOString().split('T')[0]
+                let savedRealDate = Cookies.get('saved_real')
+                if (!savedRealDate) {
+                    Cookies.set('saved_real', now)
+                } else if (savedRealDate < now) {
+                    Cookies.set('saved_real', now)
+                    Cookies.set('accounting_date', now)
+                }
+                //
                 let savedDate = Cookies.get('accounting_date')
                 if (savedDate) {
                     commit('SET_ACCOUNTING_DATE', savedDate)
