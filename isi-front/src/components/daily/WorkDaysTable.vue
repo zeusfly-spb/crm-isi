@@ -9,12 +9,27 @@
                     <tr :class="{'working': props.item.working && isToday}"
                         style="background: #EF9A9A"
                     >
-                        <td>{{ props.item.user.full_name }}</td>
-                        <td>{{ props.item.working_hours }}</td>
+                        <td>
+                            {{ props.item.user.full_name }}
+                        </td>
+                        <td>
+                            <v-text-field v-if="props.item.user.id === authUser.id || isSuperAdmin"
+                                          maxlength="2"
+                                          style="width: 2em"
+                                          v-model="props.item.working_hours"
+                            ></v-text-field>
+                            <span v-else>{{ props.item.working_hours }}</span>
+                        </td>
                         <td>{{ hideSeconds(props.item.time_start) }}</td>
                         <td>{{ props.item.time_finish}}</td>
                         <td>{{ props.item.dinner_start }} - {{ props.item.dinner_finish }}</td>
-                        <td>Действия</td>
+                        <td>
+                            <v-btn flat icon color="green"
+                                   v-if="isSuperAdmin || props.item.user.id === authUser.id"
+                            >
+                                <v-icon>save</v-icon>
+                            </v-btn>
+                        </td>
                     </tr>
                 </template>
                 <template v-slot:no-data>
@@ -33,6 +48,7 @@
                 <v-btn flat color="primary darken-1"
                        @click=""
                        v-if="isWorking"
+                       :disabled="!canCloseDay"
                 >
                     Закончить рабочий день
                 </v-btn>
@@ -54,6 +70,15 @@
             ]
         }),
         computed: {
+            canCloseDay () {
+                return this.isWorking && !!this.currentWorkDay && !!this.currentWorkDay.working_hours
+            },
+            currentWorkDay () {
+                return this.$store.getters.currentWorkDay
+            },
+            authUser () {
+                return this.$store.state.authUser
+            },
             isSuperAdmin () {
                 return this.$store.getters.isSuperadmin
             },

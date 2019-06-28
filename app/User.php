@@ -85,10 +85,15 @@ class User extends Authenticatable
         return $workday;
     }
 
-    public function finishDay()
+    public function finishDay(Array $data)
     {
         $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString)->first();
-        $currentWorkDay->update(['time_finish' => now()->toTimeString()]);
+        $currentWorkDay->update([
+            'time_finish' => now()->toTimeString(),
+            'working_hours' => $data['working_hours'] ?? null,
+            'dinner_start' => $data['dinner_start'] ?? null,
+            'dinner_finish' => $data['dinner_finish'] ?? null
+        ]);
         return $currentWorkDay;
     }
 }

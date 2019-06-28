@@ -440,6 +440,9 @@ export const store = new Vuex.Store({
             let today = state.accountingDate === currentDate
             let usersWorkDay = state.workdays.find(item => item.user_id === state.authUser.id)
             return !!usersWorkDay && !!usersWorkDay.time_start && !usersWorkDay.time_finish && today
+        },
+        currentWorkDay: state => {
+            return state.workdays.find(item => item.user.id === state.authUser.id) || null
         }
     }
 })
