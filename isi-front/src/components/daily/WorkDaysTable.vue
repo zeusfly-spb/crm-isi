@@ -1,7 +1,5 @@
 <template>
-    <v-layout justify-center class="mt-2">
-        <v-card xs12 md6 text-xs-center>
-            <div class="blue--text text-xs-center">Рабочее время</div>
+    <v-flex justify-center class="mt-2">
             <v-data-table
                 :headers="headers"
                 :items="workdays"
@@ -35,8 +33,7 @@
                     Закончить рабочий день
                 </v-btn>
             </div>
-        </v-card>
-    </v-layout>
+    </v-flex>
 
 </template>
 <script>
@@ -63,7 +60,11 @@
                 return this.$store.getters.isWorking
             },
             workdays () {
-                return this.$store.state.workdays
+                const addWorkState = (workday) => {
+                    workday.working = !!workday.time_start && !workday.time_finish
+                    return workday
+                }
+                return this.$store.state.workdays.map(item => addWorkState(item))
             }
         },
         methods: {
