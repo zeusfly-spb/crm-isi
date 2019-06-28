@@ -85,7 +85,7 @@
                 </v-btn>
                 <v-btn flat color="primary darken-1"
                        @click="resumeDay"
-                       v-if="isDayClosed"
+                       v-if="isDayClosed && isToday"
                 >
                     Продолжить рабочий день
                 </v-btn>
