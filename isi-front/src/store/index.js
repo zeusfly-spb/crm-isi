@@ -443,6 +443,9 @@ export const store = new Vuex.Store({
         },
         currentWorkDay: state => {
             return state.workdays.find(item => item.user.id === state.authUser.id) || null
+        },
+        isDayClosed: state => {
+
         }
     }
 })

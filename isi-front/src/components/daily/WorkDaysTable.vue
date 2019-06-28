@@ -1,5 +1,15 @@
 <template>
     <v-flex xs 12 md6 offset-md3 justify-center class="mt-2">
+        <v-snackbar
+                v-model="snackbar"
+                auto-height
+                top
+                :timeout="3000"
+                :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
+
             <v-data-table
                 :headers="headers"
                 :items="workdays"
@@ -13,23 +23,39 @@
                             {{ props.item.user.full_name }}
                         </td>
                         <td>
-                            <v-text-field v-if="props.item.user.id === authUser.id || isSuperAdmin"
-                                          maxlength="2"
-                                          style="width: 2em"
-                                          v-model="props.item.working_hours"
-                            ></v-text-field>
+                            <input v-if="props.item.user.id === authUser.id || isSuperAdmin"
+                                        type="text"
+                                        maxlength="2"
+                                        style="width: 2em; border: 1px solid dimgrey"
+                                        v-model="props.item.working_hours"
+                                        ref="hoursInput"
+                                        @keyup.enter="attemptToCloseDay"
+                            />
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
                         <td>{{ hideSeconds(props.item.time_start) }}</td>
                         <td>{{ props.item.time_finish}}</td>
-                        <td>{{ props.item.dinner_start }} - {{ props.item.dinner_finish }}</td>
-                        <td>
-                            <v-btn flat icon color="green"
-                                   v-if="isSuperAdmin || props.item.user.id === authUser.id"
-                            >
-                                <v-icon>save</v-icon>
-                            </v-btn>
+                        <td align="center">
+                                <input
+                                        type="text"
+                                        maxlength="4"
+                                        style="width: 4em; border: 1px solid dimgrey"
+                                        v-model="props.item.dinner_start"
+                                        v-if="props.item.user.id === authUser.id"
+                                />
+                                <span v-else>{{ props.item.dinner_start }}</span>
+
+                            -
+                                <input
+                                        type="text"
+                                        max-length="4"
+                                        style="width: 4em; border: 1px solid dimgrey"
+                                        v-model="props.item.dinner_finish"
+                                        v-if="props.item.user.id === authUser.id"
+                                />
+                                <span v-else>{{ props.item.dinner_finish }}</span>
                         </td>
+
                     </tr>
                 </template>
                 <template v-slot:no-data>
@@ -45,10 +71,9 @@
                 >
                     Начать рабочий день
                 </v-btn>
-                <v-btn flat color="primary darken-1"
-                       @click=""
+                <v-btn flat :color="canCloseDay ? 'primary darken-1' : 'grey'"
+                       @click="attemptToCloseDay"
                        v-if="isWorking"
-                       :disabled="!canCloseDay"
                 >
                     Закончить рабочий день
                 </v-btn>
@@ -60,16 +85,21 @@
     export default {
         name: 'WorkDaysTable',
         data: () => ({
+            snackbar: false,
+            snackColor: 'green',
+            snackText: '',
             headers: [
                 {text: 'Сотрудник', value: 'user.full_name'},
                 {text: 'Часы', value: 'working_hours', sortable: false},
                 {text: 'Начало', value: 'time_start'},
                 {text: 'Окончание', value: 'time_finish'},
-                {text: 'Обед', value: null, sortable: false},
-                {text: 'Действия', value: null, sortable: false}
+                {text: 'Обед', value: null, sortable: false, align: 'center'}
             ]
         }),
         computed: {
+            isDayClosed () {
+                return this.$store.getters.isDayClosed
+            },
             canCloseDay () {
                 return this.isWorking && !!this.currentWorkDay && !!this.currentWorkDay.working_hours
             },
@@ -97,6 +127,16 @@
             }
         },
         methods: {
+            attemptToCloseDay () {
+                if (!this.canCloseDay) {
+                    this.snackText = 'Чтобы закончить рабочий день введите количество отработанных часов'
+                    this.snackColor = 'red'
+                    this.snackbar = true
+                    this.$refs.hoursInput.focus()
+                    return
+                }
+
+            },
             hideSeconds (time) {
                 let params = time.split(':')
                 return `${params[0]}:${params[1]}`
