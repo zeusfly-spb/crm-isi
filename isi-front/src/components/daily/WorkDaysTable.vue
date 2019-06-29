@@ -16,8 +16,8 @@
                 hide-actions
             >
                 <template v-slot:items="props">
-                    <tr :class="{'working': props.item.working && isToday}"
-                        :style="{'background: #EF9A9A': props.item.working, 'background: #FFF': props.item.closed}"
+                    <tr :class="{'working red lighten-4': props.item.working && isToday}"
+                        style="border-bottom: solid 1px #fafafa!important;"
                     >
                         <td>
                             {{ props.item.user.full_name }}

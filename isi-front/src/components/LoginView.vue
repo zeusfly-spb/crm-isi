@@ -71,7 +71,7 @@
                                         .then(() => {
                                             if (this.$store.getters.isAllowed || this.$store.state.access === 'allowed') {
                                                 this.$store.dispatch('enterCRM')
-                                                this.$router.push('/home')
+                                                    .then(() => this.$router.push('/home'))
                                             } else {
                                                 this.$router.push('/access')
                                             }
