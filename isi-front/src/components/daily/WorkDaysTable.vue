@@ -20,7 +20,7 @@
                         style="border-bottom: solid 1px #fafafa!important;"
                     >
                         <td>
-                            {{ props.item.user.full_name }}
+                            {{ props.item.user && props.item.user.full_name}}
                         </td>
                         <td>
                             <v-text-field v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
@@ -34,8 +34,8 @@
                             ></v-text-field>
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
-                        <td>{{ hideSeconds(props.item.time_start) }}</td>
-                        <td>{{ hideSeconds(props.item.time_finish) }}</td>
+                        <td>{{ props.item.time_start }}</td>
+                        <td>{{ props.item.time_finish || '' }}</td>
                         <td align="center">
                             <v-layout>
                                 <v-text-field
@@ -109,6 +109,9 @@
             ]
         }),
         computed: {
+            realDate () {
+                return this.$store.state.realDate
+            },
             isDayClosed () {
                 return this.$store.getters.isDayClosed
             },
@@ -125,7 +128,7 @@
                 return this.$store.getters.isSuperadmin
             },
             isToday () {
-                return this.$store.state.accountingDate === new Date().toISOString().split('T')[0]
+                return this.$store.state.accountingDate === this.realDate
             },
             isDayOpen () {
                 return this.$store.getters.isDayOpen
@@ -164,16 +167,12 @@
                 .then(() => this.showSnack('Спасибо за работу', 'green'))
 
             },
-            hideSeconds (time) {
-                let params = time.split(':')
-                return `${params[0]}:${params[1]}`
-            },
             startDay () {
                 this.$store.dispatch('startUserDay')
             }
         },
         mounted () {
-            setInterval(() => this.$store.dispatch('setWorkDays'), 5000)
+//            setInterval(() => this.$store.dispatch('setWorkDays'), 5000)
 
         }
     }

@@ -94,6 +94,7 @@ class User extends Authenticatable
             'dinner_start' => $data['dinner_start'] ?? null,
             'dinner_finish' => $data['dinner_finish'] ?? null
         ]);
+        $currentWorkDay->load('user');
         return $currentWorkDay;
     }
 }

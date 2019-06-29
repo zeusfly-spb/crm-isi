@@ -152,4 +152,6 @@ class UserController extends Controller
         $currentWorkDay = $user->finishDay($request->all());
         return response()->json($currentWorkDay->toArray());
     }
+
+    
 }
