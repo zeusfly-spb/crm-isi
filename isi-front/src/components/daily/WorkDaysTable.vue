@@ -35,7 +35,7 @@
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
                         <td>{{ hideSeconds(props.item.time_start) }}</td>
-                        <td>{{ props.item.time_finish}}</td>
+                        <td>{{ hideSeconds(props.item.time_finish) }}</td>
                         <td align="center">
                             <v-layout>
                                 <v-text-field
@@ -171,6 +171,10 @@
             startDay () {
                 this.$store.dispatch('startUserDay')
             }
+        },
+        mounted () {
+            setInterval(() => this.$store.dispatch('setWorkDays'), 5000)
+
         }
     }
 </script>
