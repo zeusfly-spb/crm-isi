@@ -57,5 +57,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_workdays', 'WorkDayController@index');
     Route::post('start_day', 'API\UserController@startDay');
     Route::post('finish_day', 'API\UserController@finishDay');
+    Route::post('resume_day', 'API\UserController@resumeDay');
 
 });

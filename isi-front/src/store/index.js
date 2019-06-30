@@ -22,6 +22,16 @@ export const store = new Vuex.Store({
         realDate: null
     },
     actions: {
+        resumeUserDay ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/resume_day', {user_id: this.state.authUser.id})
+                    .then(res => {
+                        commit('UPDATE_WORK_DAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setRealDate ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_accounting_date')

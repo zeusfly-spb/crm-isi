@@ -97,4 +97,12 @@ class User extends Authenticatable
         $currentWorkDay->load('user');
         return $currentWorkDay;
     }
+
+    public function resumeDay()
+    {
+        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString())->first();
+        $currentWorkDay->update(['time_finish' => null]);
+        $currentWorkDay->load('user');
+        return $currentWorkDay;
+    }
 }

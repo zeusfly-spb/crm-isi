@@ -144,7 +144,8 @@
         },
         methods: {
             resumeDay () {
-                console.log('To resume day')
+                this.$store.dispatch('resumeUserDay')
+                    .then(() => this.showSnack('С возвращением ))', 'green'))
             },
             showSnack (text, color) {
                 this.snackColor = color
