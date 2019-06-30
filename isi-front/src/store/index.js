@@ -19,9 +19,23 @@ export const store = new Vuex.Store({
         customers: [],
         workingIslandId: 0,
         workdays: [],
-        realDate: null
+        realDate: null,
+        scanMode: {
+            workdays: true,
+            accesses: false
+        }
     },
     actions: {
+        startScanTimer ({dispatch}) {
+            setInterval(() => {
+                if (this.state.scanMode.workdays) {
+                    dispatch('setWorkDays')
+                }
+                if (this.state.scanMode.accesses) {
+                    dispatch('setAccesses')
+                }
+            }, 5000)
+        },
         resumeUserDay ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/resume_day', {user_id: this.state.authUser.id})
@@ -75,6 +89,7 @@ export const store = new Vuex.Store({
                     dispatch('setGroups')
                     dispatch('setIslands')
                     dispatch('setWorkDays')
+                    dispatch('startScanTimer')
                 })
         },
         setWorkDays ({commit}) {
@@ -373,6 +388,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_SCAN_MODE (state, mode) {
+            state.scanMode = mode
+        },
         SET_REAL_DATE (state, date) {
           state.realDate = new Date(date).toISOString().split('T')[0]
         },

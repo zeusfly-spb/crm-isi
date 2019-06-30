@@ -49,7 +49,10 @@
         },
         methods: {
             loadContent (index) {
+                this.$store.commit('SET_SCAN_MODE', {workdays: false, accesses: false})
                 switch (index) {
+                    case 0: this.$store.commit('SET_SCAN_MODE', {workdays: true, accesses: false})
+                        break
                     case 1: this.$store.dispatch('setCustomers')
                         break
                     case 2: this.$store.dispatch('setInsoles')

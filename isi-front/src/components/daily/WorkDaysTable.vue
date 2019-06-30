@@ -171,10 +171,6 @@
             startDay () {
                 this.$store.dispatch('startUserDay')
             }
-        },
-        mounted () {
-//            setInterval(() => this.$store.dispatch('setWorkDays'), 5000)
-
         }
     }
 </script>
