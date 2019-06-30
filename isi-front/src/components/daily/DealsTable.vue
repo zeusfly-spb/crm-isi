@@ -1,5 +1,15 @@
 <template>
     <v-flex>
+        <v-snackbar
+                v-model="snackbar"
+                auto-height
+                top
+                :timeout="3000"
+                :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
+
         <v-data-table
                 :headers="headers"
                 :items="deals"
@@ -24,7 +34,7 @@
 
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="dialog = true">Новая сделка</v-btn>
+                <v-btn color="primary" flat dark class="mb-2" @click="showDialog">Новая сделка</v-btn>
             </template>
             <v-card>
                 <v-card-title>
@@ -34,9 +44,8 @@
                     <v-container grid-list-md>
                         <v-layout row>
                             <v-flex xs12 sm12 md12>
-                                <!--<sub>Клиент</sub>-->
-                                <v-select
-                                        label="Клиент"
+                                <sub>Клиент</sub>
+                                <v-autocomplete
                                         v-model="selectedCustomerId"
                                         :items="customers"
                                         item-text="full_name"
@@ -47,7 +56,13 @@
                                         :error-messages="errors.collect('customer')"
                                         v-validate="'required'"
                                 >
-                                </v-select>
+                                    <template v-slot:item="data">
+                                        <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}"
+                                        >
+                                            {{ data.item.full_name }}
+                                        </span>
+                                    </template>
+                                </v-autocomplete>
                             </v-flex>
 
                         </v-layout>
@@ -67,7 +82,10 @@
     export default {
         name: 'DealsTable',
         data: () => ({
-            selectedCustomerId: null,
+            snackbar: false,
+            snackColor: 'green',
+            snackText: '',
+            selectedCustomerId: '0',
             dialog: false,
             headers: [
                 {text: '#', value: 'id'},
@@ -79,11 +97,32 @@
             ]
         }),
         computed: {
+            isDayOpen () {
+                return this.$store.getters.isDayOpen
+            },
             customers () {
-                return this.$store.state.customers
+                return [
+                    {id: null, full_name: 'Аноним'},
+                    {id: 0, full_name: 'Новый клиент'},
+                    ...this.$store.state.customers
+                ]
             },
             deals () {
                 return this.$store.state.deals
+            }
+        },
+        methods: {
+            showSnack (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
+            },
+            showDialog () {
+                if (!this.isDayOpen) {
+                    this.showSnack('Чтобы совершить сделку, начните рабочий день', 'red')
+                    return
+                }
+                this.dialog = true
             }
         }
     }
