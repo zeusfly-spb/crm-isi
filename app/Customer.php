@@ -7,9 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     protected $guarded = [];
+    protected $appends = [
+        'full_name'
+    ];
 
     public function phones()
     {
         return $this->hasMany(Phone::class);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->last_name . ' ' . $this->first_name . ' ' . $this->patronymic;
     }
 }

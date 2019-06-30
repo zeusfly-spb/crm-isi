@@ -22,12 +22,53 @@
             </template>
         </v-data-table>
 
+        <v-dialog v-model="dialog" max-width="600px">
+            <template v-slot:activator="{ on }">
+                <v-btn color="primary" flat dark class="mb-2" @click="dialog = true">Новая сделка</v-btn>
+            </template>
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Новая сделка</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container grid-list-md>
+                        <v-layout row>
+                            <v-flex xs12 sm12 md12>
+                                <!--<sub>Клиент</sub>-->
+                                <v-select
+                                        label="Клиент"
+                                        v-model="selectedCustomerId"
+                                        :items="customers"
+                                        item-text="full_name"
+                                        item-value="id"
+                                        single-line
+                                        data-vv-name="customer"
+                                        data-vv-as="Клиент"
+                                        :error-messages="errors.collect('customer')"
+                                        v-validate="'required'"
+                                >
+                                </v-select>
+                            </v-flex>
+
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red darken-1" flat @click="dialog = false">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="">Сохранить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
     export default {
         name: 'DealsTable',
         data: () => ({
+            selectedCustomerId: null,
+            dialog: false,
             headers: [
                 {text: '#', value: 'id'},
                 {text: 'Клиент', value: 'customer_id'},
@@ -38,6 +79,9 @@
             ]
         }),
         computed: {
+            customers () {
+                return this.$store.state.customers
+            },
             deals () {
                 return this.$store.state.deals
             }
