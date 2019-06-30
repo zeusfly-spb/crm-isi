@@ -105,4 +105,9 @@ class User extends Authenticatable
         $currentWorkDay->load('user');
         return $currentWorkDay;
     }
+
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
+    }
 }

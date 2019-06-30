@@ -40,11 +40,14 @@
                 </v-card>
             </v-tab>
         </v-tabs>
+        <deals-table/>
         <work-days-table/>
     </v-flex>
 </template>
 <script>
     import WorkDaysTable from './WorkDaysTable'
+    import DealsTable from './DealsTable.vue'
+
     export default {
         name: 'DailyAccounting',
         data: () => ({
@@ -75,7 +78,8 @@
             }
         },
         components: {
-            WorkDaysTable
+            WorkDaysTable,
+            DealsTable
         }
     }
 </script>

@@ -12,7 +12,7 @@ class DealController extends Controller
         $user_id = $request->user_id;
         $island_id = $request->island_id;
         $date = $request->date;
-        $queryBuilder = Deal::whereDate('created_at', $date);
+        $queryBuilder = Deal::with('user')->whereDate('created_at', $date);
         if ($island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $island_id);
         }
