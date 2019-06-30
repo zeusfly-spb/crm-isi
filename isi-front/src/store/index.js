@@ -23,9 +23,22 @@ export const store = new Vuex.Store({
         scanMode: {
             workdays: true,
             accesses: false
-        }
+        },
+        deals: []
     },
     actions: {
+        setDeals ({commit}) {
+            return new Promise((resolve,reject) => {
+                Vue.axios.post('/api/get_deals', {
+                    date: this.state.accountingDate,
+                    island_id: this.state.workingIslandId
+                })
+                    .then(res => {
+                        commit('SET_DEALS', res.data)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         startScanTimer ({dispatch}) {
             setInterval(() => {
                 if (this.state.scanMode.workdays) {
@@ -90,6 +103,7 @@ export const store = new Vuex.Store({
                     dispatch('setIslands')
                     dispatch('setWorkDays')
                     dispatch('startScanTimer')
+                    dispatch('setDeals')
                 })
         },
         setWorkDays ({commit}) {
@@ -389,6 +403,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_DEALS (state, deals) {
+            state.deals = deals
+        },
         SET_SCAN_MODE (state, mode) {
             state.scanMode = mode
         },

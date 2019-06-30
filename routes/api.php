@@ -59,4 +59,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('finish_day', 'API\UserController@finishDay');
     Route::post('resume_day', 'API\UserController@resumeDay');
 
+    // DEALS
+    Route::post('get_deals', 'DealController@index');
+
 });
