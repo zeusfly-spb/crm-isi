@@ -134,6 +134,7 @@ export const store = new Vuex.Store({
         setWorkingIslandId ({commit, dispatch}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setWorkDays')
+            dispatch('setDeals')
         },
         deleteIsland ({commit}, islandId) {
             return new Promise((resolve, reject) => {

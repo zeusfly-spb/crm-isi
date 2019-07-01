@@ -40,7 +40,11 @@
 
         <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="showDialog">Новая сделка</v-btn>
+                <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
+                       :disabled="$store.state.workingIslandId === 0"
+                >
+                    Новая сделка
+                </v-btn>
             </template>
             <v-card>
                 <v-card-title>
@@ -143,6 +147,9 @@
             ]
         }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -212,7 +219,7 @@
                 this.snackbar = true
             },
             showDialog () {
-                if (!this.isDayOpen) {
+                if (!this.isDayOpen && !this.isSuperadmin) {
                     this.showSnack('Чтобы совершить сделку, начните рабочий день', 'red')
                     return
                 }
