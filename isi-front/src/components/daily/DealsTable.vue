@@ -18,13 +18,19 @@
         >
             <template v-slot:items="props">
                 <tr>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.id }}</td>
+                    <td>
+                        <v-avatar
+                            size="36px"
+                        >
+                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
+                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+                        </v-avatar>
+                    </td>
+                    <td>{{ props.item.customer.full_name }}</td>
+                    <td>{{ props.item.insole.name }}</td>
+                    <td>{{ props.item.income }}</td>
+                    <td>{{ props.item.expense }}</td>
+                    <td>{{ props.item.is_cache ? 'Наличные' : 'Безнал' }}</td>
                 </tr>
             </template>
             <template v-slot:no-data>
@@ -57,7 +63,6 @@
                                         data-vv-name="customer"
                                         data-vv-as="Клиент"
                                         :error-messages="errors.collect('customer')"
-                                        v-validate="'required'"
                                 >
                                     <template v-slot:item="data">
                                         <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
@@ -103,7 +108,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="red darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="">Сохранить</v-btn>
+                    <v-btn color="green darken-1" flat @click="createDeal">Сохранить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -138,6 +143,12 @@
             ]
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
+            authUser () {
+                return this.$store.state.authUser
+            },
             insoles () {
                 return this.$store.state.insoles
             },
@@ -167,6 +178,26 @@
             }
         },
         methods: {
+            createDeal () {
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) return
+                        this.$store.dispatch('addDeal', {
+                            user_id: this.authUser.id,
+                            island_id: this.$store.state.workingIslandId,
+                            insole_id: this.selectedInsoleId,
+                            customer_id: this.selectedCustomerId,
+                            income: this.newDealIncome,
+                            expense: 0,
+                            is_cache: this.selectedPaymentType
+                        })
+                            .then(res => {
+                                this.showSnack(`Сделка №${res.data.id} добавлена`, 'green')
+                                this.dialog = false
+                            })
+                            .catch(e => this.showSnack(e.data, 'red'))
+                    })
+            },
             querySelection (text) {
                 this.axios.post('/api/search_customer_by_text', {text: text})
                     .then(res => {
@@ -187,6 +218,7 @@
                 }
                 this.selectedCustomerId = -1
                 this.selectedInsoleId = null
+                this.newDealIncome = null
                 this.dialog = true
             }
         },

@@ -62,5 +62,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     // DEALS
     Route::post('get_deals', 'DealController@index');
+    Route::post('add_deal', 'DealController@create');
 
 });

@@ -111,6 +111,7 @@
             ]
         }),
         computed: {
+
             realDate () {
                 return this.$store.state.realDate
             },

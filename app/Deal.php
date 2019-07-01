@@ -15,4 +15,16 @@ class Deal extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class)->withDefault([
+            'first_name' => 'Аноним'
+        ]);
+    }
+
+    public function insole()
+    {
+        return $this->belongsTo(Insole::class);
+    }
 }

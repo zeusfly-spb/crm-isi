@@ -27,6 +27,16 @@ export const store = new Vuex.Store({
         deals: []
     },
     actions: {
+        addDeal ({commit}, deal) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_deal', {...deal})
+                    .then(res => {
+                        commit('ADD_DEAL', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setDeals ({commit}) {
             return new Promise((resolve,reject) => {
                 Vue.axios.post('/api/get_deals', {
@@ -405,6 +415,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        ADD_DEAL (state, deal) {
+            state.deals.push(deal)
+        },
         SET_DEALS (state, deals) {
             state.deals = deals
         },

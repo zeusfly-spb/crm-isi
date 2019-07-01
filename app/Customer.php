@@ -20,4 +20,9 @@ class Customer extends Model
     {
         return $this->last_name . ' ' . $this->first_name . ' ' . $this->patronymic;
     }
+
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
+    }
 }
