@@ -31,6 +31,8 @@
                                         ref="hoursInput"
                                         height="1em"
                                         @keyup.enter="attemptToCloseDay"
+                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
+                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
                             ></v-text-field>
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
