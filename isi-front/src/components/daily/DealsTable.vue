@@ -38,7 +38,9 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" max-width="600px">
+        <v-dialog v-model="dialog" max-width="600px"
+                  @update:returnValue="newCustomer = false"
+        >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
                        :disabled="$store.state.workingIslandId === 0"
@@ -116,13 +118,19 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
+        <new-customer-dialog
+            :active="newCustomer"
+            @cancel="cancelNewCustomer"
+            @added="setNewCustomer"
+        />
     </v-flex>
 </template>
 <script>
+    import NewCustomerDialog from './NewCustomerDialog'
     export default {
         name: 'DealsTable',
         data: () => ({
+            newCustomer: false,
             newDealIncome: null,
             selectedPaymentType: true,
             paymentTypes: [
@@ -185,6 +193,14 @@
             }
         },
         methods: {
+            setNewCustomer (customer) {
+                this.newCustomer = false
+                this.loadedCustomers.push(customer)
+                this.selectedCustomerId = customer.id
+            },
+            cancelNewCustomer () {
+                this.newCustomer = false
+            },
             createDeal () {
                 this.$validator.validate()
                     .then(res => {
@@ -209,7 +225,6 @@
                 this.axios.post('/api/search_customer_by_text', {text: text})
                     .then(res => {
                         this.loadedCustomers = res.data
-                        console.dir(res.data)
                     })
                     .catch(e => console.error(e))
             },
@@ -230,9 +245,17 @@
             }
         },
         watch: {
+            selectedCustomerId (val) {
+                if (val === 0) {
+                    this.newCustomer = true
+                }
+            },
             search (val) {
                 val && val !== this.select && this.querySelection(val)
             }
+        },
+        components: {
+            NewCustomerDialog
         }
     }
 </script>
