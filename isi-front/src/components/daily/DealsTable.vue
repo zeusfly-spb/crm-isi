@@ -46,6 +46,9 @@
                             <v-flex xs12 sm12 md12>
                                 <sub>Клиент</sub>
                                 <v-autocomplete
+                                        label="Начните вводить данные для поиска..."
+                                        cache-items
+                                        :search-input.sync="search"
                                         v-model="selectedCustomerId"
                                         :items="customers"
                                         item-text="full_name"
@@ -57,10 +60,12 @@
                                         v-validate="'required'"
                                 >
                                     <template v-slot:item="data">
-                                        <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}"
-                                        >
+                                        <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
                                             {{ data.item.full_name }}
                                         </span>
+                                    </template>
+                                    <template slot="no-data">
+                                        <span class="red--text">Нет совпадений по запросу</span>
                                     </template>
                                 </v-autocomplete>
                             </v-flex>
@@ -82,10 +87,12 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            search: null,
+            loadedCustomers: [],
             snackbar: false,
             snackColor: 'green',
             snackText: '',
-            selectedCustomerId: '0',
+            selectedCustomerId: -1,
             dialog: false,
             headers: [
                 {text: '#', value: 'id'},
@@ -101,10 +108,21 @@
                 return this.$store.getters.isDayOpen
             },
             customers () {
+                const extendByNumbers = (customer) => {
+                    let phones = ''
+                    if (customer.phones.length) {
+                        customer.phones.forEach((item, index) => {
+                            phones = phones + `${index === 0 ? '' : ', '}${item.number}`
+                        })
+                    }
+                    customer.full_name += ' телефоны: ' + phones
+                    return customer
+                }
+
                 return [
+                    ...this.loadedCustomers.map(item => extendByNumbers(item)),
                     {id: null, full_name: 'Аноним'},
                     {id: 0, full_name: 'Новый клиент'},
-                    ...this.$store.state.customers
                 ]
             },
             deals () {
@@ -112,6 +130,14 @@
             }
         },
         methods: {
+            querySelection (text) {
+                this.axios.post('/api/search_customer_by_text', {text: text})
+                    .then(res => {
+                        this.loadedCustomers = res.data
+                        console.dir(res.data)
+                    })
+                    .catch(e => console.error(e))
+            },
             showSnack (text, color) {
                 this.snackText = text
                 this.snackColor = color
@@ -122,7 +148,13 @@
                     this.showSnack('Чтобы совершить сделку, начните рабочий день', 'red')
                     return
                 }
+                this.selectedCustomerId = -1
                 this.dialog = true
+            }
+        },
+        watch: {
+            search (val) {
+                val && val !== this.select && this.querySelection(val)
             }
         }
     }

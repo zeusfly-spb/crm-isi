@@ -32,7 +32,7 @@ class CustomerController extends Controller
     public function update(Request $request)
     {
         $customer = Customer::find($request->id);
-        $input = Arr::except($request->all(), ['id', 'phones', 'phone']);
+        $input = Arr::except($request->all(), ['id', 'phones', 'phone', 'full_name']);
 
         $customer->update($input);
         $customer->load('phones');
@@ -51,5 +51,19 @@ class CustomerController extends Controller
         $customer->phones()->create(['number' => $request->number]);
         $customer->load('phones');
         return response()->json($customer->toArray());
+    }
+
+    public function searchByText(Request $request)
+    {
+        $text = $request->text;
+        $queryBuilder = Customer::query();
+        $queryBuilder = $queryBuilder
+            ->where('first_name', 'LIKE', '%' . $text . '%')
+            ->orWhere('last_name', 'LIKE', '%' . $text . '%')
+            ->orWhere('patronymic', 'LIKE', '%' . $text . '%')
+            ->orWhereHas('phones', function($query) use($text) {
+                $query->where('number', 'LIKE', '%' . $text . '%');
+            });
+        return response()->json($queryBuilder->with('phones')->get()->toArray());
     }
 }
