@@ -147,7 +147,7 @@
         methods: {
             resumeDay () {
                 this.$store.dispatch('resumeUserDay')
-                    .then(() => this.showSnack('С возвращением ))', 'green'))
+                    .then(() => this.showSnack(`С возвращением, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
             },
             showSnack (text, color) {
                 this.snackColor = color
@@ -167,11 +167,12 @@
                 dinner_start: this.currentWorkDay.dinner_start,
                 dinner_finish: this.currentWorkDay.dinner_finish
             })
-                .then(() => this.showSnack('Спасибо за работу', 'green'))
+                .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
 
             },
             startDay () {
                 this.$store.dispatch('startUserDay')
+                    .then(() => this.showSnack(`Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
             }
         }
     }
