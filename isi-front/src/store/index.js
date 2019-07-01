@@ -105,6 +105,7 @@ export const store = new Vuex.Store({
                     dispatch('startScanTimer')
                     dispatch('setDeals')
                     dispatch('setCustomers')
+                    dispatch('setInsoles')
                 })
         },
         setWorkDays ({commit}) {

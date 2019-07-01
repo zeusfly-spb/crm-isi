@@ -42,7 +42,7 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
-                        <v-layout row>
+                        <v-layout wrap>
                             <v-flex xs12 sm12 md12>
                                 <sub>Клиент</sub>
                                 <v-autocomplete
@@ -69,6 +69,33 @@
                                     </template>
                                 </v-autocomplete>
                             </v-flex>
+                            <v-flex xs12 sm12 md12>
+                                <sub>Услуга</sub>
+                                <v-select
+                                    v-model="selectedInsoleId"
+                                    :items="insoles"
+                                    item-text="name"
+                                    item-value="id"
+                                    single-line
+
+                                ></v-select>
+                            </v-flex>
+                            <v-flex xs12 sm6 md6>
+                                <sub>Сумма</sub>
+                                <v-text-field
+                                    v-model="newDealIncome"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm6 md6>
+                                <sub>Форма оплаты</sub>
+                                <v-select
+                                    :items="paymentTypes"
+                                    v-model="selectedPaymentType"
+                                    item-text="text"
+                                    item-value="value"
+                                    single-line
+                                ></v-select>
+                            </v-flex>
 
                         </v-layout>
                     </v-container>
@@ -87,6 +114,13 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            newDealIncome: null,
+            selectedPaymentType: true,
+            paymentTypes: [
+                {value: true, text: 'Наличный'},
+                {value: false, text: 'Безналичный'}
+            ],
+            selectedInsoleId: null,
             search: null,
             loadedCustomers: [],
             snackbar: false,
@@ -104,6 +138,9 @@
             ]
         }),
         computed: {
+            insoles () {
+                return this.$store.state.insoles
+            },
             isDayOpen () {
                 return this.$store.getters.isDayOpen
             },
@@ -115,7 +152,7 @@
                             phones = phones + `${index === 0 ? '' : ', '}${item.number}`
                         })
                     }
-                    customer.full_name += ' телефоны: ' + phones
+                    customer.full_name += ` телефон${customer.phones.length > 1 ? 'ы' : ''}: ` + phones
                     return customer
                 }
 
@@ -149,6 +186,7 @@
                     return
                 }
                 this.selectedCustomerId = -1
+                this.selectedInsoleId = null
                 this.dialog = true
             }
         },
