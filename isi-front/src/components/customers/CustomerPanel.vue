@@ -1,5 +1,15 @@
 <template>
     <v-flex align-center>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
+
         <v-layout>
             <span class="title ml-2">Клиенты</span>
         </v-layout>
@@ -31,7 +41,7 @@
                     <v-icon
                             class="red--text"
                             small
-                            @click=""
+                            @click="showDeleteConfirm(props.item)"
                             title="Удалить"
                     >
                         delete
@@ -148,6 +158,33 @@
             </v-card>
         </v-dialog>
 
+        <v-dialog v-model="confirm"
+                  max-width="500"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
+                </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteCustomer"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
@@ -157,6 +194,12 @@
     export default {
         name: 'CustomersControl',
         data: () => ({
+            snackbar: false,
+            snackText: '',
+            snackColor: '',
+            customerToDelete: null,
+            confirmText: '',
+            confirm: false,
             addPhoneEnabled: false,
             date: '',
             menu: false,
@@ -188,6 +231,23 @@
             }
         },
         methods:{
+            showSnack (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
+            },
+            deleteCustomer () {
+                this.$store.dispatch('deleteCustomer', this.customerToDelete.id)
+                    .then(() => {
+                        this.confirm = false
+                        this.showSnack(`Клиент ${this.customerToDelete.full_name} удален`, 'green')
+                    })
+            },
+            showDeleteConfirm (customer) {
+                this.confirmText = `Удалить данные о клиенте ${customer.full_name}?`
+                this.customerToDelete = customer
+                this.confirm = true
+            },
             closeDialog () {
                 this.mode = null
             },
@@ -202,7 +262,10 @@
                         if (!res) return
                         let action = this.mode === 'add' ? 'addCustomer' : 'updateCustomer'
                         this.$store.dispatch(action, this.editedCustomer)
-                            .then(() => this.dialog = false)
+                            .then((res) => {
+                                this.dialog = false
+                                this.showSnack(`${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`, 'green')
+                            })
                     })
             },
             datePicked (date) {

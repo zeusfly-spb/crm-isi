@@ -66,4 +66,9 @@ class CustomerController extends Controller
             });
         return response()->json($queryBuilder->with('phones')->get()->toArray());
     }
+
+    public function delete(Request $request)
+    {
+        Customer::destroy($request->customer_id);
+    }
 }
