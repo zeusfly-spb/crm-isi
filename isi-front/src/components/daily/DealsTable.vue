@@ -88,13 +88,20 @@
                                     item-text="name"
                                     item-value="id"
                                     single-line
-
+                                    data-vv-name="insole"
+                                    data-vv-as="Тип и Размер стелек"
+                                    :error-messages="errors.collect('insole')"
+                                    v-validate="'required'"
                                 ></v-select>
                             </v-flex>
                             <v-flex xs12 sm6 md6>
                                 <sub>Сумма</sub>
                                 <v-text-field
                                     v-model="newDealIncome"
+                                    data-vv-name="price"
+                                    data-vv-as="Стоимость"
+                                    :error-messages="errors.collect('price')"
+                                    v-validate="'required|integer'"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md6>
@@ -199,6 +206,7 @@
                 this.selectedCustomerId = customer.id
             },
             cancelNewCustomer () {
+                this.selectedCustomerId = -1
                 this.newCustomer = false
             },
             createDeal () {
