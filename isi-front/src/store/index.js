@@ -140,7 +140,6 @@ export const store = new Vuex.Store({
                     dispatch('setDeals')
                     dispatch('setCustomers')
                     dispatch('setInsoles')
-                    dispatch('setStartBalance')
                 })
         },
         setWorkDays ({commit}) {
@@ -158,9 +157,12 @@ export const store = new Vuex.Store({
         },
         setWorkingIslandId ({commit, dispatch}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
-            dispatch('setWorkDays')
-            dispatch('setDeals')
-            dispatch('setStartBalance')
+            dispatch('setAccountingDate')
+                .then(() => {
+                    dispatch('setWorkDays')
+                    dispatch('setDeals')
+                    dispatch('setStartBalance')
+                })
         },
         deleteIsland ({commit}, islandId) {
             return new Promise((resolve, reject) => {
@@ -407,7 +409,7 @@ export const store = new Vuex.Store({
             })
 
         },
-        setAccountingDate ({commit}) {
+        setAccountingDate ({commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 // Verify that current date changed
                 let now = new Date().toISOString().split('T')[0]
@@ -422,11 +424,13 @@ export const store = new Vuex.Store({
                 let savedDate = Cookies.get('accounting_date')
                 if (savedDate) {
                     commit('SET_ACCOUNTING_DATE', savedDate)
+                    dispatch('setStartBalance')
                     resolve(savedDate)
                 } else {
                     Vue.axios.post('/api/get_accounting_date')
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
+                            dispatch('setStartBalance')
                             resolve(res)
                         })
                         .catch(e => {
