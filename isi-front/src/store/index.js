@@ -424,11 +424,13 @@ export const store = new Vuex.Store({
                 let savedDate = Cookies.get('accounting_date')
                 if (savedDate) {
                     commit('SET_ACCOUNTING_DATE', savedDate)
+                    dispatch('setStartBalance')
                     resolve(savedDate)
                 } else {
                     Vue.axios.post('/api/get_accounting_date')
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
+                            dispatch('setStartBalance')
                             resolve(res)
                         })
                         .catch(e => {
