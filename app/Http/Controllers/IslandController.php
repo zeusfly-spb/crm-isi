@@ -26,4 +26,20 @@ class IslandController extends Controller
     {
         return response()->json(['result' => Island::destroy($request->island_id)]);
     }
+
+    public function getStartBalance(Request $request)
+    {
+        $date = $request->date;
+        $island_id = $request->island_id;
+        if ($island_id) {
+            $island = Island::find($island_id);
+            return response()->json(['amount' => $island->startBalance($date)]);
+        } else {
+            $islands = Island::all();
+            $amount =  $islands->reduce(function ($carry, $island) use($date) {
+                return $carry + $island->startBalance($date);
+            }, 0);
+            return response()->json(['amount' => $amount]);
+        }
+    }
 }

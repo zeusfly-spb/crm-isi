@@ -14,6 +14,7 @@
                 :headers="headers"
                 :items="workdays"
                 hide-actions
+                class="elevation-1"
             >
                 <template v-slot:items="props">
                     <tr :class="{'working red lighten-4': props.item.working && isToday}"

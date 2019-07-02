@@ -24,9 +24,23 @@ export const store = new Vuex.Store({
             workdays: true,
             accesses: false
         },
-        deals: []
+        deals: [],
+        startBalance: null
     },
     actions: {
+        setStartBalance ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/start_balance', {
+                    date: this.state.accountingDate,
+                    island_id: this.state.workingIslandId
+                })
+                    .then(res => {
+                        commit('SET_START_BALANCE', res.data.amount)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteCustomer ({commit}, customerId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_customer', {customer_id: customerId})
@@ -126,6 +140,7 @@ export const store = new Vuex.Store({
                     dispatch('setDeals')
                     dispatch('setCustomers')
                     dispatch('setInsoles')
+                    dispatch('setStartBalance')
                 })
         },
         setWorkDays ({commit}) {
@@ -145,6 +160,7 @@ export const store = new Vuex.Store({
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setWorkDays')
             dispatch('setDeals')
+            dispatch('setStartBalance')
         },
         deleteIsland ({commit}, islandId) {
             return new Promise((resolve, reject) => {
@@ -426,6 +442,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_START_BALANCE (state, balance) {
+            state.startBalance = balance
+        },
         DELETE_CUSTOMER (state, customerId) {
             state.customers = state.customers.filter(item => item.id !== customerId)
         },
