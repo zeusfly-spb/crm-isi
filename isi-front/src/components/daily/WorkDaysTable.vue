@@ -49,6 +49,8 @@
                                         v-model="props.item.dinner_start"
                                         v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
                                         mask="##:##"
+                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
+                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
                                 />
                                 <span v-else>{{ props.item.dinner_start }}</span>
                                 -
@@ -60,6 +62,8 @@
                                         v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
                                         height="1em"
                                         mask="##:##"
+                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
+                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
                                 />
                                 <span v-else>{{ props.item.dinner_finish }}</span>
                             </v-layout>

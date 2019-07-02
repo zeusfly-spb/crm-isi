@@ -436,9 +436,11 @@ export const store = new Vuex.Store({
                 }
             })
         },
-        changeAccountingDate ({commit}, date) {
+        changeAccountingDate ({commit, dispatch}, date) {
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
+            dispatch('setWorkDays')
+            dispatch('setDeals')
         }
     },
     mutations: {
