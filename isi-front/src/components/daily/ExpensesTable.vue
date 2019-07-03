@@ -124,7 +124,7 @@
         },
         methods: {
             attemptToDelete (expense) {
-                if (expense.user_id !== this.authUser.id) {
+                if (expense.user_id !== this.authUser.id || !this.isSuperadmin) {
                     this.$emit('snack', 'Невозможно удалить чужую запись о расходах!', 'red')
                     return
                 }
