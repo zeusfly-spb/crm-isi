@@ -33,7 +33,9 @@
                     </tr>
                 </table>
 
-                <v-btn color="primary" flat dark class="mb-2" @click="showDialog">
+                <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
+                       :disabled="$store.state.workingIslandId === 0 || !isToday"
+                >
                     Добавить расход
                 </v-btn>
             </div>
