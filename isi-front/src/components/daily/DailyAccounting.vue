@@ -41,8 +41,8 @@
             </v-tab>
         </v-tabs>
         <deals-table/>
-        <expenses-table/>
         <day-balance/>
+        <expenses-table/>
         <work-days-table/>
     </v-flex>
 </template>

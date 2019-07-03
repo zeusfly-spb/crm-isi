@@ -30,7 +30,13 @@
                 return this.$store.state.deals.reduce(calculate, 0)
             },
             items () {
-                return [{start: this.$store.state.startBalance, expenses: 0, finish: this.currentBalance}]
+                return [
+                    {
+                        start: this.$store.state.startBalance,
+                        expenses: 0,
+                        finish: this.$store.state.startBalance + this.currentBalance
+                    }
+                    ]
             }
         }
     }
