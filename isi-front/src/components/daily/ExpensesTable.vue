@@ -82,6 +82,32 @@
 
             </v-dialog>
         </v-flex>
+        <v-dialog v-model="confirm"
+                  max-width="500"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
+                </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteExpense"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+        </v-dialog>
 
     </v-layout>
 </template>
@@ -89,6 +115,9 @@
     export default {
         name: 'ExpensesTable',
         data: () => ({
+            expenseToDelete: null,
+            confirmText: '',
+            confirm: false,
             comment: '',
             amount: '',
             dialog: false,
@@ -123,14 +152,22 @@
             },
         },
         methods: {
+            deleteExpense () {
+                this.$store.dispatch('deleteExpense', this.expenseToDelete.id)
+                    .then(() => {
+                        this.confirm = false
+                        this.$emit('snack', `Запись о расходе ${this.expenseToDelete.amount}р. ${this.expenseToDelete.comment} удалена`, 'green')
+                    })
+                    .catch(e => this.$emit('snack', e.data, 'red'))
+            },
             attemptToDelete (expense) {
                 if (expense.user_id !== this.authUser.id && !this.isSuperadmin) {
                     this.$emit('snack', 'Невозможно удалить чужую запись о расходах!', 'red')
                     return
                 }
-                this.$store.dispatch('deleteExpense', expense.id)
-                    .then(() => this.$emit('snack', `Запись о расходе ${expense.amount}р. ${expense.comment} удалена`, 'green'))
-                    .catch(e => this.$emit('snack', e.data, 'red'))
+                this.expenseToDelete = expense
+                this.confirmText = `Удалить запись о расходе ${expense.amount}р. ${expense.comment}?`
+                this.confirm = true
             },
             saveExpense () {
                 this.$validator.validate()
