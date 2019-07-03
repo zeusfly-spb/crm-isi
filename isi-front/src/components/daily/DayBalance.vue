@@ -25,15 +25,19 @@
             ]
         }),
         computed: {
+            expenses () {
+                return this.$store.state.expenses
+            },
             currentBalance () {
                 const calculate = (a, b) => a + b.income - b.expense
                 return this.$store.state.deals.reduce(calculate, 0)
             },
             items () {
+                const add = (a, b)=> a + b.amount
                 return [
                     {
                         start: this.$store.state.startBalance,
-                        expenses: 0,
+                        expenses: this.expenses.reduce(add, 0),
                         finish: this.$store.state.startBalance + this.currentBalance
                     }
                     ]

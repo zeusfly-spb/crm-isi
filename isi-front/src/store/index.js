@@ -25,9 +25,25 @@ export const store = new Vuex.Store({
             accesses: false
         },
         deals: [],
-        startBalance: null
+        startBalance: null,
+        expenses: [],
+        inspectingUserId: null
     },
     actions: {
+        setExpenses ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_expenses', {
+                    date: this.state.accountingDate,
+                    island_id: this.state.workingIslandId,
+                    user_id: this.state.inspectingUserId
+                })
+                    .then(res => {
+                        commit('SET_EXPENSES', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setStartBalance ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/start_balance', {
@@ -140,6 +156,7 @@ export const store = new Vuex.Store({
                     dispatch('setDeals')
                     dispatch('setCustomers')
                     dispatch('setInsoles')
+                    dispatch('setExpenses')
                 })
         },
         setWorkDays ({commit}) {
@@ -162,6 +179,8 @@ export const store = new Vuex.Store({
                     dispatch('setWorkDays')
                     dispatch('setDeals')
                     dispatch('setStartBalance')
+                    dispatch('setExpenses')
+
                 })
         },
         deleteIsland ({commit}, islandId) {
@@ -446,9 +465,14 @@ export const store = new Vuex.Store({
             dispatch('setDeals')
             dispatch('setWorkDays')
             dispatch('setStartBalance')
+            dispatch('setExpenses')
+
         }
     },
     mutations: {
+        SET_EXPENSES (state, expenses) {
+            state.expenses = expenses
+        },
         SET_START_BALANCE (state, balance) {
             state.startBalance = balance
         },
@@ -553,6 +577,18 @@ export const store = new Vuex.Store({
             state.status = status
         },
         AUTH_LOGOUT (state) {
+            const clearAllTimers = function(){
+                let lastID = 0;
+                return function(){
+                    let currentID = setTimeout(function(){}, 1);
+                    for(let id = currentID; id > lastID; id--){
+                        clearTimeout(id);
+                    }
+                    lastID = currentID;
+                };
+            }();
+            clearAllTimers()
+
             Cookies.remove('accounting_date')
             Cookies.remove('isi-token')
             delete Vue.axios.defaults.headers.common['Authorization']

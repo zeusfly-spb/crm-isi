@@ -16,6 +16,11 @@
         name: 'ExpensesTable',
         data: () => ({
             dialog: false
-        })
+        }),
+        computed: {
+            expenses () {
+                return this.$store.state.expenses
+            }
+        }
     }
 </script>
