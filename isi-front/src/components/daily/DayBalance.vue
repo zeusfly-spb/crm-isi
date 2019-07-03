@@ -8,13 +8,16 @@
         >
             <template v-slot:items="props">
                 <td align="center">{{ props.item.start }}</td>
-                <td align="center">{{ props.item.expenses }}</td>
+                <td align="center">
+                    {{ props.item.expenses }}
+                </td>
                 <td align="center">{{ props.item.finish }}</td>
             </template>
         </v-data-table>
     </v-flex>
 </template>
 <script>
+    import ExpensesTable from './ExpensesTable'
     export default {
         name: 'DayBalance',
         data: () => ({
@@ -42,6 +45,9 @@
                     }
                     ]
             }
+        },
+        components: {
+            ExpensesTable
         }
     }
 </script>

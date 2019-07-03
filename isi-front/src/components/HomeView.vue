@@ -37,6 +37,9 @@
             adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            scanMode () {
+                return this.$store.state.scanMode
+            },
             tabs () {
                 return this.isSuperadmin ? this.adminTabs : this.regularTabs
             },
@@ -49,9 +52,14 @@
         },
         methods: {
             loadContent (index) {
-                this.$store.commit('SET_SCAN_MODE', {workdays: false, accesses: false})
+                this.$store.commit('SET_SCAN_MODE', {
+                    workdays: false,
+                    accesses: false,
+                    deals: false,
+                    expenses: false
+                })
                 switch (index) {
-                    case 0: this.$store.commit('SET_SCAN_MODE', {workdays: true, accesses: false})
+                    case 0: this.$store.commit('SET_SCAN_MODE', {...this.scanMode, workdays: true, expenses: true, deals: true})
                         break
                     case 1: this.$store.dispatch('setCustomers')
                         break

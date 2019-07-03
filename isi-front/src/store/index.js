@@ -22,7 +22,9 @@ export const store = new Vuex.Store({
         realDate: null,
         scanMode: {
             workdays: true,
-            accesses: false
+            accesses: false,
+            deals: false,
+            expenses: false
         },
         deals: [],
         startBalance: null,
@@ -30,6 +32,16 @@ export const store = new Vuex.Store({
         inspectingUserId: null
     },
     actions: {
+        deleteExpense ({commit}, expenseId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_expense', {expense_id: expenseId})
+                    .then((res) => {
+                        commit('DELETE_EXPENSE', expenseId)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addExpense ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_expense', {
@@ -110,6 +122,12 @@ export const store = new Vuex.Store({
                 }
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')
+                }
+                if (this.state.scanMode.expenses) {
+                    dispatch('setExpenses')
+                }
+                if (this.state.scanMode.deals) {
+                    dispatch('setDeals')
                 }
             }, 5000)
         },
@@ -483,6 +501,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        DELETE_EXPENSE (state, expenseId) {
+            state.expenses = state.expenses.filter(item => item.id !== expenseId)
+        },
         ADD_EXPENSE (state, expense) {
             state.expenses.push(expense)
         },

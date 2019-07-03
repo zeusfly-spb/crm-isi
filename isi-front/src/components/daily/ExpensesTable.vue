@@ -1,34 +1,38 @@
 <template>
     <v-layout justify-center class="mt-1">
         <v-flex xs12 sm6 md4 justify-center>
-            <v-data-table
-                v-if="expenses.length"
-                :items="expenses"
-                :headers="headers"
-                hide-actions
-                hide-headers
-            >
-                <template v-slot:items="props">
-                    <td align="center">
-                        <v-icon class="red--text delete"
-                                :title="`Удалить расход ${props.item.comment} ${props.item.amount}р.`"
-                        >
-                            clear
-                        </v-icon>
-                    </td>
-                    <td align="center">
-                        <v-avatar
-                            size="36px"
-                        >
-                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
-                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-                        </v-avatar>
-                    </td>
-                    <td align="center">{{ props.item.amount }}</td>
-                    <td align="center">{{ props.item.comment }}</td>
-                </template>
-            </v-data-table>
+
             <div class="text-xs-center" v-if="isToday">
+                <table style="margin: auto">
+                    <tr
+                        v-for="expense in expenses"
+                        :key="expense.id"
+                    >
+                        <td>
+                            <v-icon class="red--text delete"
+                                    :title="`Удалить расход ${expense.comment} ${expense.amount}р.`"
+                                    @click="attemptToDelete(expense)"
+                            >
+                                clear
+                            </v-icon>
+                        </td>
+                        <td>
+                            <v-avatar
+                                size="36px"
+                            >
+                                <img :src="basePath + expense.user.avatar" alt="Фото" v-if="expense.user.avatar">
+                                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+                            </v-avatar>
+                        </td>
+                        <td>
+                            {{ expense.amount }}
+                        </td>
+                        <td>
+                            {{ expense.comment }}
+                        </td>
+                    </tr>
+                </table>
+
                 <v-btn color="primary" flat dark class="mb-2" @click="showDialog">
                     Добавить расход
                 </v-btn>
@@ -89,9 +93,9 @@
             amount: '',
             dialog: false,
             headers: [
-                {text: 'Действие'},
-                {text: 'Фото'},
-                {text: 'Сумма'},
+                {text: 'Действие', width: '1%'},
+                {text: 'Фото', width: '1%'},
+                {text: 'Сумма', width: '1%'},
                 {text: 'Комментарий'}
             ]
         }),
@@ -119,6 +123,15 @@
             },
         },
         methods: {
+            attemptToDelete (expense) {
+                if (expense.user_id !== this.authUser.id) {
+                    this.$emit('snack', 'Невозможно удалить чужую запись о расходах!', 'red')
+                    return
+                }
+                this.$store.dispatch('deleteExpense', expense.id)
+                    .then(() => this.$emit('snack', `Запись о расходе ${expense.amount}р. ${expense.comment} удалена`, 'green'))
+                    .catch(e => this.$emit('snack', e.data, 'red'))
+            },
             saveExpense () {
                 this.$validator.validate()
                     .then(res => {

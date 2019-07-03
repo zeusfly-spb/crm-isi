@@ -69,5 +69,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     // EXPENSES
     Route::post('get_expenses', 'ExpenseController@index');
     Route::post('add_expense', 'ExpenseController@create');
+    Route::post('delete_expense', 'ExpenseController@delete');
 
 });

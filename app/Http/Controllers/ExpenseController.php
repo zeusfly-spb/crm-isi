@@ -35,4 +35,9 @@ class ExpenseController extends Controller
         ])->load('user', 'island');
         return response()->json($expense->toArray());
     }
+
+    public function delete(Request $request)
+    {
+        return response()->json(['result' => Expense::destroy($request->expense_id)]);
+    }
 }

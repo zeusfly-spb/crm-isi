@@ -156,7 +156,7 @@
                 {text: '#', value: 'id'},
                 {text: 'Клиент', value: 'customer_id'},
                 {text: 'Услуга', value: 'insole_id'},
-                {text: 'Стоимость', value: 'income'},
+                {text: 'Цена', value: 'income'},
                 {text: 'Себестоимость', value: 'expense'},
                 {text: 'Форма оплаты', value: 'is_cache'},
             ]
