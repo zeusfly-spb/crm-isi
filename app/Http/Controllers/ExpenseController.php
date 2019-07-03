@@ -24,4 +24,15 @@ class ExpenseController extends Controller
 
         return response()->json($expenses->toArray());
     }
+
+    public function create(Request $request)
+    {
+        $expense = Expense::create([
+            'user_id' => $request->user_id,
+            'island_id' => $request->island_id,
+            'amount' => $request->amount,
+            'comment' => $request->comment
+        ])->load('user', 'island');
+        return response()->json($expense->toArray());
+    }
 }

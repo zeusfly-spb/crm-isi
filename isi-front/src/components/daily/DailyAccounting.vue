@@ -1,5 +1,14 @@
 <template>
     <v-flex align-center>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
         <v-tabs
             v-if="isSuperadmin"
             fixed-tabs
@@ -42,7 +51,7 @@
         </v-tabs>
         <deals-table/>
         <day-balance/>
-        <expenses-table/>
+        <expenses-table @snack="showSnack"/>
         <work-days-table/>
     </v-flex>
 </template>
@@ -54,6 +63,9 @@
     export default {
         name: 'DailyAccounting',
         data: () => ({
+            snackbar: false,
+            snackText: '',
+            snackColor: 'green'
         }),
         computed: {
             workingIslandId () {
@@ -76,6 +88,11 @@
             }
         },
         methods: {
+            showSnack (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
+            },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }

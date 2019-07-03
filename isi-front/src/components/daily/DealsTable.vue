@@ -43,7 +43,7 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
-                       :disabled="$store.state.workingIslandId === 0"
+                       :disabled="$store.state.workingIslandId === 0 || !isToday"
                 >
                     Новая сделка
                 </v-btn>
@@ -162,6 +162,12 @@
             ]
         }),
         computed: {
+            isToday () {
+                return this.$store.state.accountingDate === this.realDate
+            },
+            realDate () {
+                return this.$store.state.realDate
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },

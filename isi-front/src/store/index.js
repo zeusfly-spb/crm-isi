@@ -30,6 +30,20 @@ export const store = new Vuex.Store({
         inspectingUserId: null
     },
     actions: {
+        addExpense ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_expense', {
+                    ...data,
+                    island_id: this.state.workingIslandId,
+                    user_id: this.state.authUser.id
+                })
+                    .then(res => {
+                        commit('ADD_EXPENSE', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setExpenses ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_expenses', {
@@ -466,10 +480,12 @@ export const store = new Vuex.Store({
             dispatch('setWorkDays')
             dispatch('setStartBalance')
             dispatch('setExpenses')
-
         }
     },
     mutations: {
+        ADD_EXPENSE (state, expense) {
+            state.expenses.push(expense)
+        },
         SET_EXPENSES (state, expenses) {
             state.expenses = expenses
         },
