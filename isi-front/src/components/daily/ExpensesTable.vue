@@ -148,7 +148,7 @@
                     })
             },
             showDialog () {
-                if (!this.isDayOpen) {
+                if (!this.isDayOpen && !this.isSuperadmin) {
                     this.$emit('snack', 'Чтобы добавить расход, начните рабочий день', 'red')
                     return
                 }
