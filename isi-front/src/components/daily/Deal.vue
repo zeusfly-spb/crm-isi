@@ -12,9 +12,13 @@
         <td>{{ deal.insole.name }}</td>
         <td>
             <span
-                @dblclick="switchEditMode('income')"
+                @click="switchEditMode('income')"
             >
-                <span v-if="!editMode.income">{{ deal.income }}</span>
+                <span v-if="!editMode.income"
+                      :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
+                >
+                    {{ deal.income }}
+                </span>
                 <v-text-field
                     autofocus
                     v-else
@@ -28,15 +32,18 @@
                     @keyup.esc="blur('income')"
                     @keyup.enter="updateDeal('income')"
                     id="income"
-                    :title="canUpdate ? 'Чтобы изменить цену - двойной клик' : ''"
                 />
             </span>
         </td>
         <td>
             <span
-                @dblclick="switchEditMode('expense')"
+                @click="switchEditMode('expense')"
             >
-                <span v-if="!editMode.expense">{{ deal.expense }}</span>
+                <span v-if="!editMode.expense"
+                      :title="canUpdate ? 'Чтобы изменить себестоимость - клик мышкой' : ''"
+                >
+                    {{ deal.expense }}
+                </span>
                 <v-text-field
                     autofocus
                     v-else
@@ -50,16 +57,35 @@
                     @keyup.esc="blur('expense')"
                     @keyup.enter="updateDeal('expense')"
                     id="expense"
-                    :title="canUpdate ? 'Чтобы изменить себестоимость - двойной клик' : ''"
-
                 />
             </span>
         </td>
         <td>
             <span
-                @dblclick="switchEditMode('is_cache')"
+                @click="switchEditMode('is_cache')"
             >
-                {{ deal.is_cache ? 'Наличные' : 'Безнал' }}
+                <span
+                    :title="canUpdate ? 'Чтобы изменить форму оплаты - клик мышкой' : ''"
+                >
+                    <span
+                        v-if="!editMode.is_cache"
+                    >
+                        {{ deal.is_cache ? 'Наличный' : 'Безналичный' }}
+                    </span>
+                    <v-select
+                        style="width: 3em"
+                        v-else
+                        autofocus
+                        v-model="deal.is_cache"
+                        :items="paymentTypes"
+                        item-text="text"
+                        item-value="value"
+                        single-line
+                        @focus="focused('is_cache')"
+                        @blur="blur('is_cache')"
+                        @change="updateDeal('is_cache')"
+                    />
+                </span>
             </span>
         </td>
     </tr>
@@ -69,6 +95,10 @@
         name: 'Deal',
         props: ['deal'],
         data: () => ({
+            paymentTypes: [
+                {value: true, text: 'Наличный'},
+                {value: false, text: 'Безналичный'}
+            ],
             editMode: {
                 income: false,
                 expense: false,
