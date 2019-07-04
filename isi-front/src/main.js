@@ -47,10 +47,10 @@ Vue.axios.interceptors.response.use(
     }
 )
 
+store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
 const token = Cookies.get('isi-token')
 if (token) {
     Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-    store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
 
     store.dispatch('setAuthUser')
         .then(() => {

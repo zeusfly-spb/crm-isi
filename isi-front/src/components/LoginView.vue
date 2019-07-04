@@ -64,6 +64,7 @@
                         if (!valid) return
                         this.$store.dispatch('logIn', {name: this.name, password: this.password})
                             .then(() => {
+
                                 this.$store.dispatch('setAuthUser')
                                     .then(() => {
                                         this.$store.dispatch('checkAccess')

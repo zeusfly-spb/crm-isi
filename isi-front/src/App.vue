@@ -3,7 +3,12 @@
     <v-toolbar app>
       <v-toolbar-title class="headline">
         <v-layout>
-          <img :src="`${basePath}/img/logo.png`" alt="" height="45px">
+          <img
+              :src="`${basePath}/img/logo.png`"
+              :lazy-src="`${basePath}/img/logo.png`"
+              alt="Лого"
+              height="45px"
+          />
           &nbsp;
           <div>
             <div>

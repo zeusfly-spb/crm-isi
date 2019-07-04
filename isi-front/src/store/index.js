@@ -1,4 +1,6 @@
 const Cookies = require('js-cookie')
+require('dotenv').config()
+
 
 import Vue from 'vue'
 import Vuex from 'vuex'
