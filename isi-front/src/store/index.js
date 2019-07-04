@@ -32,6 +32,16 @@ export const store = new Vuex.Store({
         inspectingUserId: null
     },
     actions: {
+        updateDeal ({commit}, deal) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_deal', {...deal})
+                    .then(res => {
+                        commit('UPDATE_DEAL', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteExpense ({commit}, expenseId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_expense', {expense_id: expenseId})
@@ -501,6 +511,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_DEAL (state, deal) {
+            state.deals = state.deals.map(item => item.id === deal.id ? deal : item)
+        },
         DELETE_EXPENSE (state, expenseId) {
             state.expenses = state.expenses.filter(item => item.id !== expenseId)
         },

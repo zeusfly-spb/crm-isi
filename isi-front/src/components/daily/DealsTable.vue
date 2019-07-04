@@ -17,21 +17,11 @@
                 class="elevation-1"
         >
             <template v-slot:items="props">
-                <tr>
-                    <td>
-                        <v-avatar
-                            size="36px"
-                        >
-                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
-                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-                        </v-avatar>
-                    </td>
-                    <td>{{ props.item.customer.full_name }}</td>
-                    <td>{{ props.item.insole.name }}</td>
-                    <td>{{ props.item.income }}</td>
-                    <td>{{ props.item.expense }}</td>
-                    <td>{{ props.item.is_cache ? 'Наличные' : 'Безнал' }}</td>
-                </tr>
+                <tr
+                    is="deal"
+                    :deal="props.item"
+                    @snack="showSnack"
+                />
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет сделок</span>
@@ -134,6 +124,7 @@
 </template>
 <script>
     import NewCustomerDialog from './NewCustomerDialog'
+    import Deal from './Deal'
     export default {
         name: 'DealsTable',
         data: () => ({
@@ -269,7 +260,8 @@
             }
         },
         components: {
-            NewCustomerDialog
+            NewCustomerDialog,
+            Deal
         }
     }
 </script>

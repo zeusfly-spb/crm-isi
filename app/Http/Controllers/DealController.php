@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Deal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class DealController extends Controller
 {
@@ -26,6 +27,19 @@ class DealController extends Controller
     {
         $deal = Deal::create($request->all());
         $deal->load('user', 'customer', 'insole');
+        return response()->json($deal->toArray());
+    }
+
+    public function update(Request $request)
+    {
+        $deal = Deal::find($request->id);
+        $deal->update([
+            'income' => (int) $request->income,
+            'expense' => (int) $request->expense,
+            'is_cache' => (bool) $request->is_cache
+        ]);
+        $deal->load('user', 'insole', 'customer');
+
         return response()->json($deal->toArray());
     }
 }
