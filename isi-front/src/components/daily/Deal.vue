@@ -110,8 +110,14 @@
             }
         }),
         computed: {
+            isToday () {
+                return this.$store.state.accountingDate === this.realDate
+            },
+            realDate () {
+                return this.$store.state.realDate
+            },
             canUpdate () {
-                return this.deal.user_id === this.authUser.id || this.isSuperadmin
+                return (this.deal.user_id === this.authUser.id || this.isSuperadmin) && this.isToday
             },
             basePath () {
                 return this.$store.state.basePath
