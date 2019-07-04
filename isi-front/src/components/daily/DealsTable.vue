@@ -19,7 +19,7 @@
             <template v-slot:items="props">
                 <tr
                     is="deal"
-                    :deal="props.item"
+                    :deal="{...props.item, number: props.index + 1}"
                     @snack="showSnack"
                 />
             </template>
@@ -144,7 +144,8 @@
             selectedCustomerId: -1,
             dialog: false,
             headers: [
-                {text: '#', value: 'id'},
+                {text: '#', value: 'number'},
+                {text: 'Сотрудник', value: 'id'},
                 {text: 'Клиент', value: 'customer_id'},
                 {text: 'Услуга', value: 'insole_id'},
                 {text: 'Цена', value: 'income'},

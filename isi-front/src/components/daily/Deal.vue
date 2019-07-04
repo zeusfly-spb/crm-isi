@@ -1,8 +1,12 @@
 <template>
     <tr>
         <td>
+            {{ deal.number }}
+        </td>
+        <td>
             <v-avatar
                 size="36px"
+                :title="deal.user.full_name"
             >
                 <img :src="basePath + deal.user.avatar" alt="Фото" v-if="deal.user.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
