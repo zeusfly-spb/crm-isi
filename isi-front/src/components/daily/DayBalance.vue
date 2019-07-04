@@ -41,7 +41,7 @@
                     {
                         start: this.$store.state.startBalance,
                         expenses: this.expenses.reduce(add, 0),
-                        finish: this.$store.state.startBalance + this.currentBalance
+                        finish: this.$store.state.startBalance + this.currentBalance - this.expenses.reduce(add, 0)
                     }
                     ]
             }
