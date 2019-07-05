@@ -28,8 +28,8 @@
                     v-else
                     v-model="deal.income"
                     single-line
-                    maxlength="5"
-                    style="width: 3em"
+                    maxlength="7"
+                    style="width: 4em"
                     height="1em"
                     @focus="focused"
                     @blur="blur('income')"
@@ -53,8 +53,8 @@
                     v-else
                     v-model="deal.expense"
                     single-line
-                    maxlength="5"
-                    style="width: 3em"
+                    maxlength="7"
+                    style="width: 4em"
                     height="1em"
                     @focus="focused('expense')"
                     @blur="blur('expense')"
@@ -80,6 +80,7 @@
                         style="width: 3em"
                         v-else
                         autofocus
+                        height="1em"
                         v-model="deal.is_cache"
                         :items="paymentTypes"
                         item-text="text"
@@ -117,7 +118,7 @@
                 return this.$store.state.realDate
             },
             canUpdate () {
-                return (this.deal.user_id === this.authUser.id || this.isSuperadmin) && this.isToday
+                return !this.isToday ? false : this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id
             },
             basePath () {
                 return this.$store.state.basePath
@@ -126,7 +127,7 @@
                 return this.$store.state.authUser
             },
             isSuperadmin () {
-                return this.$store.getters.isSuperAdmin
+                return this.$store.getters.isSuperadmin
             }
         },
         methods: {
