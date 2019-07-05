@@ -9,9 +9,10 @@
                         :key="expense.id"
                     >
                         <td>
-                            <v-icon class="red--text delete"
-                                    :title="`Удалить расход ${expense.comment} ${expense.amount}р.`"
-                                    @click="attemptToDelete(expense)"
+                            <v-icon
+                                class="red--text delete"
+                                :title="`Удалить расход ${expense.comment} ${expense.amount}р.`"
+                                @click="attemptToDelete(expense)"
                             >
                                 clear
                             </v-icon>

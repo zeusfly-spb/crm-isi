@@ -42,4 +42,9 @@ class DealController extends Controller
 
         return response()->json($deal->toArray());
     }
+
+    public function delete(Request $request)
+    {
+        return response()->json(['result' => Deal::destroy($request->id)]);
+    }
 }

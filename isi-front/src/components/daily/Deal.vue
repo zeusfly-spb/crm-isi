@@ -1,6 +1,16 @@
 <template>
     <tr>
         <td>
+            <v-icon
+                class="red--text delete"
+                :title="`Удалить сделку ${deal.insole.name} на ${deal.income}р.`"
+                @click="confirmToDelete"
+                v-if="canUpdate"
+            >
+                clear
+            </v-icon>
+        </td>
+        <td>
             {{ deal.number }}
         </td>
         <td>
@@ -131,6 +141,9 @@
             }
         },
         methods: {
+            confirmToDelete () {
+                this.$emit('delete', this.deal)
+            },
             updateDeal (mode) {
                 this.$validator.validate()
                     .then(valid => {
@@ -160,3 +173,12 @@
         }
     }
 </script>
+<style scoped>
+    .delete {
+        cursor: pointer;
+        opacity: .6;
+    }
+    .delete:hover {
+        opacity: 1;
+    }
+</style>

@@ -21,6 +21,7 @@
                     is="deal"
                     :deal="{...props.item, number: props.index + 1}"
                     @snack="showSnack"
+                    @delete="deleteConfirm"
                 />
             </template>
             <template v-slot:no-data>
@@ -120,6 +121,33 @@
             @cancel="cancelNewCustomer"
             @added="setNewCustomer"
         />
+
+        <v-dialog v-model="confirm"
+                  max-width="600"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
+                </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteDeal"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -128,6 +156,9 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            dealToDelete: null,
+            confirm: false,
+            confirmText: '',
             newCustomer: false,
             newDealIncome: null,
             selectedPaymentType: true,
@@ -144,6 +175,7 @@
             selectedCustomerId: -1,
             dialog: false,
             headers: [
+                {text: '', value: null},
                 {text: '#', value: 'number'},
                 {text: 'Сотрудник', value: 'id'},
                 {text: 'Клиент', value: 'customer_id'},
@@ -198,6 +230,15 @@
             }
         },
         methods: {
+            deleteDeal () {
+                this.$store.dispatch('deleteDeal', this.dealToDelete)
+                    .then(() => this.showSnack(`Сделка ${this.dealToDelete.insole.name} на ${this.dealToDelete.income}р. удалена`))
+            },
+            deleteConfirm (deal) {
+                this.dealToDelete = deal
+                this.confirmText = `Удалить запись о сделке ${deal.insole.name} на ${deal.income}р. ?`
+                this.confirm = true
+            },
             setNewCustomer (customer) {
                 this.newCustomer = false
                 this.loadedCustomers.push(customer)
