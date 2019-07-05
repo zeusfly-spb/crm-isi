@@ -232,7 +232,10 @@
         methods: {
             deleteDeal () {
                 this.$store.dispatch('deleteDeal', this.dealToDelete)
-                    .then(() => this.showSnack(`Сделка ${this.dealToDelete.insole.name} на ${this.dealToDelete.income}р. удалена`))
+                    .then(() => {
+                        this.confirm = false
+                        this.showSnack(`Сделка ${this.dealToDelete.insole.name} на ${this.dealToDelete.income}р. удалена`, 'green')
+                    })
             },
             deleteConfirm (deal) {
                 this.dealToDelete = deal
