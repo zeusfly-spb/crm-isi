@@ -10,8 +10,16 @@ class HandOverController extends Controller
     public function index(Request $request)
     {
         $queryBuilder = HandOver::with('user')->whereDate('created_at', $request->date);
-        $handovers = $queryBuilder->get();
-        return response()->json($handovers->toArray());
+        if ($request->island_id) {
+            $handover = $queryBuilder->where('island_id', $request->island_id)->first();
+            $amount = $handover->amount ?? null;
+        } else {
+            $handovers = $queryBuilder->get();
+            $amount = $handovers->reduce(function ($carry, $item) {
+                return $carry + $item->amount;
+            });
+        }
+        return response()->json(['amount' => $amount]);
     }
 
     public function create(Request $request)

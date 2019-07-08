@@ -18,19 +18,16 @@
                     {{ cashlessAmount }}
                 </td>
                 <td align="center"
-                    v-if="handoversPresent"
+                    v-if="handover"
                 >
-                    <span v-if="$store.state.workingIslandId > 0">
-                        {{ currentHandover.amount }}
-                    </span>
-                    <span v-else>
-                        {{ handovers.reduce((a, b) => a + b.amount, 0) }}
+                    <span>
+                        {{ handover }}
                     </span>
                 </td>
             </template>
         </v-data-table>
         <p class="text-xs-right">
-            <v-btn
+            <v-btn v-if="!handover"
                 :disabled="!$store.state.workingIslandId"
                 flat
                 @click="showDialog"
@@ -87,14 +84,8 @@
             ]
         }),
         computed: {
-            currentHandover () {
-                this.handovers.find(item => item.island_id === this.$store.state.workingIslandId)
-            },
-            handoversPresent () {
-                return this.handovers.length > 0
-            },
-            handovers () {
-                return this.$store.state.handovers
+            handover () {
+                return this.$store.state.handover
             },
             cashlessAmount () {
                 const add = (a, b) => +a + +b.income - +b.expense
@@ -111,7 +102,7 @@
                 if (this.cashlessPresent) {
                     result = [...result, {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}]
                 }
-                if (this.handoversPresent) {
+                if (this.handover) {
                     result = [...result, {text: 'Сдано', value: null, sortable: false, align: 'center'}]
                 }
                 return result

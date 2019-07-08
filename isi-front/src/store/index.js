@@ -32,14 +32,15 @@ export const store = new Vuex.Store({
         startBalance: null,
         expenses: [],
         inspectingUserId: null,
-        handovers: []
+        handover: null
     },
     actions: {
         addHandOver ({commit}, amount) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_handover', {
                     amount: amount,
-                    user_id: this.state.authUser.id
+                    user_id: this.state.authUser.id,
+                    island_id: this.state.workingIslandId
                 })
                     .then(res => {
                         commit('ADD_HAND_OVER', res.data)
@@ -48,14 +49,14 @@ export const store = new Vuex.Store({
                     .catch(e => reject())
             })
         },
-        setHandOvers ({commit}) {
+        setHandOver ({commit}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_handovers', {
+                Vue.axios.post('/api/get_handover', {
                     date: this.state.accountingDate,
                     island_id: this.state.workingIslandId
                 })
                     .then(res => {
-                        commit('SET_HAND_OVERS', res.data)
+                        commit('SET_HAND_OVER', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -238,7 +239,7 @@ export const store = new Vuex.Store({
                     dispatch('setCustomers')
                     dispatch('setInsoles')
                     dispatch('setExpenses')
-                    dispatch('setHandOvers')
+                    dispatch('setHandOver')
                 })
         },
         setWorkDays ({commit}) {
@@ -262,7 +263,7 @@ export const store = new Vuex.Store({
                     dispatch('setDeals')
                     dispatch('setStartBalance')
                     dispatch('setExpenses')
-                    dispatch('setHandOvers')
+                    dispatch('setHandOver')
                 })
         },
         deleteIsland ({commit}, islandId) {
@@ -548,15 +549,15 @@ export const store = new Vuex.Store({
             dispatch('setWorkDays')
             dispatch('setStartBalance')
             dispatch('setExpenses')
-            dispatch('setHandOvers')
+            dispatch('setHandOver')
         }
     },
     mutations: {
         ADD_HAND_OVER (state, handover) {
-            state.handovers.push(handover)
+            state.handover = handover.amount
         },
-        SET_HAND_OVERS (state, handovers) {
-            state.handovers = handovers
+        SET_HAND_OVER (state, data) {
+            state.handover = data.amount
         },
         DELETE_DEAL (state, dealId) {
             state.deals = state.deals.filter(item => item.id !== dealId)

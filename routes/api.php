@@ -74,7 +74,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_expense', 'ExpenseController@delete');
 
     // HANDOVERS
-    Route::post('get_handovers', 'HandOverController@index');
+    Route::post('get_handover', 'HandOverController@index');
     Route::post('add_handover', 'HandOverController@create');
 
 });
