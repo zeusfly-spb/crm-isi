@@ -20,6 +20,9 @@
                 <td align="center"
                     v-if="handoversPresent"
                 >
+                    <span v-if="$store.state.workingIslandId > 0">
+                        {{ currentHandover.amount }}
+                    </span>
                     <span v-else>
                         {{ handovers.reduce((a, b) => a + b.amount, 0) }}
                     </span>
