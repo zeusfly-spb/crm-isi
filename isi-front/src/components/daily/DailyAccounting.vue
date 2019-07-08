@@ -51,7 +51,6 @@
         </v-tabs>
         <deals-table/>
         <day-balance/>
-        <cashless-day-balance/>
         <expenses-table @snack="showSnack"/>
         <work-days-table/>
     </v-flex>
@@ -61,7 +60,6 @@
     import DealsTable from './DealsTable.vue'
     import DayBalance from './DayBalance'
     import ExpensesTable from './ExpensesTable'
-    import CashlessDayBalance from './CashlessDayBalance'
     export default {
         name: 'DailyAccounting',
         data: () => ({
@@ -103,8 +101,7 @@
             WorkDaysTable,
             DealsTable,
             DayBalance,
-            ExpensesTable,
-            CashlessDayBalance
+            ExpensesTable
         }
     }
 </script>

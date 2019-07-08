@@ -21,13 +21,16 @@
     export default {
         name: 'DayBalance',
         data: () => ({
-            headers: [
+            baseHeaders: [
                 {text: 'На начало дня', value: null, sortable: false, align: 'center'},
                 {text: 'Расходы', value: null, sortable: false, align: 'center'},
                 {text: 'На конец дня', value: null, sortable: false, align: 'center'},
             ]
         }),
         computed: {
+            headers () {
+                return this.baseHeaders
+            },
             expenses () {
                 return this.$store.state.expenses
             },
