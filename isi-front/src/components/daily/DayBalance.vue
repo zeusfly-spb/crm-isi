@@ -32,7 +32,7 @@
                 return this.$store.state.expenses
             },
             currentBalance () {
-                const calculate = (a, b) => a + b.income - b.expense
+                const calculate = (a, b) => b.is_cache ? a + b.income - b.expense : a
                 return this.$store.state.deals.reduce(calculate, 0)
             },
             items () {
