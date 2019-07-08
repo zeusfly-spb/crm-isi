@@ -33,7 +33,7 @@ class Island extends Model
     {
         return $this->deals()->whereDate('created_at', $date)->get()
             ->reduce(function ($acc, $deal) {
-                return $acc + $deal->income - $deal->expense;
+                return $deal->is_cache ? $acc + $deal->income - $deal->expense : $acc;
             }, $this->startBalance($date));
     }
 
