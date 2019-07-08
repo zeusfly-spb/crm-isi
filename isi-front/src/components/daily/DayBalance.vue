@@ -34,7 +34,7 @@
         }),
         computed: {
             cashlessAmount () {
-                const add = (a, b) => a + b.income - b.expense
+                const add = (a, b) => +a + +b.income - +b.expense
                 return this.cashlessDeals.reduce(add, 0)
             },
             cashlessPresent () {
@@ -53,7 +53,7 @@
                 return this.$store.state.expenses
             },
             currentBalance () {
-                const calculate = (a, b) => b.is_cache ? a + b.income - b.expense : a
+                const calculate = (a, b) => b.is_cache ? +a + +b.income - +b.expense : +a
                 return this.$store.state.deals.reduce(calculate, 0)
             },
             items () {
