@@ -12,6 +12,11 @@
                     {{ props.item.expenses }}
                 </td>
                 <td align="center">{{ props.item.finish }}</td>
+                <td align="center" v-if="cashlessPresent"
+                    class="teal--text darken-3"
+                >
+                    {{ cashlessAmount }}
+                </td>
             </template>
         </v-data-table>
     </v-flex>
@@ -28,8 +33,21 @@
             ]
         }),
         computed: {
+            cashlessAmount () {
+                const add = (a, b) => a + b.income - b.expense
+                return this.cashlessDeals.reduce(add, 0)
+            },
+            cashlessPresent () {
+                return this.cashlessDeals.length > 0
+            },
+            cashlessDeals () {
+                return this.$store.state.deals.filter(item => !item.is_cache)
+            },
             headers () {
-                return this.baseHeaders
+                return !this.cashlessPresent ? this.baseHeaders : [
+                    ... this.baseHeaders,
+                    {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}
+                ]
             },
             expenses () {
                 return this.$store.state.expenses
