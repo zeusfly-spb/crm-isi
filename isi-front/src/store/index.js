@@ -31,9 +31,23 @@ export const store = new Vuex.Store({
         deals: [],
         startBalance: null,
         expenses: [],
-        inspectingUserId: null
+        inspectingUserId: null,
+        handovers: []
     },
     actions: {
+        setHandOvers ({commit}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_handovers', {
+                    date: this.state.accountingDate,
+                    island_id: this.state.workingIslandId
+                })
+                    .then(res => {
+                        commit('SET_HAND_OVERS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteDeal ({commit}, deal) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_deal', {...deal})
@@ -211,6 +225,7 @@ export const store = new Vuex.Store({
                     dispatch('setCustomers')
                     dispatch('setInsoles')
                     dispatch('setExpenses')
+                    dispatch('setHandOvers')
                 })
         },
         setWorkDays ({commit}) {
@@ -234,7 +249,7 @@ export const store = new Vuex.Store({
                     dispatch('setDeals')
                     dispatch('setStartBalance')
                     dispatch('setExpenses')
-
+                    dispatch('setHandOvers')
                 })
         },
         deleteIsland ({commit}, islandId) {
@@ -520,9 +535,13 @@ export const store = new Vuex.Store({
             dispatch('setWorkDays')
             dispatch('setStartBalance')
             dispatch('setExpenses')
+            dispatch('setHandOvers')
         }
     },
     mutations: {
+        SET_HAND_OVERS (state, handovers) {
+            state.handovers = handovers
+        },
         DELETE_DEAL (state, dealId) {
             state.deals = state.deals.filter(item => item.id !== dealId)
         },

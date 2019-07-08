@@ -115,4 +115,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function handovers()
+    {
+        return $this->hasMany(HandOver::class);
+    }
+
+    public function makeHandOver(int $amount)
+    {
+        return response()->json($this->handovers()->create([
+            'amount' => $amount,
+            'island_id' => $this->island_id
+        ])->toArray());
+    }
 }
