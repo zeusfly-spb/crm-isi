@@ -17,8 +17,57 @@
                 >
                     {{ cashlessAmount }}
                 </td>
+                <td align="center"
+                    v-if="handoversPresent"
+                >
+                    <span v-else>
+                        {{ handovers.reduce((a, b) => a + b.amount, 0) }}
+                    </span>
+                </td>
             </template>
         </v-data-table>
+        <p class="text-xs-right">
+            <v-btn
+                :disabled="!$store.state.workingIslandId"
+                flat
+                @click="showDialog"
+            >
+                Сдать кассу
+            </v-btn>
+        </p>
+        <v-dialog
+            v-model="dialog"
+            max-width="300"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    Сдать кассу
+                </v-card-title>
+                <v-card-text>
+                    <v-container grid-list-md>
+                        <v-layout wrap>
+                            <v-flex xs12>
+                                <v-text-field
+                                    v-model="amount"
+                                    label="Сумма"
+                                    data-vv-as="Сумма"
+                                    data-vv-name="amount"
+                                    :error-messages="errors.collect('amount')"
+                                    v-validate="'required|integer'"
+                                    autofocus
+                                />
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="saveHandover">Сохранить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
@@ -26,6 +75,8 @@
     export default {
         name: 'DayBalance',
         data: () => ({
+            amount: null,
+            dialog: false,
             baseHeaders: [
                 {text: 'На начало дня', value: null, sortable: false, align: 'center'},
                 {text: 'Расходы', value: null, sortable: false, align: 'center'},
@@ -33,6 +84,15 @@
             ]
         }),
         computed: {
+            currentHandover () {
+                this.handovers.find(item => item.island_id === this.$store.state.workingIslandId)
+            },
+            handoversPresent () {
+                return this.handovers.length > 0
+            },
+            handovers () {
+                return this.$store.state.handovers
+            },
             cashlessAmount () {
                 const add = (a, b) => +a + +b.income - +b.expense
                 return this.cashlessDeals.reduce(add, 0)
@@ -44,10 +104,14 @@
                 return this.$store.state.deals.filter(item => !item.is_cache)
             },
             headers () {
-                return !this.cashlessPresent ? this.baseHeaders : [
-                    ... this.baseHeaders,
-                    {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}
-                ]
+                let result = this.baseHeaders
+                if (this.cashlessPresent) {
+                    result = [...result, {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}]
+                }
+                if (this.handoversPresent) {
+                    result = [...result, {text: 'Сдано', value: null, sortable: false, align: 'center'}]
+                }
+                return result
             },
             expenses () {
                 return this.$store.state.expenses
@@ -65,6 +129,17 @@
                         finish: this.$store.state.startBalance + this.currentBalance - this.expenses.reduce(add, 0)
                     }
                     ]
+            }
+        },
+        methods: {
+            saveHandover () {
+                this.$store.dispatch('addHandOver', this.amount)
+                    .then(() => {
+                        this.dialog = false
+                    })
+            },
+            showDialog () {
+                this.dialog = true
             }
         },
         components: {

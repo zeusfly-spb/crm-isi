@@ -35,6 +35,19 @@ export const store = new Vuex.Store({
         handovers: []
     },
     actions: {
+        addHandOver ({commit}, amount) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_handover', {
+                    amount: amount,
+                    user_id: this.state.authUser.id
+                })
+                    .then(res => {
+                        commit('ADD_HAND_OVER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject())
+            })
+        },
         setHandOvers ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_handovers', {
@@ -539,6 +552,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        ADD_HAND_OVER (state, handover) {
+            state.handovers.push(handover)
+        },
         SET_HAND_OVERS (state, handovers) {
             state.handovers = handovers
         },

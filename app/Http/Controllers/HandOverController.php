@@ -9,7 +9,19 @@ class HandOverController extends Controller
 {
     public function index(Request $request)
     {
-        $handovers = HandOver::with('user')->whereDate('created_at', $request->date)->get();
+        $queryBuilder = HandOver::with('user')->whereDate('created_at', $request->date);
+        $handovers = $queryBuilder->get();
         return response()->json($handovers->toArray());
+    }
+
+    public function create(Request $request)
+    {
+        $handOver = HandOver::create([
+            'user_id' => $request->user_id,
+            'island_id' => $request->island_id,
+            'amount' => $request->amount
+        ]);
+        $handOver->load('user');
+        return response()->json($handOver->toArray());
     }
 }
