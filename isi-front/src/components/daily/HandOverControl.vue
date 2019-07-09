@@ -17,6 +17,10 @@
             @blur="turnEditMode(false)"
             @keyup.esc="turnEditMode(false)"
             @keyup.enter="saveHandOver"
+            data-vv-as="Сумма"
+            data-vv-name="amount"
+            :error-messages="errors.collect('amount')"
+            v-validate="'integer'"
         />
     </v-flex>
 </template>
@@ -43,8 +47,13 @@
         },
         methods: {
             saveHandOver () {
-                this.$store.dispatch('updateHandOver', this.amount)
-                    .then(() => this.turnEditMode(false))
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) return
+                        this.$store.dispatch('updateHandOver', this.amount)
+                            .then(() => this.turnEditMode(false))
+                    })
+
             },
             turnEditMode (mode) {
                 if (mode) {

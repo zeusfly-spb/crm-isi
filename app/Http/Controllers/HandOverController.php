@@ -36,6 +36,10 @@ class HandOverController extends Controller
     {
         $handover = HandOver::whereDate('created_at', $request->date)
             ->where('island_id', $request->island_id)->first();
+        if (!$request->amount) {
+            $handover->delete();
+            return response()->json(['amount' => null]);
+        }
         $handover->update(['amount' => $request->amount]);
         return response()->json(['amount' => $handover->amount]);
     }
