@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 md4 offset-md4 justify-center class="md2">
+    <v-flex xs12 md6 offset-md3 justify-center class="md2">
         <v-data-table
             :headers="headers"
             :items="items"
@@ -20,9 +20,7 @@
                 <td align="center"
                     v-if="handover"
                 >
-                    <span class="green--text darken-4 font-weight-bold">
-                        {{ handover }}
-                    </span>
+                    <hand-over-control/>
                 </td>
             </template>
         </v-data-table>
@@ -72,6 +70,7 @@
 </template>
 <script>
     import ExpensesTable from './ExpensesTable'
+    import HandOverControl from './HandOverControl'
     export default {
         name: 'DayBalance',
         data: () => ({
@@ -137,7 +136,8 @@
             }
         },
         components: {
-            ExpensesTable
+            ExpensesTable,
+            HandOverControl
         }
     }
 </script>
