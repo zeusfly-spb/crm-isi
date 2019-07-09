@@ -35,7 +35,8 @@
                 <v-select
                     v-else
                     autofocus
-                    style="width: 20em"
+                    style="width: 17em"
+                    height="1em"
                     v-model="deal.insole_id"
                     :items="insoles"
                     item-text="name"
