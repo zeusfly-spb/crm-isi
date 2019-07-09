@@ -181,9 +181,9 @@
                             comment: this.comment
                         })
                             .then(() => {
+                                this.dialog = false
                                 this.$store.dispatch('setDeals')
                                 this.$store.dispatch('setExpenses')
-                                this.dialog = false
                                 this.$emit('snack', `Расход на сумму ${this.amount} р, ${this.comment} добавлен`, 'green')
                             })
                             .catch(e => this.$emit('snack', e.data, 'red'))
