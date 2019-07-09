@@ -8,31 +8,33 @@
         >
             <template v-slot:items="props">
                 <td align="center">{{ props.item.start }}</td>
+                <td align="center"
+                >
+                    <hand-over-control v-if="handover"/>
+                    <v-btn v-if="!handover && isToday"
+                           :disabled="!$store.state.workingIslandId"
+                           flat
+                           @click="showDialog"
+                           color="primary"
+                    >
+                        Сдать кассу
+                    </v-btn>
+                    <span v-if="!handover && !isToday">0</span>
+                </td>
                 <td align="center">
                     {{ props.item.expenses }}
                 </td>
+
                 <td align="center">{{ props.item.finish }}</td>
-                <td align="center" v-if="cashlessPresent"
+                <td align="center"
                     class="teal--text darken-3"
                 >
-                    {{ cashlessAmount }}
+                    <span v-if="cashlessPresent">{{ cashlessAmount }}</span>
+                    <span v-else>0</span>
                 </td>
-                <td align="center"
-                    v-if="handover"
-                >
-                    <hand-over-control/>
-                </td>
+
             </template>
         </v-data-table>
-        <p class="text-xs-right">
-            <v-btn v-if="!handover && isToday"
-                :disabled="!$store.state.workingIslandId"
-                flat
-                @click="showDialog"
-            >
-                Сдать кассу
-            </v-btn>
-        </p>
         <v-dialog
             v-model="dialog"
             max-width="300"
@@ -76,10 +78,12 @@
         data: () => ({
             amount: null,
             dialog: false,
-            baseHeaders: [
+            headers: [
                 {text: 'На начало дня', value: null, sortable: false, align: 'center'},
+                {text: 'Сдано', value: null, sortable: false, align: 'center'},
                 {text: 'Расходы', value: null, sortable: false, align: 'center'},
                 {text: 'На конец дня', value: null, sortable: false, align: 'center'},
+                {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}
             ]
         }),
         computed: {
@@ -101,16 +105,6 @@
             },
             cashlessDeals () {
                 return this.$store.state.deals.filter(item => !item.is_cache)
-            },
-            headers () {
-                let result = this.baseHeaders
-                if (this.cashlessPresent) {
-                    result = [...result, {text: 'Безналичные платежи', value: null, sortable: false, align: 'center'}]
-                }
-                if (this.handover) {
-                    result = [...result, {text: 'Сдано', value: null, sortable: false, align: 'center'}]
-                }
-                return result
             },
             expenses () {
                 return this.$store.state.expenses
