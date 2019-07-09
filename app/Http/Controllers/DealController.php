@@ -37,7 +37,8 @@ class DealController extends Controller
             'income' => (int) $request->income,
             'expense' => (int) $request->expense,
             'is_cache' => (bool) $request->is_cache,
-            'insole_id' => (int) $request->insole_id
+            'insole_id' => (int) $request->insole_id,
+            'customer_id' => (int) $request->customer_id
         ]);
         $deal->load('user', 'insole', 'customer');
 

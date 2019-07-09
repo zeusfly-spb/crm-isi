@@ -22,7 +22,37 @@
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
         </td>
-        <td>{{ deal.customer.full_name }}</td>
+        <td>
+            <span
+                @click="switchEditMode('customer')"
+            >
+                <span v-if="!editMode.customer"
+                      :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
+                >
+                    {{ deal.customer.full_name }}
+                </span>
+                <v-select
+                    v-else
+                    autofocus
+                    :items="customers"
+                    v-model="selectedCustomerId"
+                    height="1em"
+                    style="width: 20em"
+                    item-text="full_name"
+                    item-value="id"
+                    single-line
+                    @focus="focused('customer')"
+                    @blur="blur('customer')"
+                    @change="customerSelected"
+                >
+                    <template v-slot:item="data">
+                        <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
+                            {{ data.item.full_name }}
+                        </span>
+                    </template>
+                </v-select>
+            </span>
+        </td>
         <td>
             <span
                 @click="switchEditMode('insole')"
@@ -134,6 +164,8 @@
         name: 'Deal',
         props: ['deal'],
         data: () => ({
+            newCustomer: false,
+            selectedCustomerId: null,
             paymentTypes: [
                 {value: true, text: 'Наличный'},
                 {value: false, text: 'Безналичный'}
@@ -142,10 +174,18 @@
                 income: false,
                 expense: false,
                 is_cache: false,
-                insole: false
+                insole: false,
+                customer: false
             }
         }),
         computed: {
+            customers () {
+                return [
+                    {id: null, full_name: 'Аноним'},
+                    {id: 0, full_name: 'Новый клиент'},
+                    ...this.$store.state.customers
+                ]
+            },
             insoles () {
                 return this.$store.state.insoles
             },
@@ -169,6 +209,18 @@
             }
         },
         methods: {
+            customerSelected () {
+               switch (this.selectedCustomerId) {
+                   case 0: this.newCustomer = true
+                       break
+                   case null: this.deal.customer_id = null
+                       this.updateDeal('customer')
+                       break
+                   default: this.deal.customer_id = this.selectedCustomerId
+                       this.updateDeal('customer')
+                       break
+               }
+            },
             confirmToDelete () {
                 this.$emit('delete', this.deal)
             },
@@ -179,7 +231,13 @@
                         this.$store.dispatch('updateDeal', this.deal)
                             .then(() => {
                                 this.blur(mode)
-                                this.$emit('snack', `Значение "${{insole: 'Услуга', income: 'Цена', expense: 'Себестоимость', is_cache: 'Форма оплаты'}[mode]}" изменено.`, 'green')
+                                this.$emit('snack', `Значение "${{
+                                    insole: 'Услуга',
+                                    income: 'Цена',
+                                    expense: 'Себестоимость',
+                                    is_cache: 'Форма оплаты',
+                                    customer: 'Клиент'
+                                }[mode]}" изменено.`, 'green')
                             })
                             .catch(e => console.error(e))
                     })
@@ -198,6 +256,9 @@
                 }
                 this.editMode[mode] = true
             }
+        },
+        created () {
+            this.selectedCustomerId = this.deal.customer_id
         }
     }
 </script>
