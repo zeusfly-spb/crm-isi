@@ -36,7 +36,8 @@ class DealController extends Controller
         $deal->update([
             'income' => (int) $request->income,
             'expense' => (int) $request->expense,
-            'is_cache' => (bool) $request->is_cache
+            'is_cache' => (bool) $request->is_cache,
+            'insole_id' => (int) $request->insole_id
         ]);
         $deal->load('user', 'insole', 'customer');
 

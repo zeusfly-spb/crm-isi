@@ -23,7 +23,30 @@
             </v-avatar>
         </td>
         <td>{{ deal.customer.full_name }}</td>
-        <td>{{ deal.insole.name }}</td>
+        <td>
+            <span
+                @click="switchEditMode('insole')"
+            >
+                <span v-if="!editMode.insole"
+                      :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
+                >
+                    {{ deal.insole.name }}
+                </span>
+                <v-select
+                    v-else
+                    autofocus
+                    style="width: 20em"
+                    v-model="deal.insole_id"
+                    :items="insoles"
+                    item-text="name"
+                    item-value="id"
+                    single-line
+                    @focus="focused('insole')"
+                    @blur="blur('insole')"
+                    @change="updateDeal('insole')"
+                />
+            </span>
+        </td>
         <td>
             <span
                 @click="switchEditMode('income')"
@@ -117,10 +140,14 @@
             editMode: {
                 income: false,
                 expense: false,
-                is_cache: false
+                is_cache: false,
+                insole: false
             }
         }),
         computed: {
+            insoles () {
+                return this.$store.state.insoles
+            },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate
             },
@@ -151,7 +178,7 @@
                         this.$store.dispatch('updateDeal', this.deal)
                             .then(() => {
                                 this.blur(mode)
-                                this.$emit('snack', `Значение "${{income: 'Цена', expense: 'Себестоимость', is_cache: 'Форма оплаты'}[mode]}" изменено.`, 'green')
+                                this.$emit('snack', `Значение "${{insole: 'Услуга', income: 'Цена', expense: 'Себестоимость', is_cache: 'Форма оплаты'}[mode]}" изменено.`, 'green')
                             })
                             .catch(e => console.error(e))
                     })
