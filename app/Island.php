@@ -29,6 +29,17 @@ class Island extends Model
         return $this->hasMany(Expense::class);
     }
 
+    public function handovers()
+    {
+        return $this->hasMany(HandOver::class);
+    }
+
+    public function dateHandover(string $date)
+    {
+        $handover = $this->handovers()->whereDate('created_at', $date)->first();
+        return $handover->amount ?? 0;
+    }
+
     public function dateBalance(string $date)
     {
         return $this->deals()->whereDate('created_at', $date)->get()
@@ -53,7 +64,7 @@ class Island extends Model
     public function makeStartDate()
     {
         $yesterday = Carbon::yesterday()->toDateString();
-        return $this->startDays()->create(['amount' => $this->dateBalance($yesterday) - $this->dateExpenses($yesterday)]);
+        return $this->startDays()->create(['amount' => $this->dateBalance($yesterday) - $this->dateExpenses($yesterday) - $this->dateHandover($yesterday)]);
     }
 
 }
