@@ -25,7 +25,7 @@
             </template>
         </v-data-table>
         <p class="text-xs-right">
-            <v-btn v-if="!handover"
+            <v-btn v-if="!handover && isToday"
                 :disabled="!$store.state.workingIslandId"
                 flat
                 @click="showDialog"
@@ -83,6 +83,12 @@
             ]
         }),
         computed: {
+            realDate () {
+                return this.$store.state.realDate
+            },
+            isToday () {
+                return this.$store.state.accountingDate === this.realDate
+            },
             handover () {
                 return this.$store.state.handover
             },
