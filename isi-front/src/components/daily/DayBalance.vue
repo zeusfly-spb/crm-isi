@@ -20,7 +20,7 @@
                 <td align="center"
                     v-if="handover"
                 >
-                    <span>
+                    <span class="green--text darken-4 font-weight-bold">
                         {{ handover }}
                     </span>
                 </td>
@@ -120,7 +120,7 @@
                     {
                         start: this.$store.state.startBalance,
                         expenses: this.expenses.reduce(add, 0),
-                        finish: this.$store.state.startBalance + this.currentBalance - this.expenses.reduce(add, 0)
+                        finish: this.$store.state.startBalance + this.currentBalance - this.expenses.reduce(add, 0) - this.handover
                     }
                     ]
             }
