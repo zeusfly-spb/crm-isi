@@ -176,12 +176,12 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.dialog = false
                         this.$store.dispatch('addExpense', {
                             amount: this.amount,
                             comment: this.comment
                         })
                             .then(() => {
-                                this.dialog = false
                                 this.$store.dispatch('setDeals')
                                 this.$store.dispatch('setExpenses')
                                 this.$emit('snack', `Расход на сумму ${this.amount} р, ${this.comment} добавлен`, 'green')
