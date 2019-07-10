@@ -68,9 +68,6 @@
                 }
             }
         },
-        mounted () {
-            console.log('Я дома ))')
-        },
         components: {
             AdminPanel,
             StockPanel,

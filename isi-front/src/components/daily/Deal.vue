@@ -159,6 +159,8 @@
         </td>
         <new-customer-dialog
             :active="newCustomer"
+            @cancel="cancelNewCustomer"
+            @added="setNewCustomer"
         />
     </tr>
 </template>
@@ -213,6 +215,15 @@
             }
         },
         methods: {
+            setNewCustomer (customer) {
+                this.newCustomer = false
+                this.selectedCustomerId = this.deal.customer_id = customer.id
+                this.$store.dispatch('updateDeal', this.deal)
+                    .then(() => {
+                        this.blur('customer')
+                        this.$emit('snack', 'Значение "Клиент" изменено', 'green')
+                    })
+            },
             cancelNewCustomer () {
                 this.newCustomer = false
             },
