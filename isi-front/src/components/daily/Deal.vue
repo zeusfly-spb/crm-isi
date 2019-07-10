@@ -37,7 +37,7 @@
                     :items="customers"
                     v-model="selectedCustomerId"
                     height="1em"
-                    style="width: 20em"
+                    style="width: 25em"
                     item-text="full_name"
                     item-value="id"
                     single-line
@@ -157,9 +157,13 @@
                 </span>
             </span>
         </td>
+        <new-customer-dialog
+            :active="newCustomer"
+        />
     </tr>
 </template>
 <script>
+    import NewCustomerDialog from './NewCustomerDialog'
     export default {
         name: 'Deal',
         props: ['deal'],
@@ -209,15 +213,21 @@
             }
         },
         methods: {
+            cancelNewCustomer () {
+                this.newCustomer = false
+            },
             customerSelected () {
                switch (this.selectedCustomerId) {
-                   case 0: this.newCustomer = true
+                   case 0:
+                       this.newCustomer = true
                        break
-                   case null: this.deal.customer_id = null
-                       this.updateDeal('customer')
-                       break
-                   default: this.deal.customer_id = this.selectedCustomerId
-                       this.updateDeal('customer')
+                   default:
+                       this.deal.customer_id = this.selectedCustomerId
+                       this.$store.dispatch('updateDeal', this.deal)
+                           .then(() => {
+                               this.blur('customer')
+                               this.$emit('snack', 'Значение "Клиент" изменено', 'green')
+                           })
                        break
                }
             },
@@ -259,6 +269,9 @@
         },
         created () {
             this.selectedCustomerId = this.deal.customer_id
+        },
+        components: {
+            NewCustomerDialog
         }
     }
 </script>
