@@ -16,11 +16,27 @@
         <td>
             <v-avatar
                 size="36px"
-                :title="deal.user.full_name"
+                :title="isSuperadmin ? `${deal.user.full_name} : чтобы изменить - клик мышкой` : deal.user.full_name"
+                @click="isSuperadmin ? switchEditMode('user') : null"
+                v-if="!editMode.user"
             >
                 <img :src="basePath + deal.user.avatar" alt="Фото" v-if="deal.user.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
+            <v-select
+                v-else
+                autofocus
+                :items="users"
+                v-model="deal.user_id"
+                height="1em"
+                style="width: 25em"
+                item-text="full_name"
+                item-value="id"
+                single-line
+                @focus="focused('user')"
+                @blur="blur('user')"
+                @change="updateDeal('user')"
+            />
         </td>
         <td>
             <span
@@ -181,10 +197,14 @@
                 expense: false,
                 is_cache: false,
                 insole: false,
-                customer: false
+                customer: false,
+                user: false
             }
         }),
         computed: {
+            users () {
+                return this.$store.state.users
+            },
             customers () {
                 return [
                     {id: null, full_name: 'Аноним'},
@@ -257,7 +277,8 @@
                                     income: 'Цена',
                                     expense: 'Себестоимость',
                                     is_cache: 'Форма оплаты',
-                                    customer: 'Клиент'
+                                    customer: 'Клиент',
+                                    user: 'Сотрудник'
                                 }[mode]}" изменено.`, 'green')
                             })
                             .catch(e => console.error(e))
