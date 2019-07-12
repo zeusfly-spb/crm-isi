@@ -5,9 +5,14 @@ require('dotenv').config()
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import stock from './stock'
+
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
+    modules: {
+        stock
+    },
     state: {
         basePath: '',
         authUser: null,
@@ -254,6 +259,7 @@ export const store = new Vuex.Store({
                     dispatch('setInsoles')
                     dispatch('setExpenses')
                     dispatch('setHandOver')
+                    dispatch('setReserves')
                 })
         },
         setWorkDays ({commit}) {

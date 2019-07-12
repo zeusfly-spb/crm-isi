@@ -77,4 +77,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_handover', 'HandOverController@index');
     Route::post('add_handover', 'HandOverController@create');
     Route::post('update_handover', 'HandOverController@update');
+
+    // RESERVES
+    Route::post('get_reserves', 'ReserveController@index');
 });
