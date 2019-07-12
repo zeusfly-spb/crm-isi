@@ -2,6 +2,11 @@
 
 namespace App;
 
+use App\Stock\Product;
+use App\Stock\Reserve;
+use App\Stock\Size;
+use App\Stock\StockAction;
+use App\Stock\Type;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,4 +72,63 @@ class Island extends Model
         return $this->startDays()->create(['amount' => $this->dateBalance($yesterday) - $this->dateExpenses($yesterday) - $this->dateHandover($yesterday)]);
     }
 
+    //Stock
+
+    public function reserves()
+    {
+        return $this->hasMany(Reserve::class);
+    }
+
+    public function dateReserves(string $date)
+    {
+        return $this->reserves()->whereDate('created_at', $date);
+    }
+
+    public function stockActions()
+    {
+        return $this->hasMany(StockAction::class);
+    }
+
+    public function dateStockActions(string $date)
+    {
+        return $this->stockActions()->whereDate('created_at', $date);
+    }
+
+    public function makeReserves()
+    {
+        $productIds = Product::pluck('id')->all();
+        $typeIds = Type::pluck('id')->all();
+        $sizeIds = Size::pluck('id')->all();
+
+        $yesterday = Carbon::yesterday()->toDateString();
+        $yesterdayReserves = $this->dateReserves($yesterday);
+        $yesterdayActions = $this->dateStockActions($yesterday);
+
+        foreach ($productIds as $productId) {
+            foreach ($typeIds as $typeId) {
+                foreach ($sizeIds as $sizeId) {
+                    $prevCount = $yesterdayReserves
+                        ->where('product_id', $productId)
+                        ->where('type_id', $typeId)
+                        ->where('size_id', $sizeId)
+                        ->first()
+                        ->count ?? 0;
+                    $actions = $yesterdayActions
+                        ->where('product_id', $productId)
+                        ->where('type_id', $typeId)
+                        ->where('size_id', $sizeId)
+                        ->get();
+                    $count = $actions->reduce(function ($carry, $action) {
+                        return $action->type === 'receipt' ?  $carry + $action->count : $carry - $action->count;
+                    }, $prevCount);
+                    $this->reserves()->create([
+                        'product_id' => $productId,
+                        'type_id' => $typeId,
+                        'size_id' => $sizeId,
+                        'count' => $count
+                    ]);
+                }
+            }
+        }
+    }
 }
