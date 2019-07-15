@@ -82,18 +82,33 @@
 
             </tr>
             <tr>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
+            </tr>
+            <tr v-for="sizeId in normalInsolesSizeIds">
+                <td>
+                    Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === sizeId).size.name }}</strong>
+                </td>
+                <td align="right">
+                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Кожа').count }}
+                </td>
+                <td align="right">
+                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Колоф').count }}
+                </td>
+                 <td align="right">
+                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Флис').count }}
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -138,16 +153,16 @@
 
             </tr>
             <tr>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
-                <td>Обыч.</td>
+                <td>Кожа</td>
                 <td>Колоф</td>
                 <td>Флис</td>
             </tr>
@@ -171,6 +186,15 @@
             ]
         }),
         computed: {
+            normalInsolesSizeIds () {
+                return [... new Set(this.normalInsolesReserves.map(item => item.size_id))]
+            },
+            normalInsolesReserves () {
+                return this.reserves.filter(item => item.product.name === 'Стельки')
+            },
+            reserves () {
+                return this.$store.state.stock.reserves
+            },
             basePath () {
                 return this.$store.state.basePath
             },

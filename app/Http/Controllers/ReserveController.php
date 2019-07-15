@@ -9,7 +9,7 @@ class ReserveController extends Controller
 {
     public function index(Request $request)
     {
-        $queryBuilder = Reserve::whereDate('created_at', $request->date);
+        $queryBuilder = Reserve::with('product', 'type', 'size')->whereDate('created_at', $request->date);
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
         }
