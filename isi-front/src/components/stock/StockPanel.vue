@@ -105,10 +105,36 @@
                 <td align="right">
                     {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Колоф').count }}
                 </td>
-                 <td align="right">
+                <td align="right">
                     {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Флис').count }}
                 </td>
-
+                <td align="right">
+                    {{ findActionCount('receipt', 'Стельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('receipt', 'Стельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('receipt', 'Стельки', 'Флис', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Стельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Стельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Стельки', 'Флис', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Стельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Стельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Стельки', 'Флис', sizeId) }}
+                </td>
             </tr>
             </tbody>
         </table>
@@ -186,6 +212,12 @@
             ]
         }),
         computed: {
+            currentReserves () {
+                return this.$store.getters.currentReserves
+            },
+            stockActions () {
+                return this.$store.state.stock.stockActions
+            },
             normalInsolesSizeIds () {
                 return [... new Set(this.normalInsolesReserves.map(item => item.size_id))]
             },
@@ -215,6 +247,14 @@
             }
         },
         methods: {
+            currentCount (productName, typeName, sizeId) {
+                let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
+                return target && target.count || 0
+            },
+            findActionCount (action, productName, typeName, sizeId) {
+                let target = this.stockActions.find(item => item.type === action && item.product.name === productName && item.type.name === typeName && item.size_id === sizeId)
+                return target && target.count || 0
+            },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }

@@ -80,4 +80,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     // RESERVES
     Route::post('get_reserves', 'ReserveController@index');
+
+    // STOCK ACTIONS
+    Route::post('get_stock_actions', 'StockActionController@index');
 });

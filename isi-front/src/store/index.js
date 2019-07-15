@@ -260,6 +260,7 @@ export const store = new Vuex.Store({
                     dispatch('setExpenses')
                     dispatch('setHandOver')
                     dispatch('setReserves')
+                    dispatch('setStockActions')
                 })
         },
         setWorkDays ({commit}) {
@@ -284,6 +285,8 @@ export const store = new Vuex.Store({
                     dispatch('setStartBalance')
                     dispatch('setExpenses')
                     dispatch('setHandOver')
+                    dispatch('setReserves')
+                    dispatch('setStockActions')
                 })
         },
         deleteIsland ({commit}, islandId) {
@@ -570,6 +573,8 @@ export const store = new Vuex.Store({
             dispatch('setStartBalance')
             dispatch('setExpenses')
             dispatch('setHandOver')
+            dispatch('setReserves')
+            dispatch('setStockActions')
         }
     },
     mutations: {
