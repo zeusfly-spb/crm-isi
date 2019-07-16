@@ -300,8 +300,10 @@
                 return target && target.count || 0
             },
             findActionCount (action, productName, typeName, sizeId) {
-                let target = this.stockActions.find(item => item.type === action && item.product.name === productName && item.type.name === typeName && item.size_id === sizeId)
-                return target && target.count || 0
+                const nameOfType = (type_id) => this.$store.state.stock.options.types && this.$store.state.stock.options.types.find(item => +item.id === +type_id).name
+                const add = (a, b) => +a + +b.count
+                let currentEntityActions = this.stockActions.filter(item => item.type === action && item.product.name === productName && nameOfType(item.type_id) === typeName && +item.size_id === +sizeId)
+                return currentEntityActions.reduce(add, 0) || 0
             },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
