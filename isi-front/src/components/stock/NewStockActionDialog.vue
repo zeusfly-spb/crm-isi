@@ -5,7 +5,12 @@
             max-width="900px"
         >
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="showDialog">Новая операция</v-btn>
+                <v-btn color="primary" flat dark class="mb-2"
+                       @click="showDialog"
+                       :disabled="workingIslandId === 0"
+                >
+                    Новая операция
+                </v-btn>
             </template>
             <v-card>
                 <v-card-title>
@@ -102,6 +107,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             products () {
                 return this.$store.state.stock.options.products
             },

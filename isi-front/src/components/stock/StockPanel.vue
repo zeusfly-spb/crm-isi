@@ -236,7 +236,7 @@
             </tbody>
         </table>
     </v-layout>
-    <new-stock-action-dialog v-if="workingIslandId > 0"/>
+    <new-stock-action-dialog/>
 </v-container>
 
     </v-flex>

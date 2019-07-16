@@ -78,7 +78,7 @@ export default {
             let result = []
             state.reserves.forEach(item => {
                 let positionOperations = state.stockActions.filter(action => action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
-                const add = (a, b) => b.type === 'receipt' ? a + +b.count : a - +b.count
+                const add = (a, b) => b.type === 'receipt' ? +a + +b.count : +a - +b.count
                 let clone = JSON.parse(JSON.stringify(item))
                 clone.count += positionOperations.reduce(add, 0)
                 result.push(clone)
