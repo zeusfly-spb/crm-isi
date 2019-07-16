@@ -192,6 +192,47 @@
                 <td>Колоф</td>
                 <td>Флис</td>
             </tr>
+            <tr v-for="sizeId in halfInsolesSizeIds">
+                <td>
+                    Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === sizeId).size.name }}</strong>
+                </td>
+                <td align="right">
+                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Кожа').count }}
+                </td>
+                <td align="right">
+                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Колоф').count }}
+                </td>
+                <td align="right">
+                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Флис').count }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('receipt', 'Полустельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('receipt', 'Полустельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('receipt', 'Полустельки', 'Флис', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Полустельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Полустельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ findActionCount('expense', 'Полустельки', 'Флис', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Полустельки', 'Кожа', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Полустельки', 'Колоф', sizeId) }}
+                </td>
+                <td align="right">
+                    {{ currentCount('Полустельки', 'Флис', sizeId) }}
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -218,8 +259,14 @@
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
+            halfInsolesSizeIds () {
+                return [... new Set(this.halfInsolesReserves.map(item => item.size_id))]
+            },
             normalInsolesSizeIds () {
                 return [... new Set(this.normalInsolesReserves.map(item => item.size_id))]
+            },
+            halfInsolesReserves () {
+                return this.reserves.filter(item => item.product.name === 'Полустельки' && !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(item.size.name))
             },
             normalInsolesReserves () {
                 return this.reserves.filter(item => item.product.name === 'Стельки')
