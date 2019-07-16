@@ -235,13 +235,14 @@
             </tr>
             </tbody>
         </table>
-
     </v-layout>
+    <new-stock-action-dialog v-if="workingIslandId > 0"/>
 </v-container>
 
     </v-flex>
 </template>
 <script>
+    import NewStockActionDialog from './NewStockActionDialog'
     export default {
         name: 'StockPanel',
         data: () => ({
@@ -305,6 +306,9 @@
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
+        },
+        components: {
+            NewStockActionDialog
         }
     }
 </script>

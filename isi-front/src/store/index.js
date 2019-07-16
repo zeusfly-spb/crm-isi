@@ -261,6 +261,7 @@ export const store = new Vuex.Store({
                     dispatch('setHandOver')
                     dispatch('setReserves')
                     dispatch('setStockActions')
+                    dispatch('setStockOptions')
                 })
         },
         setWorkDays ({commit}) {
