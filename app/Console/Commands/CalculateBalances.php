@@ -40,6 +40,8 @@ class CalculateBalances extends Command
     {
         $islands = Island::all();
         foreach ($islands as $island) {
+            $island->makeReserves();
+            $this->info($island->name . ' reserves counted');
             $this->info($island->name . ' = ' .$island->makeStartDate()->amount . PHP_EOL);
         }
     }
