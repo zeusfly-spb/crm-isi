@@ -45,12 +45,10 @@ export default {
         currentReserves: state => {
             let result = []
             state.reserves.forEach(item => {
-                let expenseTarget = state.stockActions.find(action => action.type === 'expense' && action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
-                let expense = expenseTarget && expenseTarget.count || 0
-                let receiptTarget = state.stockActions.find(action => action.type === 'receipt' && action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
-                let receipt = receiptTarget && receiptTarget.count || 0
+                let positionOperations = state.stockActions.filter(action => action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
+                const add = (a, b) => b.type === 'receipt' ? a + b.count : a - b.count
                 let clone = JSON.parse(JSON.stringify(item))
-                clone.count = clone.count - expense + receipt
+                clone.count += positionOperations.reduce(add, 0)
                 result.push(clone)
             })
             return result
