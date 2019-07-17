@@ -58,6 +58,10 @@
                                     item-text="name"
                                     item-value="id"
                                     single-line
+                                    data-vv-as="Размер"
+                                    data-vv-name="size"
+                                    :error-messages="errors.collect('size')"
+                                    v-validate="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -102,8 +106,8 @@
             newActionData: {},
             dialog: false,
             actionTypes: [
-                {text: 'Приемка', type: 'receipt'},
-                {text: 'Списание', type: 'expense'}
+                {text: 'Приход', type: 'receipt'},
+                {text: 'Расход', type: 'expense'}
             ]
         }),
         computed: {
@@ -125,7 +129,7 @@
                 return {
                     type: 'receipt',
                     product_id: this.products && this.products.map(item => item.id)[0] || null,
-                    type_id: this.types && this.types.map(item => item.id)[0] || null,
+                    type_id: this.types && this.types.find(item => item.name === 'Кожа').id || null,
                     size_id: this.sizes && this.sizes.map(item => item.id)[0] || null,
                     count: ''
                 }
@@ -143,6 +147,11 @@
             showDialog () {
                 this.newActionData = JSON.parse(JSON.stringify(this.defaultActionData))
                 this.dialog = true
+            }
+        },
+        watch: {
+            sizes (value) {
+                this.newActionData.size_id = value[0]
             }
         }
     }
