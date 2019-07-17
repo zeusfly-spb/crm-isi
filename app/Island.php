@@ -116,8 +116,7 @@ class Island extends Model
                     $actions = $yesterdayActions
                         ->where('product_id', $productId)
                         ->where('type_id', $typeId)
-                        ->where('size_id', $sizeId)
-                        ->get();
+                        ->where('size_id', $sizeId);
                     $count = $actions->reduce(function ($carry, $action) {
                         return $action->type === 'receipt' ?  $carry + $action->count : $carry - $action->count;
                     }, $prevCount);
