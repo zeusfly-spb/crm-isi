@@ -81,7 +81,7 @@ class Island extends Model
 
     public function dateReserves(string $date)
     {
-        return $this->reserves()->whereDate('created_at', $date);
+        return $this->reserves()->whereDate('created_at', $date)->get();
     }
 
     public function stockActions()
