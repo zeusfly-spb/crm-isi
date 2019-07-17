@@ -12,7 +12,7 @@ class StockActionController extends Controller
 {
     public function index(Request $request)
     {
-        $queryBuilder = StockAction::with('product', 'size')->whereDate('created_at', $request->date);
+        $queryBuilder = StockAction::with('product', 'size', 'user')->whereDate('created_at', $request->date);
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
         }
@@ -22,7 +22,7 @@ class StockActionController extends Controller
     public function create(Request $request)
     {
         $stockAction = StockAction::create($request->all());
-        $stockAction->load('product', 'size');
+        $stockAction->load('product', 'size', 'user');
         return response()->json($stockAction->toArray());
     }
 

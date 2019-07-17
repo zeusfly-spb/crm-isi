@@ -2,6 +2,7 @@
 
 namespace App\Stock;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class StockAction extends Model
@@ -21,5 +22,10 @@ class StockAction extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
