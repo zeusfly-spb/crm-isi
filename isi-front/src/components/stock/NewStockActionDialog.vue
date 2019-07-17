@@ -151,7 +151,7 @@
         },
         watch: {
             sizes (value) {
-                this.newActionData.size_id = value[0]
+                this.newActionData.size_id = value[0].id
             }
         }
     }

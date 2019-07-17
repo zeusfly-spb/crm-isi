@@ -237,12 +237,14 @@
         </table>
     </v-layout>
     <new-stock-action-dialog/>
+    <stock-actions-table/>
 </v-container>
 
     </v-flex>
 </template>
 <script>
     import NewStockActionDialog from './NewStockActionDialog'
+    import StockActionsTable from './StockActionsTable'
     export default {
         name: 'StockPanel',
         data: () => ({
@@ -310,7 +312,8 @@
             }
         },
         components: {
-            NewStockActionDialog
+            NewStockActionDialog,
+            StockActionsTable
         }
     }
 </script>
