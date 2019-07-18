@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DealAction;
 use App\Stock\Product;
 use App\Stock\Size;
 use App\Stock\StockAction;
@@ -31,7 +32,8 @@ class StockActionController extends Controller
         return response()->json([
             'products' => Product::all()->toArray(),
             'types' => Type::all()->toArray(),
-            'sizes' => Size::all()->toArray()
+            'sizes' => Size::all()->toArray(),
+            'deal_actions' => DealAction::all()->toArray()
         ]);
     }
 }

@@ -13,7 +13,7 @@ class DealController extends Controller
         $user_id = $request->user_id;
         $island_id = $request->island_id;
         $date = $request->date;
-        $queryBuilder = Deal::with('user', 'customer', 'insole')->whereDate('created_at', $date);
+        $queryBuilder = Deal::with('user', 'customer')->whereDate('created_at', $date);
         if ($island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $island_id);
         }
@@ -26,7 +26,7 @@ class DealController extends Controller
     public function create(Request $request)
     {
         $deal = Deal::create($request->all());
-        $deal->load('user', 'customer', 'insole');
+        $deal->load('user', 'customer');
         return response()->json($deal->toArray());
     }
 
@@ -37,11 +37,14 @@ class DealController extends Controller
             'income' => (int) $request->income,
             'expense' => (int) $request->expense,
             'is_cache' => (bool) $request->is_cache,
-            'insole_id' => (int) $request->insole_id,
             'customer_id' => (int) $request->customer_id,
-            'user_id' => (int) $request->user_id
+            'user_id' => (int) $request->user_id,
+            'deal_action_id' => (int) $request->deal_customer_id,
+            'product_id' => (int) $request->product_id,
+            'type_id' => (int) $request->type_id,
+            'size_id' => (int) $request->size
         ]);
-        $deal->load('user', 'insole', 'customer');
+        $deal->load('user', 'customer');
 
         return response()->json($deal->toArray());
     }

@@ -71,25 +71,21 @@
                                     </template>
                                 </v-autocomplete>
                             </v-flex>
-<!--                            <v-flex xs12 sm12 md12>-->
-<!--                                <sub>Услуга</sub>-->
-<!--                                <v-select-->
-<!--                                    v-model="selectedInsoleId"-->
-<!--                                    :items="insoles"-->
-<!--                                    item-text="name"-->
-<!--                                    item-value="id"-->
-<!--                                    single-line-->
-<!--                                    data-vv-name="insole"-->
-<!--                                    data-vv-as="Тип и Размер стелек"-->
-<!--                                    :error-messages="errors.collect('insole')"-->
-<!--                                    v-validate="'required'"-->
-<!--                                ></v-select>-->
-<!--                            </v-flex>-->
                             <v-flex xs12 sm6 md4>
-                                <sub>Наименование</sub>
+                                <sub>Услуга</sub>
                                 <v-select
-                                    v-model="newActionData.product_id"
-                                    :items="products"
+                                    v-model="newDealData.deal_action_id"
+                                    :items="stockOptions.deal_actions"
+                                    item-text="text"
+                                    item-value="id"
+                                    single-line
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Продукция</sub>
+                                <v-select
+                                    v-model="newDealData.product_id"
+                                    :items="stockOptions.products"
                                     item-text="name"
                                     item-value="id"
                                     single-line
@@ -99,8 +95,8 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Материал</sub>
                                 <v-select
-                                    v-model="newActionData.type_id"
-                                    :items="types"
+                                    v-model="newDealData.type_id"
+                                    :items="stockOptions.types"
                                     item-text="name"
                                     item-value="id"
                                     single-line
@@ -109,8 +105,8 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Размер</sub>
                                 <v-select
-                                    v-model="newActionData.size_id"
-                                    :items="sizes"
+                                    v-model="newDealData.size_id"
+                                    :items="stockOptions.sizes"
                                     item-text="name"
                                     item-value="id"
                                     single-line
@@ -120,7 +116,7 @@
                                     v-validate="'required'"
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md6>
+                            <v-flex xs12 sm6 md4>
                                 <sub>Сумма</sub>
                                 <v-text-field
                                     v-model="newDealIncome"
@@ -130,7 +126,7 @@
                                     v-validate="'required|integer'"
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md6>
+                            <v-flex xs12 sm6 md4>
                                 <sub>Форма оплаты</sub>
                                 <v-select
                                     :items="paymentTypes"
@@ -191,6 +187,12 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            newDealData: {
+                deal_action_id: null,
+                product_id: null,
+                type_id: null,
+                size_id: null
+            },
             dealToDelete: null,
             confirm: false,
             confirmText: '',
@@ -221,6 +223,9 @@
             ]
         }),
         computed: {
+            stockOptions () {
+                return this.$store.state.stock.options
+            },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate
             },

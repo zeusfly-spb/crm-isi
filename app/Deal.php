@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Stock\Product;
+use App\Stock\Size;
+use App\Stock\Type;
 use Illuminate\Database\Eloquent\Model;
 
 class Deal extends Model
@@ -10,6 +13,7 @@ class Deal extends Model
     protected $casts = [
         'is_cache' => 'boolean',
     ];
+    protected $appends = ['insole'];
 
     public function user()
     {
@@ -23,8 +27,30 @@ class Deal extends Model
         ]);
     }
 
-    public function insole()
+    public function action()
     {
-        return $this->belongsTo(Insole::class);
+        return $this->belongsTo(DealAction::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
+    }
+
+    public function getInsoleAttribute()
+    {
+        return (object) [
+            'full_name' => $this->product->name . $this->type->name . $this->size->name
+        ];
     }
 }
