@@ -29,7 +29,7 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" max-width="600px"
+        <v-dialog v-model="dialog" max-width="900px"
                   @update:returnValue="newCustomer = false"
         >
             <template v-slot:activator="{ on }">
@@ -71,19 +71,54 @@
                                     </template>
                                 </v-autocomplete>
                             </v-flex>
-                            <v-flex xs12 sm12 md12>
-                                <sub>Услуга</sub>
+<!--                            <v-flex xs12 sm12 md12>-->
+<!--                                <sub>Услуга</sub>-->
+<!--                                <v-select-->
+<!--                                    v-model="selectedInsoleId"-->
+<!--                                    :items="insoles"-->
+<!--                                    item-text="name"-->
+<!--                                    item-value="id"-->
+<!--                                    single-line-->
+<!--                                    data-vv-name="insole"-->
+<!--                                    data-vv-as="Тип и Размер стелек"-->
+<!--                                    :error-messages="errors.collect('insole')"-->
+<!--                                    v-validate="'required'"-->
+<!--                                ></v-select>-->
+<!--                            </v-flex>-->
+                            <v-flex xs12 sm6 md4>
+                                <sub>Наименование</sub>
                                 <v-select
-                                    v-model="selectedInsoleId"
-                                    :items="insoles"
+                                    v-model="newActionData.product_id"
+                                    :items="products"
                                     item-text="name"
                                     item-value="id"
                                     single-line
-                                    data-vv-name="insole"
-                                    data-vv-as="Тип и Размер стелек"
-                                    :error-messages="errors.collect('insole')"
+                                />
+                            </v-flex>
+
+                            <v-flex xs12 sm6 md4>
+                                <sub>Материал</sub>
+                                <v-select
+                                    v-model="newActionData.type_id"
+                                    :items="types"
+                                    item-text="name"
+                                    item-value="id"
+                                    single-line
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Размер</sub>
+                                <v-select
+                                    v-model="newActionData.size_id"
+                                    :items="sizes"
+                                    item-text="name"
+                                    item-value="id"
+                                    single-line
+                                    data-vv-as="Размер"
+                                    data-vv-name="size"
+                                    :error-messages="errors.collect('size')"
                                     v-validate="'required'"
-                                ></v-select>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md6>
                                 <sub>Сумма</sub>
