@@ -41,7 +41,7 @@
                             </v-flex>
 
                             <v-flex xs12 sm6 md4>
-                                <sub>Тип</sub>
+                                <sub>Материал</sub>
                                 <v-select
                                     v-model="newActionData.type_id"
                                     :items="types"
@@ -73,6 +73,12 @@
                                     data-vv-name="count"
                                     :error-messages="errors.collect('count')"
                                     v-validate="'required|integer'"
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Комментарий</sub>
+                                <v-text-field
+                                    v-model="newActionData.comment"
                                 />
                             </v-flex>
 
@@ -131,7 +137,8 @@
                     product_id: this.products && this.products.map(item => item.id)[0] || null,
                     type_id: this.types && this.types.find(item => item.name === 'Кожа').id || null,
                     size_id: this.sizes && this.sizes.map(item => item.id)[0] || null,
-                    count: ''
+                    count: '',
+                    comment: ''
                 }
             }
         },
