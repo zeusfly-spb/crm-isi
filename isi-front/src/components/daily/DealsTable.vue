@@ -106,7 +106,7 @@
                                 <sub>Размер</sub>
                                 <v-select
                                     v-model="newDealData.size_id"
-                                    :items="stockOptions.sizes"
+                                    :items="newDealSizes"
                                     item-text="name"
                                     item-value="id"
                                     single-line
@@ -223,6 +223,11 @@
             ]
         }),
         computed: {
+            newDealSizes () {
+                let currentProduct = this.stockOptions.products && this.stockOptions.products.find(product => product.id === this.newDealData.product_id) || {name: 'Стельки'}
+                return currentProduct.name === 'Стельки' ? this.$store.state.stock.options.sizes :
+                    this.$store.state.stock.options.sizes.filter(size => !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
+            },
             stockOptions () {
                 return this.$store.state.stock.options
             },
@@ -270,6 +275,12 @@
             }
         },
         methods: {
+            setDefaultDealData () {
+                this.newDealData.deal_action_id = this.stockOptions.deal_actions[0].id
+                this.newDealData.product_id = this.stockOptions.products[0].id
+                this.newDealData.type_id = this.stockOptions.types.find(type => type.name === 'Кожа').id
+                this.newDealData.size_id = this.stockOptions.sizes[0].id
+            },
             deleteDeal () {
                 this.$store.dispatch('deleteDeal', this.dealToDelete)
                     .then(() => {
@@ -328,6 +339,7 @@
                     this.showSnack('Чтобы совершить сделку, начните рабочий день', 'red')
                     return
                 }
+                this.setDefaultDealData()
                 this.selectedCustomerId = -1
                 this.selectedInsoleId = null
                 this.newDealIncome = null
@@ -335,6 +347,9 @@
             }
         },
         watch: {
+            newDealSizes (value) {
+                this.newDealData.size_id = value[0].id
+            },
             selectedCustomerId (val) {
                 if (val === 0) {
                     this.newCustomer = true
