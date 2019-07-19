@@ -307,9 +307,9 @@
                     .then(res => {
                         if (!res) return
                         this.$store.dispatch('addDeal', {
+                            ...this.newDealData,
                             user_id: this.authUser.id,
                             island_id: this.$store.state.workingIslandId,
-                            insole_id: this.selectedInsoleId,
                             customer_id: this.selectedCustomerId === -1 ? null : this.selectedCustomerId,
                             income: this.newDealIncome,
                             expense: 0,

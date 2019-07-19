@@ -50,7 +50,7 @@ class Deal extends Model
     public function getInsoleAttribute()
     {
         return (object) [
-            'name' => $this->product->name . $this->type->name . $this->size->name
+            'name' => $this->product->name . ' ' . $this->type->name . ' ' . $this->size->name
         ];
     }
 }

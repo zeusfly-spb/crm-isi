@@ -15,7 +15,8 @@ class DealActionSeeder extends Seeder
         'correction' => 'Коррекция',
         'prodDefect' => 'Брак производства',
         'islandDefect' => 'Брак островка',
-        'alteration' => 'Переделка'
+        'alteration' => 'Переделка',
+        'return' => 'Возврат'
     ];
 
     public function run()
