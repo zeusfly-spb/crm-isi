@@ -70,7 +70,7 @@
             </span>
         </td>
         <td>
-            {{ deal.action.text }}
+            {{ deal.action && deal.action.text || '' }}
         </td>
         <td>
             <span

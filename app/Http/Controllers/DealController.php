@@ -91,7 +91,7 @@ class DealController extends Controller
             'type_id' => (int) $request->type_id,
             'size_id' => (int) $request->size
         ]);
-        $deal->load('user', 'customer');
+        $deal->load('user', 'customer', 'action');
 
         return response()->json($deal->toArray());
     }
