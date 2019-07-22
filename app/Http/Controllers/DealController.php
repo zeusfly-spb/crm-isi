@@ -86,7 +86,7 @@ class DealController extends Controller
             'is_cache' => (bool) $request->is_cache,
             'customer_id' => (int) $request->customer_id,
             'user_id' => (int) $request->user_id,
-            'deal_action_id' => (int) $request->deal_customer_id,
+            'deal_action_id' => (int) $request->deal_action_id,
             'product_id' => (int) $request->product_id,
             'type_id' => (int) $request->type_id,
             'size_id' => (int) $request->size
