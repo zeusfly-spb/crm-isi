@@ -4,6 +4,7 @@ namespace App;
 
 use App\Stock\Product;
 use App\Stock\Size;
+use App\Stock\StockAction;
 use App\Stock\Type;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,6 +46,11 @@ class Deal extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function stockAction()
+    {
+        return $this->hasOne(StockAction::class);
     }
 
     public function getInsoleAttribute()

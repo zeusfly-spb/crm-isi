@@ -61,7 +61,7 @@ class DealController extends Controller
         $deal->load('user', 'customer', 'action');
 
         if ($deal->action_type !== 'correction') {
-            StockAction::create([
+            $deal->stockAction()->create([
                 'user_id' => $request->user_id,
                 'type' => 'expense',
                 'island_id' => $request->island_id,
@@ -98,6 +98,10 @@ class DealController extends Controller
 
     public function delete(Request $request)
     {
+        $deal = Deal::find($request->id);
+        if ($deal->stockAction) {
+            $deal->stockAction->delete();
+        }
         return response()->json(['result' => Deal::destroy($request->id)]);
     }
 }

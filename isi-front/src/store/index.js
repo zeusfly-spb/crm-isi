@@ -81,11 +81,12 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        deleteDeal ({commit}, deal) {
+        deleteDeal ({commit, dispatch}, deal) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_deal', {...deal})
                     .then(res => {
                         commit('DELETE_DEAL', deal.id)
+                        dispatch('setStockActions')
                         resolve(res)
                     })
                     .catch(e => reject(e))

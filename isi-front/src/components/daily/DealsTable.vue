@@ -124,7 +124,7 @@
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
-                                    v-validate="newDealActionType === 'produce' ? 'required|integer' : null"
+                                    v-validate="['produce', 'return'].includes(newDealActionType) ? 'required|integer' : null"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
