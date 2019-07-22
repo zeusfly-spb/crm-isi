@@ -121,7 +121,7 @@
                                 <v-text-field
                                     v-model="newDealIncome"
                                     data-vv-name="price"
-                                    data-vv-as="Стоимость"
+                                    data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
                                     v-validate="'required|integer'"
                                 ></v-text-field>
@@ -216,7 +216,8 @@
                 {text: '#', value: 'number'},
                 {text: 'Сотрудник', value: 'id'},
                 {text: 'Клиент', value: 'customer_id'},
-                {text: 'Услуга', value: 'insole_id'},
+                {text: 'Услуга', value: 'action_type'},
+                {text: 'Продукция', value: 'insole'},
                 {text: 'Цена', value: 'income'},
                 {text: 'Себестоимость', value: 'expense'},
                 {text: 'Форма оплаты', value: 'is_cache'},

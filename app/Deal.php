@@ -13,7 +13,7 @@ class Deal extends Model
     protected $casts = [
         'is_cache' => 'boolean',
     ];
-    protected $appends = ['insole'];
+    protected $appends = ['insole', 'action_type'];
 
     public function user()
     {
@@ -29,7 +29,7 @@ class Deal extends Model
 
     public function action()
     {
-        return $this->belongsTo(DealAction::class);
+        return $this->belongsTo(DealAction::class, 'deal_action_id');
     }
 
     public function product()
@@ -53,4 +53,10 @@ class Deal extends Model
             'name' => $this->product->name . ' ' . $this->type->name . ' ' . $this->size->name
         ];
     }
+
+    public function getActionTypeAttribute()
+    {
+        return $this->action->type ?? null;
+    }
+
 }

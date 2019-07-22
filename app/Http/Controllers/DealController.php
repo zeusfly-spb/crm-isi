@@ -3,17 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\Stock\Product;
+use App\Stock\Size;
+use App\Stock\StockAction;
+use App\Stock\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class DealController extends Controller
 {
+    private $products;
+    private $types;
+    private $sizes;
+
+    public function __construct()
+    {
+        $this->types = Type::all();
+        $this->sizes = Size::all();
+        $this->products = Product::all();
+    }
+
     public function index(Request $request)
     {
         $user_id = $request->user_id;
         $island_id = $request->island_id;
         $date = $request->date;
-        $queryBuilder = Deal::with('user', 'customer')->whereDate('created_at', $date);
+        $queryBuilder = Deal::with('user', 'customer', 'action')->whereDate('created_at', $date);
         if ($island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $island_id);
         }
@@ -26,7 +41,22 @@ class DealController extends Controller
     public function create(Request $request)
     {
         $deal = Deal::create($request->all());
-        $deal->load('user', 'customer');
+        $deal->load('user', 'customer', 'action');
+
+        if ($deal->action_type !== 'correction') {
+            StockAction::create([
+                'user_id' => $request->user_id,
+                'type' => 'expense',
+                'island_id' => $request->island_id,
+                'product_id' => $request->product_id,
+                'type_id' => $request->type_id,
+                'size_id' => $request->size_id,
+                'count' => 1,
+                'comment' => $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name
+                    . ' ' . $this->types->where('id', $request->type_id)->first()->name . ' ' . $this->sizes->where('id', $request->size_id)->first()->name
+            ]);
+        }
+
         return response()->json($deal->toArray());
     }
 

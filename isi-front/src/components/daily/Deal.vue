@@ -70,6 +70,9 @@
             </span>
         </td>
         <td>
+            {{ deal.action.text }}
+        </td>
+        <td>
             <span
                 @click="switchEditMode('insole')"
             >
