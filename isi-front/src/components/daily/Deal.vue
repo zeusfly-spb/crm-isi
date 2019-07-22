@@ -74,7 +74,6 @@
         </td>
         <td>
             <span
-                @click="switchEditMode('insole')"
             >
                 <span v-if="!editMode.insole"
                       :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"

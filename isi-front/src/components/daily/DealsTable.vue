@@ -119,16 +119,18 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Сумма</sub>
                                 <v-text-field
+                                    :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
                                     v-model="newDealIncome"
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
-                                    v-validate="'required|integer'"
+                                    v-validate="newDealActionType === 'produce' ? 'required|integer' : null"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <sub>Форма оплаты</sub>
                                 <v-select
+                                    :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
                                     :items="paymentTypes"
                                     v-model="selectedPaymentType"
                                     item-text="text"
@@ -218,12 +220,16 @@
                 {text: 'Клиент', value: 'customer_id'},
                 {text: 'Услуга', value: 'action_type'},
                 {text: 'Продукция', value: 'insole'},
-                {text: 'Цена', value: 'income'},
-                {text: 'Себестоимость', value: 'expense'},
+                {text: 'Приход', value: 'income'},
+                {text: 'Расход', value: 'expense'},
                 {text: 'Форма оплаты', value: 'is_cache'},
             ]
         }),
         computed: {
+            newDealActionType () {
+                let actions = this.$store.state.stock.options.deal_actions || []
+                return actions.find(item => +item.id === +this.newDealData.deal_action_id) &&  actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null
+            },
             newDealSizes () {
                 let currentProduct = this.stockOptions.products && this.stockOptions.products.find(product => product.id === this.newDealData.product_id) || {name: 'Стельки'}
                 return currentProduct.name === 'Стельки' ? this.$store.state.stock.options.sizes :

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\DealAction;
 use App\Stock\Product;
 use App\Stock\Size;
 use App\Stock\StockAction;
@@ -15,12 +16,15 @@ class DealController extends Controller
     private $products;
     private $types;
     private $sizes;
+    private $actions;
 
     public function __construct()
     {
+
         $this->types = Type::all();
         $this->sizes = Size::all();
         $this->products = Product::all();
+        $this->actions = DealAction::all();
     }
 
     public function index(Request $request)
@@ -40,7 +44,20 @@ class DealController extends Controller
 
     public function create(Request $request)
     {
-        $deal = Deal::create($request->all());
+        $newDealAction = $this->actions->where('id', $request->deal_action_id)->first()->type;
+        $inputs = $request->all();
+
+        if ($newDealAction === 'correction' || $newDealAction === 'prodDefect' || $newDealAction === 'islandDefect' || $newDealAction === 'alteration') {
+            $inputs['income'] = 0;
+            $inputs['expense'] = 0;
+        }
+
+        if ($newDealAction === 'return') {
+            $inputs['expense'] = $inputs['income'];
+            $inputs['income'] = 0;
+        }
+
+        $deal = Deal::create($inputs);
         $deal->load('user', 'customer', 'action');
 
         if ($deal->action_type !== 'correction') {
