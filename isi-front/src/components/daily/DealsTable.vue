@@ -227,14 +227,17 @@
         }),
         computed: {
             formattedSizes () {
+                let currentAction = this.stockOptions.deal_actions &&
+                    this.stockOptions.deal_actions.find(item => +item.id === +this.newDealData.deal_action_id) &&
+                    this.stockOptions.deal_actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null
                 let productName = this.stockOptions.products &&
                     this.stockOptions.products.find(item => +item.id === +this.newDealData.product_id) &&
                     this.stockOptions.products.find(item => +item.id === +this.newDealData.product_id).name || null
                 let typeName = this.stockOptions.types &&
                     this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id) &&
                     this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id).name || null
-                return this.newDealSizes &&
-                    this.newDealSizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true}))
+                return currentAction === 'produce' ? this.newDealSizes &&
+                    this.newDealSizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true})) : this.newDealSizes
             },
             currentReserves () {
                 return this.$store.getters.currentReserves
@@ -303,7 +306,6 @@
                 this.newDealData.deal_action_id = this.stockOptions.deal_actions[0].id
                 this.newDealData.product_id = this.stockOptions.products[0].id
                 this.newDealData.type_id = this.stockOptions.types.find(type => type.name === 'Кожа').id
-                this.newDealData.size_id = this.stockOptions.sizes[0].id
             },
             deleteDeal () {
                 this.$store.dispatch('deleteDeal', this.dealToDelete)
@@ -371,8 +373,9 @@
             }
         },
         watch: {
-            newDealSizes (value) {
-                this.newDealData.size_id = value[0].id
+            formattedSizes (value) {
+                let available = value.filter(item => !item.disabled)
+                return this.newDealData.size_id = available.length && available[0] || null
             },
             selectedCustomerId (val) {
                 if (val === 0) {
