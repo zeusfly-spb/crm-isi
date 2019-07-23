@@ -106,7 +106,7 @@
                                 <sub>Размер</sub>
                                 <v-select
                                     v-model="newDealData.size_id"
-                                    :items="newDealSizes"
+                                    :items="formattedSizes"
                                     item-text="name"
                                     item-value="id"
                                     single-line
@@ -226,6 +226,19 @@
             ]
         }),
         computed: {
+            formattedSizes () {
+                let productName = this.stockOptions.products &&
+                    this.stockOptions.products.find(item => +item.id === +this.newDealData.product_id) &&
+                    this.stockOptions.products.find(item => +item.id === +this.newDealData.product_id).name || null
+                let typeName = this.stockOptions.types &&
+                    this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id) &&
+                    this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id).name || null
+                return this.newDealSizes &&
+                    this.newDealSizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true}))
+            },
+            currentReserves () {
+                return this.$store.getters.currentReserves
+            },
             newDealActionType () {
                 let actions = this.$store.state.stock.options.deal_actions || []
                 return actions.find(item => +item.id === +this.newDealData.deal_action_id) &&  actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null
@@ -282,6 +295,10 @@
             }
         },
         methods: {
+            currentCount (productName, typeName, sizeId) {
+                let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
+                return target && target.count || 0
+            },
             setDefaultDealData () {
                 this.newDealData.deal_action_id = this.stockOptions.deal_actions[0].id
                 this.newDealData.product_id = this.stockOptions.products[0].id
