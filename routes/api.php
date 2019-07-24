@@ -44,9 +44,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_island', 'IslandController@delete');
     Route::post('start_balance', 'IslandController@getStartBalance');
 
-    // INSOLES
-    Route::post('get_insoles', 'InsoleController@index');
-
     // CUSTOMERS
     Route::post('get_customers', 'CustomerController@index');
     Route::post('create_customer', 'CustomerController@create');

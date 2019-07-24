@@ -258,7 +258,6 @@ export const store = new Vuex.Store({
                     dispatch('startScanTimer')
                     dispatch('setDeals')
                     dispatch('setCustomers')
-                    dispatch('setInsoles')
                     dispatch('setExpenses')
                     dispatch('setHandOver')
                     dispatch('setReserves')
@@ -347,16 +346,6 @@ export const store = new Vuex.Store({
                 Vue.axios.post('/api/get_customers')
                     .then(res => {
                         commit('SET_CUSTOMERS', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-        },
-        setInsoles ({commit}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_insoles')
-                    .then(res => {
-                        commit('SET_INSOLES', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -649,9 +638,6 @@ export const store = new Vuex.Store({
         },
         SET_CUSTOMERS (state, customers) {
             state.customers = customers
-        },
-        SET_INSOLES (state, insoles) {
-            state.insoles = insoles
         },
         REMOVE_ACCESS_REQUEST (state, accessId) {
             state.accessRequests = state.accessRequests.filter(item => item.id !== accessId)
