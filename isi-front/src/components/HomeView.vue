@@ -63,8 +63,6 @@
                         break
                     case 1: this.$store.dispatch('setCustomers')
                         break
-                    case 2: this.$store.dispatch('setInsoles')
-                        break
                 }
             }
         },
