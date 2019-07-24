@@ -40,205 +40,226 @@
                     </v-card>
                 </v-tab>
             </v-tabs>
-<v-container grid-list-md>
     <v-layout wrap>
-        <table
-            border="1"
-        >
-            <caption><strong>Обычные</strong></caption>
-            <tbody>
-            <tr>
-                <td
-                    bgcolor="#34fb68"
-                    rowspan="2"
-                >
-                    Стельки
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#85dbff"
-                >
-                    Начало дня
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#ff4026"
-                >
-                    Приход
+        <v-flex xs12 sm6 md6 justify-center>
+            <span class="title">Стельки</span>
+            <v-data-table
+                hide-actions
+                :items="normalInsolesSizeIds"
+                class="elevation-1"
+            >
+                <template slot="headers" slot-scope="row">
+                    <tr
+                        style="height: 1em"
+                    >
+                        <td
+                            rowspan="2"
+                            align="center"
+                        >
+                            <strong>Стельки</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
 
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#fff963"
-                >
-                    Расход
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#8cfff8"
-                >
-                    Конец дня
-                </td>
+                        >
+                            <strong>Начало дня</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
 
-            </tr>
-            <tr>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-            </tr>
-            <tr v-for="sizeId in normalInsolesSizeIds">
-                <td>
-                    Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === sizeId).size.name }}</strong>
-                </td>
-                <td align="right">
-                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Кожа').count }}
-                </td>
-                <td align="right">
-                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Колоф').count }}
-                </td>
-                <td align="right">
-                    {{ normalInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Флис').count }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Стельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Стельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Стельки', 'Флис', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Стельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Стельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Стельки', 'Флис', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Стельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Стельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Стельки', 'Флис', sizeId) }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <v-spacer></v-spacer>
-        <table
-            border="1"
-        >
-            <caption><strong>Полустельки</strong></caption>
-            <tbody>
-            <tr>
-                <td
-                    bgcolor="#34fb68"
-                    rowspan="2"
-                >
-                    Стельки
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#85dbff"
-                >
-                    Начало дня
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#ff4026"
-                >
-                    Приход
+                        >
+                            <strong>Приход</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
 
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#fff963"
-                >
-                    Расход
-                </td>
-                <td
-                    colspan="3"
-                    bgcolor="#8cfff8"
-                >
-                    Конец дня
-                </td>
+                        >
+                            <strong>Расход</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
+                        >
+                            <strong>Конец дня</strong>
+                        </td>
+                    </tr>
+                    <tr
+                        style="height: 1em"
+                    >
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                    </tr>
+                </template>
+                <template v-slot:items="props">
+                    <tr style="height: 1em">
+                        <td
+                            align="center"
+                        >
+                            Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
+                        </td>
+                        <td align="center">
+                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                        </td>
+                        <td align="center">
+                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
+                        </td>
+                        <td align="center">
+                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Стельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Стельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Стельки', 'Флис', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Стельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Стельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Стельки', 'Флис', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Стельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Стельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Стельки', 'Флис', props.item) }}
+                        </td>
+                    </tr>
+                </template>
+            </v-data-table>
+        </v-flex>
+        <v-flex xs12 sm6 md6 justify-center>
+            <span class="title">Полустельки</span>
+            <v-data-table
+                hide-actions
+                :items="halfInsolesSizeIds"
+                class="elevation-1"
+            >
+                <template slot="headers" slot-scope="row">
+                    <tr
+                        style="height: 1em"
+                    >
+                        <td
+                            rowspan="2"
+                            align="center"
+                        >
+                            <strong>Стельки</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
 
-            </tr>
-            <tr>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-                <td>Кожа</td>
-                <td>Колоф</td>
-                <td>Флис</td>
-            </tr>
-            <tr v-for="sizeId in halfInsolesSizeIds">
-                <td>
-                    Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === sizeId).size.name }}</strong>
-                </td>
-                <td align="right">
-                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Кожа').count }}
-                </td>
-                <td align="right">
-                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Колоф').count }}
-                </td>
-                <td align="right">
-                    {{ halfInsolesReserves.find(item => item.size_id === sizeId && item.type.name === 'Флис').count }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Полустельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Полустельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('receipt', 'Полустельки', 'Флис', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Полустельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Полустельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ findActionCount('expense', 'Полустельки', 'Флис', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Полустельки', 'Кожа', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Полустельки', 'Колоф', sizeId) }}
-                </td>
-                <td align="right">
-                    {{ currentCount('Полустельки', 'Флис', sizeId) }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                        >
+                            <strong>Начало дня</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
+
+                        >
+                            <strong>Приход</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
+
+                        >
+                            <strong>Расход</strong>
+                        </td>
+                        <td
+                            colspan="3"
+                            align="center"
+                        >
+                            <strong>Конец дня</strong>
+                        </td>
+                    </tr>
+                    <tr
+                        style="height: 1em"
+                    >
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                        <td align="center">Кожа</td>
+                        <td align="center">Колоф</td>
+                        <td align="center">Флис</td>
+                    </tr>
+                </template>
+                <template v-slot:items="props">
+                    <tr style="height: 1em">
+                        <td>
+                            Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
+                        </td>
+                        <td align="center">
+                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                        </td>
+                        <td align="center">
+                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
+                        </td>
+                        <td align="center">
+                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Полустельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('receipt', 'Полустельки', 'Флис', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Полустельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Полустельки', 'Кожа', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Полустельки', 'Колоф', props.item) }}
+                        </td>
+                        <td align="center">
+                            {{ currentCount('Полустельки', 'Флис', props.item) }}
+                        </td>
+                    </tr>
+                </template>
+            </v-data-table>
+        </v-flex>
     </v-layout>
     <new-stock-action-dialog/>
     <stock-actions-table/>
-</v-container>
 
     </v-flex>
 </template>
@@ -248,6 +269,9 @@
     export default {
         name: 'StockPanel',
         data: () => ({
+            insolesHeaders: [
+
+            ],
             headers: [
                 {text: '#', value: 'id'},
                 {text: 'Тип', value: 'type'},
@@ -297,6 +321,9 @@
             }
         },
         methods: {
+            fakeHeaders () {
+
+            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
@@ -323,11 +350,10 @@
         display: table;
         border-collapse: collapse;
         border-spacing: 2px;
-        border-color: grey;
     }
     td {
         border: solid 1px grey;
-        padding-left: .25em;
-        padding-right: .25em;
+        padding-left: .25em!important;
+        padding-right: .25em!important;
     }
 </style>
