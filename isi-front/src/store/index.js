@@ -502,11 +502,16 @@ export const store = new Vuex.Store({
                     .then(res => {
                         let token = res.data.success.token
 
+                        let now = new Date()
+                        now.setMinutes(1 + now.getMinutes())
+                        Cookies.set('isi-token', token, {expires: now, path: '/'})
                         setInterval(() => {
                             let now = new Date()
                             now.setMinutes(1 + now.getMinutes())
                             Cookies.set('isi-token', token, {expires: now, path: '/'})
                         }, 30000)
+
+                        // Cookies.set('isi-token', token)
 
 
                         Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
