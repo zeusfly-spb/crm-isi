@@ -50,7 +50,6 @@
             >
                 <template slot="headers" slot-scope="row">
                     <tr
-                        style="height: 1em"
                     >
                         <td
                             rowspan="2"
@@ -61,6 +60,7 @@
                         <td
                             colspan="3"
                             align="center"
+                            style="border-bottom: 0"
 
                         >
                             <strong>Начало дня</strong>
@@ -89,61 +89,109 @@
                     <tr
                         style="height: 1em"
                     >
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
                     </tr>
                 </template>
                 <template v-slot:items="props">
-                    <tr style="height: 1em">
+                    <tr>
                         <td
                             align="center"
                         >
                             Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ findActionCount('receipt', 'Стельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ findActionCount('receipt', 'Стельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ findActionCount('receipt', 'Стельки', 'Флис', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ findActionCount('expense', 'Стельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ findActionCount('expense', 'Стельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ findActionCount('expense', 'Стельки', 'Флис', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ currentCount('Стельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ currentCount('Стельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ currentCount('Стельки', 'Флис', props.item) }}
                         </td>
                     </tr>
@@ -159,7 +207,6 @@
             >
                 <template slot="headers" slot-scope="row">
                     <tr
-                        style="height: 1em"
                     >
                         <td
                             rowspan="2"
@@ -198,59 +245,107 @@
                     <tr
                         style="height: 1em"
                     >
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
-                        <td align="center">Кожа</td>
-                        <td align="center">Колоф</td>
-                        <td align="center">Флис</td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0"
+                        >
+                            <span class="mat">Кожа</span>
+                        </td>
+                        <td align="center"
+                            style="border-right: 0; border-left: 0;"
+                        >
+                            <span class="mat">Колоф</span>
+                        </td>
+                        <td align="center"
+                            style="border-left: 0"
+                        >
+                            <span class="mat">Флис</span>
+                        </td>
                     </tr>
                 </template>
                 <template v-slot:items="props">
                     <tr style="height: 1em">
-                        <td>
+                        <td align="center">
                             Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ findActionCount('receipt', 'Полустельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ findActionCount('receipt', 'Полустельки', 'Флис', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ findActionCount('expense', 'Полустельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-right: 0">
                             {{ currentCount('Полустельки', 'Кожа', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0; border-right: 0">
                             {{ currentCount('Полустельки', 'Колоф', props.item) }}
                         </td>
-                        <td align="center">
+                        <td align="center" style="border-left: 0">
                             {{ currentCount('Полустельки', 'Флис', props.item) }}
                         </td>
                     </tr>
@@ -321,9 +416,6 @@
             }
         },
         methods: {
-            fakeHeaders () {
-
-            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
@@ -346,14 +438,19 @@
 </script>
 <style scoped>
     table {
-        border: solid 1px grey;
+        border: solid 1px rgb(200,200,200);
         display: table;
         border-collapse: collapse;
         border-spacing: 2px;
     }
     td {
-        border: solid 1px grey;
+        border: solid 1px rgb(200,200,200);
         padding-left: .25em!important;
         padding-right: .25em!important;
+    }
+    .mat {
+        color: rgba(0,0,0,0.54);
+        font-weight: 500;
+        font-size: 12px;
     }
 </style>
