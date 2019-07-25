@@ -52,6 +52,12 @@ const token = Cookies.get('isi-token')
 if (token) {
     Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
+    setInterval(() => {
+        let now = new Date()
+        now.setMinutes(1 + now.getMinutes())
+        Cookies.set('isi-token', token, {expires: now, path: '/'})
+    }, 30000)
+
     store.dispatch('setAuthUser')
         .then(() => {
             if (!store.getters.isSuperadmin) {
