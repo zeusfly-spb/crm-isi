@@ -501,7 +501,14 @@ export const store = new Vuex.Store({
                 Vue.axios.post('/api/login', {name: query.name, password: query.password})
                     .then(res => {
                         let token = res.data.success.token
-                        Cookies.set('isi-token', token)
+
+                        setInterval(() => {
+                            let now = new Date()
+                            now.setMinutes(1 + now.getMinutes())
+                            Cookies.set('isi-token', token, {expires: now, path: '/'})
+                        }, 30000)
+
+
                         Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                         dispatch('setAuthUser')
                         resolve (res)

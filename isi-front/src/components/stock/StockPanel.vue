@@ -41,7 +41,7 @@
                 </v-tab>
             </v-tabs>
     <v-layout wrap>
-        <v-flex xs12 sm6 md6 justify-center>
+        <v-flex xs12 sm8 md6 justify-center>
             <span class="title">Стельки</span>
             <v-data-table
                 hide-actions
@@ -198,7 +198,7 @@
                 </template>
             </v-data-table>
         </v-flex>
-        <v-flex xs12 sm6 md6 justify-center>
+        <v-flex xs12 sm8 md6 justify-center>
             <span class="title">Полустельки</span>
             <v-data-table
                 hide-actions
