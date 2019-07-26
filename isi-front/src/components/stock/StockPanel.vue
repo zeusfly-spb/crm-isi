@@ -213,7 +213,7 @@
                             rowspan="2"
                             align="center"
                         >
-                            <strong>Стельки</strong>
+                            <strong>Полустельки</strong>
                         </td>
                         <td
                             colspan="3"

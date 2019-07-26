@@ -4,6 +4,7 @@
       <v-toolbar-title class="headline">
         <v-layout>
           <img
+              v-if="isAuth"
               :src="`${basePath}/img/logo.png`"
               :lazy-src="`${basePath}/img/logo.png`"
               alt="Лого"
@@ -11,7 +12,7 @@
           />
           &nbsp;
           <div>
-            <div>
+            <div v-if="isAuth">
               <span>Островки</span>
               <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
             </div>
