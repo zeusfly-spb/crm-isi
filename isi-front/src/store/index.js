@@ -6,12 +6,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import stock from './stock'
+import salary from './salary'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     modules: {
-        stock
+        stock,
+        salary
     },
     state: {
         basePath: '',

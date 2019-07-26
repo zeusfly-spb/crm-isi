@@ -48,6 +48,9 @@
     export default {
         name: 'SalaryPanel',
         computed: {
+            monthData () {
+                return this.$store.state.salary.monthData
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -68,6 +71,9 @@
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
+        },
+        created () {
+            this.$store.dispatch('setMonthData')
         }
     }
 </script>
