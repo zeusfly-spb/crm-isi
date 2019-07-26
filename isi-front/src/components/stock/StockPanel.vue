@@ -40,8 +40,9 @@
                     </v-card>
                 </v-tab>
             </v-tabs>
+
     <v-layout wrap>
-        <v-flex xs12 sm8 md6 justify-center>
+        <v-flex xs12 sm6 md6 justify-center>
             <span class="title">Стельки</span>
             <v-data-table
                 hide-actions
@@ -198,7 +199,8 @@
                 </template>
             </v-data-table>
         </v-flex>
-        <v-flex xs12 sm8 md6 justify-center>
+<!--        <div style="width: .5em"></div>-->
+        <v-flex xs12 sm6 md6 justify-center>
             <span class="title">Полустельки</span>
             <v-data-table
                 hide-actions
@@ -309,7 +311,9 @@
                 </template>
                 <template v-slot:items="props">
                     <tr style="height: 1em">
-                        <td align="center">
+                        <td align="center"
+                            style="border-top: 1px solid rgb(200,200,200); border-left: 1px solid rgb(200,200,200);"
+                        >
                             Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                         </td>
                         <td align="center" style="border-right: 0">
@@ -353,7 +357,8 @@
             </v-data-table>
         </v-flex>
     </v-layout>
-    <new-stock-action-dialog/>
+
+        <new-stock-action-dialog/>
     <stock-actions-table/>
 
     </v-flex>
