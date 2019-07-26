@@ -199,7 +199,6 @@
                 </template>
             </v-data-table>
         </v-flex>
-<!--        <div style="width: .5em"></div>-->
         <v-flex xs12 sm6 md6 justify-center>
             <span class="title">Полустельки</span>
             <v-data-table

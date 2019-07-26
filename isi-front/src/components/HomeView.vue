@@ -17,6 +17,7 @@
                     <daily-accounting v-if="index === 0"></daily-accounting>
                     <customer-panel v-if="index === 1"></customer-panel>
                     <stock-panel v-if="index === 2"></stock-panel>
+                    <salary-panel v-if="index === 3"></salary-panel>
                     <admin-panel v-if="index === 4"></admin-panel>
                 </v-tab-item>
             </v-tabs-items>
@@ -29,6 +30,7 @@
     import StockPanel from './stock/StockPanel'
     import CustomerPanel from './customers/CustomerPanel'
     import DailyAccounting from './daily/DailyAccounting'
+    import SalaryPanel from './salary/SalaryPanel'
 
     export default {
         name: 'HomeView',
@@ -70,7 +72,8 @@
             AdminPanel,
             StockPanel,
             CustomerPanel,
-            DailyAccounting
+            DailyAccounting,
+            SalaryPanel
         }
     }
 </script>

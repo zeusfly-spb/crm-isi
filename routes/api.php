@@ -82,4 +82,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_stock_actions', 'StockActionController@index');
     Route::post('add_stock_action', 'StockActionController@create');
     Route::post('get_stock_options', 'StockActionController@getStockOptions');
+
+    // SALARY
+    Route::post('get_month_data', 'SalaryController@monthData');
 });
