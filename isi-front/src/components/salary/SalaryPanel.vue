@@ -1,5 +1,5 @@
 <template>
-    <v-flex
+    <v-card
         align-center
     >
         <v-tabs
@@ -42,7 +42,6 @@
                 </v-card>
             </v-tab>
         </v-tabs>
-<!--        <user-info v-for="user in users" :key="user.id" :user="user"/>-->
         <v-data-table
             :items="users"
             :headers="headers"
@@ -54,7 +53,7 @@
             </template>
 
         </v-data-table>
-    </v-flex>
+    </v-card>
 </template>
 <script>
     import UserInfo from './UserInfo'
@@ -63,12 +62,19 @@
         name: 'SalaryPanel',
         computed: {
             headers () {
-                return this.dates && this.dates.map(item => ({
+                let dates = this.dates && this.dates.map(item => ({
                     text: this.hDate(item),
                     value: item,
                     sortable: false,
                     align: 'center'
                 })) || []
+                return [{
+                    text: 'ИТОГО',
+                    value: null,
+                    sortable: false,
+                    align: 'center',
+                    width: '200px'
+                }, ... dates]
             },
             dates () {
                 return this.monthData && this.monthData.dates
