@@ -42,12 +42,40 @@
                 </v-card>
             </v-tab>
         </v-tabs>
+<!--        <user-info v-for="user in users" :key="user.id" :user="user"/>-->
+        <v-data-table
+            :items="users"
+            :headers="headers"
+            hide-actions
+            class="elevation-1"
+        >
+            <template v-slot:items="props">
+                <user-row :user="props.item"/>
+            </template>
+
+        </v-data-table>
     </v-flex>
 </template>
 <script>
+    import UserInfo from './UserInfo'
+    import UserRow from './UserRow'
     export default {
         name: 'SalaryPanel',
         computed: {
+            headers () {
+                return this.dates && this.dates.map(item => ({
+                    text: this.hDate(item),
+                    value: item,
+                    sortable: false,
+                    align: 'center'
+                })) || []
+            },
+            dates () {
+                return this.monthData && this.monthData.dates
+            },
+            users () {
+                return this.monthData && this.monthData.users || []
+            },
             monthData () {
                 return this.$store.state.salary.monthData
             },
@@ -68,12 +96,21 @@
             }
         },
         methods: {
+            hDate (textDate) {
+                let date = new Date(textDate)
+                let options = {month: 'short', day: 'numeric'}
+                return date.toLocaleDateString('ru-RU', options)
+            },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             }
         },
         created () {
             this.$store.dispatch('setMonthData')
+        },
+        components: {
+            UserInfo,
+            UserRow
         }
     }
 </script>

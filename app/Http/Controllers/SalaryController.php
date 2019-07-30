@@ -23,7 +23,7 @@ class SalaryController extends Controller
             $currentDate = strtotime("+1 day", $currentDate);
         }
 
-        $queryBuilder = User::with('deals', 'workdays');
+        $queryBuilder = User::with('deals', 'workdays')->where('is_superadmin', false);
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
         }
@@ -31,7 +31,8 @@ class SalaryController extends Controller
         $users = $queryBuilder->get();
         foreach ($users as &$user) {
             $user['monthDeals'] = $user->deals()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthWorkdays'] = $user->workdays()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
+            $user['monthWorkdays'] = $user->workdays()->whereYear('date', $year)->whereMonth('date', $month)->get()->toArray();
+            $user['dates'] = $monthDates;
         }
 
         return response()->json(['users' => $users->toArray(), 'dates' => $monthDates]);

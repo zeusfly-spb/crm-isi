@@ -291,6 +291,8 @@ export const store = new Vuex.Store({
                     dispatch('setHandOver')
                     dispatch('setReserves')
                     dispatch('setStockActions')
+
+                    dispatch('setMonthData')
                 })
         },
         deleteIsland ({commit}, islandId) {
@@ -581,6 +583,8 @@ export const store = new Vuex.Store({
             dispatch('setHandOver')
             dispatch('setReserves')
             dispatch('setStockActions')
+
+            dispatch('setMonthData')
         }
     },
     mutations: {
