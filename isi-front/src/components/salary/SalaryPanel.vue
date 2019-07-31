@@ -56,7 +56,6 @@
     </v-card>
 </template>
 <script>
-    import UserInfo from './UserInfo'
     import UserRow from './UserRow'
     export default {
         name: 'SalaryPanel',
@@ -115,7 +114,6 @@
             this.$store.dispatch('setMonthData')
         },
         components: {
-            UserInfo,
             UserRow
         }
     }
