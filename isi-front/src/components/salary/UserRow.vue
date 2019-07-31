@@ -3,7 +3,7 @@
         <td
             style="border: 1px solid black; padding: 0"
         >
-            <v-card style="width: 270px">
+            <v-card style="width: 350px">
                 <v-card-title>
                     <v-avatar
                         size="36px"
@@ -16,43 +16,66 @@
                         <strong>{{ user.full_name }}</strong>
                     </div>
                 </v-card-title>
-                <v-card-text>
+                <v-card-text class="p-0">
                     <v-list dense>
                         <v-list-tile>
-                            <v-list-tile-content>
-                                <strong>Часы:</strong>
-                            </v-list-tile-content>
-                            <v-list-tile-content class="align-end">
-                                <strong>{{ totalHours }}</strong>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                            <table>
+                                <tr>
+                                    <td
+                                        class="info-tab"
+                                    >
+                                        Наименование
+                                    </td>
+                                    <td
+                                        class="info-tab"
+                                    >
+                                        Всего
+                                    </td>
+                                    <td
+                                        class="info-tab"
+                                    >
+                                        Коэф.
+                                    </td>
+                                    <td
+                                        class="info-tab"
+                                    >
+                                        Итог
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="info-tab">
+                                        Часы
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ totalHours }}</strong>
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ user.hour_rate }}</strong>
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ user.hour_rate * totalHours }}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="info-tab">
+                                        Доход
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ totalIncome }}</strong>
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ user.sales_rate }}</strong>
+                                    </td>
+                                    <td class="info-tab">
+                                        <strong>{{ user.sales_rate * totalIncome }}</strong>
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <v-list-tile>
-                            <v-list-tile-content>
-                                <strong>Сделки:</strong>
-                            </v-list-tile-content>
-                            <v-list-tile-content class="align-end">
-                                <strong>{{ totalDeals }}</strong>
-                            </v-list-tile-content>
                         </v-list-tile>
+                        <v-list-tile></v-list-tile>
+                        <v-list-tile></v-list-tile>
 
-                        <v-list-tile>
-                            <v-list-tile-content>
-                                <strong>Доход:</strong>
-                            </v-list-tile-content>
-                            <v-list-tile-content class="align-end">
-                                <strong>{{ totalIncome }}</strong>
-                            </v-list-tile-content>
-                        </v-list-tile>
-
-                        <v-list-tile>
-                            <v-list-tile-content>
-                                <strong>Расход:</strong>
-                            </v-list-tile-content>
-                            <v-list-tile-content class="align-end">
-                                <strong>{{ totalExpense }}</strong>
-                            </v-list-tile-content>
-                        </v-list-tile>
                     </v-list>
                 </v-card-text>
 
@@ -139,3 +162,9 @@
         }
     }
 </script>
+<style scoped>
+    .info-tab {
+        padding: .3em 1em!important;
+        text-align: right;
+    }
+</style>
