@@ -89,11 +89,11 @@
             <v-list dense>
                 <v-list-tile>
                     <v-list-tile-content>Часы:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ getHours(date)}}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ getHours(date) }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                     <v-list-tile-content>Сделки:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ getDealCount(date)}}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ getDealCount(date) }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                     <v-list-tile-content>Доход:</v-list-tile-content>
