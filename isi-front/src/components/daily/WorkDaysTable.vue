@@ -26,14 +26,18 @@
                         <td>
                             <v-text-field v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
                                         type="text"
-                                        maxlength="2"
-                                        style="width: 2em"
+                                        maxlength="4"
+                                        style="width: 3em"
                                         v-model="props.item.working_hours"
                                         ref="hoursInput"
                                         height="1em"
                                         @keyup.enter="attemptToCloseDay"
                                         @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
                                         @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
+                                          data-vv-as="Часы"
+                                          data-vv-name="hours"
+                                      :error-messages="errors.collect('hours')"
+                                      v-validate="'decimal:4'"
                             ></v-text-field>
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
@@ -167,12 +171,16 @@
                     this.$refs.hoursInput.focus()
                     return
                 }
-            this.$store.dispatch('finishUserDay', {
-                working_hours: this.currentWorkDay.working_hours,
-                dinner_start: this.currentWorkDay.dinner_start,
-                dinner_finish: this.currentWorkDay.dinner_finish
-            })
-                .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) return
+                        this.$store.dispatch('finishUserDay', {
+                            working_hours: this.currentWorkDay.working_hours,
+                            dinner_start: this.currentWorkDay.dinner_start,
+                            dinner_finish: this.currentWorkDay.dinner_finish
+                        })
+                            .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
+                    })
 
             },
             startDay () {
