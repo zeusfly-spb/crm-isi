@@ -24,22 +24,7 @@
                             {{ props.item.user && props.item.user.full_name}}
                         </td>
                         <td>
-                            <v-text-field v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
-                                        type="text"
-                                        maxlength="4"
-                                        style="width: 3em"
-                                        v-model="props.item.working_hours"
-                                        ref="hoursInput"
-                                        height="1em"
-                                        @keyup.enter="attemptToCloseDay"
-                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
-                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
-                                          data-vv-as="Часы"
-                                          data-vv-name="hours"
-                                      :error-messages="errors.collect('hours')"
-                                      v-validate="'decimal:4'"
-                            ></v-text-field>
-                            <span v-else>{{ props.item.working_hours }}</span>
+                            <span>{{ props.item.working_hours }}</span>
                         </td>
                         <td>{{ props.item.time_start }}</td>
                         <td>{{ props.item.time_finish || '' }}</td>
@@ -82,13 +67,13 @@
                 </v-btn>
                 <v-btn flat color="green darken-1"
                        @click="startTimeBreak"
-                       v-if="!isOnTimeBreak"
+                       v-if="!isOnTimeBreak && !isDayClosed"
                 >
                     Начать перерыв
                 </v-btn>
                 <v-btn flat color="green darken-1"
                        @click="finishTimeBreak"
-                       v-if="isOnTimeBreak"
+                       v-if="isOnTimeBreak && !isDayClosed"
                 >
                     Закончить перерыв
                 </v-btn>
@@ -160,17 +145,11 @@
         methods: {
             finishTimeBreak () {
                 this.$store.dispatch('finishTimeBreak')
-                    .then(res => console.dir(res.data))
+                    .then(() => this.showSnack('Закончили перерыв', 'green'))
             },
             startTimeBreak () {
                 this.$store.dispatch('startTimeBreak')
-                    .then(res => console.dir(res.data))
-            },
-            startDinner () {
-                this.$store.dispatch('startUserDinner')
-            },
-            finishDinner () {
-                this.$store.dispatch('finishUserDinner')
+                    .then(() => this.showSnack('Начали перерыв', 'green'))
             },
             resumeDay () {
                 this.$store.dispatch('resumeUserDay')
