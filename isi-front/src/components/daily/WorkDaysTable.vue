@@ -44,33 +44,13 @@
                         <td>{{ props.item.time_start }}</td>
                         <td>{{ props.item.time_finish || '' }}</td>
                         <td align="center">
-                            <v-layout>
-                                <v-text-field
-                                        type="text"
-                                        maxlength="5"
-                                        style="width: 2em"
-                                        height="1em"
-                                        v-model="props.item.dinner_start"
-                                        v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
-                                        mask="##:##"
-                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
-                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
-                                />
-                                <span v-else>{{ props.item.dinner_start }}</span>
+                            <v-flex v-for="timeBreak in props.item.time_breaks"
+                                      class="text-xs-center"
+                            >
+                                <span>{{ timeBreak.start_time }}</span>
                                 -
-                                <v-text-field
-                                        type="text"
-                                        maxlength="5"
-                                        style="width: 2em"
-                                        v-model="props.item.dinner_finish"
-                                        v-if="(props.item.user.id === authUser.id || isSuperAdmin) && !isDayClosed"
-                                        height="1em"
-                                        mask="##:##"
-                                        @focus="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: false})"
-                                        @blur="$store.commit('SET_SCAN_MODE', {...$store.state.scanMode, workdays: true})"
-                                />
-                                <span v-else>{{ props.item.dinner_finish }}</span>
-                            </v-layout>
+                                <span>{{ timeBreak.finish_time }}</span>
+                            </v-flex>
                         </td>
 
                     </tr>
@@ -100,6 +80,18 @@
                 >
                     Продолжить рабочий день
                 </v-btn>
+                <v-btn flat color="green darken-1"
+                       @click="startTimeBreak"
+                       v-if="!isOnTimeBreak"
+                >
+                    Начать перерыв
+                </v-btn>
+                <v-btn flat color="green darken-1"
+                       @click="finishTimeBreak"
+                       v-if="isOnTimeBreak"
+                >
+                    Закончить перерыв
+                </v-btn>
             </div>
     </v-flex>
 
@@ -116,10 +108,22 @@
                 {text: 'Часы', value: 'working_hours', sortable: false},
                 {text: 'Начало', value: 'time_start'},
                 {text: 'Окончание', value: 'time_finish'},
-                {text: 'Обед', value: null, sortable: false, align: 'center'}
+                {text: 'Перерывы', value: null, sortable: false, align: 'center'}
             ]
         }),
         computed: {
+            isOnTimeBreak () {
+                return this.timeBreaks && this.timeBreaks.length && this.timeBreaks.filter(item => !item.finish_time).length
+            },
+            timeBreaks () {
+                return this.currentWorkDay && this.currentWorkDay.time_breaks
+            },
+            isDinnerFinished () {
+                return !!this.currentWorkDay && this.currentWorkDay.dinner_finish
+            },
+            isOnDinner () {
+                return !!this.currentWorkDay && this.currentWorkDay.dinner_start
+            },
             realDate () {
                 return this.$store.state.realDate
             },
@@ -154,6 +158,20 @@
             }
         },
         methods: {
+            finishTimeBreak () {
+                this.$store.dispatch('finishTimeBreak')
+                    .then(res => console.dir(res.data))
+            },
+            startTimeBreak () {
+                this.$store.dispatch('startTimeBreak')
+                    .then(res => console.dir(res.data))
+            },
+            startDinner () {
+                this.$store.dispatch('startUserDinner')
+            },
+            finishDinner () {
+                this.$store.dispatch('finishUserDinner')
+            },
             resumeDay () {
                 this.$store.dispatch('resumeUserDay')
                     .then(() => this.showSnack(`С возвращением, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))

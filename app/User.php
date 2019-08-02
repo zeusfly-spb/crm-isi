@@ -106,6 +106,22 @@ class User extends Authenticatable
         return $currentWorkDay;
     }
 
+    public function startDinner()
+    {
+        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString())->first();
+        $currentWorkDay->update(['dinner_start' => now()->toTimeString()]);
+        $currentWorkDay->load('user');
+        return $currentWorkDay;
+    }
+
+    public function finishDinner()
+    {
+        $currentWorkDay = $this->workdays()->whereDate('date', now()->toDateString())->first();
+        $currentWorkDay->update(['dinner_finish' => now()->toTimeString()]);
+        $currentWorkDay->load('user');
+        return $currentWorkDay;
+    }
+
     public function deals()
     {
         return $this->hasMany(Deal::class);

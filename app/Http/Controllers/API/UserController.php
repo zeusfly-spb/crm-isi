@@ -160,4 +160,18 @@ class UserController extends Controller
         return response()->json($currentWorkDay->toArray());
     }
 
+    public function startDinner(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $currentWorkDay = $user->startDinner();
+        return response()->json($currentWorkDay->toArray());
+    }
+
+    public function finishDinner(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $currentWorkDay = $user->finishDinner();
+        return response()->json($currentWorkDay->toArray());
+    }
+
 }

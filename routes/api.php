@@ -58,6 +58,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('start_day', 'API\UserController@startDay');
     Route::post('finish_day', 'API\UserController@finishDay');
     Route::post('resume_day', 'API\UserController@resumeDay');
+    Route::post('start_dinner', 'API\UserController@startDinner');
+    Route::post('finish_dinner', 'API\UserController@finishDinner');
+    Route::post('start_time_break', 'WorkDayController@startTimeBreak');
+    Route::post('finish_time_break', 'WorkDayController@finishTimeBreak');
 
     // DEALS
     Route::post('get_deals', 'DealController@index');
