@@ -2,7 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
-        monthData: null
+        monthData: null,
+
     },
     actions: {
         setMonthData ({commit, rootState}) {

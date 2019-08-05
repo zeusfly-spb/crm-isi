@@ -357,7 +357,7 @@
         </v-flex>
     </v-layout>
 
-        <new-stock-action-dialog/>
+    <new-stock-action-dialog v-if="isSuperadmin"/>
     <stock-actions-table/>
 
     </v-flex>

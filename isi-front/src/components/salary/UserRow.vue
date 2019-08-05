@@ -78,7 +78,9 @@
             width="10em"
             :title="`${user.full_name} за ${hDate(date)}`"
         >
-            <v-list dense>
+            <v-list dense
+                    :class="{'red lighten-4': isHoliday(date)}"
+            >
                 <v-list-tile>
                     <v-list-tile-content>Часы:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ getHours(date) }}</v-list-tile-content>
@@ -131,6 +133,11 @@
             }
         },
         methods: {
+            isHoliday (textDate) {
+                let date = new Date(textDate)
+                let day = date.getDay()
+                return [0, 1].includes(day)
+            },
             hDate (textDate) {
                 let date = new Date(textDate)
                 let options = {month: 'short', day: 'numeric', year: 'numeric'}

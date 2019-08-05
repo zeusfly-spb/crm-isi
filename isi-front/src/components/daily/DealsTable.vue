@@ -375,7 +375,7 @@
         watch: {
             formattedSizes (value) {
                 let available = value.filter(item => !item.disabled)
-                return this.newDealData.size_id = available.length && available[0] || null
+                return this.newDealData.size_id = available.length && available[0].id || null
             },
             selectedCustomerId (val) {
                 if (val === 0) {

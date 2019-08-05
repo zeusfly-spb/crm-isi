@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Deal;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -35,6 +36,8 @@ class SalaryController extends Controller
             $user['dates'] = $monthDates;
         }
 
-        return response()->json(['users' => $users->toArray(), 'dates' => $monthDates]);
+        $allDeals = Deal::whereMonth('created_at', $month)->get()->toArray();
+
+        return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals]);
     }
 }
