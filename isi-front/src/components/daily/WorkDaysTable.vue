@@ -30,7 +30,8 @@
                         <td>{{ props.item.time_finish || '' }}</td>
                         <td align="center">
                             <v-flex v-for="timeBreak in props.item.time_breaks"
-                                      class="text-xs-center"
+                                    :key="timeBreak.id"
+                                    class="text-xs-center"
                             >
                                 <span>{{ timeBreak.start_time }}</span>
                                 -
