@@ -53,7 +53,7 @@
                 >
                     Начать рабочий день
                 </v-btn>
-                <v-btn flat :color="canCloseDay ? 'primary darken-1' : 'grey'"
+                <v-btn flat
                        @click="attemptToCloseDay"
                        v-if="isDayOpen"
                 >
@@ -161,24 +161,8 @@
                 this.snackbar = true
             },
             attemptToCloseDay () {
-                if (!this.canCloseDay) {
-                    this.snackText = 'Чтобы закончить рабочий день введите количество отработанных часов'
-                    this.snackColor = 'red'
-                    this.snackbar = true
-                    this.$refs.hoursInput.focus()
-                    return
-                }
-                this.$validator.validate()
-                    .then(res => {
-                        if (!res) return
-                        this.$store.dispatch('finishUserDay', {
-                            working_hours: this.currentWorkDay.working_hours,
-                            dinner_start: this.currentWorkDay.dinner_start,
-                            dinner_finish: this.currentWorkDay.dinner_finish
-                        })
-                            .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
-                    })
-
+                this.$store.dispatch('finishUserDay')
+                    .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
             },
             startDay () {
                 this.$store.dispatch('startUserDay')
