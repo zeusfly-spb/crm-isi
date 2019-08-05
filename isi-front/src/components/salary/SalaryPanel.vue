@@ -49,13 +49,18 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <user-row :user="props.item"/>
+                <component
+                    :is="props.index === 0 ? 'total-data-row' : 'user-row'"
+                    :user="props.item"
+                    :dates="dates"
+                />
             </template>
 
         </v-data-table>
     </v-card>
 </template>
 <script>
+    import TotalDataRow from './TotalDataRow'
     import UserRow from './UserRow'
     export default {
         name: 'SalaryPanel',
@@ -114,7 +119,8 @@
             this.$store.dispatch('setMonthData')
         },
         components: {
-            UserRow
+            UserRow,
+            TotalDataRow
         }
     }
 </script>

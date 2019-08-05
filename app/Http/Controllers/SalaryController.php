@@ -36,7 +36,11 @@ class SalaryController extends Controller
             $user['dates'] = $monthDates;
         }
 
-        $allDeals = Deal::whereMonth('created_at', $month)->get()->toArray();
+        $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
+        if ($request->island_id) {
+            $dealsBuilder = $dealsBuilder->where('island_id', $request->island_id);
+        }
+        $allDeals = $dealsBuilder->get()->toArray();
 
         return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals]);
     }

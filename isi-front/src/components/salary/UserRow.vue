@@ -45,13 +45,13 @@
                                 Часы
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalHours }}</strong>
+                                <strong>{{ totalHours.toFixed(2) }}</strong>
                             </td>
                             <td class="info-tab">
                                 <strong>{{ user.hour_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ user.hour_rate * totalHours }}</strong>
+                                <strong>{{ (user.hour_rate * totalHours).toFixed(2) }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -59,13 +59,13 @@
                                 Доход
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalIncome }}</strong>
+                                <strong>{{ totalIncome.toFixed(2) }}</strong>
                             </td>
                             <td class="info-tab">
                                 <strong>{{ user.sales_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ user.sales_rate * totalIncome }}</strong>
+                                <strong>{{ (user.sales_rate * totalIncome).toFixed(2) }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -162,9 +162,6 @@
     }
 </script>
 <style scoped>
-    .holiday {
-        background-color: pink;
-    }
     .info-tab {
         height: 1em;
         padding: .1em 1em!important;
