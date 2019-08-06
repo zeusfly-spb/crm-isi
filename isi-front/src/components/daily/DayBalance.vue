@@ -7,7 +7,7 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <td align="center">{{ props.item.start }}</td>
+                <td align="center">{{ props.item.start | pretty }}</td>
                 <td align="center"
                 >
                     <hand-over-control v-if="handover"/>
@@ -25,11 +25,11 @@
                     {{ props.item.expenses }}
                 </td>
 
-                <td align="center">{{ props.item.finish }}</td>
+                <td align="center">{{ props.item.finish | pretty }}</td>
                 <td align="center"
                     class="teal--text darken-3"
                 >
-                    <span v-if="cashlessPresent">{{ cashlessAmount }}</span>
+                    <span v-if="cashlessPresent">{{ cashlessAmount | pretty }}</span>
                     <span v-else>0</span>
                 </td>
 

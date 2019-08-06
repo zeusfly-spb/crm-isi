@@ -18,7 +18,7 @@
                         <td
                             align="right"
                         >
-                            {{ totalIncome(true) }}
+                            {{ totalIncome(true) | pretty }}
                         </td>
                     </tr>
                     <tr
@@ -33,7 +33,22 @@
                         <td
                             align="right"
                         >
-                            {{ totalIncome(false) }}
+                            {{ totalIncome(false) | pretty }}
+                        </td>
+                    </tr>
+                    <tr
+                        class="condensed-row"
+                    >
+                        <td
+                            align="left"
+                            style="padding-left: 0!important;"
+                        >
+                            Приход всего:
+                        </td>
+                        <td
+                            align="right"
+                        >
+                            {{ totalIncome(false) + totalIncome(true) | pretty }}
                         </td>
                     </tr>
                 </table>
@@ -56,7 +71,7 @@
                     <td
                         align="right"
                     >
-                        {{ dateIncome({date: date, isCache: true})}}
+                        {{ dateIncome({date: date, isCache: true}) | pretty }}
                     </td>
                 </tr>
                 <tr
@@ -65,7 +80,16 @@
                     <td
                         align="right"
                     >
-                        {{ dateIncome({date: date, isCache: false})}}
+                        {{ dateIncome({date: date, isCache: false}) | pretty }}
+                    </td>
+                </tr>
+                <tr
+                    class="condensed-row"
+                >
+                    <td
+                        align="right"
+                    >
+                        {{ dateIncome({date: date, isCache: false}) + dateIncome({date: date, isCache: true}) | pretty }}
                     </td>
                 </tr>
             </table>

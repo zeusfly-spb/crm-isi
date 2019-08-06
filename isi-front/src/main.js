@@ -79,6 +79,12 @@ if (token) {
         .then(() => router.push('/login'))
 }
 
+// additional filter for pretty big number formats
+Vue.filter('pretty', function (value) {
+    if (!value) return '0'
+    return value.toLocaleString('ru')
+})
+
 new Vue({
     store,
     router,
