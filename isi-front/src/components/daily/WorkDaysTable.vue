@@ -17,7 +17,7 @@
                 class="elevation-1"
             >
                 <template v-slot:items="props">
-                    <tr :class="{'working red lighten-4': props.item.working && isToday}"
+                    <tr :class="{'working red lighten-5': props.item.working && isToday}"
                         style="border-bottom: solid 1px #fafafa!important;"
                     >
                         <td>
@@ -68,7 +68,7 @@
                 </v-btn>
                 <v-btn flat color="green darken-1"
                        @click="startTimeBreak"
-                       v-if="!isOnTimeBreak && !isDayClosed"
+                       v-if="!isOnTimeBreak && !isDayClosed && isDayOpen"
                 >
                     Начать перерыв
                 </v-btn>
