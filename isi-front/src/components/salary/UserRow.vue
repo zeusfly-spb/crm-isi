@@ -79,7 +79,7 @@
             :title="`${user.full_name} за ${hDate(date)}`"
         >
             <v-list dense
-                    :class="{'red lighten-4': isHoliday(date)}"
+                    :class="{'red lighten-5': isHoliday(date)}"
             >
                 <v-list-tile>
                     <v-list-tile-content>Часы:</v-list-tile-content>

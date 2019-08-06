@@ -1,26 +1,37 @@
 <template>
     <tr>
         <td
-            style="border: 1px solid black; padding: 0"
+            style="border: 1px solid black; padding: 0; height: 3em!important;"
+            align="right"
         >
             <table>
                 <table>
-                    <tr>
+                    <tr
+                        class="condensed-row"
+                    >
                         <td
+                            align="left"
+                            style="padding-left: 0!important;"
                         >
-                            Итого наличным:
+                            Приход наличными платежами:
                         </td>
                         <td
+                            align="right"
                         >
                             {{ totalIncome(true) }}
                         </td>
                     </tr>
-                    <tr>
+                    <tr
+                        class="condensed-row"
+                    >
                         <td
+                            align="left"
+                            style="padding-left: 0!important;"
                         >
-                            Итого безналичным:
+                            Приход безналичными платежами:
                         </td>
                         <td
+                            align="right"
                         >
                             {{ totalIncome(false) }}
                         </td>
@@ -35,19 +46,24 @@
             width="10em"
             style="border: 1px solid black!important; padding: 0"
             :title="`ИТОГО за ${hDate(date)}`"
-            :class="{'red lighten-4': isHoliday(date)}"
+            :class="{'red lighten-5': isHoliday(date)}"
+            align="right"
         >
             <table>
-                <tr>
+                <tr
+                    class="condensed-row"
+                >
                     <td
-                        class="cond-tr"
+                        align="right"
                     >
                         {{ dateIncome({date: date, isCache: true})}}
                     </td>
                 </tr>
-                <tr>
+                <tr
+                    class="condensed-row"
+                >
                     <td
-                        class="cond-tr"
+                        align="right"
                     >
                         {{ dateIncome({date: date, isCache: false})}}
                     </td>
@@ -92,8 +108,10 @@
     }
 </script>
 <style>
-    .cond-tr {
-        padding: 0 2px!important;
+    .condensed-row > TD {
+        margin: 0 2px!important;
+        height: 1.8em!important;
+        font-weight: bold!important;
     }
 </style>
 
