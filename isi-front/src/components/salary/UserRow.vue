@@ -136,7 +136,7 @@
             isHoliday (textDate) {
                 let date = new Date(textDate)
                 let day = date.getDay()
-                return [0, 1].includes(day)
+                return [0, 6].includes(day)
             },
             hDate (textDate) {
                 let date = new Date(textDate)
