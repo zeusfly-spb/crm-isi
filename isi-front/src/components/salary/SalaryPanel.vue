@@ -43,7 +43,7 @@
             </v-tab>
         </v-tabs>
         <v-data-table
-            :items="users"
+            :items="['', ...users]"
             :headers="headers"
             hide-actions
             class="elevation-1"

@@ -102,7 +102,7 @@
         props: ['dates'],
         computed: {
             deals () {
-                return this.$store.state.salary.monthData.allDeals
+                return this.$store.state.salary.monthData && this.$store.state.salary.monthData.allDeals
             },
             basePath () {
                 return this.$store.state.basePath
@@ -110,7 +110,7 @@
         },
         methods: {
             dateIncome ({date, isCache}) {
-                let deals = this.deals.filter(item => item.created_at.split(' ')[0] === date && item.is_cache === isCache)
+                let deals = this.deals && this.deals.filter(item => item.created_at.split(' ')[0] === date && item.is_cache === isCache)
                 const add = (a, b) => a + +b.income
                 return deals.reduce(add, 0)
             },
@@ -120,9 +120,9 @@
                 return date.toLocaleDateString('ru-RU', options)
             },
             totalIncome (isCache) {
-                let deals = this.deals.filter(item => item.is_cache === isCache)
+                let deals = this.deals && this.deals.filter(item => item.is_cache === isCache)
                 const add = (a, b) => a + +b.income
-                return deals.reduce(add, 0)
+                return deals && deals.reduce(add, 0)
             },
             isHoliday (textDate) {
                 let date = new Date(textDate)
