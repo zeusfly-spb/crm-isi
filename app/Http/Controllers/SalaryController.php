@@ -44,4 +44,11 @@ class SalaryController extends Controller
 
         return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals]);
     }
+
+    public function updateUserRate(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update([$request->field_name => $request->value]);
+        return response()->json(['user' => $user->toArray(), 'field_name' => $request->field_name]);
+    }
 }

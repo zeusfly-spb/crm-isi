@@ -73,7 +73,7 @@
                     align: 'center'
                 })) || []
                 return [{
-                    text: 'ИТОГО',
+                    text: '',
                     value: null,
                     sortable: false,
                     align: 'center',

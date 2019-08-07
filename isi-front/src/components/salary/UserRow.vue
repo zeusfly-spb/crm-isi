@@ -45,27 +45,31 @@
                                 Часы
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalHours.toFixed(2) }}</strong>
+                                <strong>{{ totalHours.toFixed(2) | pretty }}</strong>
+                            </td>
+                            <td
+                                class="info-tab"
+                            >
+                                <rate-updater v-if="isSuperadmin" :user="user" mode="hours" :caption="user.hour_rate"/>
+                                <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ user.hour_rate }}</strong>
-                            </td>
-                            <td class="info-tab">
-                                <strong>{{ (user.hour_rate * totalHours).toFixed(2) }}</strong>
+                                <strong>{{ (user.hour_rate * totalHours).toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="info-tab">
-                                Доход
+                                Оборот
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalIncome.toFixed(2) }}</strong>
+                                <strong >{{ totalIncome.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ user.sales_rate }}</strong>
+                                <rate-updater v-if="isSuperadmin" :user="user" mode="sales" :caption="user.sales_rate"/>
+                                <strong v-else>{{ user.sales_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ (user.sales_rate * totalIncome).toFixed(2) }}</strong>
+                                <strong>{{ (user.sales_rate * totalIncome).toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -102,10 +106,14 @@
     </tr>
 </template>
 <script>
+    import RateUpdater from './RateUpdater'
     export default {
         name: 'UserRow',
         props: ['user'],
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             totalExpense () {
                 const add = (a, b) => a + +b.expense
                 let deals = this.user && this.user.monthDeals
@@ -158,6 +166,9 @@
                 let targetDay = this.user.workdays.find(day => day.date === dateString)
                 return targetDay && targetDay.working_hours || 0
             },
+        },
+        components: {
+            RateUpdater
         }
     }
 </script>
@@ -166,5 +177,8 @@
         height: 1em;
         padding: .1em 1em!important;
         text-align: right;
+    }
+    .changeable {
+        cursor: pointer;
     }
 </style>
