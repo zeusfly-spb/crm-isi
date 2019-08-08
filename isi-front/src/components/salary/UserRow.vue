@@ -19,24 +19,16 @@
                 <v-card-text class="p-0">
                     <table>
                         <tr>
-                            <td
-                                class="info-tab"
-                            >
+                            <td class="info-tab">
                                 Наименование
                             </td>
-                            <td
-                                class="info-tab"
-                            >
+                            <td class="info-tab">
                                 Всего
                             </td>
-                            <td
-                                class="info-tab"
-                            >
+                            <td class="info-tab">
                                 Коэф.
                             </td>
-                            <td
-                                class="info-tab"
-                            >
+                            <td class="info-tab">
                                 Итог
                             </td>
                         </tr>
@@ -47,17 +39,15 @@
                             <td class="info-tab">
                                 <strong>{{ totalHours.toFixed(2) | pretty }}</strong>
                             </td>
-                            <td
-                                class="info-tab"
-                            >
+                            <td class="info-tab">
                                 <rate-updater v-if="isSuperadmin"
                                               :user="user" mode="hours"
-                                              @updated="reRender"
+                                              @updated=""
                                 />
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ (user.hour_rate * totalHours).toFixed(2) | pretty }}</strong>
+                                <strong>{{ hourRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -72,7 +62,7 @@
                                 <strong v-else>{{ user.sales_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ (user.sales_rate * totalIncome).toFixed(2) | pretty }}</strong>
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -114,6 +104,12 @@
         name: 'UserRow',
         props: ['user'],
         computed: {
+            salesRateAmount () {
+                return this.user.sales_rate * this.totalIncome
+            },
+            hourRateAmount () {
+                return this.user.hour_rate * this.totalHours
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
@@ -144,9 +140,6 @@
             }
         },
         methods: {
-            reRender () {
-                this.$emit('updated')
-            },
             isHoliday (textDate) {
                 let date = new Date(textDate)
                 let day = date.getDay()

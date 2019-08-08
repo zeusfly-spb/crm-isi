@@ -54,10 +54,7 @@
                     field_name: this.targetFieldName,
                     value: this.user[this.targetFieldName]
                 })
-                    .then(() => {
-                        this.$emit('updated')
-                        this.active = false
-                    })
+                    .then(() => this.active = false)
             },
             activate () {
                 this.active = true
