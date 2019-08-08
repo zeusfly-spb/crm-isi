@@ -6,9 +6,10 @@
             class="changeable"
             :title="`Изменить ${targetCaption} для сотрудника ${user.full_name}`"
         >
-            {{ caption }}
+            {{ user[targetFieldName] }}
         </strong>
         <v-text-field
+            type="number"
             v-else
             v-model="targetField"
             style="width: 3em"
@@ -19,7 +20,7 @@
             single-line
             @blur="cancel"
             @keyup.esc="cancel"
-            type="number"
+            @keyup.enter="saveRate"
         ></v-text-field>
     </v-flex>
 </template>
@@ -28,8 +29,7 @@
         name: 'RateUpdater',
         props: ['user', 'mode', 'caption'],
         data: () => ({
-            active: false,
-            backup: null
+            active: false
         }),
         computed: {
             targetCaption () {
@@ -48,12 +48,21 @@
             }
         },
         methods: {
+            saveRate () {
+                this.$store.dispatch('updateUserRate', {
+                    user_id: this.user.id,
+                    field_name: this.targetFieldName,
+                    value: this.user[this.targetFieldName]
+                })
+                    .then(() => {
+                        this.$emit('updated')
+                        this.active = false
+                    })
+            },
             activate () {
-                this.backup = this.targetField
                 this.active = true
             },
             cancel () {
-                this.targetField = this.backup
                 this.active = false
             }
         }

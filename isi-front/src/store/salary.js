@@ -31,14 +31,8 @@ export default {
     },
     mutations: {
         UPDATE_USER_RATE (state, data) {
-            const updateValue = (user) => {
-                let result = []
-                for (let key in user) {
-                    result[key] = key === data.field_name ? data.value : user[key]
-                }
-                return result
-            }
-            state.monthData.users = state.monthData.users.map(item => item.id === data.user.id ? updateValue(item) : item)
+            let target = state.monthData.users.find(user => +user.id === +data.user.id)
+            target[data.field_name] = data.user[data.field_name]
         },
         SET_MONTH_DATA (state, data) {
             state.monthData = data

@@ -50,7 +50,10 @@
                             <td
                                 class="info-tab"
                             >
-                                <rate-updater v-if="isSuperadmin" :user="user" mode="hours" :caption="user.hour_rate"/>
+                                <rate-updater v-if="isSuperadmin"
+                                              :user="user" mode="hours"
+                                              @updated="reRender"
+                                />
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
                             <td class="info-tab">
@@ -141,6 +144,9 @@
             }
         },
         methods: {
+            reRender () {
+                this.$emit('updated')
+            },
             isHoliday (textDate) {
                 let date = new Date(textDate)
                 let day = date.getDay()

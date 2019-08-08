@@ -53,6 +53,7 @@
                     :is="props.index === 0 ? 'total-data-row' : 'user-row'"
                     :user="props.item"
                     :dates="dates"
+                    @updated="reRender"
                 />
             </template>
 
@@ -106,6 +107,9 @@
             }
         },
         methods: {
+            reRender () {
+                this.$forceUpdate()
+            },
             hDate (textDate) {
                 let date = new Date(textDate)
                 let options = {month: 'short', day: 'numeric'}
