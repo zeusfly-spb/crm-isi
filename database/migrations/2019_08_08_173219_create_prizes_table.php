@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTimeBreaksTable extends Migration
+class CreatePrizesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateTimeBreaksTable extends Migration
      */
     public function up()
     {
-        Schema::create('time_breaks', function (Blueprint $table) {
+        Schema::create('prizes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('work_day_id')->unsigned()->index();
-            $table->time('start_time');
-            $table->time('finish_time')->nullable()->default(null);
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->integer('amount')->default(0);
+            $table->string('comment')->nullable()->default(null);
             $table->timestamps();
-
-            $table->foreign('work_day_id')->references('id')->on('work_days')->onDelete('cascade');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateTimeBreaksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('time_breaks');
+        Schema::dropIfExists('prizes');
     }
 }
