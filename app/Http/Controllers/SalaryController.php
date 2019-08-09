@@ -34,6 +34,7 @@ class SalaryController extends Controller
             $user['monthDeals'] = $user->deals()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
             $user['monthWorkdays'] = $user->workdays()->whereYear('date', $year)->whereMonth('date', $month)->get()->toArray();
             $user['dates'] = $monthDates;
+            $user['monthPrizes'] = $user->prizes()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
         }
 
         $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);

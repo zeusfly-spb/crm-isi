@@ -60,7 +60,7 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" max-width="600px">
+            <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2" @click="addUser">Добавить сотрудника</v-btn>
             </template>
@@ -72,7 +72,6 @@
                 <v-card-text>
                     <v-container grid-list-md>
                         <v-layout wrap>
-
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.name"
                                               label="Логин"
