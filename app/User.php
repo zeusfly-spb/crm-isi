@@ -136,4 +136,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(HandOver::class);
     }
+
+    public function prizes()
+    {
+        return $this->hasMany(Prize::class);
+    }
+
+    public function forfeits()
+    {
+        return $this->hasMany(Forfeit::class);
+    }
+
+    public function sicks()
+    {
+        return $this->hasMany(Sick::class);
+    }
+
+    public function prepays()
+    {
+        return $this->hasMany(Prepay::class);
+    }
 }

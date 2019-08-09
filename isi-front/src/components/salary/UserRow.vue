@@ -65,6 +65,77 @@
                                 <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
+                        <tr>
+                            <td class="info-tab">
+                                Премия
+                            </td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="info-tab">
+                                Штраф
+                            </td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="info-tab">
+                                Больничный
+                            </td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="info-tab">
+                                Аванс
+                            </td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+
+                       <tr>
+                            <td class="total-tab"
+                                colspan="3"
+                            >
+                                <strong>ИТОГО</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="total-tab"
+                                colspan="3"
+                            >
+                                <strong>Выдано</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="total-tab"
+                                colspan="3"
+                            >
+                                <strong>Остаток</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
                     </table>
                 </v-card-text>
 
@@ -172,6 +243,11 @@
     }
 </script>
 <style scoped>
+    .total-tab {
+        height: 1em;
+        padding: .1em 1em!important;
+        text-align: left;
+    }
     .info-tab {
         height: 1em;
         padding: .1em 1em!important;
