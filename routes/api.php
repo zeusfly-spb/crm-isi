@@ -90,4 +90,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     // SALARY
     Route::post('get_month_data', 'SalaryController@monthData');
     Route::post('update_user_rate', 'SalaryController@updateUserRate');
+    Route::post('add_user_prize', 'SalaryController@addUserPrize');
 });

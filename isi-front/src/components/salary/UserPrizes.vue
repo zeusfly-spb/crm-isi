@@ -27,6 +27,11 @@
                             :headers="headers"
                             hide-actions
                         >
+                            <template v-slot:items="props">
+                                <td>{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
+                                <td>{{ props.item.amount }}</td>
+                                <td>{{ props.item.comment }}</td>
+                            </template>
                             <template v-slot:no-data>
                                 <span class="red--text">Нет премий</span>
                             </template>
@@ -34,15 +39,31 @@
 
                     </v-flex>
                     <v-layout v-if="adding">
-                        <v-flex xs6 sm6 md6>
+                        <v-flex xs4>
                             <v-text-field
-                                style="width: 3em"
+                                label="Сумма"
+                                type="number"
+                                style="width: 4em;"
+                                v-model="amount"
+                                maxlength="7"
+                                height="1em"
+                                autofocus
                             />
                         </v-flex>
-                        <v-flex xs6 sm6 md6>
+                        <v-flex xs8>
                             <v-text-field
-                                style="width: 3em"
+                                label="Комментарий"
+                                v-model="comment"
+                                height="1em"
                             />
+                        </v-flex>
+                        <v-flex>
+                            <v-btn
+                                flat color="green"
+                                @click="addPrize"
+                            >
+                                Записать
+                            </v-btn>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -50,7 +71,14 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="darken-1" flat @click="dialog = false">Закрыть</v-btn>
-                <v-btn color="green darken-1" flat @click="adding=true">Добавить премию</v-btn>
+                <v-btn
+                    color="green darken-1"
+                    flat
+                    @click="adding=true"
+                    :disabled="adding"
+                >
+                    Добавить премию
+                </v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -60,6 +88,8 @@
         name: 'UserPrizes',
         props: ['user'],
         data: () => ({
+            amount: 0,
+            comment: '',
             adding: false,
             dialog: false,
             headers: [
@@ -77,10 +107,20 @@
                 return this.prizes.reduce(add, 0)
             }
         },
+        methods: {
+            addPrize () {
+                this.$store.dispatch('addUserPrize', {
+                    user_id: this.user.id,
+                    amount: this.amount,
+                    comment: this.comment
+                })
+                    .then(() => this.adding = false)
+            }
+        },
         watch: {
             dialog (value) {
                 if (value) {
-                    this.adding = false
+                    [this.amount, this.comment, this.adding] = [0, '', false]
                 }
             }
         }

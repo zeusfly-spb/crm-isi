@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        addUserPrize ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_user_prize', {...data})
+                    .then(res => {
+                        commit('ADD_USER_PRIZE', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateUserRate ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_user_rate', {...data})
@@ -30,6 +40,12 @@ export default {
         }
     },
     mutations: {
+        ADD_USER_PRIZE (state, prize) {
+            let targetUser = state.monthData.users.find(user => +user.id === +prize.user_id)
+            if (targetUser) {
+                targetUser.monthPrizes.push(prize)
+            }
+        },
         UPDATE_USER_RATE (state, data) {
             let target = state.monthData.users.find(user => +user.id === +data.user.id)
             target[data.field_name] = data.user[data.field_name]

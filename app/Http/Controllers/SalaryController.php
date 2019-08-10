@@ -52,4 +52,10 @@ class SalaryController extends Controller
         $user->update([$request->field_name => $request->value]);
         return response()->json(['user' => $user->toArray(), 'field_name' => $request->field_name]);
     }
+
+    public function addUserPrize(Request $request)
+    {
+        $user = User::find($request->user_id);
+        return response()->json($user->addPrize($request->amount, $request->comment ?? '')->toArray());
+    }
 }

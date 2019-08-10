@@ -156,4 +156,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Prepay::class);
     }
+
+    public function addPrize(int $amount, string $comment = '')
+    {
+        return $this->prizes()->create([
+            'amount' => $amount,
+            'comment' => $comment
+        ]);
+    }
 }
