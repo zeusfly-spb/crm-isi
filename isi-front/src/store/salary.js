@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        addUserForfeit ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_user_forfeit', {...data})
+                    .then(res => {
+                        commit('ADD_USER_FORFEIT', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addUserPrize ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_user_prize', {...data})
@@ -40,6 +50,12 @@ export default {
         }
     },
     mutations: {
+        ADD_USER_FORFEIT (state, forfeit) {
+            let targetUser = state.monthData.users.find(user => +user.id === +forfeit.user_id)
+            if (targetUser) {
+                targetUser.monthForfeits.push(forfeit)
+            }
+        },
         ADD_USER_PRIZE (state, prize) {
             let targetUser = state.monthData.users.find(user => +user.id === +prize.user_id)
             if (targetUser) {

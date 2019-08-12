@@ -164,4 +164,12 @@ class User extends Authenticatable
             'comment' => $comment
         ]);
     }
+
+    public function addForfeit(int $amount, string $comment = '')
+    {
+        return $this->forfeits()->create([
+            'amount' => $amount,
+            'comment' => $comment
+        ]);
+    }
 }
