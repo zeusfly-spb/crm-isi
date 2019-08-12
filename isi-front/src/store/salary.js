@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        addUserSick ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_user_sick', {...data})
+                    .then(res => {
+                        commit('ADD_USER_SICK', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addUserForfeit ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_user_forfeit', {...data})
@@ -50,6 +60,12 @@ export default {
         }
     },
     mutations: {
+        ADD_USER_SICK (state, sick) {
+            let targetUser = state.monthData.users.find(user => +user.id === +sick.user_id)
+            if (targetUser) {
+                targetUser.monthSicks.push(sick)
+            }
+        },
         ADD_USER_FORFEIT (state, forfeit) {
             let targetUser = state.monthData.users.find(user => +user.id === +forfeit.user_id)
             if (targetUser) {

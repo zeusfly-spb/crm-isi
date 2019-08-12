@@ -172,4 +172,12 @@ class User extends Authenticatable
             'comment' => $comment
         ]);
     }
+
+    public function addSick(int $amount, string $comment = '')
+    {
+        return $this->sicks()->create([
+                'amount' => $amount,
+                'comment' => $comment
+        ]);
+    }
 }

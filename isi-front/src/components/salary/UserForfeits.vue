@@ -92,7 +92,7 @@
         data: () => ({
             dialog: false,
             adding: false,
-            amount: 0,
+            amount: '',
             comment: '',
             headers: [
                 {text: 'Дата', value: 'created_at', align: 'center'},
@@ -114,7 +114,7 @@
                 return this.$store.getters.isSuperadmin
             },
             forfeits () {
-                return this.user.monthForfeits
+                return this.user.monthForfeits || []
             },
             totalForfeitsAmount () {
                 const add = (a, b) => a + +b.amount
@@ -123,6 +123,7 @@
         },
         methods: {
             addForfeit () {
+                if (!this.amount) return
                 this.$store.dispatch('addUserForfeit', {
                     user_id: this.user.id,
                     amount: this.amount,

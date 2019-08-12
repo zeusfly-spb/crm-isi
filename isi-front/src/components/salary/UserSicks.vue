@@ -5,26 +5,26 @@
             class="clickable"
             v-if="canUpdate"
         >
-            {{ totalPrizesAmount.toFixed(2) | pretty }}
+            {{ totalSicksAmount.toFixed(2) | pretty }}
         </strong>
-        <strong v-else>{{ totalPrizesAmount.toFixed(2) | pretty }}</strong>
+        <strong v-else>{{ totalSicksAmount.toFixed(2) | pretty }}</strong>
         <v-dialog
             v-model="dialog"
             max-width="700px"
         >
             <v-card>
                 <v-card-title>
-                    <span class="headline">
-                        {{ `Премии сотрудника ${user.full_name}`}}
-                    </span>
+                <span class="headline">
+                    {{ `Больничные сотрудника ${user.full_name}`}}
+                </span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md
-                                 style="padding: 0!important; margin: 0!important;"
+                                 class="margin-less"
                     >
                         <v-flex>
                             <v-data-table
-                                :items="prizes"
+                                :items="sicks"
                                 :headers="headers"
                                 hide-actions
                             >
@@ -34,10 +34,9 @@
                                     <td>{{ props.item.comment }}</td>
                                 </template>
                                 <template v-slot:no-data>
-                                    <span class="red--text">Нет премий</span>
+                                    <span class="red--text">Нет больничных</span>
                                 </template>
                             </v-data-table>
-
                         </v-flex>
                         <v-layout v-if="adding">
                             <v-flex xs4>
@@ -61,7 +60,7 @@
                             <v-flex>
                                 <v-btn
                                     flat color="green"
-                                    @click="addPrize"
+                                    @click="addSick"
                                 >
                                     Сохранить
                                 </v-btn>
@@ -78,22 +77,23 @@
                         @click="adding=true"
                         :disabled="adding"
                     >
-                        Добавить премию
+                        Добавить больничный
                     </v-btn>
                 </v-card-actions>
             </v-card>
+
         </v-dialog>
     </v-flex>
 </template>
 <script>
     export default {
-        name: 'UserPrizes',
+        name: 'UserSicks',
         props: ['user'],
         data: () => ({
+            dialog: false,
+            adding: false,
             amount: '',
             comment: '',
-            adding: false,
-            dialog: false,
             headers: [
                 {text: 'Дата', value: 'created_at', align: 'center'},
                 {text: 'Сумма', value: 'amount', align: 'center'},
@@ -113,18 +113,18 @@
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
-            prizes () {
-                return this.user.monthPrizes || []
+            sicks () {
+                return this.user.monthSicks || []
             },
-            totalPrizesAmount () {
+            totalSicksAmount () {
                 const add = (a, b) => a + +b.amount
-                return this.prizes.reduce(add, 0)
+                return this.sicks.reduce(add, 0)
             }
         },
         methods: {
-            addPrize () {
+            addSick () {
                 if (!this.amount) return
-                this.$store.dispatch('addUserPrize', {
+                this.$store.dispatch('addUserSick', {
                     user_id: this.user.id,
                     amount: this.amount,
                     comment: this.comment
@@ -144,6 +144,10 @@
 <style scoped>
     TD {
         text-align: center;
+    }
+    .margin-less {
+        padding: 0!important;
+        margin: 0!important;
     }
     .clickable {
         cursor: pointer;

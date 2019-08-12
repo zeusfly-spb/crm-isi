@@ -92,7 +92,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <user-sicks :user="user"></user-sicks>
                             </td>
                         </tr>
                         <tr>
@@ -173,6 +173,7 @@
     import RateUpdater from './RateUpdater'
     import UserPrizes from './UserPrizes'
     import UserForfeits from './UserForfeits'
+    import UserSicks from './UserSicks'
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -242,7 +243,8 @@
         components: {
             RateUpdater,
             UserPrizes,
-            UserForfeits
+            UserForfeits,
+            UserSicks
         }
     }
 </script>

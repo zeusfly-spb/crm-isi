@@ -36,6 +36,7 @@ class SalaryController extends Controller
             $user['dates'] = $monthDates;
             $user['monthPrizes'] = $user->prizes()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
             $user['monthForfeits'] = $user->forfeits()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
+            $user['monthSicks'] = $user->sicks()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
         }
 
         $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
@@ -64,5 +65,11 @@ class SalaryController extends Controller
     {
         $user = User::find($request->user_id);
         return response()->json($user->addForfeit($request->amount, $request->comment ?? '')->toArray());
+    }
+
+    public function addUserSick(Request $request)
+    {
+        $user = User::find($request->user_id);
+        return response()->json($user->addSick($request->amount, $request->comment ?? '')->toArray());
     }
 }
