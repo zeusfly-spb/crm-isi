@@ -93,4 +93,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('add_user_prize', 'SalaryController@addUserPrize');
     Route::post('add_user_forfeit', 'SalaryController@addUserForfeit');
     Route::post('add_user_sick', 'SalaryController@addUserSick');
+    Route::post('add_user_prepay', 'SalaryController@addUserPrepay');
 });

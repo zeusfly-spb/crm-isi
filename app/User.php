@@ -180,4 +180,12 @@ class User extends Authenticatable
                 'comment' => $comment
         ]);
     }
+
+    public function addPrepay(int $amount, $comment = '')
+    {
+        return $this->prepays()->create([
+            'amount' => $amount,
+            'comment' => $comment
+        ]);
+    }
 }

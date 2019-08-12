@@ -92,7 +92,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <user-sicks :user="user"></user-sicks>
+                                <user-sicks :user="user"/>
                             </td>
                         </tr>
                         <tr>
@@ -102,7 +102,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <user-prepays :user="user"/>
                             </td>
                         </tr>
 
@@ -174,6 +174,7 @@
     import UserPrizes from './UserPrizes'
     import UserForfeits from './UserForfeits'
     import UserSicks from './UserSicks'
+    import UserPrepays from './UserPrepays'
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -244,7 +245,8 @@
             RateUpdater,
             UserPrizes,
             UserForfeits,
-            UserSicks
+            UserSicks,
+            UserPrepays
         }
     }
 </script>

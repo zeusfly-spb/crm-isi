@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        addUserPrepay ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_user_prepay', {...data})
+                    .then(res => {
+                        commit('ADD_USER_PREPAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addUserSick ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_user_sick', {...data})
@@ -60,6 +70,12 @@ export default {
         }
     },
     mutations: {
+        ADD_USER_PREPAY (state, prepay) {
+            let targetUser = state.monthData.users.find(user => +user.id === +prepay.user_id)
+            if (targetUser) {
+                targetUser.monthPrepays.push(prepay)
+            }
+        },
         ADD_USER_SICK (state, sick) {
             let targetUser = state.monthData.users.find(user => +user.id === +sick.user_id)
             if (targetUser) {
