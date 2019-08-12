@@ -129,6 +129,14 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
+                    .finally(() => this.$emit('update'))
+            }
+        },
+        watch: {
+            dialog (value) {
+                if (value) {
+                    [this.amount, this.comment, this.adding] = [0, '', false]
+                }
             }
         }
     }

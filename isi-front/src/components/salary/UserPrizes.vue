@@ -130,6 +130,7 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
+                    .finally(() => this.$emit('update'))
             }
         },
         watch: {

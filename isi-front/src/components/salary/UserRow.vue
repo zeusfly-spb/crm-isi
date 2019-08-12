@@ -72,7 +72,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <user-prizes :user="user"/>
+                                <user-prizes :user="user" @update="calculateTotals" ref="prizes"/>
                             </td>
                         </tr>
                         <tr>
@@ -82,7 +82,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <user-forfeits :user="user"/>
+                                <user-forfeits :user="user" @update="calculateTotals" ref="forfeits"/>
                             </td>
                         </tr>
                         <tr>
@@ -92,7 +92,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <user-sicks :user="user"/>
+                                <user-sicks :user="user" @update="calculateTotals" ref="sicks"/>
                             </td>
                         </tr>
                         <tr>
@@ -102,7 +102,7 @@
                             <td class="info-tab"></td>
                             <td class="info-tab"></td>
                             <td class="info-tab">
-                                <user-prepays :user="user"/>
+                                <user-prepays :user="user" @update="calculateTotals" ref="prepays"/>
                             </td>
                         </tr>
 
@@ -113,7 +113,7 @@
                                 <strong>ИТОГО</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ grandTotal.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -123,7 +123,7 @@
                                 <strong>Выдано</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ totalPrepays.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -133,7 +133,7 @@
                                 <strong>Остаток</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ (grandTotal - totalPrepays).toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -178,7 +178,16 @@
     export default {
         name: 'UserRow',
         props: ['user'],
+        data: () => ({
+            totalPrepays: 0,
+            totalSicks: 0,
+            totalForfeits: 0,
+            totalPrizes: 0
+        }),
         computed: {
+            grandTotal () {
+                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes - this.totalForfeits - this.totalSicks
+            },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome
             },
@@ -215,6 +224,12 @@
             }
         },
         methods: {
+            calculateTotals () {
+                this.totalPrizes = this.$refs.prizes && this.$refs.prizes.totalPrizesAmount
+                this.totalForfeits = this.$refs.forfeits && this.$refs.forfeits.totalForfeitsAmount
+                this.totalSicks = this.$refs.sicks && this.$refs.sicks.totalSicksAmount
+                this.totalPrepays = this.$refs.prepays && this.$refs.prepays.totalPrepaysAmount
+            },
             isHoliday (textDate) {
                 let date = new Date(textDate)
                 let day = date.getDay()
@@ -240,6 +255,9 @@
                 let targetDay = this.user.workdays.find(day => day.date === dateString)
                 return targetDay && targetDay.working_hours || 0
             },
+        },
+        mounted () {
+            this.calculateTotals()
         },
         components: {
             RateUpdater,
