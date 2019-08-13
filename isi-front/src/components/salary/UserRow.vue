@@ -42,7 +42,6 @@
                             <td class="info-tab">
                                 <rate-updater v-if="isSuperadmin"
                                               :user="user" mode="hours"
-                                              @updated=""
                                 />
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
@@ -164,11 +163,27 @@
                     <v-list-tile-content>Расход:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ getDealsExpense(date) }}</v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-for="(item, ind) in getForfeits(date)" :key="ind">
-                    <v-list-tile-content class="red--text">Штраф:</v-list-tile-content>
-                    <v-list-tile-content class="align-end red--text">{{ item.amount }}</v-list-tile-content>
-                </v-list-tile>
-                </v-list>
+                <div v-for="(item, index) in getPrizes(date)"
+                     :key="index"
+                     style="text-align: center"
+                >
+                    <span class="green--text"
+                          :title="item.comment"
+                    >
+                        {{ `Премия: ${item.amount}` }}
+                    </span>
+                </div>
+                <div v-for="(item, index) in getForfeits(date)"
+                     :key="index"
+                     style="text-align: center"
+                >
+                        <span class="red--text"
+                              :title="item.comment"
+                        >
+                            {{ `Штраф: ${item.amount}` }}
+                        </span>
+                </div>
+            </v-list>
         </td>
     </tr>
 </template>
@@ -260,6 +275,9 @@
             },
             getForfeits (dateString) {
                 return this.user.monthForfeits.filter(item => item.created_at.split(' ')[0] === dateString)
+            },
+            getPrizes (dateString) {
+                return this.user.monthPrizes.filter(item => item.created_at.split(' ')[0] === dateString)
             }
         },
         mounted () {
