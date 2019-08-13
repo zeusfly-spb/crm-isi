@@ -3,7 +3,7 @@
         <td
             style="border: 1px solid black; padding: 0"
         >
-            <v-card style="width: 350px">
+            <v-card style="width: 370px">
                 <v-card-title>
                     <v-avatar
                         size="36px"
@@ -95,17 +95,6 @@
                                 <user-sicks :user="user" @update="calculateTotals" ref="sicks"/>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="info-tab">
-                                Аванс
-                            </td>
-                            <td class="info-tab"></td>
-                            <td class="info-tab"></td>
-                            <td class="info-tab">
-                                <user-prepays :user="user" @update="calculateTotals" ref="prepays"/>
-                            </td>
-                        </tr>
-
                        <tr>
                             <td class="total-tab"
                                 colspan="3"
@@ -120,10 +109,10 @@
                             <td class="total-tab"
                                 colspan="3"
                             >
-                                <strong>Выдано</strong>
+                                <strong>Выплаты</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalPrepays.toFixed(2) | pretty }}</strong>
+                                <user-prepays :user="user" @update="calculateTotals" ref="prepays"/>
                             </td>
                         </tr>
                         <tr>
@@ -134,6 +123,16 @@
                             </td>
                             <td class="info-tab">
                                 <strong>{{ (grandTotal - totalPrepays).toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="total-tab"
+                                colspan="3"
+                            >
+                                <strong>Выдано</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ totalPrepays.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                     </table>
@@ -165,7 +164,11 @@
                     <v-list-tile-content>Расход:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ getDealsExpense(date) }}</v-list-tile-content>
                 </v-list-tile>
-            </v-list>
+                <v-list-tile v-for="(item, ind) in getForfeits(date)" :key="ind">
+                    <v-list-tile-content class="red--text">Штраф:</v-list-tile-content>
+                    <v-list-tile-content class="align-end red--text">{{ item.amount }}</v-list-tile-content>
+                </v-list-tile>
+                </v-list>
         </td>
     </tr>
 </template>
@@ -255,6 +258,9 @@
                 let targetDay = this.user.workdays.find(day => day.date === dateString)
                 return targetDay && targetDay.working_hours || 0
             },
+            getForfeits (dateString) {
+                return this.user.monthForfeits.filter(item => item.created_at.split(' ')[0] === dateString)
+            }
         },
         mounted () {
             this.calculateTotals()

@@ -15,7 +15,7 @@
             <v-card>
                 <v-card-title>
                 <span class="headline">
-                    {{ `Авансы сотрудника ${user.full_name}`}}
+                    {{ `Выплаты сотруднику ${user.full_name}`}}
                 </span>
                 </v-card-title>
                 <v-card-text>
@@ -34,7 +34,7 @@
                                     <td>{{ props.item.comment }}</td>
                                 </template>
                                 <template v-slot:no-data>
-                                    <span class="red--text">Нет авансов</span>
+                                    <span class="red--text">Нет выплат</span>
                                 </template>
                             </v-data-table>
                         </v-flex>
@@ -77,7 +77,7 @@
                         @click="adding=true"
                         :disabled="adding"
                     >
-                        Добавить аванс
+                        Добавить выплату
                     </v-btn>
                 </v-card-actions>
             </v-card>
