@@ -46,6 +46,7 @@ export default {
             })
         },
         setReserves ({commit, rootState}) {
+            commit('SET_LOADING_ON')
             return new Promise ((resolve, reject) => {
                 Vue.axios.post('/api/get_reserves', {
                     date: rootState.accountingDate,
@@ -53,6 +54,7 @@ export default {
                 })
                     .then(res => {
                         commit('SET_RESERVES', res.data)
+                        commit('SET_LOADING_OFF')
                         resolve(res)
                     })
                     .catch(e => reject(e))

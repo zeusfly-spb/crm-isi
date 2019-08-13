@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-toolbar app>
+
+      <v-toolbar app>
       <v-toolbar-title class="headline">
         <v-layout>
           <img
@@ -17,9 +18,8 @@
               <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
             </div>
           </div>
+
         </v-layout>
-
-
 
 
       </v-toolbar-title>
@@ -33,10 +33,10 @@
         Выход &nbsp;
         <v-icon large color="orange darken-2">exit_to_app</v-icon>
     </v-btn>
-
     </v-toolbar>
 
     <v-content>
+        <v-progress-linear :indeterminate="true" v-if="loading"/>
         <router-view></router-view>
     </v-content>
   </v-app>
@@ -53,6 +53,9 @@ export default {
         }
     },
     computed: {
+        loading () {
+            return this.$store.state.loading
+        },
         basePath () {
             return this.$store.state.basePath
         },
