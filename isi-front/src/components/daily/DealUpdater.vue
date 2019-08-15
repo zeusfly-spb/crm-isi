@@ -1,12 +1,13 @@
 <template>
     <v-flex>
         <span v-if="!active"
-              :class="{clickable: canUpdate}"
+              :class="{clickable: canUpdate && !loading}"
               @click="activate"
-              :title="canUpdate ? 'Клик чтобы изменить продукцию по сделке' : ''"
+              :title="canUpdate && !loading ? 'Клик чтобы изменить продукцию по сделке' : ''"
         >
             {{ deal.insole.name }}
         </span>
+        <span v-else class="grey--text">{{ deal.insole.name }}</span>
         <v-dialog
             v-model="active"
             persistent
@@ -23,10 +24,11 @@
                                 <sub>Продукция</sub>
                                 <v-select
                                     v-model="deal.product_id"
-                                    :items="stockOptions.products"
+                                    :items="products"
                                     item-text="name"
                                     item-value="id"
                                     single-line
+                                    @change="updateCurrentProduct"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -37,6 +39,7 @@
                                     item-text="name"
                                     item-value="id"
                                     single-line
+                                    @change="updateCurrentType"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -60,7 +63,10 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="deactivate">Закрыть</v-btn>
-                    <v-btn color="green darken-1" flat @click="">Сохранить</v-btn>
+                    <v-btn color="green darken-1" flat @click=""
+                    >
+                        Сохранить
+                    </v-btn>
                 </v-card-actions>
             </v-card>
 
@@ -72,30 +78,38 @@
         name: 'DealUpdater',
         props: ['deal'],
         data: () => ({
+            loading: false,
+            currentType: null,
+            currentProduct: null,
             active: false
         }),
         computed: {
+            products () {
+                return this.$store.state.stock.options.products
+            },
+            types () {
+                return this.$store.state.stock.options.types
+            },
+            sizes () {
+                return this.currentProduct && this.currentProduct.name === 'Стельки' ? this.$store.state.stock.options.sizes :
+                    this.$store.state.stock.options.sizes && this.$store.state.stock.options.sizes.filter(size => !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
+            },
             currentReserves () {
                 return this.$store.getters.currentReserves
             },
             newDealSizes () {
                 let currentProduct = this.stockOptions.products && this.stockOptions.products.find(product => +product.id === +this.deal.product_id) || {name: 'Стельки'}
-                console.dir(currentProduct)
                 return currentProduct.name === 'Стельки' ? this.$store.state.stock.options.sizes :
-                    this.$store.state.stock.options.sizes.filter(size => !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
+                    this.$store.state.stock.options.sizes && this.$store.state.stock.options.sizes.filter(size => !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
             },
             formattedSizes () {
                 let currentAction = this.stockOptions.deal_actions &&
                     this.stockOptions.deal_actions.find(item => +item.id === +this.deal.deal_action_id) &&
                     this.stockOptions.deal_actions.find(item => +item.id === +this.deal.deal_action_id).type || null
-                let productName = this.stockOptions.products &&
-                    this.stockOptions.products.find(item => +item.id === +this.deal.product_id) &&
-                    this.stockOptions.products.find(item => +item.id === +this.deal.product_id).name || null
-                let typeName = this.stockOptions.types &&
-                    this.stockOptions.types.find(item => +item.id === +this.deal.type_id) &&
-                    this.stockOptions.types.find(item => +item.id === +this.deal.type_id).name || null
-                return currentAction === 'produce' ? this.newDealSizes &&
-                    this.newDealSizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true})) : this.newDealSizes
+                let productName = this.currentProduct && this.currentProduct.name || 'Стельки'
+                let typeName = this.currentType && this.currentType.name || 'Кожа'
+                return currentAction === 'produce' ? this.sizes &&
+                    this.sizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true})) : this.sizes
             },
             stockOptions () {
                 return this.$store.state.stock.options
@@ -120,6 +134,12 @@
             }
         },
         methods: {
+            updateCurrentType () {
+                this.currentType = this.types && this.types.find(item => +item.id === +this.deal.type_id)
+            },
+            updateCurrentProduct () {
+                this.currentProduct = this.products && this.products.find(item => +item.id === +this.deal.product_id)
+            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
@@ -128,12 +148,28 @@
                 this.active = false
             },
             activate () {
-                if (!this.canUpdate) return
-
+                if (!this.canUpdate || this.loading) return
                 this.active = true
             }
         },
         watch: {
+            formattedSizes (value) {
+                this.loading = true
+                let enabledSizes = value.filter(item => !item.disabled)
+                if (!enabledSizes.length) {
+                    this.deal.size_id = null
+                    return
+                }
+                this.deal.size_id = enabledSizes[0].id
+                this.loading = false
+            },
+            sizes (value) {
+                this.deal.size_id = value.length && value[0].id
+            },
+            deal () {
+                this.updateCurrentProduct()
+                this.updateCurrentType()
+            },
             active (value) {
                 if (value) {
                     this.$emit('activated')
@@ -141,6 +177,10 @@
                     this.$emit('deactivated')
                 }
             }
+        },
+        mounted () {
+            this.updateCurrentProduct()
+            this.updateCurrentType()
         }
     }
 </script>
