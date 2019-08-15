@@ -19,6 +19,7 @@
                 :title="isSuperadmin ? `${deal.user.full_name} : чтобы изменить - клик мышкой` : deal.user.full_name"
                 @click="isSuperadmin ? switchEditMode('user') : null"
                 v-if="!editMode.user"
+                :class="{clickable: isSuperadmin && isToday}"
             >
                 <img :src="basePath + deal.user.avatar" alt="Фото" v-if="deal.user.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
@@ -44,6 +45,7 @@
             >
                 <span v-if="!editMode.customer"
                       :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
+                      :class="{clickable: canUpdate}"
                 >
                     {{ deal.customer.full_name }}
                 </span>
@@ -76,7 +78,7 @@
             <span
             >
                 <span v-if="!editMode.insole"
-                      :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
+                      :title="canUpdate ? 'Чтобы изменить тип продукции - клик мышкой' : ''"
                 >
                     {{ deal.insole.name }}
                 </span>
@@ -102,6 +104,7 @@
             >
                 <span v-if="!editMode.income"
                       :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
+                      :class="{clickable: canUpdate}"
                 >
                     {{ deal.income }}
                 </span>
@@ -127,6 +130,7 @@
             >
                 <span v-if="!editMode.expense"
                       :title="canUpdate ? 'Чтобы изменить себестоимость - клик мышкой' : ''"
+                      :class="{clickable: canUpdate}"
                 >
                     {{ deal.expense }}
                 </span>
@@ -152,6 +156,7 @@
             >
                 <span
                     :title="canUpdate ? 'Чтобы изменить форму оплаты - клик мышкой' : ''"
+                    :class="{clickable: canUpdate}"
                 >
                     <span
                         v-if="!editMode.is_cache"
@@ -310,6 +315,9 @@
     }
 </script>
 <style scoped>
+    .clickable {
+        cursor: pointer;
+    }
     .delete {
         cursor: pointer;
         opacity: .6;
