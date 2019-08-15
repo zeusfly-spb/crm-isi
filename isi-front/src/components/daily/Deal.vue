@@ -77,25 +77,27 @@
         <td>
             <span
             >
-                <span v-if="!editMode.insole"
-                      :title="canUpdate ? 'Чтобы изменить тип продукции - клик мышкой' : ''"
-                >
-                    {{ deal.insole.name }}
-                </span>
-                <v-select
-                    v-else
-                    autofocus
-                    style="width: 17em"
-                    height="1em"
-                    v-model="deal.insole_id"
-                    :items="insoles"
-                    item-text="name"
-                    item-value="id"
-                    single-line
-                    @focus="focused('insole')"
-                    @blur="blur('insole')"
-                    @change="updateDeal('insole')"
-                />
+<!--                <span v-if="!editMode.insole"-->
+<!--                      :title="canUpdate ? 'Чтобы изменить тип продукции - клик мышкой' : ''"-->
+<!--                      :class="{clickable: canUpdate}"-->
+<!--                >-->
+<!--                    {{ deal.insole.name }}-->
+<!--                </span>-->
+                <deal-updater :deal="deal" @activated="focused" @deactivated="blur('insole')"/>
+<!--                <v-select-->
+<!--                    v-else-->
+<!--                    autofocus-->
+<!--                    style="width: 17em"-->
+<!--                    height="1em"-->
+<!--                    v-model="deal.insole_id"-->
+<!--                    :items="insoles"-->
+<!--                    item-text="name"-->
+<!--                    item-value="id"-->
+<!--                    single-line-->
+<!--                    @focus="focused('insole')"-->
+<!--                    @blur="blur('insole')"-->
+<!--                    @change="updateDeal('insole')"-->
+<!--                />-->
             </span>
         </td>
         <td>
@@ -189,6 +191,7 @@
 </template>
 <script>
     import NewCustomerDialog from './NewCustomerDialog'
+    import DealUpdater from './DealUpdater'
     export default {
         name: 'Deal',
         props: ['deal'],
@@ -310,7 +313,8 @@
             this.selectedCustomerId = this.deal.customer_id
         },
         components: {
-            NewCustomerDialog
+            NewCustomerDialog,
+            DealUpdater
         }
     }
 </script>

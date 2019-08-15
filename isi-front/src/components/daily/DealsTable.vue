@@ -91,7 +91,6 @@
                                     single-line
                                 />
                             </v-flex>
-
                             <v-flex xs12 sm6 md4>
                                 <sub>Материал</sub>
                                 <v-select
