@@ -33,6 +33,7 @@ export default {
             })
         },
         setStockActions ({commit, rootState}) {
+            commit('SET_LOADING_ON')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_stock_actions', {
                     date: rootState.accountingDate,
@@ -40,6 +41,7 @@ export default {
                 })
                     .then(res => {
                         commit('SET_STOCK_ACTIONS', res.data)
+                        commit('SET_LOADING_OFF')
                         resolve(res)
                     })
                     .catch(e => reject(e))
