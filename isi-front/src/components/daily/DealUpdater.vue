@@ -63,8 +63,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="deactivate">Закрыть</v-btn>
-                    <v-btn color="green darken-1" flat @click=""
-                    >
+                    <v-btn color="green darken-1" flat @click="updateDeal">
                         Сохранить
                     </v-btn>
                 </v-card-actions>
@@ -134,6 +133,17 @@
             }
         },
         methods: {
+            updateDeal () {
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) return
+                        this.$store.dispatch('updateDealWithStock', this.deal)
+                            .then(() => {
+                                this.$store.dispatch('setStockActions')
+                                this.deactivate()
+                            })
+                    })
+            },
             updateCurrentType () {
                 this.currentType = this.types && this.types.find(item => +item.id === +this.deal.type_id)
             },

@@ -96,6 +96,28 @@ class DealController extends Controller
         return response()->json($deal->toArray());
     }
 
+    public function updateWithStock(Request $request)
+    {
+        $deal = Deal::find($request->id);
+        $actionName = DealAction::find($request->deal_action_id)->text ?? '';
+        $productName = Product::find($request->product_id)->name ?? '';
+        $typeName = Type::find($request->type_id)->name ?? '';
+        $sizeName = Size::find($request->size_id)->name ?? '';
+        $deal->stockAction->update([
+            'product_id' => $request->product_id,
+            'type_id' => $request->type_id,
+            'size_id' => $request->size_id,
+            'comment' => $actionName . ' ' . $productName . ' ' . $typeName . ' ' . $sizeName
+        ]);
+        $deal->update([
+            'product_id' => $request->product_id,
+            'type_id' => $request->type_id,
+            'size_id' => $request->size_id
+        ]);
+        $deal->load('user', 'customer', 'action', 'stockAction');
+        return response()->json($deal->toArray());
+    }
+
     public function delete(Request $request)
     {
         $deal = Deal::find($request->id);

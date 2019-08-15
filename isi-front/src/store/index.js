@@ -43,6 +43,16 @@ export const store = new Vuex.Store({
         handover: null
     },
     actions: {
+        updateDealWithStock ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_deal_with_stock', {...data})
+                    .then(res => {
+                        commit('UPDATE_DEAL', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         finishTimeBreak ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/finish_time_break', {
