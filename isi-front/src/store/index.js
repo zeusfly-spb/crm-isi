@@ -40,7 +40,12 @@ export const store = new Vuex.Store({
         startBalance: null,
         expenses: [],
         inspectingUserId: null,
-        handover: null
+        handover: null,
+        hDate: (dateString) => {
+            let date = new Date(dateString)
+            let options = {month: 'short', day: 'numeric', year: 'numeric'}
+            return date.toLocaleDateString('ru-RU', options)
+        }
     },
     actions: {
         updateDealWithStock ({commit}, data) {

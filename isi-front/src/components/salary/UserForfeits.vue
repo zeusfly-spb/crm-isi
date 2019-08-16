@@ -11,6 +11,7 @@
         <v-dialog
             v-model="dialog"
             max-width="700px"
+            persistent
         >
             <v-card>
                 <v-card-title>
@@ -29,6 +30,15 @@
                                 hide-actions
                             >
                                 <template v-slot:items="props">
+                                    <td>
+                                        <v-icon
+                                            class="red--text clickable"
+                                            :title="`Удалить штраф сотрудника ${user.full_name} на сумму ${props.item.amount} р. ${props.item.comment} за ${$store.state.hDate(props.item.created_at)}`"
+                                            @click="showPrompt(props.item)"
+                                        >
+                                            clear
+                                        </v-icon>
+                                    </td>
                                     <td>{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
                                     <td>{{ props.item.amount }}</td>
                                     <td>{{ props.item.comment }}</td>
@@ -82,19 +92,52 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog
+            v-model="prompt"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Подтверждение</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container grid-list-md>
+                        <span v-if="forfeitToDelete">
+                            {{`
+                            Удалить штраф сотрудника ${user.full_name} от ${$store.state.hDate(forfeitToDelete.created_at)} ${forfeitToDelete.comment.length ? forfeitToDelete.comment : ''}
+                             на сумму ${forfeitToDelete.amount} р. ?
+                            `}}
+                        </span>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="prompt = false">Закрыть</v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat
+                        @click="deleteForfeit"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
-
 </template>
 <script>
     export default {
         name: 'UserForfeits',
         props: ['user'],
         data: () => ({
+            forfeitToDelete: null,
+            prompt: false,
             dialog: false,
             adding: false,
             amount: '',
             comment: '',
             headers: [
+                {text: 'Действие', value: null, align: 'center'},
                 {text: 'Дата', value: 'created_at', align: 'center'},
                 {text: 'Сумма', value: 'amount', align: 'center'},
                 {text: 'Комментарий', value: 'comment', align: 'center'}
@@ -122,6 +165,14 @@
             }
         },
         methods: {
+            deleteForfeit () {
+                this.$store.dispatch('deleteUserForfeit', this.forfeitToDelete.id)
+                    .then(() => this.prompt = false)
+            },
+            showPrompt (forfeit) {
+                this.forfeitToDelete = forfeit
+                this.prompt = true
+            },
             addForfeit () {
                 if (!this.amount) return
                 this.$store.dispatch('addUserForfeit', {

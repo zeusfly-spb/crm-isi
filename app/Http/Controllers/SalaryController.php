@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\Forfeit;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -78,5 +79,13 @@ class SalaryController extends Controller
     {
         $user = User::find($request->user_id);
         return response()->json($user->addPrepay($request->amount, $request->comment)->toArray());
+    }
+
+    public function deleteUserForfeit(Request $request)
+    {
+        $forfeit = Forfeit::find($request->id);
+        $user_id = $forfeit->user_id;
+        $result = $forfeit->delete();
+        return response()->json(['user_id' => $user_id, 'forfeit_id' => $request->id, 'result' => $result]);
     }
 }

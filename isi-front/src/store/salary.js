@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        deleteUserForfeit ({commit}, forfeitId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_user_forfeit', {id: forfeitId})
+                    .then(res => {
+                        commit('DELETE_USER_FORFEIT', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addUserPrepay ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_user_prepay', {...data})
@@ -72,6 +82,10 @@ export default {
         }
     },
     mutations: {
+        DELETE_USER_FORFEIT (state, data) {
+            let user = state.monthData.users.find(item => +item.id === +data.user_id)
+            user.monthForfeits = user.monthForfeits.filter(item => +item.id !== +data.forfeit_id)
+        },
         ADD_USER_PREPAY (state, prepay) {
             let targetUser = state.monthData.users.find(user => +user.id === +prepay.user_id)
             if (targetUser) {
