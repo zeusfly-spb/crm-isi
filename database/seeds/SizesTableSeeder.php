@@ -12,7 +12,7 @@ class SizesTableSeeder extends Seeder
      */
     private $sizes = [
         '29-30',
-        '30-31.5',
+        '31-31.5',
         '32-33',
         '34-34.5',
         '35-36',
