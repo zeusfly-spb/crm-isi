@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Deal;
 use App\Forfeit;
+use App\Prize;
 use App\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -88,4 +89,15 @@ class SalaryController extends Controller
         $result = $forfeit->delete();
         return response()->json(['user_id' => $user_id, 'forfeit_id' => $request->id, 'result' => $result]);
     }
+
+    public function deleteUserPrize(Request $request)
+    {
+        $prize = Prize::where('id', $request->id)->first();
+        $user_id = $prize->user_id;
+        $result = $prize->delete();
+        return response()->json(['user_id' => $user_id, 'prize_id' => $request->id, 'result' => $result]);
+    }
+
+
+
 }
