@@ -248,7 +248,7 @@
             newDealSizes () {
                 let currentProduct = this.stockOptions.products && this.stockOptions.products.find(product => product.id === this.newDealData.product_id) || {name: 'Стельки'}
                 return currentProduct.name === 'Стельки' ? this.$store.state.stock.options.sizes :
-                    this.$store.state.stock.options.sizes.filter(size => !['29-30', '30-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
+                    this.$store.state.stock.options.sizes.filter(size => !['29-30', '31-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
             },
             stockOptions () {
                 return this.$store.state.stock.options
