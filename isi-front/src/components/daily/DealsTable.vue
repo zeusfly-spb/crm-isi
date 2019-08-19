@@ -231,7 +231,19 @@
         computed: {
             actions () {
                 function sortAction (a, b) {
-                    return a.type - b.type
+                    if (a.type === 'produce' && b.type === 'sale') {
+                        return -1
+                    }
+                    if (a.type === 'sale' && b.type === 'produce') {
+                        return 1
+                    }
+                    if (a.type === 'produce' && b.type !== 'sale') {
+                        return -1
+                    }
+                    if (a.type === 'sale' && b.type !== 'sale') {
+                        return -1
+                    }
+                    return a.id - b.id
                 }
                 return this.stockOptions.deal_actions && this.stockOptions.deal_actions.sort(sortAction)
             },
