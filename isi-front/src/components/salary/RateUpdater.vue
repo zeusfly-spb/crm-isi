@@ -6,7 +6,7 @@
             class="changeable"
             :title="`Изменить ${targetCaption} для сотрудника ${user.full_name}`"
         >
-            {{ user[targetFieldName] }}
+            {{ +user[targetFieldName] | pretty }}
         </strong>
         <v-text-field
             type="number"

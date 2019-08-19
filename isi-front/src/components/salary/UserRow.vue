@@ -37,7 +37,7 @@
                                 Часы
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalHours.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +totalHours.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
                                 <rate-updater v-if="isSuperadmin"
@@ -46,7 +46,7 @@
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ hourRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +hourRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -54,14 +54,14 @@
                                 Оборот
                             </td>
                             <td class="info-tab">
-                                <strong >{{ totalIncome.toFixed(2) | pretty }}</strong>
+                                <strong >{{ +totalIncome.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
                                 <rate-updater v-if="isSuperadmin" :user="user" mode="sales" :caption="user.sales_rate"/>
                                 <strong v-else>{{ user.sales_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +salesRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +101,7 @@
                                 <strong>ИТОГО</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ grandTotal.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +grandTotal.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -121,7 +121,7 @@
                                 <strong>Остаток</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ (grandTotal - totalPrepays).toFixed(2) | pretty }}</strong>
+                                <strong>{{ +(grandTotal - totalPrepays).toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr>
@@ -131,7 +131,7 @@
                                 <strong>Выдано</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ totalPrepays.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +totalPrepays.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                     </table>

@@ -10,20 +10,24 @@ class ProductsTableSeeder extends Seeder
      *
      * @return void
      */
-    private $names = [
-        'Стельки',
-        'Полустельки'
+
+
+    private $protos = [
+        ['name' => 'Стельки', 'description' => null],
+        ['name' => 'Полустельки', 'description' => null],
+        ['name' => 'Подпяточник', 'description' => 'good'],
+        ['name' => 'Вальгусные распорки', 'description' => 'good']
     ];
 
     public function run()
     {
         echo PHP_EOL;
-        foreach ($this->names as $name) {
-            if (!Product::where('name', $name)->first()) {
-                Product::create(['name' => $name]);
-                echo "Product $name created" . PHP_EOL;
+        foreach ($this->protos as $proto) {
+            if (!Product::where('name', $proto['name'])->first()) {
+                Product::create(['name' => $proto['name'], 'description' => $proto['description']]);
+                echo "Product " . $proto['name'] . " created" . PHP_EOL;
             } else {
-                echo "Product $name already exists" . PHP_EOL;
+                echo "Product " . $proto['name'] . " already exists" . PHP_EOL;
             }
         }
     }

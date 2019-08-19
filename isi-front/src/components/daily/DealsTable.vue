@@ -241,6 +241,10 @@
             currentReserves () {
                 return this.$store.getters.currentReserves
             },
+            newDealProduct () {
+                let products = this.stockOptions.products || []
+                return products && products.find(item => +item.id === +this.newDealData.product_id) || null
+            },
             newDealActionType () {
                 let actions = this.$store.state.stock.options.deal_actions || []
                 return actions.find(item => +item.id === +this.newDealData.deal_action_id) &&  actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null

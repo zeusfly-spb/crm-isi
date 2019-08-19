@@ -5,9 +5,9 @@
             class="clickable"
             v-if="canUpdate"
         >
-            {{ totalForfeitsAmount.toFixed(2) | pretty }}
+            {{ +totalForfeitsAmount.toFixed(2) | pretty }}
         </strong>
-        <strong v-else>{{ totalForfeitsAmount.toFixed(2) | pretty }}</strong>
+        <strong v-else>{{ +totalForfeitsAmount.toFixed(2) | pretty }}</strong>
         <v-dialog
             v-model="dialog"
             max-width="700px"
