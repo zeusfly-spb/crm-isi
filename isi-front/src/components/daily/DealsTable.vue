@@ -75,7 +75,7 @@
                                 <sub>Услуга</sub>
                                 <v-select
                                     v-model="newDealData.deal_action_id"
-                                    :items="stockOptions.deal_actions"
+                                    :items="actions"
                                     item-text="text"
                                     item-value="id"
                                     single-line
@@ -85,13 +85,15 @@
                                 <sub>Продукция</sub>
                                 <v-select
                                     v-model="newDealData.product_id"
-                                    :items="stockOptions.products"
+                                    :items="newDealActionType === 'sale' ? goods : products"
                                     item-text="name"
                                     item-value="id"
                                     single-line
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                    v-show="newDealActionType !== 'sale'"
+                            >
                                 <sub>Материал</sub>
                                 <v-select
                                     v-model="newDealData.type_id"
@@ -101,7 +103,9 @@
                                     single-line
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                    v-show="newDealActionType !== 'sale'"
+                            >
                                 <sub>Размер</sub>
                                 <v-select
                                     v-model="newDealData.size_id"
@@ -111,8 +115,8 @@
                                     single-line
                                     data-vv-as="Размер"
                                     data-vv-name="size"
-                                    :error-messages="errors.collect('size')"
-                                    v-validate="'required'"
+                                    :error-messages="newDealActionType !== 'sale' ? errors.collect('size') : ''"
+                                    v-validate="newDealActionType !== 'sale' ? 'required' : ''"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -225,6 +229,18 @@
             ]
         }),
         computed: {
+            actions () {
+                function sortAction (a, b) {
+                    return a.type - b.type
+                }
+                return this.stockOptions.deal_actions && this.stockOptions.deal_actions.sort(sortAction)
+            },
+            goods () {
+                return this.stockOptions.products && this.stockOptions.products.filter(item => item.description === 'good') || []
+            },
+            products () {
+                return this.stockOptions.products && this.stockOptions.products.filter(item => item.description === null) || []
+            },
             formattedSizes () {
                 let currentAction = this.stockOptions.deal_actions &&
                     this.stockOptions.deal_actions.find(item => +item.id === +this.newDealData.deal_action_id) &&
@@ -376,6 +392,13 @@
             }
         },
         watch: {
+            newDealActionType (value) {
+                if (value === 'sale') {
+                    this.newDealData.product_id = this.goods[0].id
+                } else {
+                    this.newDealData.product_id = this.products[0].id
+                }
+            },
             formattedSizes (value) {
                 let available = value.filter(item => !item.disabled)
                 return this.newDealData.size_id = available.length && available[0].id || null
