@@ -355,6 +355,44 @@
                 </template>
             </v-data-table>
         </v-flex>
+        <v-flex xs12 sm6 md6 justify-center>
+            <span class="title">Товары</span>
+            <v-data-table
+                hide-actions
+                :items="goodsProductIds"
+                class="elevation-1"
+            >
+                <template slot="headers" slot-scope="row">
+                    <tr>
+                        <td align="center">
+                            <strong>Наименование</strong>
+                        </td>
+                        <td align="center">
+                            <strong>Начало дня</strong>
+                        </td>
+                        <td align="center">
+                            <strong>Приход</strong>
+                        </td>
+                        <td align="center">
+                            <strong>Расход</strong>
+                        </td>
+                        <td align="center">
+                            <strong>Конец дня</strong>
+                        </td>
+                    </tr>
+                </template>
+                <template v-slot:items="props">
+                    <tr style="height: 1em">
+                        <td align="center">{{ goodName(props.item) }}</td>
+                        <td align="center">{{ goodsReserves.find(item => item.product_id === props.item).count }}</td>
+                        <td align="center">{{ goodActionCount(props.item, 'receipt') }}</td>
+                        <td align="center">{{ goodActionCount(props.item, 'expense') }}</td>
+                        <td align="center">{{ goodsReserves.find(item => item.product_id === props.item).count + goodActionCount(props.item, 'receipt') - goodActionCount(props.item, 'expense') }}</td>
+                    </tr>
+                </template>
+            </v-data-table>
+
+        </v-flex>
     </v-layout>
 
     <new-stock-action-dialog v-if="isSuperadmin"/>
@@ -368,9 +406,6 @@
     export default {
         name: 'StockPanel',
         data: () => ({
-            insolesHeaders: [
-
-            ],
             headers: [
                 {text: '#', value: 'id'},
                 {text: 'Тип', value: 'type'},
@@ -379,8 +414,11 @@
             ]
         }),
         computed: {
+            goodsProductIds () {
+                return [... new Set(this.goodsReserves.map(item => +item.product_id))]
+            },
             goodsReserves () {
-                return this.currentReserves.filter(item => item.product.descrition === 'good')
+                return this.currentReserves.filter(item => item.product.description === 'good')
             },
             currentReserves () {
                 return this.$store.getters.currentReserves
@@ -423,6 +461,14 @@
             }
         },
         methods: {
+            goodActionCount (productId, action) {
+                let actions = this.stockActions.filter(item => +item.product_id === +productId && item.type === action)
+                const add = (a, b) => +a + +b.count
+                return actions.reduce(add, 0) || 0
+            },
+            goodName (id) {
+                return this.goodsReserves.find(item => +item.product_id === +id).product.name || '*'
+            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0

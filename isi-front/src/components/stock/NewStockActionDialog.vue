@@ -40,7 +40,9 @@
                                 />
                             </v-flex>
 
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                    v-if="!isGood"
+                            >
                                 <sub>Материал</sub>
                                 <v-select
                                     v-model="newActionData.type_id"
@@ -50,7 +52,9 @@
                                     single-line
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                    v-if="!isGood"
+                            >
                                 <sub>Размер</sub>
                                 <v-select
                                     v-model="newActionData.size_id"
@@ -60,8 +64,8 @@
                                     single-line
                                     data-vv-as="Размер"
                                     data-vv-name="size"
-                                    :error-messages="errors.collect('size')"
-                                    v-validate="'required'"
+                                    :error-messages="!isGood ? errors.collect('size') : ''"
+                                    v-validate="!isGood ? 'required' : ''"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -117,6 +121,12 @@
             ]
         }),
         computed: {
+            isGood () {
+                return this.currentProduct && this.currentProduct.description === 'good'
+            },
+            currentProduct () {
+                return this.products && this.products.find(item => +item.id === +this.newActionData.product_id)
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
