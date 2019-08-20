@@ -17,8 +17,8 @@ class CreateReservesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('island_id')->unsigned()->index();
             $table->bigInteger('product_id')->unsigned()->index();
-            $table->bigInteger('type_id')->unsigned()->index();
-            $table->bigInteger('size_id')->unsigned()->index();
+            $table->bigInteger('type_id')->unsigned()->nullable()->index();
+            $table->bigInteger('size_id')->unsigned()->nullable()->index();
             $table->integer('count')->default(0);
             $table->timestamps();
 

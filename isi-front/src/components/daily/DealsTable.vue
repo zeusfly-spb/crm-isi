@@ -123,6 +123,7 @@
                                 <sub>Сумма</sub>
                                 <v-text-field
                                     :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
+                                    :readonly="newDealActionType === 'sale'"
                                     v-model="newDealIncome"
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
@@ -422,6 +423,13 @@
             },
             search (val) {
                 val && val !== this.select && this.querySelection(val)
+            },
+            newDealProduct (value) {
+                if (value.description === 'good') {
+                    this.newDealIncome = value.price
+                } else {
+                    this.newDealIncome = null
+                }
             }
         },
         components: {

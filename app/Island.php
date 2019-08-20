@@ -105,6 +105,21 @@ class Island extends Model
         $yesterdayActions = $this->dateStockActions($yesterday);
 
         foreach ($productIds as $productId) {
+
+            $product = Product::find($productId);
+            if ($product->description === 'good') {
+                $prevCount = $yesterdayReserves->where('product_id', $productId)->first()->count ?? 0;
+                $actions = $yesterdayActions->where('product_id', $productId);
+                $count = $actions->reduce(function ($carry, $action) {
+                    return $action->type === 'receipt' ? $carry + $action->count : $carry - $action->count;
+                }, $prevCount);
+                $this->reserves()->create([
+                    'product_id' => $productId,
+                    'count' => $count
+                ]);
+                continue;
+            }
+
             foreach ($typeIds as $typeId) {
                 foreach ($sizeIds as $sizeId) {
                     $prevCount = $yesterdayReserves

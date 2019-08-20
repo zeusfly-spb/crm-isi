@@ -379,6 +379,9 @@
             ]
         }),
         computed: {
+            goodsReserves () {
+                return this.currentReserves.filter(item => item.product.descrition === 'good')
+            },
             currentReserves () {
                 return this.$store.getters.currentReserves
             },
