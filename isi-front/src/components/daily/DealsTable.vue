@@ -89,6 +89,10 @@
                                     item-text="name"
                                     item-value="id"
                                     single-line
+                                    data-vv-name="product"
+                                    data-vv-as="Продукция"
+                                    :error-messages="errors.collect('product')"
+                                    v-validate="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
@@ -230,6 +234,9 @@
             ]
         }),
         computed: {
+            stockActions () {
+                return this.$store.state.stock.stockActions
+            },
             actions () {
                 function sortAction (a, b) {
                     if (a.type === 'produce' && b.type === 'sale') {
@@ -249,7 +256,9 @@
                 return this.stockOptions.deal_actions && this.stockOptions.deal_actions.sort(sortAction)
             },
             goods () {
-                return this.stockOptions.products && this.stockOptions.products.filter(item => item.description === 'good') || []
+                const markLack = (goodsArray) => goodsArray.map(item => ({...item, count: this.goodCount(item.id), disabled: this.goodCount(item.id) < 1}))
+                let result =  this.stockOptions.products && this.stockOptions.products.filter(item => item.description === 'good') || []
+                return markLack(result)
             },
             products () {
                 return this.stockOptions.products && this.stockOptions.products.filter(item => item.description === null) || []
@@ -330,6 +339,14 @@
             }
         },
         methods: {
+            goodCount (productId) {
+                let target = this.currentReserves.find(item => +item.product_id === +productId)
+                let initialCount = target && target.count || 0
+                let targetActions = this.stockActions.filter(item => +item.product_id === +productId)
+                console.log(productId)
+                const calculate = (a, b) => b.type === 'receipt' ? a + b.count : a - b.count
+                return targetActions.reduce(calculate, initialCount)
+            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
@@ -407,7 +424,8 @@
         watch: {
             newDealActionType (value) {
                 if (value === 'sale') {
-                    this.newDealData.product_id = this.goods[0].id
+                    let availableGood = this.goods.filter(item => !item.disabled)[0]
+                    this.newDealData.product_id = availableGood && availableGood.id || null
                 } else {
                     this.newDealData.product_id = this.products[0].id
                 }
@@ -425,6 +443,7 @@
                 val && val !== this.select && this.querySelection(val)
             },
             newDealProduct (value) {
+                if (!value) return
                 if (value.description === 'good') {
                     this.newDealIncome = value.price
                 } else {
