@@ -20,7 +20,6 @@ class DealController extends Controller
 
     public function __construct()
     {
-
         $this->types = Type::all();
         $this->sizes = Size::all();
         $this->products = Product::all();
@@ -61,6 +60,13 @@ class DealController extends Controller
         $deal->load('user', 'customer', 'action');
 
         if ($deal->action_type !== 'correction') {
+            $product = Product::find($request->product_id);
+            if ($product->description === 'good') {
+                $comment = $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name;
+            } else {
+                $comment = $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name
+                    . ' ' . $this->types->where('id', $request->type_id)->first()->name . ' ' . $this->sizes->where('id', $request->size_id)->first()->name;
+            }
             $deal->stockAction()->create([
                 'user_id' => $request->user_id,
                 'type' => 'expense',
@@ -69,8 +75,7 @@ class DealController extends Controller
                 'type_id' => $request->type_id,
                 'size_id' => $request->size_id,
                 'count' => 1,
-                'comment' => $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name
-                    . ' ' . $this->types->where('id', $request->type_id)->first()->name . ' ' . $this->sizes->where('id', $request->size_id)->first()->name
+                'comment' => $comment
             ]);
         }
 

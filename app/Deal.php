@@ -58,9 +58,18 @@ class Deal extends Model
         $product = $this->product->name ?? '';
         $type = $this->type->name ?? '';
         $size = $this->size->name ?? '';
-        return (object) [
-            'name' => $product . ' ' . $type . ' ' . $size
-        ];
+        $isGood = $this->product && $this->product->description === 'good';
+
+        if ($isGood) {
+            return (object) [
+                'name' => $product
+            ];
+        } else {
+            return (object) [
+                'name' => $product . ' ' . $type . ' ' . $size
+            ];
+        }
+
     }
 
     public function getActionTypeAttribute()

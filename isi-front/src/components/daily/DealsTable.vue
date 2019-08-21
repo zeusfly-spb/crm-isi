@@ -343,7 +343,6 @@
                 let target = this.currentReserves.find(item => +item.product_id === +productId)
                 let initialCount = target && target.count || 0
                 let targetActions = this.stockActions.filter(item => +item.product_id === +productId)
-                console.log(productId)
                 const calculate = (a, b) => b.type === 'receipt' ? a + b.count : a - b.count
                 return targetActions.reduce(calculate, initialCount)
             },
