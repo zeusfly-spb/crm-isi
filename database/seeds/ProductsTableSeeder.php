@@ -15,8 +15,8 @@ class ProductsTableSeeder extends Seeder
     private $protos = [
         ['name' => 'Стельки', 'description' => null, 'price' => null],
         ['name' => 'Полустельки', 'description' => null, 'price' => null],
-        ['name' => 'Подпяточник', 'description' => 'good', 'price' => 300],
-        ['name' => 'Вальгусные распорки', 'description' => 'good', 'price' => 250]
+        ['name' => 'Подпяточник 1см.', 'description' => 'good', 'price' => 100],
+        ['name' => 'Подпяточник 0.5 см.', 'description' => 'good', 'price' => 100]
     ];
 
     public function run()
