@@ -16,7 +16,7 @@ export const store = new Vuex.Store({
         salary
     },
     state: {
-        loading: false,
+        loading: 0,
         basePath: '',
         authUser: null,
         accountingDate: null,
@@ -310,7 +310,7 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        enterCRM ({dispatch}) {
+        enterCRM ({dispatch, commit}) {
             dispatch('setAccountingDate')
                 .then(() => {
                     dispatch('setRealDate')
@@ -326,9 +326,7 @@ export const store = new Vuex.Store({
                     dispatch('setReserves')
                     dispatch('setStockActions')
                     dispatch('setStockOptions')
-
                     dispatch('setMonthData')
-
                 })
         },
         setWorkDays ({commit}) {
@@ -565,7 +563,7 @@ export const store = new Vuex.Store({
         },
         logIn ({commit, dispatch}, query) {
             return new Promise ((resolve, reject) => {
-                commit('SET_LOADING_ON')
+                // commit('SET_LOADING_ON')
                 commit('SET_STATUS', 'request')
                 Vue.axios.post('/api/login', {name: query.name, password: query.password})
                     .then(res => {
@@ -608,7 +606,7 @@ export const store = new Vuex.Store({
         },
         setAccountingDate ({commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                commit('SET_LOADING_ON')
+                // commit('SET_LOADING_ON')
                 // Verify that current date changed
                 let now = new Date().toISOString().split('T')[0]
                 let savedRealDate = Cookies.get('saved_real')
@@ -655,10 +653,10 @@ export const store = new Vuex.Store({
     },
     mutations: {
         SET_LOADING_OFF (state) {
-            state.loading = false
+            state.loading --
         },
         SET_LOADING_ON (state) {
-            state.loading = true
+            state.loading ++
         },
         UPDATE_HAND_OVER (state, handover) {
             state.handover = handover.amount

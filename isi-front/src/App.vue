@@ -36,7 +36,7 @@
     </v-toolbar>
 
     <v-content>
-        <v-progress-linear :indeterminate="true" v-if="loading"/>
+        <v-progress-linear :indeterminate="true" v-if="loading > 0"/>
         <router-view></router-view>
     </v-content>
   </v-app>

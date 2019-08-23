@@ -8,6 +8,7 @@ export default {
     },
     actions: {
         setStockOptions ({commit}) {
+            commit('SET_LOADING_ON')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_stock_options')
                     .then(res => {
@@ -15,6 +16,7 @@ export default {
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('SET_LOADING_OFF'))
             })
         },
         addStockAction ({commit, rootState}, data) {
@@ -27,11 +29,10 @@ export default {
                 })
                     .then(res => {
                         commit('ADD_STOCK_ACTION',  res.data)
-                        commit('SET_LOADING_OFF')
                         resolve(res)
                     })
                     .catch(e => reject(e))
-
+                    .finally(() => commit('SET_LOADING_OFF'))
             })
         },
         setStockActions ({commit, rootState}) {
