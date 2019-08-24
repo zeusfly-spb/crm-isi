@@ -581,7 +581,7 @@ export const store = new Vuex.Store({
 
                         Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                         dispatch('setAuthUser')
-                        commit('SET_LOADING_OFF')
+                        // commit('SET_LOADING_OFF')
                         resolve (res)
                     })
                     .catch(e => {
@@ -627,7 +627,7 @@ export const store = new Vuex.Store({
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
                             dispatch('setStartBalance')
-                            commit('SET_LOADING_OFF')
+                            // commit('SET_LOADING_OFF')
                             resolve(res)
                         })
                         .catch(e => {
@@ -807,6 +807,10 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        totalDealIncome: state => {
+            const add = (a, b) => a + +b.income
+            return state.deals.reduce(add, 0)
+        },
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
         isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed'),

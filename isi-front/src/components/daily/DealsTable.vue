@@ -335,7 +335,11 @@
                 ]
             },
             deals () {
-                return this.$store.state.deals
+                if (!this.$store.state.deals.length) {
+                    return []
+                }
+
+                return [... this.$store.state.deals, {id: null, income: 200}]
             }
         },
         methods: {

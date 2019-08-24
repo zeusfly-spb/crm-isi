@@ -1,6 +1,13 @@
 <template>
-    <tr>
-        <td>
+    <tr :class="{total: isTotal}">
+        <td
+            v-if="isTotal"
+            colspan="6"
+            align="right"
+        >
+            <span class="medium"><strong>ИТОГО:</strong></span>
+        </td>
+        <td v-if="!isTotal">
             <v-icon
                 class="red--text delete"
                 :title="`Удалить сделку ${deal.insole.name} на ${deal.income}р.`"
@@ -10,10 +17,10 @@
                 clear
             </v-icon>
         </td>
-        <td>
+        <td v-if="!isTotal">
             {{ deal.number }}
         </td>
-        <td>
+        <td v-if="!isTotal">
             <v-avatar
                 size="36px"
                 :title="isSuperadmin ? `${deal.user.full_name} : чтобы изменить - клик мышкой` : deal.user.full_name"
@@ -39,7 +46,7 @@
                 @change="updateDeal('user')"
             />
         </td>
-        <td>
+        <td v-if="!isTotal">
             <span
                 @click="switchEditMode('customer')"
             >
@@ -71,10 +78,10 @@
                 </v-select>
             </span>
         </td>
-        <td>
+        <td v-if="!isTotal">
             {{ deal.action && deal.action.text || '' }}
         </td>
-        <td>
+        <td v-if="!isTotal">
             <span>
                 <deal-updater :deal="deal" @activated="focused" @deactivated="blur('insole')"/>
             </span>
@@ -85,9 +92,9 @@
             >
                 <span v-if="!editMode.income"
                       :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
-                      :class="{clickable: canUpdate}"
+                      :class="{clickable: canUpdate, subheading: isTotal}"
                 >
-                    {{ deal.income }}
+                    {{ +`${isTotal ? totalDealIncome : deal.income}` | pretty }}
                 </span>
                 <v-text-field
                     autofocus
@@ -105,7 +112,12 @@
                 />
             </span>
         </td>
-        <td>
+        <td
+            v-if="isTotal"
+            colspan="2"
+        >
+        </td>
+        <td v-if="!isTotal">
             <span
                 @click="switchEditMode('expense')"
             >
@@ -131,7 +143,7 @@
                 />
             </span>
         </td>
-        <td>
+        <td v-if="!isTotal">
             <span
                 @click="switchEditMode('is_cache')"
             >
@@ -191,6 +203,12 @@
             }
         }),
         computed: {
+            totalDealIncome () {
+                return this.$store.getters.totalDealIncome
+            },
+            isTotal () {
+                return this.deal.id === null
+            },
             users () {
                 return this.$store.state.users
             },
@@ -211,6 +229,9 @@
                 return this.$store.state.realDate
             },
             canUpdate () {
+                if (this.isTotal) {
+                    return false
+                }
                 return !this.isToday ? false : this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id
             },
             basePath () {
@@ -307,5 +328,8 @@
     }
     .delete:hover {
         opacity: 1;
+    }
+    .total {
+        border-top:solid 2px rgb(200,200,200);
     }
 </style>
