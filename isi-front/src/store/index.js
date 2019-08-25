@@ -288,10 +288,11 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        finishUserDay ({commit}) {
+        finishUserDay ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/finish_day', {
-                    user_id: this.state.authUser.id
+                    user_id: this.state.authUser.id,
+                    working_hours: data.working_hours
                 })
                     .then(res => {
                         commit('UPDATE_WORK_DAY', res.data)

@@ -152,7 +152,14 @@ class UserController extends Controller
         $currentWorkDay = $user->workdays()->whereDate('created_at', now()->toDateString())->first();
 //        $currentWorkDay = $user->finishDay($request->all());
 //        return response()->json($currentWorkDay->toArray());
-        return response()->json($currentWorkDay->closeDay()->toArray());
+        $currentWorkDay->update([
+            'time_finish' => now()->toTimeString(),
+            'working_hours' => $request->working_hours
+        ]);
+
+//        return response()->json($currentWorkDay->closeDay()->toArray());
+        $currentWorkDay->load('user', 'timeBreaks');
+        return response()->json($currentWorkDay->toArray());
     }
 
     public function resumeDay(Request $request)
