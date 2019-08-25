@@ -22,6 +22,8 @@
                 </template>
                 <v-date-picker v-model="date" no-title scrollable
                                @change="datePicked"
+                               locale="ru"
+                               first-day-of-week="1"
                 >
                 </v-date-picker>
             </v-menu>
