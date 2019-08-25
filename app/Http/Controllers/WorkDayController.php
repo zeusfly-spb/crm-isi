@@ -35,4 +35,12 @@ class WorkDayController extends Controller
         $workday->load('user', 'timeBreaks');
         return $workday->toArray();
     }
+
+    public function update(Request $request)
+    {
+        $workday = WorkDay::find($request->id);
+        $workday->update($request->all());
+        $workday->load('user', 'timeBreaks');
+        return response()->json($workday->toArray());
+    }
 }

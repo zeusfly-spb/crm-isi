@@ -27,15 +27,17 @@
                             <v-text-field
                                     type="number"
                                     step="0.01"
+                                    max="12"
+                                    min="0"
                                     v-if="(isSuperAdmin || props.item.user.id === authUser.id) && !isDayClosed"
                                     v-model="props.item.working_hours"
                                     height="1em"
-                                    max="12"
                                     maxlength="5"
                                     style="width: 4em"
                                     @focus="stopScanWorkdays"
                                     @blur="startScanWorkdays"
                                     ref="hoursInput"
+                                    @keyup.enter="updateHours(props.item)"
                             />
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
@@ -157,6 +159,14 @@
             }
         },
         methods: {
+            updateHours (workday) {
+                if (!this.isSuperAdmin) return
+                this.$store.dispatch('updateWorkDay', {
+                    id: workday.id,
+                    working_hours: workday.working_hours
+                })
+                    .then(() => this.showSnack('Количество часов изменено', 'green'))
+            },
             startScanWorkdays () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, workdays: true})
             },
