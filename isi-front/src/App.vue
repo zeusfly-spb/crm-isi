@@ -53,6 +53,9 @@ export default {
         }
     },
     computed: {
+        currentPage () {
+            return this.$store.state.spinner.currentPage
+        },
         loading () {
             return this.$store.state.loading
         },

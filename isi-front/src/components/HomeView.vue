@@ -62,8 +62,16 @@
                 })
                 switch (index) {
                     case 0: this.$store.commit('SET_SCAN_MODE', {...this.scanMode, workdays: true, expenses: true, deals: true})
+                        this.$store.dispatch('setCurrentPage', 'daily')
                         break
                     case 1: this.$store.dispatch('setCustomers')
+                        this.$store.dispatch('setCurrentPage', 'customers')
+                        break
+                    case 2: this.$store.dispatch('setCurrentPage', 'stock')
+                        break
+                    case 3: this.$store.dispatch('setCurrentPage', 'salary')
+                        break
+                    case 4: this.$store.dispatch('setCurrentPage', 'admin')
                         break
                 }
             }

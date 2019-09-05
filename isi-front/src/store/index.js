@@ -7,13 +7,15 @@ import Vuex from 'vuex'
 
 import stock from './stock'
 import salary from './salary'
+import spinner from './spinner'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     modules: {
         stock,
-        salary
+        salary,
+        spinner
     },
     state: {
         loading: 0,
