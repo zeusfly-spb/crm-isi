@@ -60,8 +60,8 @@ export default {
             return this.$store.state.spinner.currentPage
         },
         loading () {
-            return this.$store.state.loading
-            // return this.$store.getters.busy
+            // return this.$store.state.loading
+            return this.$store.getters.busy
         },
         basePath () {
             return this.$store.state.basePath

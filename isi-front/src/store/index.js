@@ -291,6 +291,7 @@ export const store = new Vuex.Store({
             })
         },
         setRealDate ({commit}) {
+            commit('ADD_TASK', 'daily')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_accounting_date')
                     .then(res => {
@@ -298,6 +299,7 @@ export const store = new Vuex.Store({
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('REMOVE_TASK', 'daily'))
             })
         },
         finishUserDay ({commit}, data) {
@@ -326,15 +328,21 @@ export const store = new Vuex.Store({
         enterCRM ({dispatch, commit}) {
             dispatch('setAccountingDate')
                 .then(() => {
+                    // daily page
                     dispatch('setRealDate')
+                    dispatch('setIslands')
+
+                    commit('ADD_TASK', 'daily')
+                    dispatch('setWorkDays')
+                        .finally(() => commit('REMOVE_TASK', 'daily'))
+
+                    dispatch('setDeals')
+                    dispatch('setExpenses')
+
                     dispatch('setUsers')
                     dispatch('setGroups')
-                    dispatch('setIslands')
-                    dispatch('setWorkDays')
                     dispatch('startScanTimer')
-                    dispatch('setDeals')
                     dispatch('setCustomers')
-                    dispatch('setExpenses')
                     dispatch('setHandOver')
                     dispatch('setReserves')
                     dispatch('setStockActions')
@@ -359,14 +367,16 @@ export const store = new Vuex.Store({
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setAccountingDate')
                 .then(() => {
+                    commit('ADD_TASK', 'daily')
                     dispatch('setWorkDays')
+                        .finally(() => commit('REMOVE_TASK', 'daily'))
+
                     dispatch('setDeals')
                     dispatch('setStartBalance')
                     dispatch('setExpenses')
                     dispatch('setHandOver')
                     dispatch('setReserves')
                     dispatch('setStockActions')
-
                     dispatch('setMonthData')
                 })
         },
@@ -464,6 +474,7 @@ export const store = new Vuex.Store({
             })
         },
         setIslands ({commit}) {
+            commit('ADD_TASK', 'daily')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_islands')
                     .then(res => {
@@ -471,6 +482,7 @@ export const store = new Vuex.Store({
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('REMOVE_TASK', 'daily'))
             })
         },
         setAccessRequests ({commit}) {
@@ -653,11 +665,14 @@ export const store = new Vuex.Store({
         changeAccountingDate ({commit, dispatch}, date) {
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
+            commit('ADD_TASK', 'daily')
             dispatch('setDeals')
             dispatch('setWorkDays')
             dispatch('setStartBalance')
             dispatch('setExpenses')
             dispatch('setHandOver')
+                .finally(() => commit('REMOVE_TASK', 'daily'))
+
             dispatch('setReserves')
             dispatch('setStockActions')
 

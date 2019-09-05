@@ -77,6 +77,7 @@ export default {
         },
         setMonthData ({commit, rootState}) {
             commit('SET_LOADING_ON')
+            commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_month_data', {
                     island_id: rootState.workingIslandId,
@@ -88,6 +89,7 @@ export default {
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('REMOVE_TASK', 'salary'))
             })
         }
     },
