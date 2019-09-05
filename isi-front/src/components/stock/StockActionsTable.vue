@@ -17,10 +17,10 @@
                     {{ props.item.product.name }}
                 </td>
                 <td>
-                    {{ typeName(props.item.type_id) }}
+                    {{ !!props.item.product.description ? '' : typeName(props.item.type_id) }}
                 </td>
                 <td>
-                    {{ props.item.size.name }}
+                    {{ !!props.item.product.description ? '' : props.item.size.name }}
                 </td>
                 <td>
                     {{ props.item.count }}

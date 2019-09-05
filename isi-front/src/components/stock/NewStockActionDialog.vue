@@ -2,7 +2,7 @@
     <v-flex>
         <v-dialog
             v-model="dialog"
-            max-width="900px"
+            max-width="1000px"
         >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2"
