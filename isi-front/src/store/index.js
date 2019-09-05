@@ -50,6 +50,16 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
+        updateWorkDay ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_workday', {...data})
+                    .then(res => {
+                        commit('UPDATE_WORKDAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateDealWithStock ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_deal_with_stock', {...data})
@@ -290,10 +300,11 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        finishUserDay ({commit}) {
+        finishUserDay ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/finish_day', {
-                    user_id: this.state.authUser.id
+                    user_id: this.state.authUser.id,
+                    working_hours: data.working_hours
                 })
                     .then(res => {
                         commit('UPDATE_WORK_DAY', res.data)
@@ -654,6 +665,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_WORKDAY (state, workday) {
+            state.workdays = state.workdays.map(item => item.id === workday.id ? workday : item)
+        },
         SET_LOADING_OFF (state) {
             state.loading --
         },

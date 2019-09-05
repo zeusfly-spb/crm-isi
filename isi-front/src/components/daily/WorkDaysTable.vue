@@ -24,7 +24,22 @@
                             {{ props.item.user && props.item.user.full_name}}
                         </td>
                         <td>
-                            <span>{{ props.item.working_hours }}</span>
+                            <v-text-field
+                                    type="number"
+                                    step="0.01"
+                                    max="12"
+                                    min="0"
+                                    v-if="(isSuperAdmin || props.item.user.id === authUser.id) && !isDayClosed"
+                                    v-model="props.item.working_hours"
+                                    height="1em"
+                                    maxlength="5"
+                                    style="width: 4em"
+                                    @focus="stopScanWorkdays"
+                                    @blur="startScanWorkdays"
+                                    ref="hoursInput"
+                                    @keyup.enter="updateHours(props.item)"
+                            />
+                            <span v-else>{{ props.item.working_hours }}</span>
                         </td>
                         <td>{{ props.item.time_start }}</td>
                         <td>{{ props.item.time_finish || '' }}</td>
@@ -144,6 +159,20 @@
             }
         },
         methods: {
+            updateHours (workday) {
+                if (!this.isSuperAdmin) return
+                this.$store.dispatch('updateWorkDay', {
+                    id: workday.id,
+                    working_hours: workday.working_hours
+                })
+                    .then(() => this.showSnack('Количество часов изменено', 'green'))
+            },
+            startScanWorkdays () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, workdays: true})
+            },
+            stopScanWorkdays () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, workdays: false})
+            },
             finishTimeBreak () {
                 this.$store.dispatch('finishTimeBreak')
                     .then(() => this.showSnack('Закончили перерыв', 'green'))
@@ -162,7 +191,12 @@
                 this.snackbar = true
             },
             attemptToCloseDay () {
-                this.$store.dispatch('finishUserDay')
+                if (!this.currentWorkDay.working_hours) {
+                    this.$refs.hoursInput.focus()
+                    this.showSnack('Чтобы завершить рабочий день введите количество отработанных часов', 'red')
+                    return
+                }
+                this.$store.dispatch('finishUserDay', {working_hours: this.currentWorkDay.working_hours})
                     .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
             },
             startDay () {
