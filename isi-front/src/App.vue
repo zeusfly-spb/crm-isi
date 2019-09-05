@@ -53,11 +53,15 @@ export default {
         }
     },
     computed: {
+        tasks () {
+            return this.$store.state.spinner.tasks
+        },
         currentPage () {
             return this.$store.state.spinner.currentPage
         },
         loading () {
             return this.$store.state.loading
+            // return this.$store.getters.busy
         },
         basePath () {
             return this.$store.state.basePath
