@@ -332,21 +332,23 @@ export const store = new Vuex.Store({
                 .then(() => {
                     // daily page
                     dispatch('setRealDate')
-                    dispatch('setIslands')
                         .then(() => {
-                            dispatch('loadDailyPage')
+                            dispatch('setIslands')
+                                .then(() => {
+                                    dispatch('loadDailyPage')
+                                        .then(() => {
+                                            // other pages
+                                            dispatch('setUsers')
+                                            dispatch('setGroups')
+                                            dispatch('startScanTimer')
+                                            dispatch('setCustomers')
+                                            dispatch('setReserves')
+                                            dispatch('setStockActions')
+                                            dispatch('setStockOptions')
+                                            dispatch('setMonthData')
+                                        })
+                                })
                         })
-                        .finally(() => {
-                            dispatch('setUsers')
-                            dispatch('setGroups')
-                            dispatch('startScanTimer')
-                            dispatch('setCustomers')
-                            dispatch('setReserves')
-                            dispatch('setStockActions')
-                            dispatch('setStockOptions')
-                            dispatch('setMonthData')
-                        })
-
                 })
         },
         setWorkDays ({commit}) {
