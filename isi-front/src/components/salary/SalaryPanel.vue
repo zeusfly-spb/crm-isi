@@ -116,7 +116,7 @@
             }
         },
         created () {
-            this.$store.dispatch('setMonthData')
+            // this.$store.dispatch('setMonthData')
         },
         components: {
             UserRow,
