@@ -8,6 +8,7 @@ import Vuex from 'vuex'
 import stock from './stock'
 import salary from './salary'
 import spinner from './spinner'
+import loader from './loader'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ export const store = new Vuex.Store({
     modules: {
         stock,
         salary,
-        spinner
+        spinner,
+        loader
     },
     state: {
         loading: 0,
@@ -332,24 +334,19 @@ export const store = new Vuex.Store({
                     dispatch('setRealDate')
                     dispatch('setIslands')
                         .then(() => {
-                            commit('ADD_TASK', 'daily')
-                            dispatch('setWorkDays')
-                                .finally(() => {
-                                    dispatch('setDeals')
-                                    dispatch('setExpenses')
-                                    dispatch('setHandOver')
-                                    commit('REMOVE_TASK', 'daily')
-                                })
+                            dispatch('loadDailyPage')
+                        })
+                        .finally(() => {
+                            dispatch('setUsers')
+                            dispatch('setGroups')
+                            dispatch('startScanTimer')
+                            dispatch('setCustomers')
+                            dispatch('setReserves')
+                            dispatch('setStockActions')
+                            dispatch('setStockOptions')
+                            dispatch('setMonthData')
                         })
 
-                    dispatch('setUsers')
-                    dispatch('setGroups')
-                    dispatch('startScanTimer')
-                    dispatch('setCustomers')
-                    dispatch('setReserves')
-                    dispatch('setStockActions')
-                    dispatch('setStockOptions')
-                    dispatch('setMonthData')
                 })
         },
         setWorkDays ({commit}) {
