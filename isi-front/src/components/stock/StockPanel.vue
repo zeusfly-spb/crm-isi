@@ -12,6 +12,7 @@
                 <v-tab
                     v-for="tab in tabs"
                     :key="tab.id"
+                    @click="changeCurrentIslandId(tab.id)"
                 >
                     <v-card
                         :class="{'blue lighten-3': tab.id === workingIslandId}"
@@ -481,6 +482,9 @@
             },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
+            },
+            changeCurrentIslandId (id) {
+                this.$store.dispatch('setWorkingIslandId', id)
             }
         },
         components: {
