@@ -368,17 +368,15 @@ export const store = new Vuex.Store({
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setAccountingDate')
                 .then(() => {
-                    commit('ADD_TASK', 'daily')
-                    dispatch('setWorkDays')
-                        .finally(() => commit('REMOVE_TASK', 'daily'))
+                    dispatch('loadDailyPage')
+                        .then(() => {
+                            dispatch('setStartBalance')
+                            dispatch('setReserves')
+                            dispatch('setStockActions')
+                            dispatch('setMonthData')
+                        })
 
-                    dispatch('setDeals')
-                    dispatch('setStartBalance')
-                    dispatch('setExpenses')
-                    dispatch('setHandOver')
-                    dispatch('setReserves')
-                    dispatch('setStockActions')
-                    dispatch('setMonthData')
+
                 })
         },
         deleteIsland ({commit}, islandId) {
