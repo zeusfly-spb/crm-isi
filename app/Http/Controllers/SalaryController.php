@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Deal;
 use App\Forfeit;
 use App\Prize;
+use App\Sick;
 use App\User;
 use App\Vacation;
 use Illuminate\Http\Request;
@@ -94,10 +95,18 @@ class SalaryController extends Controller
 
     public function deleteUserPrize(Request $request)
     {
-        $prize = Prize::where('id', $request->id)->first();
+        $prize = Prize::find($request->id);
         $user_id = $prize->user_id;
         $result = $prize->delete();
         return response()->json(['user_id' => $user_id, 'prize_id' => $request->id, 'result' => $result]);
+    }
+
+    public function deleteUserSick(Request $request)
+    {
+        $sick = Sick::find($request->id);
+        $user_id = $sick->user_id;
+        $result = $sick->delete();
+        return response()->json(['user_id' => $user_id, 'sick_id' => $request->id, 'result' => $result]);
     }
 
     public function addUserVacation(Request $request)

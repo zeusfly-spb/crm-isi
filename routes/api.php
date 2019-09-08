@@ -99,6 +99,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_user_forfeit', 'SalaryController@deleteUserForfeit');
     Route::post('add_user_sick', 'SalaryController@addUserSick');
     Route::post('add_user_prepay', 'SalaryController@addUserPrepay');
+    Route::post('delete_user_sick', 'SalaryController@deleteUserSick');
 
     // LOADER
     Route::post('load_daily_page', 'LoaderController@loadDailyPage');

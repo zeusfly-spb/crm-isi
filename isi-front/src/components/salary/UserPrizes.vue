@@ -163,6 +163,7 @@
             deletePrize () {
                 this.$store.dispatch('deleteUserPrize', {id: this.prizeToDelete.id})
                     .then(() => this.prompt = false)
+                    .finally(() => this.$emit('update'))
             },
             showPrompt (prize) {
                 this.prizeToDelete = prize

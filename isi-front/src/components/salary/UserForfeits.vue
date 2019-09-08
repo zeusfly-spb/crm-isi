@@ -168,6 +168,7 @@
             deleteForfeit () {
                 this.$store.dispatch('deleteUserForfeit', this.forfeitToDelete.id)
                     .then(() => this.prompt = false)
+                    .finally(() => this.$emit('update'))
             },
             showPrompt (forfeit) {
                 this.forfeitToDelete = forfeit

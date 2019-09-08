@@ -5,9 +5,19 @@ export default {
         monthData: null,
     },
     actions: {
-        deleteUserPrize ({commit}, prizeId) {
+        deleteUserSick ({commit}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/delete_user_prize', {id: prizeId})
+                Vue.axios.post('/api/delete_user_sick', {... data})
+                    .then(res => {
+                        commit('DELETE_USER_SICK', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        deleteUserPrize ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_user_prize', {... data})
                     .then(res => {
                         commit('DELETE_USER_PRIZE', res.data)
                         resolve(res)
@@ -94,6 +104,10 @@ export default {
         }
     },
     mutations: {
+        DELETE_USER_SICK (state, data) {
+            let user = state.monthData.users.find(item => +item.id === +data.user_id)
+            user.monthSicks = user.monthSicks.filter(item => +item.id !== +data.sick_id)
+        },
         DELETE_USER_PRIZE (state, data) {
             let user = state.monthData.users.find(item => +item.id === +data.user_id)
             user.monthPrizes = user.monthPrizes.filter(item => +item.id !== +data.prize_id)

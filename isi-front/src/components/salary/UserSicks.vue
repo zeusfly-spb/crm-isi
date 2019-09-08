@@ -29,6 +29,15 @@
                                 hide-actions
                             >
                                 <template v-slot:items="props">
+                                    <td>
+                                        <v-icon
+                                            class="red--text clickable"
+                                            :title="`Удалить больничный сотрудника ${user.full_name} на сумму ${props.item.amount} ${props.item.comment}`"
+                                            @click="showPrompt(props.item)"
+                                        >
+                                            clear
+                                        </v-icon>
+                                    </td>
                                     <td>{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
                                     <td>{{ props.item.amount }}</td>
                                     <td>{{ props.item.comment }}</td>
@@ -83,6 +92,31 @@
             </v-card>
 
         </v-dialog>
+        <v-dialog
+            v-model="prompt"
+            max-width="500px"
+            v-if="sickToDelete"
+        >
+            <v-card>
+                <v-card-title><span class="headline">Подтвержение</span></v-card-title>
+                <v-card-text>
+                    <v-layout grid-list-md>
+                        {{`Удалить больничный сотрудника ${user.full_name} от ${$store.state.hDate(sickToDelete.created_at)} на сумму ${sickToDelete.amount} р. ${sickToDelete.comment}?`}}
+                    </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="prompt = false">Закрыть</v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat
+                        @click="deleteSick"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -90,6 +124,8 @@
         name: 'UserSicks',
         props: ['user'],
         data: () => ({
+            prompt: false,
+            sickToDelete: null,
             dialog: false,
             adding: false,
             amount: '',
@@ -122,6 +158,15 @@
             }
         },
         methods: {
+            deleteSick () {
+                this.$store.dispatch('deleteUserSick', {id: this.sickToDelete.id})
+                    .then(() => this.prompt = false)
+                    .finally(() => this.$emit('update'))
+            },
+            showPrompt (sick) {
+                this.sickToDelete = sick
+                this.prompt = true
+            },
             addSick () {
                 if (!this.amount) return
                 this.$store.dispatch('addUserSick', {
