@@ -139,7 +139,7 @@
 
             </v-card>
         </td>
-        <td v-for="(date, index) in dates" :key="index"
+        <td v-for="(date, index) in dates" :key="'main' + index"
             style="border: 1px solid black; padding: 0"
             width="10em"
             :title="`${user.full_name} за ${hDate(date)}`"
@@ -164,7 +164,7 @@
                     <v-list-tile-content class="align-end">{{ getDealsExpense(date) }}</v-list-tile-content>
                 </v-list-tile>
                 <div v-for="(item, index) in getPrizes(date)"
-                     :key="index"
+                     :key="'prizes' + index"
                      style="text-align: center"
                 >
                     <span class="green--text"
@@ -174,7 +174,7 @@
                     </span>
                 </div>
                 <div v-for="(item, index) in getForfeits(date)"
-                     :key="index"
+                     :key="'forfeits' + index"
                      style="text-align: center"
                 >
                         <span class="red--text"

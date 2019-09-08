@@ -6,6 +6,7 @@ use App\Deal;
 use App\Forfeit;
 use App\Prize;
 use App\User;
+use App\Vacation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -40,6 +41,7 @@ class SalaryController extends Controller
             $user['monthForfeits'] = $user->forfeits()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
             $user['monthSicks'] = $user->sicks()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
             $user['monthPrepays'] = $user->prepays()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
+            $user['monthVacations'] = $user->vacations()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
         }
 
         $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
@@ -98,6 +100,17 @@ class SalaryController extends Controller
         return response()->json(['user_id' => $user_id, 'prize_id' => $request->id, 'result' => $result]);
     }
 
+    public function addUserVacation(Request $request)
+    {
+        $user = User::find($request->user_id);
+        return response()->json($user->addVacation($request->amount, $request->comment ?? '')->toArray());
+    }
 
-
+    public function deleteUserVacation(Request $request)
+    {
+        $vacation = Vacation::find($request->id);
+        $user_id = $vacation->user_id;
+        $result = $vacation->delete();
+        return response()->json(['user_id' => $user_id, 'vacation_id' => $request->id, 'result' => $result]);
+    }
 }

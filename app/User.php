@@ -193,4 +193,12 @@ class User extends Authenticatable
             'comment' => $comment
         ]);
     }
+
+    public function addVacation(int $amount, $comment = '')
+    {
+        return $this->vacations()->create([
+            'amount' => $amount,
+            'comment' => $comment
+        ]);
+    }
 }
