@@ -480,11 +480,10 @@
                 let currentEntityActions = this.stockActions.filter(item => item.type === action && item.product.name === productName && nameOfType(item.type_id) === typeName && +item.size_id === +sizeId)
                 return currentEntityActions.reduce(add, 0) || 0
             },
-            setCurrentIslandId (index) {
-                this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
-            },
             changeCurrentIslandId (id) {
+                this.$store.commit('ADD_TASK', 'stock')
                 this.$store.dispatch('setWorkingIslandId', id)
+                    .then(() => this.$store.commit('REMOVE_TASK', 'stock'))
             }
         },
         components: {

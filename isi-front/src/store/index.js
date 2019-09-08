@@ -375,8 +375,6 @@ export const store = new Vuex.Store({
                             dispatch('setStockActions')
                             dispatch('setMonthData')
                         })
-
-
                 })
         },
         deleteIsland ({commit}, islandId) {
