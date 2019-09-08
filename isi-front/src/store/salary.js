@@ -5,6 +5,26 @@ export default {
         monthData: null,
     },
     actions: {
+        deleteUserVacation ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_user_vacation', {... data})
+                    .then(res => {
+                        commit('DELETE_USER_VACATION', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addUserVacation ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_user_vacation', {... data})
+                    .then(res => {
+                        commit('ADD_USER_VACATION', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteUserSick ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_user_sick', {... data})
@@ -104,6 +124,16 @@ export default {
         }
     },
     mutations: {
+        DELETE_USER_VACATION (state, data) {
+            let user = state.monthData.users.find(item => +item.id === +data.user_id)
+            user.monthVacations = user.monthVacations.filter(item => +item.id !== data.vacation_id)
+        },
+        ADD_USER_VACATION (state, vacation) {
+            let targetUser = state.monthData.users.find(user => +user.id === +vacation.user_id)
+            if (targetUser) {
+                targetUser.monthVacations.push(vacation)
+            }
+        },
         DELETE_USER_SICK (state, data) {
             let user = state.monthData.users.find(item => +item.id === +data.user_id)
             user.monthSicks = user.monthSicks.filter(item => +item.id !== +data.sick_id)

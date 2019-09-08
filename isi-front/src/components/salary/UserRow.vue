@@ -94,6 +94,16 @@
                                 <user-sicks :user="user" @update="calculateTotals" ref="sicks"/>
                             </td>
                         </tr>
+                        <tr>
+                            <td class="info-tab">
+                                Отпускные
+                            </td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab"></td>
+                            <td class="info-tab">
+                                <user-vacations :user="user" @update="calculateTotals" ref="vacations"/>
+                            </td>
+                        </tr>
                        <tr>
                             <td class="total-tab"
                                 colspan="3"
@@ -193,6 +203,7 @@
     import UserForfeits from './UserForfeits'
     import UserSicks from './UserSicks'
     import UserPrepays from './UserPrepays'
+    import UserVacations from './UserVacations'
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -200,11 +211,12 @@
             totalPrepays: 0,
             totalSicks: 0,
             totalForfeits: 0,
-            totalPrizes: 0
+            totalPrizes: 0,
+            totalVacations: 0
         }),
         computed: {
             grandTotal () {
-                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes - this.totalForfeits - this.totalSicks
+                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes - this.totalForfeits - this.totalSicks - this.totalVacations
             },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome
@@ -247,6 +259,7 @@
                 this.totalForfeits = this.$refs.forfeits && this.$refs.forfeits.totalForfeitsAmount
                 this.totalSicks = this.$refs.sicks && this.$refs.sicks.totalSicksAmount
                 this.totalPrepays = this.$refs.prepays && this.$refs.prepays.totalPrepaysAmount
+                this.totalVacations = this.$refs.vacations && this.$refs.vacations.totalVacationsAmount
             },
             isHoliday (textDate) {
                 let date = new Date(textDate)
@@ -284,6 +297,7 @@
             this.calculateTotals()
         },
         components: {
+            UserVacations,
             RateUpdater,
             UserPrizes,
             UserForfeits,

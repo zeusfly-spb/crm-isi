@@ -47,7 +47,6 @@
                                     <span class="red--text">Нет премий</span>
                                 </template>
                             </v-data-table>
-
                         </v-flex>
                         <v-layout v-if="adding">
                             <v-flex xs4>
@@ -132,7 +131,7 @@
             adding: false,
             dialog: false,
             headers: [
-                {text: '', value: null, align: 'center'},
+                {text: 'Действия', value: null, align: 'center'},
                 {text: 'Дата', value: 'created_at', align: 'center'},
                 {text: 'Сумма', value: 'amount', align: 'center'},
                 {text: 'Комментарий', value: 'comment', align: 'center'}
@@ -184,6 +183,11 @@
             dialog (value) {
                 if (value) {
                     [this.amount, this.comment, this.adding] = [0, '', false]
+                }
+            },
+            adding (value) {
+                if (value) {
+                    [this.amount, this.comment] = [0, '']
                 }
             }
         }

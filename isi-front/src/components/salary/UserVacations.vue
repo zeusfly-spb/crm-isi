@@ -5,9 +5,9 @@
             class="clickable"
             v-if="canUpdate"
         >
-            {{ +totalForfeitsAmount.toFixed(2) | pretty }}
+            {{ +totalVacationsAmount.toFixed(2) | pretty }}
         </strong>
-        <strong v-else>{{ +totalForfeitsAmount.toFixed(2) | pretty }}</strong>
+        <strong v-else>{{ +totalVacationsAmount.toFixed(2) | pretty }}</strong>
         <v-dialog
             v-model="dialog"
             max-width="700px"
@@ -15,17 +15,18 @@
         >
             <v-card>
                 <v-card-title>
-                <span class="headline">
-                    {{ `Штрафы сотрудника ${user.full_name}`}}
-                </span>
+                    <span class="headline">
+                        {{ `Отпускные сотрудника ${user.full_name}`}}
+                    </span>
                 </v-card-title>
                 <v-card-text>
-                    <v-container grid-list-md
-                                 class="margin-less"
+                    <v-container
+                        grid-list-md
+                        style="padding: 0!important; margin: 0!important;"
                     >
                         <v-flex>
                             <v-data-table
-                                :items="forfeits"
+                                :items="vacations"
                                 :headers="headers"
                                 hide-actions
                             >
@@ -33,7 +34,7 @@
                                     <td>
                                         <v-icon
                                             class="red--text clickable"
-                                            :title="`Удалить штраф сотрудника ${user.full_name} на сумму ${props.item.amount} р. ${props.item.comment} за ${$store.state.hDate(props.item.created_at)}`"
+                                            :title="`Удалить отпускные сотрудника ${user.full_name} на сумму ${props.item.amount} ${props.item.comment}`"
                                             @click="showPrompt(props.item)"
                                         >
                                             clear
@@ -44,7 +45,7 @@
                                     <td>{{ props.item.comment }}</td>
                                 </template>
                                 <template v-slot:no-data>
-                                    <span class="red--text">Нет штрафов</span>
+                                    <span class="red--text">Нет отпускных</span>
                                 </template>
                             </v-data-table>
                         </v-flex>
@@ -70,7 +71,7 @@
                             <v-flex>
                                 <v-btn
                                     flat color="green"
-                                    @click="addForfeit"
+                                    @click="addVacation"
                                 >
                                     Сохранить
                                 </v-btn>
@@ -87,7 +88,7 @@
                         @click="adding=true"
                         :disabled="adding"
                     >
-                        Добавить штраф
+                        Добавить отпускной
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -95,20 +96,14 @@
         <v-dialog
             v-model="prompt"
             max-width="500px"
+            v-if="vacationToDelete"
         >
             <v-card>
-                <v-card-title>
-                    <span class="headline">Подтверждение</span>
-                </v-card-title>
+                <v-card-title><span class="headline">Подтвержение</span></v-card-title>
                 <v-card-text>
-                    <v-container grid-list-md>
-                        <span v-if="forfeitToDelete">
-                            {{`
-                            Удалить штраф сотрудника ${user.full_name} от ${$store.state.hDate(forfeitToDelete.created_at)} ${forfeitToDelete.comment.length ? forfeitToDelete.comment : ''}
-                             на сумму ${forfeitToDelete.amount} р. ?
-                            `}}
-                        </span>
-                    </v-container>
+                    <v-layout grid-list-md>
+                        {{`Удалить отпускной сотрудника ${user.full_name} от ${$store.state.hDate(vacationToDelete.created_at)} на сумму ${vacationToDelete.amount} р. ${vacationToDelete.comment}?`}}
+                    </v-layout>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -116,7 +111,7 @@
                     <v-btn
                         color="red darken-1"
                         flat
-                        @click="deleteForfeit"
+                        @click="deleteVacation"
                     >
                         Удалить
                     </v-btn>
@@ -125,16 +120,17 @@
         </v-dialog>
     </v-flex>
 </template>
+
 <script>
     export default {
-        name: 'UserForfeits',
+        name: 'UserVacations',
         props: ['user'],
         data: () => ({
-            forfeitToDelete: null,
+            vacationToDelete: null,
             prompt: false,
             dialog: false,
             adding: false,
-            amount: '',
+            amount: 0,
             comment: '',
             headers: [
                 {text: 'Действие', value: null, align: 'center'},
@@ -156,32 +152,32 @@
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
-            forfeits () {
-                return this.user.monthForfeits || []
+            vacations () {
+                return this.user.monthVacations || []
             },
-            totalForfeitsAmount () {
+            totalVacationsAmount () {
                 const add = (a, b) => a + +b.amount
-                return this.forfeits.reduce(add, 0)
+                return this.vacations.reduce(add, 0)
             }
         },
         methods: {
-            deleteForfeit () {
-                this.$store.dispatch('deleteUserForfeit', this.forfeitToDelete.id)
-                    .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
-            },
-            showPrompt (forfeit) {
-                this.forfeitToDelete = forfeit
+            showPrompt (vacation) {
+                this.vacationToDelete = vacation
                 this.prompt = true
             },
-            addForfeit () {
+            addVacation () {
                 if (!this.amount) return
-                this.$store.dispatch('addUserForfeit', {
+                this.$store.dispatch('addUserVacation', {
                     user_id: this.user.id,
                     amount: this.amount,
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
+                    .finally(() => this.$emit('update'))
+            },
+            deleteVacation () {
+                this.$store.dispatch('deleteUserVacation', {id: this.vacationToDelete.id})
+                    .then(() => this.prompt = false)
                     .finally(() => this.$emit('update'))
             }
         },
@@ -202,10 +198,6 @@
 <style scoped>
     TD {
         text-align: center;
-    }
-    .margin-less {
-        padding: 0!important;
-        margin: 0!important;
     }
     .clickable {
         cursor: pointer;
