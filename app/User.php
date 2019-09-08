@@ -157,6 +157,11 @@ class User extends Authenticatable
         return $this->hasMany(Prepay::class);
     }
 
+    public function vacations()
+    {
+        return $this->hasMany(Vacation::class);
+    }
+
     public function addPrize(int $amount, string $comment = '')
     {
         return $this->prizes()->create([
