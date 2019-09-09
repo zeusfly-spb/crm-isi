@@ -6,7 +6,6 @@
                 centered
                 slider-color="green"
                 height="70"
-                @change="setCurrentIslandId"
                 hide-slider
             >
                 <v-tab

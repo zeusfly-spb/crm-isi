@@ -183,4 +183,10 @@ class UserController extends Controller
         return response()->json($currentWorkDay->toArray());
     }
 
+    public function fireUser(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update(['fired_at' => $request->date]);
+        return response()->json($user->toArray());
+    }
 }

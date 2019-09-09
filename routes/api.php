@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('save_user', 'API\UserController@saveUser');
     Route::post('delete_user', 'API\UserController@deleteUser');
     Route::post('set_user_island', 'API\UserController@setUserIsland');
+    Route::post('fire_user', 'API\UserController@fireUser');
 
     // GROUPS
     Route::post('get_groups', 'GroupController@all');

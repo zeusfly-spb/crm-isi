@@ -12,6 +12,19 @@
             <span>{{ errorText }}</span>
         </v-snackbar>
 
+        <v-flex>
+            <v-btn
+                small
+                v-for="(mode, index) in viewModes"
+                @click="setViewMode(mode)"
+                :key="index"
+                :depressed="mode === currentViewMode"
+                :color="mode === currentViewMode ? 'grey lighten-1' : null"
+            >
+                {{ {work: 'Работают', fire: 'Уволены', all: 'Все'}[mode] }} ({{ mode === 'all' ? counts.all : mode === 'fire' ? counts.fire : counts.work}})
+            </v-btn>
+        </v-flex>
+
         <v-data-table
             :headers="headers"
             :items="users"
@@ -33,6 +46,7 @@
                 <td>{{ props.item.patronymic }}</td>
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
                 <td><span v-if="props.item.phone && props.item.phone.length === 10">{{ props.item.phone | phone }}</span></td>
+                <td>{{ props.item.address }}</td>
                 <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
                 <td class="justify-center layout px-0">
@@ -45,7 +59,16 @@
                         edit
                     </v-icon>
                     <v-icon
-                        class="red--text"
+                        small
+                        class="mr-2 red--text"
+                        title="Уволить"
+                        v-if="currentViewMode !== 'fire'"
+                        @click="showFireConfirm(props.item)"
+                    >
+                        person_add_disabled
+                    </v-icon>
+                    <v-icon
+                        class="mr-2 red--text"
                         small
                         @click="showDeleteConfirm(props.item)"
                         title="Удалить"
@@ -230,16 +253,25 @@
                     <v-spacer></v-spacer>
                     <v-btn
                         flat="flat"
-                        @click="confirm = false"
+                        @click="confirm = false; toDeleteUserId = null; toFireUserId = null;"
                     >
                         Отмена
                     </v-btn>
                     <v-btn
+                        v-if="!!toDeleteUserId"
                         color="red darken-1"
                         flat="flat"
                         @click="deleteUser"
                     >
                         Удалить
+                    </v-btn>
+                    <v-btn
+                        v-if="!!toFireUserId"
+                        color="red darken-1"
+                        flat="flat"
+                        @click="fireUser"
+                    >
+                        Уволить
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -252,6 +284,9 @@
 <script>
     export default {
         data: () => ({
+            toFireUserId: null,
+            currentViewMode: 'work',
+            viewModes: ['work', 'fire', 'all'],
             avatarFileReader: {},
             toDeleteUserId: null,
             confirmText: '',
@@ -311,6 +346,11 @@
                     value: 'phone'
                 },
                 {
+                    text: 'Адрес',
+                    sortable: false,
+                    value: 'address'
+                },
+                {
                     text: 'Островок',
                     value: null
                 },
@@ -326,11 +366,25 @@
             ]
         }),
         computed: {
+            counts () {
+                return {
+                    all: this.$store.state.users.length,
+                    work: this.$store.state.users.filter(user => !user.fired_at).length,
+                    fire: this.$store.state.users.filter(user => !!user.fired_at).length,
+                }
+            },
             basePath () {
                 return this.$store.state.basePath
             },
             users () {
-                return this.$store.state.users
+                switch (this.currentViewMode) {
+                    case 'all':
+                        return this.$store.state.users
+                    case 'work':
+                        return this.$store.state.users.filter(user => !user.fired_at)
+                    case 'fire':
+                        return this.$store.state.users.filter(user => !!user.fired_at)
+                }
             },
             groups () {
                 return this.$store.state.groups
@@ -340,6 +394,22 @@
             }
         },
         methods: {
+            setViewMode (mode) {
+                this.currentViewMode = mode
+            },
+            fireUser () {
+                this.$store.dispatch('fireUser', this.toFireUserId)
+                    .then(() => {
+                        this.confirm = false
+                        this.showSuccess('Пользователь уволен')
+                        this.toFireUserId = null
+                    })
+            },
+            showFireConfirm (user) {
+                this.toFireUserId = user.id
+                this.confirmText = `Уволить сотрудника ${user.full_name}?`
+                this.confirm = true
+            },
             islandName (id) {
                 let island = this.islands && this.islands.find(island => island.id === id)
                 return island && island.name || '-'
@@ -357,6 +427,7 @@
                     .then(() => {
                         this.confirm = false
                         this.showSuccess('Пользователь удален')
+                        this.toDeleteUserId = null
                     })
                     .catch(e => console.error(e))
             },
