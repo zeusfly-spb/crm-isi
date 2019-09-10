@@ -189,4 +189,11 @@ class UserController extends Controller
         $user->update(['fired_at' => $request->date]);
         return response()->json($user->toArray());
     }
+
+    public function restoreUser(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update(['fired_at' => null]);
+        return response()->json($user->toArray());
+    }
 }

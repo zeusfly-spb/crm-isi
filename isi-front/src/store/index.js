@@ -52,6 +52,18 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
+        restoreUser ({commit}, userId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/restore_user', {
+                    user_id: userId
+                })
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         fireUser ({commit, state}, userId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/fire_user', {

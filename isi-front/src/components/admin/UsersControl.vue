@@ -64,8 +64,19 @@
                         title="Уволить"
                         v-if="currentViewMode !== 'fire'"
                         @click="showFireConfirm(props.item)"
+                        v-show="!props.item.fired_at"
                     >
                         person_add_disabled
+                    </v-icon>
+                    <v-icon
+                        small
+                        class="mr-2 blue--text"
+                        title="Восттановить"
+                        v-if="currentViewMode !== 'work'"
+                        @click="showRestoreConfirm(props.item)"
+                        v-show="!!props.item.fired_at"
+                    >
+                        settings_backup_restore
                     </v-icon>
                     <v-icon
                         class="mr-2 red--text"
@@ -258,7 +269,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                         flat="flat"
-                        @click="confirm = false; toDeleteUserId = null; toFireUserId = null;"
+                        @click="cancelOperation"
                     >
                         Отмена
                     </v-btn>
@@ -278,6 +289,15 @@
                     >
                         Уволить
                     </v-btn>
+                    <v-btn
+                        v-if="!!toRestoreUserId"
+                        color="green darken-1"
+                        flat="flat"
+                        @click="restoreUser"
+                    >
+                        Восстановить
+                    </v-btn>
+
                 </v-card-actions>
             </v-card>
 
@@ -289,6 +309,7 @@
 <script>
     export default {
         data: () => ({
+            toRestoreUserId: null,
             toFireUserId: null,
             currentViewMode: 'work',
             viewModes: ['work', 'fire', 'all'],
@@ -399,6 +420,22 @@
             }
         },
         methods: {
+            restoreUser () {
+                this.$store.dispatch('restoreUser', this.toRestoreUserId)
+                    .then(() => {
+                        this.confirm = false
+                        this.showSuccess('Пользователь восстановлен')
+                        this.toRestoreUserId = null
+                    })
+            },
+            cancelOperation () {
+                [this.confirm, this.toDeleteUserId, this.toFireUserId, this.toRestoreUserId] = [false, null, null, null]
+            },
+            showRestoreConfirm (user) {
+                this.toRestoreUserId = user.id
+                this.confirmText = `Восстановить сотрудника ${user.full_name}?`
+                this.confirm = true
+            },
             setViewMode (mode) {
                 this.currentViewMode = mode
             },
