@@ -21,6 +21,12 @@
                         style="border-bottom: solid 1px #fafafa!important;"
                     >
                         <td>
+                            <v-avatar
+                                size="36px"
+                            >
+                                <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
+                                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+                            </v-avatar>
                             {{ props.item.user && props.item.user.full_name}}
                         </td>
                         <td>
@@ -113,6 +119,9 @@
             ]
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             isOnTimeBreak () {
                 return this.timeBreaks && this.timeBreaks.length && this.timeBreaks.filter(item => !item.finish_time).length
             },
