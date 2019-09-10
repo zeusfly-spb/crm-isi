@@ -49,6 +49,8 @@
                 <td>{{ props.item.address }}</td>
                 <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
+                <td v-if="currentViewMode !== 'all'">{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
+                <td v-if="currentViewMode === 'fire'">{{ props.item.fired_at | moment('DD MMMM YYYY г.') }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -338,58 +340,7 @@
                 avatar: null
             },
             snackbar: false,
-            dialog: false,
-            headers: [
-                {
-                    text: '#',
-                    value: 'id'
-                },
-                {
-                    text: 'Логин',
-                    sortable: false,
-                    value: 'name'
-                },
-                {
-                    text: 'Фамилия',
-                    value: 'last_name'
-                },
-                {
-                    text: 'Имя',
-                    value: 'first_name'
-                },
-                {
-                    text: 'Отчество',
-                    sortable: false,
-                    value: 'patronymic'
-                },
-                {
-                    text: 'Дата рождения',
-                    value: 'birth_date'
-                },
-                {
-                    text: 'Телефон',
-                    sortable: false,
-                    value: 'phone'
-                },
-                {
-                    text: 'Адрес',
-                    sortable: false,
-                    value: 'address'
-                },
-                {
-                    text: 'Островок',
-                    value: null
-                },
-                {
-                    text: 'Группа',
-                    value: null
-                },
-                {
-                    text: 'Действия',
-                    sortable: false,
-                    value: null
-                }
-            ]
+            dialog: false
         }),
         computed: {
             counts () {
@@ -417,6 +368,75 @@
             },
             islands () {
                 return this.$store.state.islands
+            },
+            headers () {
+                let base = [
+                    {
+                        text: '#',
+                        value: 'id'
+                    },
+                    {
+                        text: 'Логин',
+                        sortable: false,
+                        value: 'name'
+                    },
+                    {
+                        text: 'Фамилия',
+                        value: 'last_name'
+                    },
+                    {
+                        text: 'Имя',
+                        value: 'first_name'
+                    },
+                    {
+                        text: 'Отчество',
+                        sortable: false,
+                        value: 'patronymic'
+                    },
+                    {
+                        text: 'Дата рождения',
+                        value: 'birth_date'
+                    },
+                    {
+                        text: 'Телефон',
+                        sortable: false,
+                        value: 'phone'
+                    },
+                    {
+                        text: 'Адрес',
+                        sortable: false,
+                        value: 'address'
+                    },
+                    {
+                        text: 'Островок',
+                        value: null
+                    },
+                    {
+                        text: 'Группа',
+                        value: null
+                    },
+                    {
+                        text: 'Дата приема',
+                        value: 'created_at'
+                    },
+                    {
+                        text: 'Дата увольнения',
+                        value: 'fired_at'
+                    },
+                    {
+                        text: 'Действия',
+                        sortable: false,
+                        value: null
+                    }
+                ]
+                switch (this.currentViewMode) {
+                    case 'fire':
+                        return base
+                    case 'all':
+                        return base.filter(item => item.text !== 'Дата увольнения' && item.text !== 'Дата приема')
+                    default:
+                        return base.filter(item => item.text !== 'Дата увольнения')
+                }
             }
         },
         methods: {
@@ -424,7 +444,7 @@
                 this.$store.dispatch('restoreUser', this.toRestoreUserId)
                     .then(() => {
                         this.confirm = false
-                        this.showSuccess('Пользователь восстановлен')
+                        this.showSuccess('Сотрудник восстановлен')
                         this.toRestoreUserId = null
                     })
             },
@@ -443,7 +463,7 @@
                 this.$store.dispatch('fireUser', this.toFireUserId)
                     .then(() => {
                         this.confirm = false
-                        this.showSuccess('Пользователь уволен')
+                        this.showSuccess('Сотрудник уволен')
                         this.toFireUserId = null
                     })
             },
@@ -468,7 +488,7 @@
                 this.$store.dispatch('deleteUser', this.toDeleteUserId)
                     .then(() => {
                         this.confirm = false
-                        this.showSuccess('Пользователь удален')
+                        this.showSuccess('Сотрудник удален')
                         this.toDeleteUserId = null
                     })
                     .catch(e => console.error(e))
@@ -504,7 +524,7 @@
                     this.$store.dispatch('updateUser', data)
                         .then(() => {
                             this.dialog = false
-                            this.showSuccess('Данные пользователя обновлены')
+                            this.showSuccess('Данные сотрудника обновлены')
                         })
                         .catch(e => {
                             if (e.error) {
@@ -520,7 +540,7 @@
                                 this.$store.dispatch('addUser', data)
                                     .then(() => {
                                         this.dialog = false
-                                        this.showSuccess('Пользователь добавлен')
+                                        this.showSuccess('Сотрудник добавлен')
                                     })
                                     .catch(e => {
                                         if (e.error) {
