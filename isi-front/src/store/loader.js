@@ -4,6 +4,16 @@ export default {
     state: {
     },
     actions: {
+        uploadDocumentImage ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/upload_image', data)
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         loadDailyPage ({commit, rootState}) {
             return new Promise((resolve, reject) => {
                 commit('ADD_TASK', 'daily')

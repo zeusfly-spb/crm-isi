@@ -109,4 +109,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // LOADER
     Route::post('load_daily_page', 'LoaderController@loadDailyPage');
 
+    // DOCUMENT PACK
+    Route::post('upload_image', 'DocumentPackController@updateImage');
+
 });

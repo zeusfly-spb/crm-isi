@@ -7,6 +7,13 @@
         >
             insert_drive_file
         </v-icon>
+        <input type="file"
+               name="image"
+               ref="imageInput"
+               accept="image/*"
+               @change="loadImage"
+               style="display: none"
+        />
         <v-dialog
             persistent
             v-model="active"
@@ -24,20 +31,21 @@
                         :items="docs"
                         hide-actions
                         hide-headers
-                        class="elevation-1"
                     >
                         <template v-slot:items="props">
                             <td>{{ props.item.title }}</td>
                             <td align="right">
                                 <v-icon
                                     class="mr-3 clickable"
-                                    :title="`Посмотреть ${props.item.title}`"
+                                    :title="`Посмотреть изображение документа '${props.item.title}'`"
+                                    v-if="images[props.item.field]"
                                 >
                                     remove_red_eye
                                 </v-icon>
                                 <v-icon
                                     class="clickable"
-                                    :title="`Загрузить ${props.item.title}`"
+                                    :title="`Загрузить изображение документа '${props.item.title}'`"
+                                    @click="showImageInput(props.item)"
                                 >
                                     cloud_upload
                                 </v-icon>
@@ -51,6 +59,29 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog
+            v-model="preview"
+            max-width="700"
+        >
+            <v-card>
+                <v-card-title>
+                    <span class="title">Предпросмотр {{ uploadingImage && uploadingImage.title ? uploadingImage.title : '' }}</span>
+                </v-card-title>
+                <v-card-text
+                    class="text-xs-center"
+                >
+                    <img src="" alt=""
+                         width="500px"
+                         ref="previewImage"
+                    />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="preview = false">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="uploadDocumentImage">Сохранить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -58,6 +89,10 @@
         name: 'DocPack',
         props: ['user'],
         data: () => ({
+            uploadingImage: null,
+            image: null,
+            preview: false,
+            imageFileReader: {},
             active: false,
             headers: [
                 {
@@ -80,7 +115,48 @@
                 {field: 'contract', title: 'Трудовой договор'},
                 {field: 'secret', title: 'Коммерческая тайна'},
             ]
-        })
+        }),
+        computed: {
+            images () {
+                return this.user.document_pack
+            }
+        },
+        methods: {
+            reset () {
+                this.preview = false
+            },
+            uploadDocumentImage () {
+                console.log(this.images.id)
+                console.dir(this.user)
+                let data = new FormData
+                data.append('id', this.images.id)
+                data.append('field_name', this.uploadingImage.field)
+                data.append('image', this.image)
+                this.$store.dispatch('uploadDocumentImage', data)
+                    .then(() => this.reset())
+            },
+            showImageInput (image) {
+                this.uploadingImage = image
+                this.$refs.imageInput.click()
+            },
+            loadImage () {
+                this.image = this.$refs.imageInput.files[0]
+                this.imageFileReader.readAsDataURL(this.$refs.imageInput.files[0])
+            }
+        },
+        created () {
+            this.imageFileReader = new FileReader()
+            this.imageFileReader.onload = (e)=> {
+                this.$refs.previewImage.src = e.target.result
+            }
+        },
+        watch: {
+            image (value) {
+                if (value) {
+                    this.preview = true
+                }
+            }
+        }
     }
 </script>
 <style scoped>
