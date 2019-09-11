@@ -28,8 +28,19 @@
                     >
                         <template v-slot:items="props">
                             <td>{{ props.item.title }}</td>
-                            <td>
-                                <v-icon>remove_red_eye</v-icon>
+                            <td align="right">
+                                <v-icon
+                                    class="mr-3 clickable"
+                                    :title="`Посмотреть ${props.item.title}`"
+                                >
+                                    remove_red_eye
+                                </v-icon>
+                                <v-icon
+                                    class="clickable"
+                                    :title="`Загрузить ${props.item.title}`"
+                                >
+                                    cloud_upload
+                                </v-icon>
                             </td>
                         </template>
                     </v-data-table>

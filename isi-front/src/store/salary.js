@@ -5,6 +5,16 @@ export default {
         monthData: null,
     },
     actions: {
+        deleteUserPrepay ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_user_prepay', {... data})
+                    .then(res => {
+                        commit('DELETE_USER_PREPAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteUserVacation ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_user_vacation', {... data})
@@ -139,6 +149,10 @@ export default {
         }
     },
     mutations: {
+        DELETE_USER_PREPAY (state, data) {
+            let user = state.monthData.users.find(item => +item.id === +data.user_id)
+            user.monthPrepays = user.monthPrepays.filter(item => +item.id !== +data.prepay_id)
+        },
         DELETE_USER_VACATION (state, data) {
             let user = state.monthData.users.find(item => +item.id === +data.user_id)
             user.monthVacations = user.monthVacations.filter(item => +item.id !== data.vacation_id)

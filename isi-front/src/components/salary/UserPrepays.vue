@@ -29,6 +29,15 @@
                                 hide-actions
                             >
                                 <template v-slot:items="props">
+                                    <td>
+                                        <v-icon
+                                            class="red--text clickable"
+                                            :title="`Удалить выплату сотрудника ${user.full_name} на сумму ${props.item.amount} ${props.item.comment}`"
+                                            @click="showPrompt(props.item)"
+                                        >
+                                            clear
+                                        </v-icon>
+                                    </td>
                                     <td>{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
                                     <td>{{ props.item.amount }}</td>
                                     <td>{{ props.item.comment }}</td>
@@ -81,7 +90,31 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-
+        </v-dialog>
+        <v-dialog
+            v-model="prompt"
+            max-width="500px"
+            v-if="prepayToDelete"
+        >
+            <v-card>
+                <v-card-title><span class="headline">Подтвержение</span></v-card-title>
+                <v-card-text>
+                    <v-layout grid-list-md>
+                        {{`Удалить выплату сотрудника ${user.full_name} от ${$store.state.hDate(prepayToDelete.created_at)} на сумму ${prepayToDelete.amount} р. ${prepayToDelete.comment}?`}}
+                    </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="prompt = false">Закрыть</v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat
+                        @click="deletePrepay"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
     </v-flex>
 </template>
@@ -90,6 +123,8 @@
         name: 'UserPrepays',
         props: ['user'],
         data: () => ({
+            prepayToDelete: null,
+            prompt: false,
             dialog: false,
             adding: false,
             amount: '',
@@ -122,6 +157,15 @@
             }
         },
         methods: {
+            deletePrepay () {
+                this.$store.dispatch('deleteUserPrepay', this.prepayToDelete)
+                    .then(() => this.prompt = false)
+                    .finally(() => this.$emit('update'))
+            },
+            showPrompt (prepay) {
+                this.prepayToDelete = prepay
+                this.prompt = true
+            },
             addPrepay () {
                 this.$store.dispatch('addUserPrepay', {
                     user_id: this.user.id,

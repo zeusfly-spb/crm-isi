@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Deal;
 use App\Forfeit;
+use App\Prepay;
 use App\Prize;
 use App\Sick;
 use App\User;
@@ -121,5 +122,13 @@ class SalaryController extends Controller
         $user_id = $vacation->user_id;
         $result = $vacation->delete();
         return response()->json(['user_id' => $user_id, 'vacation_id' => $request->id, 'result' => $result]);
+    }
+
+    public function deleteUserPrepay(Request $request)
+    {
+        $prepay = Prepay::find($request->id);
+        $user_id = $prepay->user_id;
+        $result = $prepay->delete();
+        return response()->json(['user_id' => $user_id, 'prepay_id' => $request->id, 'result' => $result]);
     }
 }
