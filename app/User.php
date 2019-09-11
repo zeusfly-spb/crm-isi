@@ -201,4 +201,9 @@ class User extends Authenticatable
             'comment' => $comment
         ]);
     }
+
+    public function documentPack()
+    {
+        return $this->hasOne(DocumentPack::class);
+    }
 }
