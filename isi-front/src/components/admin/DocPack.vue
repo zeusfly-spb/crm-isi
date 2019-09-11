@@ -95,6 +95,7 @@
                 <v-card-text>
                     <img
                         :src="`${basePath}${images[viewingImage && viewingImage.field ? viewingImage.field : null]}`"
+                        v-if="viewingImage"
                     />
                 </v-card-text>
                 <v-card-actions>
