@@ -19,11 +19,14 @@
             v-model="active"
             max-width="700px"
         >
-            <v-card>
+            <v-card style="border-radius: 5px">
                 <v-card-title
-                    class="light-blue lighten-3"
+                    class="light-blue darken-3"
                 >
-                    <span class="title">{{ `Документы сотрудника ${user.full_name}` }}</span>
+                    <v-icon color="white" class="mr-2">
+                        folder
+                    </v-icon>
+                    <span class="title white--text">{{ `Документы сотрудника ${user.full_name}` }}</span>
                 </v-card-title>
                 <v-card-text>
                     <v-data-table
@@ -66,9 +69,9 @@
         >
             <v-card>
                 <v-card-title
-                    class="light-blue lighten-3"
+                    class="light-blue darken-3"
                 >
-                    <span class="title">Предпросмотр {{ uploadingImage && uploadingImage.title ? uploadingImage.title : '' }}</span>
+                    <span class="title white--text">Предпросмотр {{ uploadingImage && uploadingImage.title ? uploadingImage.title : '' }}</span>
                 </v-card-title>
                 <v-card-text
                     class="text-xs-center"
@@ -89,8 +92,8 @@
             v-model="view"
         >
             <v-card>
-                <v-card-title class="title light-blue lighten-3">
-                    Просмотр {{ viewingImage && viewingImage.title  ? viewingImage.title : '' }}
+                <v-card-title class="title light-blue darken-3">
+                    <span class="white--text">Просмотр {{ viewingImage && viewingImage.title  ? viewingImage.title : '' }}</span>
                 </v-card-title>
                 <v-card-text>
                     <img
