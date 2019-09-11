@@ -39,6 +39,7 @@
                                     class="mr-3 clickable"
                                     :title="`Посмотреть изображение документа '${props.item.title}'`"
                                     v-if="images[props.item.field]"
+                                    @click="showImage(props.item)"
                                 >
                                     remove_red_eye
                                 </v-icon>
@@ -64,7 +65,9 @@
             max-width="700"
         >
             <v-card>
-                <v-card-title>
+                <v-card-title
+                    class="light-blue lighten-3"
+                >
                     <span class="title">Предпросмотр {{ uploadingImage && uploadingImage.title ? uploadingImage.title : '' }}</span>
                 </v-card-title>
                 <v-card-text
@@ -82,6 +85,24 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog
+            v-model="view"
+        >
+            <v-card>
+                <v-card-title class="title light-blue lighten-3">
+                    Просмотр {{ viewingImage && viewingImage.title  ? viewingImage.title : '' }}
+                </v-card-title>
+                <v-card-text>
+                    <img
+                        :src="`${basePath}${images[viewingImage && viewingImage.field ? viewingImage.field : null]}`"
+                    />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="view = false">Закрыть</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -89,6 +110,8 @@
         name: 'DocPack',
         props: ['user'],
         data: () => ({
+            viewingImage: null,
+            view: false,
             uploadingImage: null,
             image: null,
             preview: false,
@@ -117,11 +140,18 @@
             ]
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             images () {
                 return this.user.document_pack
             }
         },
         methods: {
+            showImage (image) {
+                this.viewingImage = image
+                this.view = true
+            },
             reset () {
                 this.preview = false
             },
