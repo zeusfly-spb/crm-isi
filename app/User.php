@@ -206,4 +206,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(DocumentPack::class);
     }
+
+    public function createDocumentPack()
+    {
+        $this->documentPack()->create();
+    }
 }

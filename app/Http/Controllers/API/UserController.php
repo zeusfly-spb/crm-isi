@@ -78,6 +78,7 @@ class UserController extends Controller
 
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        $user->createDocumentPack();
         $success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
         $success['user'] = $user;
@@ -97,13 +98,13 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        return response()->json(User::get()->toArray());
+        return response()->json(User::with('documentPack')->get()->toArray());
     }
 
     public function saveUser(Request $request)
     {
         $user = User::find($request->id);
-        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name']);
+        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name', 'document_pack']);
 
         if ($request->password && $request->c_password && $request->password === $request->c_password) {
             $users = User::where('name', $request->name)->get();
@@ -124,7 +125,8 @@ class UserController extends Controller
         }
 
         $user->update($input);
-        return $user;
+        $user->load('documentPack');
+        return $user->toArray();
     }
 
     public function deleteUser(Request $request)
@@ -187,6 +189,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update(['fired_at' => $request->date]);
+        $user->load('documentPack');
         return response()->json($user->toArray());
     }
 
@@ -194,6 +197,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update(['fired_at' => null]);
+        $user->load('documentPack');
         return response()->json($user->toArray());
     }
 }

@@ -47,6 +47,9 @@
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
                 <td><span v-if="props.item.phone && props.item.phone.length === 10">{{ props.item.phone | phone }}</span></td>
                 <td>{{ props.item.address }}</td>
+                <td align="center">
+                    <doc-pack :user="props.item"></doc-pack>
+                </td>
                 <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
                 <td v-if="currentViewMode !== 'all'">{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
@@ -309,6 +312,7 @@
 </template>
 
 <script>
+    import DocPack from './DocPack'
     export default {
         data: () => ({
             toRestoreUserId: null,
@@ -406,6 +410,11 @@
                         text: 'Адрес',
                         sortable: false,
                         value: 'address'
+                    },
+                    {
+                        text: 'Документы',
+                        sortable: false,
+                        value: null
                     },
                     {
                         text: 'Островок',
@@ -579,7 +588,10 @@
                 return '+7 ' + val.replace(/[^0-9]/g, '')
                     .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
             }
+        },
+        components: {
+            DocPack
         }
-
     }
 </script>
+
