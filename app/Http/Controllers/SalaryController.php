@@ -64,25 +64,25 @@ class SalaryController extends Controller
     public function addUserPrize(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addPrize($request->amount, $request->comment ?? '')->toArray());
+        return response()->json($user->addPrize($request->amount, $request->date, $request->comment ?? '')->toArray());
     }
 
     public function addUserForfeit(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addForfeit($request->amount, $request->comment ?? '')->toArray());
+        return response()->json($user->addForfeit($request->amount, $request->date, $request->comment ?? '')->toArray());
     }
 
     public function addUserSick(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addSick($request->amount, $request->comment ?? '')->toArray());
+        return response()->json($user->addSick($request->amount, $request->date, $request->comment ?? '')->toArray());
     }
 
     public function addUserPrepay(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addPrepay($request->amount, $request->comment)->toArray());
+        return response()->json($user->addPrepay($request->amount, $request->date, $request->comment)->toArray());
     }
 
     public function deleteUserForfeit(Request $request)
@@ -112,7 +112,7 @@ class SalaryController extends Controller
     public function addUserVacation(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addVacation($request->amount, $request->comment ?? '')->toArray());
+        return response()->json($user->addVacation($request->amount, $request->date, $request->comment ?? '')->toArray());
     }
 
     public function deleteUserVacation(Request $request)

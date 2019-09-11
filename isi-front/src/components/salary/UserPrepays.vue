@@ -102,7 +102,7 @@
         }),
         computed: {
             canUpdate () {
-                return this.isSuperadmin && this.isToday
+                return this.isSuperadmin
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate

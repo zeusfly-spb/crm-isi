@@ -15,9 +15,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addUserVacation ({commit}, data) {
+        addUserVacation ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_user_vacation', {... data})
+                Vue.axios.post('/api/add_user_vacation', {
+                    ... data,
+                    date: rootState.accountingDate
+                })
                     .then(res => {
                         commit('ADD_USER_VACATION', res.data)
                         resolve(res)
@@ -55,9 +58,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addUserPrepay ({commit}, data) {
+        addUserPrepay ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_user_prepay', {...data})
+                Vue.axios.post('/api/add_user_prepay', {
+                    ...data,
+                    date: rootState.accountingDate
+                })
                     .then(res => {
                         commit('ADD_USER_PREPAY', res.data)
                         resolve(res)
@@ -65,9 +71,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addUserSick ({commit}, data) {
+        addUserSick ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_user_sick', {...data})
+                Vue.axios.post('/api/add_user_sick', {
+                    ...data,
+                    date: rootState.accountingDate
+                })
                     .then(res => {
                         commit('ADD_USER_SICK', res.data)
                         resolve(res)
@@ -75,9 +84,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addUserForfeit ({commit}, data) {
+        addUserForfeit ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_user_forfeit', {...data})
+                Vue.axios.post('/api/add_user_forfeit', {
+                    ...data,
+                    date: rootState.accountingDate
+                })
                     .then(res => {
                         commit('ADD_USER_FORFEIT', res.data)
                         resolve(res)
@@ -85,9 +97,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addUserPrize ({commit}, data) {
+        addUserPrize ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_user_prize', {...data})
+                Vue.axios.post('/api/add_user_prize', {
+                    ...data,
+                    date: rootState.accountingDate
+                })
                     .then(res => {
                         commit('ADD_USER_PRIZE', res.data)
                         resolve(res)

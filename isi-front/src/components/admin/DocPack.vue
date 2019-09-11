@@ -30,7 +30,6 @@
                             <td>{{ props.item.title }}</td>
                             <td>
                                 <v-icon>remove_red_eye</v-icon>
-
                             </td>
                         </template>
                     </v-data-table>

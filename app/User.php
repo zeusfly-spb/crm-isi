@@ -162,43 +162,48 @@ class User extends Authenticatable
         return $this->hasMany(Vacation::class);
     }
 
-    public function addPrize(int $amount, string $comment = '')
+    public function addPrize(int $amount, string $date, string $comment = '')
     {
         return $this->prizes()->create([
             'amount' => $amount,
-            'comment' => $comment
+            'comment' => $comment,
+            'created_at' => $date
         ]);
     }
 
-    public function addForfeit(int $amount, string $comment = '')
+    public function addForfeit(int $amount, string $date, string $comment = '')
     {
         return $this->forfeits()->create([
             'amount' => $amount,
-            'comment' => $comment
+            'comment' => $comment,
+            'created_at' => $date
         ]);
     }
 
-    public function addSick(int $amount, string $comment = '')
+    public function addSick(int $amount, string $date, string $comment = '')
     {
         return $this->sicks()->create([
                 'amount' => $amount,
-                'comment' => $comment
+                'comment' => $comment,
+                'created_at' => $date
         ]);
     }
 
-    public function addPrepay(int $amount, $comment = '')
+    public function addPrepay(int $amount, string $date, $comment = '')
     {
         return $this->prepays()->create([
             'amount' => $amount,
-            'comment' => $comment
+            'comment' => $comment,
+            'created_at' => $date
         ]);
     }
 
-    public function addVacation(int $amount, $comment = '')
+    public function addVacation(int $amount, string $date, $comment = '')
     {
         return $this->vacations()->create([
             'amount' => $amount,
-            'comment' => $comment
+            'comment' => $comment,
+            'created_at' => $date
         ]);
     }
 
