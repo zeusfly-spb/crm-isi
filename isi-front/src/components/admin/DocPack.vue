@@ -61,7 +61,7 @@
                                     class="clickable"
                                     :title="`Удалить изображение документа '${props.item.title}'`"
                                     color="red darken-4"
-                                    @click=""
+                                    @click="showDeleteConfirm(props.item)"
                                 >
                                     delete_forever
                                 </v-icon>
@@ -119,6 +119,33 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="confirm"
+                  max-width="500"
+        >
+            <v-card>
+                <v-card-title class="subheading">
+                    {{ confirmText }}
+                </v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteImage"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+        </v-dialog>
+
     </v-flex>
 </template>
 <script>
@@ -126,6 +153,9 @@
         name: 'DocPack',
         props: ['user'],
         data: () => ({
+            imageToDelete: null,
+            confirmText: '',
+            confirm: false,
             viewingImage: null,
             view: false,
             uploadingImage: null,
@@ -164,6 +194,21 @@
             }
         },
         methods: {
+            deleteImage () {
+                this.$store.dispatch('deleteDocumentImage', {
+                    id: this.images.id,
+                    field_name: this.imageToDelete.field
+                })
+                    .then(() => {
+                        this.confirm = false
+                        this.$emit('updated', `Изображение документа '${this.imageToDelete.title}' удалено`)
+                    })
+            },
+            showDeleteConfirm (image) {
+                this.imageToDelete = image
+                this.confirmText = `Удалить изображение документа '${image.title}'?`
+                this.confirm = true
+            },
             showImage (image) {
                 this.viewingImage = image
                 this.view = true

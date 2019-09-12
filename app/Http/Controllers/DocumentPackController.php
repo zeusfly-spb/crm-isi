@@ -29,9 +29,8 @@ class DocumentPackController extends Controller
     {
         $documentPack = DocumentPack::find($request->id);
         $fieldName = $request->field_name;
-        if (Storage::delete($documentPack->$fieldName)) {
-            $documentPack->update([$fieldName => null]);
-        };
+        Storage::delete($documentPack->$fieldName);
+        $documentPack->update([$fieldName => null]);
         $user = User::with('documentPack')->find($documentPack->user_id);
         return response()->json($user->toArray());
     }

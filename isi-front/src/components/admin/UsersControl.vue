@@ -48,7 +48,7 @@
                 <td><span v-if="props.item.phone && props.item.phone.length === 10">{{ props.item.phone | phone }}</span></td>
                 <td>{{ props.item.address }}</td>
                 <td align="center">
-                    <doc-pack :user="props.item"></doc-pack>
+                    <doc-pack :user="props.item" @updated="showSuccess"></doc-pack>
                 </td>
                 <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
