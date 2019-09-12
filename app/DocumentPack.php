@@ -16,6 +16,6 @@ class DocumentPack extends Model
 
     public function getFilledAttribute()
     {
-        return $this->passport && $this->inn && $this->snils && $this->contract && $this->contract;
+        return $this->passport && $this->inn && $this->snils && $this->contract && $this->secret;
     }
 }

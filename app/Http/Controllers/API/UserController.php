@@ -200,4 +200,12 @@ class UserController extends Controller
         $user->load('documentPack');
         return response()->json($user->toArray());
     }
+
+    public function updateDate(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update([$request->field => $request->date]);
+        $user->load('documentPack');
+        return response()->json($user->toArray());
+    }
 }

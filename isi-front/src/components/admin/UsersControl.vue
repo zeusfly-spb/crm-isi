@@ -52,8 +52,12 @@
                 </td>
                 <td>{{ islandName(props.item.island_id) }}</td>
                 <td>{{ groupName(props.item.group_id) }}</td>
-                <td v-if="currentViewMode !== 'all'">{{ props.item.created_at | moment('DD MMMM YYYY г.') }}</td>
-                <td v-if="currentViewMode === 'fire'">{{ props.item.fired_at | moment('DD MMMM YYYY г.') }}</td>
+                <td v-if="currentViewMode !== 'all'">
+                    <date-updater :user="props.item" field="created_at" @updated="showSuccess"/>
+                </td>
+                <td v-if="currentViewMode === 'fire'">
+                    <date-updater :user="props.item" field="fired_at"/>
+                </td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -313,6 +317,7 @@
 
 <script>
     import DocPack from './DocPack'
+    import DateUpdater from './DateUpdater'
     export default {
         data: () => ({
             toRestoreUserId: null,
@@ -590,7 +595,8 @@
             }
         },
         components: {
-            DocPack
+            DocPack,
+            DateUpdater
         }
     }
 </script>

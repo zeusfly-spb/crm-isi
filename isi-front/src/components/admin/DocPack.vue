@@ -160,8 +160,6 @@
                 this.preview = false
             },
             uploadDocumentImage () {
-                console.log(this.images.id)
-                console.dir(this.user)
                 let data = new FormData
                 data.append('id', this.images.id)
                 data.append('field_name', this.uploadingImage.field)

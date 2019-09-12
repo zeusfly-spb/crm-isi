@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('set_user_island', 'API\UserController@setUserIsland');
     Route::post('fire_user', 'API\UserController@fireUser');
     Route::post('restore_user', 'API\UserController@restoreUser');
+    Route::post('update_user_date', 'API\UserController@updateDate');
 
     // GROUPS
     Route::post('get_groups', 'GroupController@all');
