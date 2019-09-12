@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DocumentPack;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 
 class DocumentPackController extends Controller
@@ -20,6 +21,17 @@ class DocumentPackController extends Controller
             );
             $documentPack->update([$fieldName => '/storage/documents/' . $fileName]) ;
         }
+        $user = User::with('documentPack')->find($documentPack->user_id);
+        return response()->json($user->toArray());
+    }
+
+    public function deleteImage(Request $request)
+    {
+        $documentPack = DocumentPack::find($request->id);
+        $fieldName = $request->field_name;
+        if (Storage::delete($documentPack->$fieldName)) {
+            $documentPack->update([$fieldName => null]);
+        };
         $user = User::with('documentPack')->find($documentPack->user_id);
         return response()->json($user->toArray());
     }

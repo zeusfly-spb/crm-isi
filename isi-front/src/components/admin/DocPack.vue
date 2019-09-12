@@ -42,16 +42,28 @@
                                     class="mr-3 clickable"
                                     :title="`Посмотреть изображение документа '${props.item.title}'`"
                                     v-if="images[props.item.field]"
+                                    color="teal darken-3"
                                     @click="showImage(props.item)"
                                 >
                                     remove_red_eye
                                 </v-icon>
                                 <v-icon
+                                    :class="{'mr-3': images[props.item.field]}"
                                     class="clickable"
                                     :title="`Загрузить изображение документа '${props.item.title}'`"
+                                    color="light-blue darken-3"
                                     @click="showImageInput(props.item)"
                                 >
                                     cloud_upload
+                                </v-icon>
+                                <v-icon
+                                    v-if="images[props.item.field]"
+                                    class="clickable"
+                                    :title="`Удалить изображение документа '${props.item.title}'`"
+                                    color="red darken-4"
+                                    @click=""
+                                >
+                                    delete_forever
                                 </v-icon>
                             </td>
                         </template>

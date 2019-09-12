@@ -4,6 +4,16 @@ export default {
     state: {
     },
     actions: {
+        deleteDocumentImage ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_image', {... data})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateUserDate ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_user_date', {... data})
