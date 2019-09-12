@@ -14,6 +14,11 @@ class DocumentPackController extends Controller
     {
         $documentPack = DocumentPack::find($request->id);
         $fieldName = $request->field_name;
+
+        if ($documentPack->$fieldName) {
+            Storage::delete($documentPack->$fieldName);
+        }
+
         if ($request->hasFile('image')) {
             $fileName = (string) Uuid::generate(4);
             $request->file('image')->storeAs(
