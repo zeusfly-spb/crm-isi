@@ -23,6 +23,9 @@
                <td>
                    <island-users-column :users="props.item.users"></island-users-column>
                </td>
+               <td>
+                   <chief-updater :island="props.item" @updated="showSuccess"/>
+               </td>
                <td class="justify-center layout px-0">
                    <v-icon
                            small
@@ -121,6 +124,7 @@
 
 <script>
     import IslandUsersColumn from './IslandUsersColumn'
+    import ChiefUpdater from './ChiefUpdater'
     export default {
         name: 'IslandsControl',
         data: () => ({
@@ -142,6 +146,7 @@
                 {text: 'Название', value: 'name'},
                 {text: 'Описание', value: 'description'},
                 {text: 'Сотрудники', value: 'users'},
+                {text: 'Руководитель', value: 'chief_id'},
                 {text: 'Действия', align: 'center', value: null}
             ]
         }),
@@ -194,7 +199,8 @@
             this.editedIsland = JSON.parse(JSON.stringify(this.defaultIsland))
         },
         components: {
-            IslandUsersColumn
+            IslandUsersColumn,
+            ChiefUpdater
         }
     }
 </script>

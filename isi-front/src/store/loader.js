@@ -4,6 +4,16 @@ export default {
     state: {
     },
     actions: {
+        updateIslandChiefId ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_chief_id', {... data})
+                    .then(res => {
+                        commit('UPDATE_ISLAND', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteDocumentImage ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_image', {... data})

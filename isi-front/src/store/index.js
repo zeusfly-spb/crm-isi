@@ -702,6 +702,9 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        UPDATE_ISLAND (state, island) {
+            state.islands = state.islands.map(item => +item.id === +island.id ? island : item)
+        },
         UPDATE_WORKDAY (state, workday) {
             state.workdays = state.workdays.map(item => item.id === workday.id ? workday : item)
         },
