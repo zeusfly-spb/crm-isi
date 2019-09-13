@@ -216,4 +216,9 @@ class User extends Authenticatable
     {
         $this->documentPack()->create();
     }
+
+    public function controlledIslands()
+    {
+        return $this->hasMany(Island::class, 'chief_id', 'id')->with('users');
+    }
 }

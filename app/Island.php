@@ -145,4 +145,9 @@ class Island extends Model
             }
         }
     }
+
+    public function chief()
+    {
+        return $this->belongsTo(User::class, 'chief_id', 'id');
+    }
 }

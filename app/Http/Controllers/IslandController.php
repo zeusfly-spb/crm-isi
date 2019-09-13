@@ -42,4 +42,11 @@ class IslandController extends Controller
             return response()->json(['amount' => $amount]);
         }
     }
+
+    public function updateChiefId(Request $request)
+    {
+        $island = Island::with('users')->find($request->island_id);
+        $island->update(['chief_id' => $request->chief_id]);
+        return response()->json($island->toArray());
+    }
 }
