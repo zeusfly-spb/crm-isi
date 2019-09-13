@@ -38,7 +38,8 @@
                     })
                         .then(() => {
                             this.deactivate()
-                            this.$emit('updated', `Сотрудник ${this.chiefName} назначен руководителем островка ${this.island.name}`)
+                            let hint = !!this.val ? `Сотрудник ${this.chiefName} назначен руководителем островка ${this.island.name}` : `С островка ${this.island.name} сняли руководителя`
+                            this.$emit('updated', hint)
                         })
                 }
             },
@@ -47,7 +48,7 @@
             },
             chiefName () {
                 let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
-                return target && target.full_name || ' - '
+                return target && target.full_name || 'Нет'
             }
         },
         methods: {
