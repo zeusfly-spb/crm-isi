@@ -43,7 +43,7 @@
                 }
             },
             users () {
-                return this.$store.state.users
+                return [{id: null, full_name: 'Нет'}, ...this.$store.state.users]
             },
             chiefName () {
                 let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
