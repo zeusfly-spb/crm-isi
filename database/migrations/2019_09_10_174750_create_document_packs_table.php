@@ -24,7 +24,7 @@ class CreateDocumentPacksTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')
-                ->on('user')->onDelete('cascade');
+                ->on('users')->onDelete('cascade');
         });
     }
 
