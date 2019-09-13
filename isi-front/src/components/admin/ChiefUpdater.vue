@@ -37,6 +37,7 @@
                         chief_id: val
                     })
                         .then(() => {
+                            this.deactivate()
                             let hint = this.chiefName === 'Нет' ? `С островка ${this.island.name} сняли руководителя`
                                 : `Сотрудник ${this.chiefName} назначен руководителем островка ${this.island.name}`
                             this.$emit('updated', hint)
