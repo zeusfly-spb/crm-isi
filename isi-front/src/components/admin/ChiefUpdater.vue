@@ -38,7 +38,11 @@
                     })
                         .then(() => {
                             this.deactivate()
-                            let hint = !!this.val ? `Сотрудник ${this.chiefName} назначен руководителем островка ${this.island.name}` : `С островка ${this.island.name} сняли руководителя`
+                            if (this.chiefName === 'Нет') {
+                                let hint = `С островка ${this.island.name} сняли руководителя`
+                            } else {
+                                let hint = `Сотрудник ${this.chiefName} назначен руководителем островка ${this.island.name}`
+                            }
                             this.$emit('updated', hint)
                         })
                 }
