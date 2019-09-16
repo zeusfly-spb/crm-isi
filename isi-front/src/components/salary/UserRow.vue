@@ -64,6 +64,25 @@
                                 <strong>{{ +salesRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
+                        <tr
+                            v-if="isChief"
+                            class="light-blue lighten-4"
+                        >
+                            <td class="info-tab">
+                                Руководящий оборот
+                            </td>
+                            <td class="info-tab">
+                                <strong >{{ +subDealsAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                            <td class="info-tab">
+                                <rate-updater v-if="isSuperadmin" :user="user" mode="sales" :caption="user.sales_rate"/>
+                                <strong v-else>{{ user.sales_rate }}</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ +salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td class="info-tab">
                                 Премия
@@ -216,6 +235,18 @@
             totalVacations: 0
         }),
         computed: {
+            subDealsAmount () {
+                const add = (a, b) => a + +b.income
+                return this.subDeals.reduce(add, 0)
+            },
+            subDeals () {
+                if (!this.isChief) return []
+                let monthDeals = this.$store.state.salary.monthData.allDeals
+                return monthDeals.filter(item => +item.user_id !== +this.user.id)
+            },
+            isChief () {
+                return this.user && this.user.controlled_islands.length
+            },
             grandTotal () {
                 return this.hourRateAmount + this.salesRateAmount + this.totalPrizes - this.totalForfeits - this.totalSicks - this.totalVacations
             },
