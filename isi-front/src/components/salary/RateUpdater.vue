@@ -33,7 +33,11 @@
         }),
         computed: {
             targetCaption () {
-                return this.mode === 'hours' ? 'часовую ставку' : 'ставку на оборот'
+                switch (this.mode) {
+                    case 'hours': return 'часовую ставку'
+                    case 'sales': return 'ставку на оборот'
+                    case 'chief': return 'ставку на руководящий оборот'
+                }
             },
             targetField: {
                 get: function () {

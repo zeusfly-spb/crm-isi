@@ -15,6 +15,15 @@
               @click="activate"
               :title="`Назначить руководителя на островок ${island && island.name || ''}`"
         >
+            <v-avatar
+                size="30px"
+                style="margin-bottom: .2em"
+            >
+                <img :src="`${basePath}${chiefAvatar}`"
+                     alt="Фото"
+                     :title="chiefName"
+                />
+            </v-avatar>
             {{ chiefName }}
         </span>
     </v-flex>
@@ -51,6 +60,13 @@
             chiefName () {
                 let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
                 return target && target.full_name || 'Нет'
+            },
+            chiefAvatar () {
+                let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
+                return target && target.avatar || '/img/default.jpg'
+            },
+            basePath () {
+                return this.$store.state.basePath
             }
         },
         methods: {
