@@ -251,7 +251,9 @@
                 return this.$store.state.basePath
             },
             dates () {
-                return this.user && this.user.dates
+                let today = new Date(this.$store.state.realDate)
+                let tomorrow = today.setDate(today.getDate() + 1)
+                return this.user && this.user.dates.filter(item => new Date(item) < tomorrow)
             }
         },
         methods: {

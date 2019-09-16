@@ -82,7 +82,9 @@
                 }, ... dates]
             },
             dates () {
-                return this.monthData && this.monthData.dates
+                let today = new Date(this.$store.state.realDate)
+                let tomorrow = today.setDate(today.getDate() + 1)
+                return this.monthData && this.monthData.dates.filter(item => new Date(item) < tomorrow)
             },
             users () {
                 return this.monthData && this.monthData.users || []
