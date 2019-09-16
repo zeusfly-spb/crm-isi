@@ -18,6 +18,7 @@
             <v-avatar
                 size="30px"
                 style="margin-bottom: .2em"
+                v-if="chiefName !== 'Нет'"
             >
                 <img :src="`${basePath}${chiefAvatar}`"
                      alt="Фото"
