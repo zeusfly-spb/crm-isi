@@ -4,6 +4,7 @@
             class="clickable"
             :title="`Пакет документов сотрудника ${user.full_name}`"
             @click="active = true"
+            :class="{'red--text': !user.document_pack.filled}"
         >
             insert_drive_file
         </v-icon>
