@@ -75,11 +75,11 @@
                                 <strong >{{ +subDealsAmount.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
-                                <rate-updater v-if="isSuperadmin" :user="user" mode="sales" :caption="user.sales_rate"/>
-                                <strong v-else>{{ user.sales_rate }}</strong>
+                                <rate-updater v-if="isSuperadmin" :user="user" mode="chief" :caption="user.sales_rate"/>
+                                <strong v-else>{{ user.chief_rate }}</strong>
                             </td>
                             <td class="info-tab">
-                                <strong>{{ +salesRateAmount.toFixed(2) | pretty }}</strong>
+                                <strong>{{ +subDealsTotal.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
 
@@ -186,8 +186,8 @@
                     <v-list-tile-content class="align-end">{{ getDealCount(date) }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
-                    <v-list-tile-content>Доход:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ getDealsIncome(date) }}</v-list-tile-content>
+                    <v-list-tile-content>Оборот:</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ +getDealsIncome(date).toFixed(2) | pretty }}</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                     <v-list-tile-content>Расход:</v-list-tile-content>
@@ -235,6 +235,9 @@
             totalVacations: 0
         }),
         computed: {
+            subDealsTotal () {
+                return this.user.chief_rate * this.subDealsAmount
+            },
             subDealsAmount () {
                 const add = (a, b) => a + +b.income
                 return this.subDeals.reduce(add, 0)
@@ -248,7 +251,7 @@
                 return this.user && this.user.controlled_islands.length
             },
             grandTotal () {
-                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes - this.totalForfeits - this.totalSicks - this.totalVacations
+                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits - this.totalSicks - this.totalVacations
             },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome

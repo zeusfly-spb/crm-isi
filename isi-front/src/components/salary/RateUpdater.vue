@@ -44,7 +44,11 @@
                 }
             },
             targetFieldName () {
-                return this.mode === 'hours' ? 'hour_rate' : 'sales_rate'
+                switch (this.mode) {
+                    case 'hours': return 'hour_rate'
+                    case 'sales': return 'sales_rate'
+                    case 'chief': return 'chief_rate'
+                }
             }
         },
         methods: {
