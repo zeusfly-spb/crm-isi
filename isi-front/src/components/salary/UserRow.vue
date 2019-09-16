@@ -156,6 +156,7 @@
         >
             <v-list dense
                     :class="{'red lighten-5': isHoliday(date)}"
+                    v-if="+getHours(date)"
             >
                 <v-list-tile>
                     <v-list-tile-content>Часы:</v-list-tile-content>

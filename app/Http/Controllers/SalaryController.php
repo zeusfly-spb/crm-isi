@@ -29,7 +29,16 @@ class SalaryController extends Controller
             $currentDate = strtotime("+1 day", $currentDate);
         }
 
-        $queryBuilder = User::with('deals', 'workdays')->where('is_superadmin', false)->where('island_id', '<>', null);
+        $queryBuilder = User::with('deals', 'workdays')
+            ->where('is_superadmin', false)
+            ->whereNotNull('island_id')
+            ->whereNull('fired_at');
+
+        $queryBuilder = $queryBuilder
+            ->where('created_at', '<', $startDate)
+            ->orWhereBetween('created_at', [$startDate, $endDate])
+            ->whereNotNull('island_id');
+
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
         }
