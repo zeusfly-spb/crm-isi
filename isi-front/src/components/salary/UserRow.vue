@@ -156,9 +156,9 @@
         >
             <v-list dense
                     :class="{'red lighten-5': isHoliday(date)}"
-                    v-if="+getHours(date)"
+                    v-if="+getHours(date) || unmarkedDate(date)"
             >
-                <v-list-tile>
+                <v-list-tile :class="{'red white--text': unmarkedDate(date)}">
                     <v-list-tile-content>Часы:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ getHours(date) }}</v-list-tile-content>
                 </v-list-tile>
@@ -257,6 +257,11 @@
             }
         },
         methods: {
+            unmarkedDate (dateString) {
+                let targetWorkday = this.user && this.user.monthWorkdays && this.user.monthWorkdays.find(item => item.date === dateString)
+                if (!targetWorkday) return false
+                return (!!targetWorkday.time_start && !targetWorkday.time_finish)
+            },
             calculateTotals () {
                 this.totalPrizes = this.$refs.prizes && this.$refs.prizes.totalPrizesAmount
                 this.totalForfeits = this.$refs.forfeits && this.$refs.forfeits.totalForfeitsAmount
