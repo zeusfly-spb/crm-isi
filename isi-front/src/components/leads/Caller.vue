@@ -3,6 +3,7 @@
         icon
         title="Позвонить"
         @click="makeCall"
+        :disabled="!authUser.vpbx_extension"
     >
         <v-icon
             :class="{'green--text': !!authUser.vpbx_extension, 'grey--text': !authUser.vpbx_extension}"
