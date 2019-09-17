@@ -10,7 +10,10 @@
             <template v-slot:items="props">
                 <td>{{ props.index + 1 }}</td>
                 <td>{{ props.item.name }}</td>
-                <td>{{ props.item.phone }}</td>
+                <td>
+                    {{ props.item.phone }}
+                    <caller :phone="props.item.phone"/>
+                </td>
                 <td>{{ props.item.site }}</td>
                 <td>{{ props.item.comment }}</td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
@@ -22,6 +25,7 @@
     </v-flex>
 </template>
 <script>
+    import Caller from './Caller'
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -38,6 +42,9 @@
             leads () {
                 return this.$store.state.loader.leads
             }
+        },
+        components: {
+            Caller
         }
     }
 </script>
