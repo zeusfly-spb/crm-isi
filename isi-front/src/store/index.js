@@ -375,6 +375,7 @@ export const store = new Vuex.Store({
                                             dispatch('setStockActions')
                                             dispatch('setStockOptions')
                                             dispatch('setMonthData')
+                                            dispatch('setLeads')
                                         })
                                 })
                         })
@@ -703,6 +704,7 @@ export const store = new Vuex.Store({
             dispatch('setStockActions')
 
             dispatch('setMonthData')
+            dispatch('setLeads')
         }
     },
     mutations: {
