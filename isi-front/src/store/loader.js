@@ -5,6 +5,16 @@ export default {
         leads: []
     },
     actions: {
+        deleteLead ({commit}, leadId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_lead', {lead_id: leadId})
+                    .then(res => {
+                        commit('DELETE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setLeadsOnTimer ({commit, rootState}) {
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {date: rootState.accountingDate})
@@ -84,6 +94,9 @@ export default {
         }
     },
     mutations: {
+        DELETE_LEAD (state, data) {
+            state.leads = state.leads.filter(item => +item.id !== +data.lead_id)
+        },
         SET_LEADS (state, leads) {
             state.leads = leads
         },

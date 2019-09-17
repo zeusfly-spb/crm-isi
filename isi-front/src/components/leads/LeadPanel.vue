@@ -1,6 +1,14 @@
 <template>
     <v-flex>
-        <span class="title">Заявки</span>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
         <v-data-table
             :headers="headers"
             :items="leads"
@@ -50,7 +58,7 @@
                     <v-btn
                         color="red darken-1"
                         flat="flat"
-                        @click=""
+                        @click="deleteLead"
                     >
                         Удалить
                     </v-btn>
@@ -65,6 +73,9 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            snackbar: false,
+            snackText: '',
+            snackColor: 'green',
             confirmText: '',
             confirm: false,
             leadToDelete: null,
@@ -87,6 +98,18 @@
             }
         },
         methods: {
+            showSuccess (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
+            },
+            deleteLead () {
+                this.$store.dispatch('deleteLead', {lead_id: this.leadToDelete.id})
+                    .then(() => {
+                        this.showSuccess(`Заявка с номера ${this.leadToDelete.phone} удалена`, 'green')
+                        this.confirm = false
+                    })
+            },
             confirmToDelete (lead) {
                 this.leadToDelete = lead
                 this.confirmText = `Удалить заявку с номера ${lead.phone}?`

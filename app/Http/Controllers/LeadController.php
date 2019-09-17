@@ -17,4 +17,9 @@ class LeadController extends Controller
     {
         return response()->json(Lead::whereDate('created_at', $request->date)->get()->toArray());
     }
+
+    public function delete(Request $request)
+    {
+        return response()->json(['result' => Lead::destroy($request->lead_id), 'id' => $request->lead_id]);
+    }
 }
