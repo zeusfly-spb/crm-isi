@@ -14,7 +14,7 @@ class AddChiefRateOnUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('chief_rate')->default(0);
+            $table->decimal('chief_rate', 8, 2)->default(0);
         });
     }
 
