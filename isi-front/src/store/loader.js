@@ -5,6 +5,16 @@ export default {
         leads: []
     },
     actions: {
+        setLeadsOnTimer ({commit, rootState}) {
+            return new Promise((resolve ,reject) => {
+                Vue.axios.post('/api/get_leads', {date: rootState.accountingDate})
+                    .then(res => {
+                        commit('SET_LEADS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setLeads ({commit, rootState}) {
             return new Promise((resolve ,reject) => {
                 commit('ADD_TASK', 'leads')
@@ -16,7 +26,6 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'leads'))
             })
-
         },
         updateIslandChiefId ({commit}, data) {
             return new Promise((resolve, reject) => {

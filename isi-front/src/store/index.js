@@ -38,7 +38,8 @@ export const store = new Vuex.Store({
             workdays: true,
             accesses: false,
             deals: false,
-            expenses: false
+            expenses: false,
+            leads: false
         },
         deals: [],
         startBalance: null,
@@ -280,6 +281,9 @@ export const store = new Vuex.Store({
                 }
                 if (this.state.scanMode.deals) {
                     dispatch('setDeals')
+                }
+                if (this.state.scanMode.leads) {
+                    dispatch('setLeadsOnTimer')
                 }
             }, 5000)
         },

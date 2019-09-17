@@ -73,6 +73,7 @@
                         break
                     case 3: this.$store.dispatch('setCurrentPage', 'leads')
                         this.$store.dispatch('setLeads')
+                        this.$store.commit('SET_SCAN_MODE', {...this.scanMode, leads: true})
                         break
                     case 4: this.$store.dispatch('setCurrentPage', 'salary')
                         break

@@ -26,9 +26,9 @@
         name: 'LeadsPanel',
         data: () => ({
             headers: [
-                {text: '№', value: null},
+                {text: '№', value: 'id'},
                 {text: 'Имя', value: 'name'},
-                {text: 'Телефон', value: 'phine'},
+                {text: 'Телефон', value: 'phone'},
                 {text: 'Сайт', value: 'site'},
                 {text: 'Комментарий', value: 'comment'},
                 {text: 'Дата/Время', value: 'created_at'},
