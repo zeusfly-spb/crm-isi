@@ -14,11 +14,12 @@
                     v-for="(item, index) in tabs"
                     :key="index"
                 >
-                    <daily-accounting v-if="index === 0"></daily-accounting>
-                    <customer-panel v-if="index === 1"></customer-panel>
-                    <stock-panel v-if="index === 2"></stock-panel>
-                    <salary-panel v-if="index === 3"></salary-panel>
-                    <admin-panel v-if="index === 4"></admin-panel>
+                    <daily-accounting v-if="index === 0"/>
+                    <customer-panel v-if="index === 1"/>
+                    <stock-panel v-if="index === 2"/>
+                    <lead-panel v-if="index === 3"/>
+                    <salary-panel v-if="index === 4"/>
+                    <admin-panel v-if="index === 5"/>
                 </v-tab-item>
             </v-tabs-items>
 
@@ -31,12 +32,13 @@
     import CustomerPanel from './customers/CustomerPanel'
     import DailyAccounting from './daily/DailyAccounting'
     import SalaryPanel from './salary/SalaryPanel'
+    import LeadPanel from './leads/LeadPanel'
 
     export default {
         name: 'HomeView',
         data: () => ({
-            regularTabs: ['Учет на день', 'База клиентов', 'Склад'],
-            adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Зарплата', 'Администрирование']
+            regularTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки'],
+            adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
         }),
         computed: {
             scanMode () {
@@ -69,9 +71,12 @@
                         break
                     case 2: this.$store.dispatch('setCurrentPage', 'stock')
                         break
-                    case 3: this.$store.dispatch('setCurrentPage', 'salary')
+                    case 3: this.$store.dispatch('setCurrentPage', 'leads')
+                        this.$store.dispatch('setLeads')
                         break
-                    case 4: this.$store.dispatch('setCurrentPage', 'admin')
+                    case 4: this.$store.dispatch('setCurrentPage', 'salary')
+                        break
+                    case 5: this.$store.dispatch('setCurrentPage', 'admin')
                         break
                 }
             }
@@ -81,7 +86,8 @@
             StockPanel,
             CustomerPanel,
             DailyAccounting,
-            SalaryPanel
+            SalaryPanel,
+            LeadPanel
         }
     }
 </script>

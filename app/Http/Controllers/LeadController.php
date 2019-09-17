@@ -12,4 +12,9 @@ class LeadController extends Controller
         $lead = Lead::create($request->all());
         return response()->json($lead->toArray());
     }
+
+    public function index(Request $request)
+    {
+        return response()->json(Lead::whereDate('created_at', $request->date)->get()->toArray());
+    }
 }

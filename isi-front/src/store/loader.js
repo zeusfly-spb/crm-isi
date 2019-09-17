@@ -2,8 +2,22 @@ import Vue from 'vue'
 
 export default {
     state: {
+        leads: []
     },
     actions: {
+        setLeads ({commit, rootState}) {
+            return new Promise((resolve ,reject) => {
+                commit('ADD_TASK', 'leads')
+                Vue.axios.post('/api/get_leads', {date: rootState.accountingDate})
+                    .then(res => {
+                        commit('SET_LEADS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+                    .finally(() => commit('REMOVE_TASK', 'leads'))
+            })
+
+        },
         updateIslandChiefId ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_chief_id', {... data})
@@ -61,6 +75,9 @@ export default {
         }
     },
     mutations: {
+        SET_LEADS (state, leads) {
+            state.leads = leads
+        },
         SET_DAILY_PAGE (rootState, data) {
             rootState.workdays = data.workdays
             rootState.deals = data.deals
