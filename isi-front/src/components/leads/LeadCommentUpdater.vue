@@ -14,7 +14,7 @@
             :title="`Изменить комментарий для заявки с номера ${lead.phone}`"
             @click="activate"
         >
-            {{ lead.comment || '-' }}
+            {{ lead.comment || '-----------' }}
         </span>
     </v-flex>
 </template>
