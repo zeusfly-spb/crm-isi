@@ -1,6 +1,5 @@
 <template>
   <v-app>
-
       <v-toolbar app>
       <v-toolbar-title class="headline">
         <v-layout>
@@ -18,9 +17,7 @@
               <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
             </div>
           </div>
-
         </v-layout>
-
 
       </v-toolbar-title>
         <date-selector v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"/>

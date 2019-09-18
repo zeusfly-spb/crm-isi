@@ -52,7 +52,9 @@
                     <caller :phone="props.item.phone"/>
                 </td>
                 <td>{{ props.item.site }}</td>
-                <td>{{ props.item.comment }}</td>
+                <td>
+                    <lead-comment-updater :lead="props.item" @updated="showSuccess"/>
+                </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
                 <td>
                     <v-icon
@@ -115,6 +117,7 @@
 </template>
 <script>
     import Caller from './Caller'
+    import LeadCommentUpdater from './LeadCommentUpdater'
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -196,7 +199,8 @@
             }
         },
         components: {
-            Caller
+            Caller,
+            LeadCommentUpdater
         }
     }
 </script>

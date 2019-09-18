@@ -5,6 +5,16 @@ export default {
         leads: []
     },
     actions: {
+        updateLeadComment ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_lead_comment', {... data})
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateLeadStatus ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_lead_status', {... data})

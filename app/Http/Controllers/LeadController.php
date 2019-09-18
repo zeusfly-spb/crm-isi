@@ -29,4 +29,11 @@ class LeadController extends Controller
         $lead->update(['status' => $request->status]);
         return response()->json($lead->toArray());
     }
+
+    public function updateComment(Request $request)
+    {
+        $lead = Lead::find($request->lead_id);
+        $lead->update(['comment' => $request->comment]);
+        return response()->json($lead->toArray());
+    }
 }
