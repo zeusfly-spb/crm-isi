@@ -121,6 +121,6 @@ export default {
         }
     },
     getters: {
-
+        waitingLeadsCount: state => state.leads.filter(item => item.status === 'wait').length
     }
 }

@@ -7,7 +7,15 @@
                 v-for="(item, index) in tabs"
                 :key="index"
             >
-                {{ item }}
+                <v-badge color="red"
+                         v-if="index === 3 && waitingLeadsCount"
+                >
+                    <template v-slot:badge>
+                        <span>{{ waitingLeadsCount }}</span>
+                    </template>
+                    {{ item }}
+                </v-badge>
+                <span v-else>{{ item }}</span>
             </v-tab>
             <v-tabs-items touchless>
                 <v-tab-item
@@ -41,6 +49,9 @@
             adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            waitingLeadsCount () {
+                return this.$store.getters.waitingLeadsCount
+            },
             scanMode () {
                 return this.$store.state.scanMode
             },
