@@ -22,4 +22,11 @@ class LeadController extends Controller
     {
         return response()->json(['result' => Lead::destroy($request->lead_id), 'id' => $request->lead_id]);
     }
+
+    public function updateStatus(Request $request)
+    {
+        $lead = Lead::find($request->lead_id);
+        $lead->update(['status' => $request->status]);
+        return response()->json($lead->toArray());
+    }
 }

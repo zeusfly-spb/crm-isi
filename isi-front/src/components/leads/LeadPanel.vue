@@ -9,6 +9,25 @@
         >
             <span>{{ snackText }}</span>
         </v-snackbar>
+        <v-flex>
+            <v-btn
+                small
+                v-for="(mode, index) in viewModes"
+                @click="setViewMode(mode)"
+                :key="index"
+                :depressed="mode === currentViewMode"
+                :color="mode === currentViewMode ? 'grey lighten-1' : null"
+            >
+                {{ {wait: 'Ожидают', process: 'В работе', done: 'Завершенные', moderate: 'На модерации', all: 'Все'}[mode] }}
+                (
+                <span v-if="mode === 'all'">{{ counts.all }}</span>
+                <span v-if="mode === 'wait'">{{ counts.wait }}</span>
+                <span v-if="mode === 'process'">{{ counts.process }}</span>
+                <span v-if="mode === 'moderate'">{{ counts.moderate }}</span>
+                <span v-if="mode === 'done'">{{ counts.done }}</span>
+                )
+            </v-btn>
+        </v-flex>
         <v-data-table
             :headers="headers"
             :items="leads"
@@ -35,6 +54,32 @@
                 <td>{{ props.item.site }}</td>
                 <td>{{ props.item.comment }}</td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
+                <td>
+                    <v-icon
+                        :title="`Присвоить статус 'В работе' для заявки с номера ${props.item.phone}`"
+                        v-show="props.item.status !== 'process'"
+                        class="green--text clickable"
+                        @click="updateStatus({lead: props.item, status: 'process'})"
+                    >
+                        offline_pin
+                    </v-icon>
+                    <v-icon
+                        :title="`Присвоить статус 'На модерации' для заявки с номера ${props.item.phone}`"
+                        v-show="props.item.status !== 'moderate'"
+                        class="blue--text clickable"
+                        @click="updateStatus({lead: props.item, status: 'moderate'})"
+                    >
+                        offline_bolt
+                    </v-icon>
+                    <v-icon
+                        :title="`Присвоить статус 'Завершено' для заявки с номера ${props.item.phone}`"
+                        v-show="props.item.status !== 'done' && canClose"
+                        class="red--text clickable"
+                        @click="updateStatus({lead: props.item, status: 'done'})"
+                    >
+                        remove_circle
+                    </v-icon>
+                </td>
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет заявок</span>
@@ -73,6 +118,8 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            currentViewMode: 'wait',
+            viewModes: ['wait', 'process', 'moderate', 'done', 'all'],
             snackbar: false,
             snackText: '',
             snackColor: 'green',
@@ -87,17 +134,49 @@
                 {text: 'Сайт', value: 'site'},
                 {text: 'Комментарий', value: 'comment'},
                 {text: 'Дата/Время', value: 'created_at'},
+                {text: 'Действия', value: null}
             ]
         }),
         computed: {
+            canClose () {
+                return this.isSuperadmin
+            },
+            counts () {
+                let base = this.$store.state.loader.leads
+                return {
+                    all: base.length,
+                    wait: base.filter(item => item.status === 'wait').length,
+                    process: base.filter(item => item.status === 'process').length,
+                    done: base.filter(item => item.status === 'done').length,
+                    moderate: base.filter(item => item.status === 'moderate').length
+                }
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
             leads () {
-                return this.$store.state.loader.leads
+                let base = this.$store.state.loader.leads
+                switch (this.currentViewMode) {
+                    case 'all': return base
+                    case 'wait': return base.filter(item => item.status === 'wait')
+                    case 'process': return base.filter(item => item.status === 'process')
+                    case 'moderate': return base.filter(item => item.status === 'moderate')
+                    case 'done': return base.filter(item => item.status === 'done')
+                }
             }
         },
         methods: {
+            updateStatus ({lead, status}) {
+                let hint = `Заявке с номера ${lead.phone} присвоен статус '${{process: 'В работе', moderate: 'На модерации', done: 'Завершена'}[status]}'`
+                this.$store.dispatch('updateLeadStatus', {
+                    lead_id: lead.id,
+                    status: status
+                })
+                    .then(() => this.showSuccess(hint, 'green'))
+            },
+            setViewMode (mode) {
+                this.currentViewMode = mode
+            },
             showSuccess (text, color) {
                 this.snackText = text
                 this.snackColor = color
@@ -122,6 +201,13 @@
     }
 </script>
 <style scoped>
+    .clickable {
+        cursor: pointer;
+        opacity: .75;
+    }
+    .clickable:hover {
+        opacity: 1;
+    }
     .delete {
         cursor: pointer;
         opacity: .6;

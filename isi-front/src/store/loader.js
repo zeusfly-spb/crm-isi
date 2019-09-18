@@ -5,6 +5,16 @@ export default {
         leads: []
     },
     actions: {
+        updateLeadStatus ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_lead_status', {... data})
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteLead ({commit}, leadId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
@@ -94,6 +104,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_LEAD (state, lead) {
+            state.leads = state.leads.map(item => +item.id === +lead.id ? lead : item)
+        },
         DELETE_LEAD (state, data) {
             state.leads = state.leads.filter(item => +item.id !== +data.lead_id)
         },
