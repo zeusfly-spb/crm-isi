@@ -15,7 +15,7 @@ class LeadController extends Controller
 
     public function index(Request $request)
     {
-        return response()->json(Lead::whereDate('created_at', $request->date)->get()->toArray());
+        return response()->json(Lead::all()->toArray());
     }
 
     public function delete(Request $request)

@@ -53,7 +53,7 @@
                 </td>
                 <td>{{ props.item.site }}</td>
                 <td>
-                    <lead-comment-updater :lead="props.item" @updated="showSuccess"/>
+                    <lead-comment-updater :lead="props.item" @updated="showSuccessй"/>
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
                 <td>
