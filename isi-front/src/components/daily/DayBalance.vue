@@ -39,9 +39,9 @@
             v-model="dialog"
             max-width="300"
         >
-            <v-card>
-                <v-card-title class="subheading">
-                    Сдать кассу
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Сдать кассу</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
@@ -141,3 +141,8 @@
         }
     }
 </script>
+<style scoped>
+    .round-corner {
+        border-radius: 5px;
+    }
+</style>
