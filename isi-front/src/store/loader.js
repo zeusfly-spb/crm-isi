@@ -5,9 +5,22 @@ export default {
         leads: []
     },
     actions: {
-        updateLeadComment ({commit}, data) {
+        deleteLeadComment ({commit}, commentId) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_lead_comment', {... data})
+                Vue.axios.post('/api/delete_lead_comment', {comment_id: commentId})
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addLeadComment ({commit, rootState}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_lead_comment', {
+                    ... data,
+                    user_id: rootState.authUser.id
+                })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
                         resolve(res)

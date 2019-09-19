@@ -53,8 +53,7 @@
                 </td>
                 <td>{{ props.item.site }}</td>
                 <td>
-<!--                    <lead-comment-updater :lead="props.item" @updated="showSuccess"/>-->
-                    <lead-comments :lead="props.item"/>
+                    <lead-comments :lead="props.item" @updated="showSuccess"/>
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
                 <td>
@@ -118,7 +117,6 @@
 </template>
 <script>
     import Caller from './Caller'
-    import LeadCommentUpdater from './LeadCommentUpdater'
     import LeadComments from './LeadComments'
 
     export default {
@@ -138,7 +136,7 @@
                 {text: 'Имя', value: 'name'},
                 {text: 'Телефон', value: 'phone'},
                 {text: 'Сайт', value: 'site'},
-                {text: 'Комментарий', value: 'comment'},
+                {text: 'Комментарии', value: 'comment'},
                 {text: 'Дата/Время', value: 'created_at'},
                 {text: 'Действия', value: null}
             ]
@@ -203,7 +201,6 @@
         },
         components: {
             Caller,
-            LeadCommentUpdater,
             LeadComments
         }
     }

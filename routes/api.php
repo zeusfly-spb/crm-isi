@@ -120,5 +120,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_lead', 'LeadController@delete');
     Route::post('update_lead_status', 'LeadController@updateStatus');
     Route::post('update_lead_comment', 'LeadController@updateComment');
+    Route::post('add_lead_comment', 'LeadController@addComment');
+    Route::post('delete_lead_comment', 'LeadController@deleteComment');
 
 });
