@@ -28,6 +28,7 @@ class LeadController extends Controller
     {
         $lead = Lead::find($request->lead_id);
         $lead->update(['status' => $request->status]);
+        $lead->addComment($request->comment, $request->user_id);
         $lead->load('comments');
         return response()->json($lead->toArray());
     }

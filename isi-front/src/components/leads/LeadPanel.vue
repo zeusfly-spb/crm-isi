@@ -57,30 +57,7 @@
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
                 <td>
-                    <v-icon
-                        :title="`Присвоить статус 'В работе' для заявки с номера ${props.item.phone}`"
-                        v-show="props.item.status !== 'process'"
-                        class="green--text clickable"
-                        @click="updateStatus({lead: props.item, status: 'process'})"
-                    >
-                        offline_pin
-                    </v-icon>
-                    <v-icon
-                        :title="`Присвоить статус 'На модерации' для заявки с номера ${props.item.phone}`"
-                        v-show="props.item.status !== 'moderate'"
-                        class="blue--text clickable"
-                        @click="updateStatus({lead: props.item, status: 'moderate'})"
-                    >
-                        offline_bolt
-                    </v-icon>
-                    <v-icon
-                        :title="`Присвоить статус 'Завершено' для заявки с номера ${props.item.phone}`"
-                        v-show="props.item.status !== 'done' && canClose"
-                        class="red--text clickable"
-                        @click="updateStatus({lead: props.item, status: 'done'})"
-                    >
-                        remove_circle
-                    </v-icon>
+                    <lead-status :lead="props.item"></lead-status>
                 </td>
             </template>
             <template v-slot:no-data>
@@ -118,6 +95,7 @@
 <script>
     import Caller from './Caller'
     import LeadComments from './LeadComments'
+    import LeadStatus from './LeadStatus'
 
     export default {
         name: 'LeadsPanel',
@@ -201,18 +179,12 @@
         },
         components: {
             Caller,
-            LeadComments
+            LeadComments,
+            LeadStatus
         }
     }
 </script>
 <style scoped>
-    .clickable {
-        cursor: pointer;
-        opacity: .75;
-    }
-    .clickable:hover {
-        opacity: 1;
-    }
     .delete {
         cursor: pointer;
         opacity: .6;

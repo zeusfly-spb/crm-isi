@@ -28,9 +28,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        updateLeadStatus ({commit}, data) {
+        updateLeadStatus ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_lead_status', {... data})
+                Vue.axios.post('/api/update_lead_status', {
+                    ... data,
+                    user_id: rootState.authUser.id
+                })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
                         resolve(res)
