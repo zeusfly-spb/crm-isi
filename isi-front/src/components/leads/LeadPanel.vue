@@ -53,7 +53,8 @@
                 </td>
                 <td>{{ props.item.site }}</td>
                 <td>
-                    <lead-comment-updater :lead="props.item" @updated="showSuccessй"/>
+<!--                    <lead-comment-updater :lead="props.item" @updated="showSuccess"/>-->
+                    <lead-comments :lead="props.item"/>
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
                 <td>
@@ -118,6 +119,8 @@
 <script>
     import Caller from './Caller'
     import LeadCommentUpdater from './LeadCommentUpdater'
+    import LeadComments from './LeadComments'
+
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -200,7 +203,8 @@
         },
         components: {
             Caller,
-            LeadCommentUpdater
+            LeadCommentUpdater,
+            LeadComments
         }
     }
 </script>
