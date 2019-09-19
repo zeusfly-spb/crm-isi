@@ -19,7 +19,7 @@
         </v-icon>
         <v-dialog
             v-model="active"
-            max-width="800px"
+            max-width="1000px"
             :persistent="adding"
         >
             <v-card class="round-border">
@@ -43,6 +43,7 @@
                                 autofocus
                                 @keyup.esc="adding = false"
                                 @keyup.enter="addComment"
+                                @blur="adding = false"
                                 data-vv-as="Комментарий"
                                 data-vv-name="comment"
                                 :error-messages="errors.collect('comment')"
