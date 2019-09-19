@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lead extends Model
+class LeadComment extends Model
 {
     protected $guarded = [];
 
-    public function comments()
+    public function lead()
     {
-        return $this->hasMany(LeadComment::class);
+        return $this->belongsTo(Lead::class);
     }
 }
