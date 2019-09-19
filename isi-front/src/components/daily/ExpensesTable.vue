@@ -44,9 +44,9 @@
                 v-model="dialog"
                 max-width="400px"
             >
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">Добавить расход</span>
+                <v-card class="round-corner">
+                    <v-card-title class="light-blue darken-3">
+                        <span class="title white--text">Добавить расход</span>
                     </v-card-title>
                     <v-card-text>
                         <v-container grid-list-md>
@@ -88,10 +88,15 @@
         <v-dialog v-model="confirm"
                   max-width="500"
         >
-            <v-card>
-                <v-card-title class="subheading">
-                    {{ confirmText }}
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Подтверждение</span>
                 </v-card-title>
+                <v-card-text>
+                    <span class="title">
+                        {{ confirmText }}
+                    </span>
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -208,5 +213,8 @@
     }
     .delete:hover {
         opacity: 1;
+    }
+    .round-corner {
+        border-radius: 5px;
     }
 </style>
