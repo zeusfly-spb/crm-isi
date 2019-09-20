@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::post('/save_lead', 'LeadController@save');
+Route::post('/missed_call', 'LeadController@missed');

@@ -6,7 +6,7 @@
             @click="activate"
             class="clickable fat-able"
         >
-            {{ lastComment.text }}
+            {{ lastComment.text }} <span class="green--text accent-4"><strong>({{ comments.length }})</strong></span>
         </span>
         <v-icon
             v-else

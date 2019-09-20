@@ -49,4 +49,10 @@ class LeadController extends Controller
         $lead->load('comments');
         return response()->json($lead->toArray());
     }
+
+    public function missed(Request $request)
+    {
+        $lead = Lead::create($request->all());
+        return response()->json($lead->toArray());
+    }
 }
