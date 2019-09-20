@@ -2,7 +2,7 @@
     <v-flex>
         <span
             v-if="comments.length"
-            :title="`Показать все комментарии к заявке с номера ${lead.phone}`"
+            :title="comments.length > 1 ? `Показать все комментарии к заявке с номера ${lead.phone}` : `Открыть панель  комментариев к заявке с номера ${lead.phone}`"
             @click="activate"
             class="clickable fat-able"
         >
@@ -127,7 +127,7 @@
                 class="round-border"
             >
                 <v-card-title class="light-blue darken-3">
-                    <span class="title white--text">Подтвержение</span>
+                    <span class="title white--text">Подтверждение</span>
                 </v-card-title>
                 <v-card-text>
                     Удалить комментарий <strong>{{ commentToDelete && commentToDelete.text || ''}}</strong>?
