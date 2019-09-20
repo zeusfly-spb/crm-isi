@@ -51,6 +51,9 @@
                     {{ props.item.phone }}
                     <caller :phone="props.item.phone"/>
                 </td>
+                <td>
+                    {{ props.item.comment }}
+                </td>
                 <td>{{ props.item.site }}</td>
                 <td>
                     <lead-comments :lead="props.item" @updated="showSuccess"/>
@@ -64,6 +67,7 @@
                 <span class="red--text">Нет заявок</span>
             </template>
         </v-data-table>
+        <new-lead-dialog/>
         <v-dialog v-model="confirm"
                   max-width="400"
         >
@@ -96,6 +100,7 @@
     import Caller from './Caller'
     import LeadComments from './LeadComments'
     import LeadStatus from './LeadStatus'
+    import NewLeadDialog from './NewLeadDialog'
 
     export default {
         name: 'LeadsPanel',
@@ -109,14 +114,15 @@
             confirm: false,
             leadToDelete: null,
             headers: [
-                {text: '', value: null},
-                {text: '#', value: 'id'},
-                {text: 'Имя', value: 'name'},
-                {text: 'Телефон', value: 'phone'},
-                {text: 'Сайт', value: 'site'},
-                {text: 'Комментарии', value: 'comment'},
-                {text: 'Дата/Время', value: 'created_at'},
-                {text: 'Действия', value: null}
+                {text: '', value: null, sortable: false},
+                {text: '#', value: 'id', sortable: false},
+                {text: 'Имя', value: 'name', sortable: false},
+                {text: 'Телефон', value: 'phone', sortable: false},
+                {text: 'Примечание', value: null, sortable: false},
+                {text: 'Сайт', value: 'site', sortable: false},
+                {text: 'Комментарии', value: null, sortable: false},
+                {text: 'Дата/Время', value: 'created_at', sortable: false},
+                {text: 'Действия', value: null, sortable: false}
             ]
         }),
         computed: {
@@ -180,7 +186,8 @@
         components: {
             Caller,
             LeadComments,
-            LeadStatus
+            LeadStatus,
+            NewLeadDialog
         }
     }
 </script>

@@ -27,7 +27,7 @@
             max-width="1000px"
             :persistent="adding"
         >
-            <v-card class="round-border">
+            <v-card class="round-corner">
                 <v-card-title
                     class="light-blue darken-3"
                 >
@@ -124,7 +124,7 @@
             max-width="400"
         >
             <v-card
-                class="round-border"
+                class="round-corner"
             >
                 <v-card-title class="light-blue darken-3">
                     <span class="title white--text">Подтверждение</span>
@@ -241,7 +241,7 @@
     .clickable:hover {
         opacity: 1;
     }
-    .round-border {
+    .round-corner {
         border-radius: 5px;
     }
 </style>
