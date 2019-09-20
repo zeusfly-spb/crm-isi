@@ -86,6 +86,13 @@
                             })
                     })
             }
+        },
+        watch: {
+            dialog (val) {
+                if (val) {
+                    [this.phone, this.name, this.comment] = ['', '', '']
+                }
+            }
         }
     }
 </script>
