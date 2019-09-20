@@ -63,6 +63,7 @@ class LeadController extends Controller
         $lead = Lead::create([
             'phone' => $request->phone,
             'name' => $request->name,
+            'status' => 'process',
             'comment' => $request->comment . ' | Добавлено сотрудником ' . $user->full_name
         ]);
         return response()->json($lead->toArray());

@@ -27,6 +27,7 @@
                 <span v-if="mode === 'done'">{{ counts.done }}</span>
                 )
             </v-btn>
+            <new-lead-dialog @updated="showSuccess" style="display: inline"/>
         </v-flex>
         <v-data-table
             :headers="headers"
@@ -67,7 +68,7 @@
                 <span class="red--text">Нет заявок</span>
             </template>
         </v-data-table>
-        <new-lead-dialog @updated="showSuccess"/>
+
         <v-dialog v-model="confirm"
                   max-width="600"
         >
