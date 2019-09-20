@@ -2,7 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
-        leads: []
+        leads: [],
+        beep: false
     },
     actions: {
         addLead ({commit, rootState}, data) {
@@ -153,7 +154,13 @@ export default {
             state.leads = state.leads.filter(item => +item.id !== +data.lead_id)
         },
         SET_LEADS (state, leads) {
+            let prevCount = state.leads.filter(item => item.status === 'wait')
             state.leads = leads
+            let postCount = state.leads.filter(item => item.status === 'wait')
+            if (postCount > prevCount) {
+                state.beep = true
+                setTimeout(() => state.beep = false, 2000)
+            }
         },
         SET_DAILY_PAGE (rootState, data) {
             rootState.workdays = data.workdays

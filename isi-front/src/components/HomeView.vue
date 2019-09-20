@@ -30,8 +30,11 @@
                     <admin-panel v-if="index === 5"/>
                 </v-tab-item>
             </v-tabs-items>
-
         </v-tabs>
+        <audio
+            :src="`${basePath}/beep.wav`" autoplay
+            v-if="beep"
+        />
     </v-flex>
 </template>
 <script>
@@ -49,6 +52,12 @@
             adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            beep () {
+                return this.$store.state.loader.beep
+            },
+            basePath () {
+                return this.$store.state.basePath
+            },
             waitingLeadsCount () {
                 return this.$store.getters.waitingLeadsCount
             },
