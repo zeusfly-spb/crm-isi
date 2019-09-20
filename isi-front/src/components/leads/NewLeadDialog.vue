@@ -75,6 +75,15 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.$store.dispatch('addLead', {
+                            phone: this.phone,
+                            name: this.name,
+                            comment: this.comment
+                        })
+                            .then(() => {
+                                this.dialog = false
+                                this.$emit('updated', 'Добавлена новая заявка', 'green')
+                            })
                     })
             }
         }

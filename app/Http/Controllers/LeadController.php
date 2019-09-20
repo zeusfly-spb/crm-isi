@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lead;
 use App\LeadComment;
+use App\User;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
@@ -53,6 +54,17 @@ class LeadController extends Controller
     public function missed(Request $request)
     {
         $lead = Lead::create(['phone' => $request->phone, 'comment' => 'Пропущенный звонок']);
+        return response()->json($lead->toArray());
+    }
+
+    public function addLead(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $lead = Lead::create([
+            'phone' => $request->phone,
+            'name' => $request->name,
+            'comment' => $request->comment . ' | Добавлено сотрудником ' . $user->full_name
+        ]);
         return response()->json($lead->toArray());
     }
 }

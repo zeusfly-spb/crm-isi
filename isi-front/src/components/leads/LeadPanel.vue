@@ -67,14 +67,17 @@
                 <span class="red--text">Нет заявок</span>
             </template>
         </v-data-table>
-        <new-lead-dialog/>
+        <new-lead-dialog @updated="showSuccess"/>
         <v-dialog v-model="confirm"
-                  max-width="400"
+                  max-width="600"
         >
             <v-card>
-                <v-card-title class="subheading">
-                    {{ confirmText }}
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Подтверждение</span>
                 </v-card-title>
+                <v-card-text>
+                    <span class="title">{{ confirmText }}</span>
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
