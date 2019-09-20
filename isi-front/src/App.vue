@@ -41,14 +41,11 @@
 
 <script>
 import DateSelector from './components/DateSelector'
-
+import Jquery from 'jquery'
 export default {
     name: 'App',
-    data () {
-        return {
-          //
-        }
-    },
+    data: () => ({
+    }),
     computed: {
         tasks () {
             return this.$store.state.spinner.tasks
@@ -75,10 +72,17 @@ export default {
 
     },
     methods: {
+        setAlert () {
+            let $ = Jquery
+            $('head').append(`<link id="dynamic-favicon" rel="shortcut icon" href="${this.basePath}/alert.ico" />`);
+        },
         logOut () {
             this.$store.dispatch('logOut')
             this.$router.push('/login')
         }
+    },
+    created () {
+        this.setAlert()
     },
     components: {
         DateSelector
