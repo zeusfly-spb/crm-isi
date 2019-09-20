@@ -49,7 +49,9 @@
                 <td>{{ props.index + 1 }}</td>
                 <td>{{ props.item.name }}</td>
                 <td>
-                    {{ props.item.phone }}
+                    <span v-if="props.item.phone[0] == '+'">{{ props.item.phone }}</span>
+                    <span v-else>{{ props.item.phone | phone }}</span>
+
                     <caller :phone="props.item.phone"/>
                 </td>
                 <td>
@@ -185,6 +187,12 @@
                 this.leadToDelete = lead
                 this.confirmText = `Удалить заявку с номера ${lead.phone}?`
                 this.confirm = true
+            }
+        },
+        filters: {
+            phone: function (val) {
+                return '+7 ' + val.replace(/[^0-9]/g, '')
+                    .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
             }
         },
         components: {
