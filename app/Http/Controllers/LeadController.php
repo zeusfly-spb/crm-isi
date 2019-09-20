@@ -15,9 +15,10 @@ class LeadController extends Controller
         return response()->json($lead->toArray());
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        return response()->json(Lead::with('comments')->get()->toArray());
+        $leads = Lead::with('comments')->get()->reverse()->values();
+        return response()->json($leads->toArray());
     }
 
     public function delete(Request $request)

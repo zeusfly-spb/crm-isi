@@ -149,7 +149,7 @@
                 return this.$store.getters.isSuperadmin
             },
             leads () {
-                let base = this.$store.state.loader.leads.reverse()
+                let base = this.$store.state.loader.leads
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
