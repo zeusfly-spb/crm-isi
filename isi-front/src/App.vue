@@ -72,17 +72,10 @@ export default {
 
     },
     methods: {
-        setAlert () {
-            let $ = Jquery
-            $('head').append(`<link id="dynamic-favicon" rel="shortcut icon" href="${this.basePath}/alert.ico" />`);
-        },
         logOut () {
             this.$store.dispatch('logOut')
             this.$router.push('/login')
         }
-    },
-    created () {
-        this.setAlert()
     },
     components: {
         DateSelector
