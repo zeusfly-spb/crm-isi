@@ -52,7 +52,7 @@ class LeadController extends Controller
 
     public function missed(Request $request)
     {
-        $lead = Lead::create($request->all());
+        $lead = Lead::create(['phone' => $request->phone, 'comment' => 'Пропущенный звонок']);
         return response()->json($lead->toArray());
     }
 }
