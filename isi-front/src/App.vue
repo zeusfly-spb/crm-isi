@@ -41,7 +41,6 @@
 
 <script>
 import DateSelector from './components/DateSelector'
-import Jquery from 'jquery'
 export default {
     name: 'App',
     data: () => ({
