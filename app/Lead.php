@@ -13,7 +13,12 @@ class Lead extends Model
         return $this->hasMany(LeadComment::class)->with('user');
     }
 
-    public function addComment(string $text, int $user_id)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function addComment(string $text, $user_id = null)
     {
         return $this->comments()->create(['user_id' => $user_id, 'text' => $text]);
     }

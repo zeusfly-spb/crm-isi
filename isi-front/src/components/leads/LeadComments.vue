@@ -88,10 +88,11 @@
                                     <td align="right">
                                         <v-avatar
                                             size="36px"
-                                            :title="props.item.user.full_name"
+                                            :title="props.item.user && props.item.user.full_name || ''"
                                         >
-                                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
-                                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+                                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
+                                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                                            <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
                                         </v-avatar>
                                     </td>
                                     <td align="right">

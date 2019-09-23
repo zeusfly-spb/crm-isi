@@ -47,16 +47,24 @@
                     </v-icon>
                 </td>
                 <td>{{ props.index + 1 }}</td>
-                <td>{{ props.item.name }}</td>
+                <td>{{ props.item.name | upFirst }}</td>
                 <td nowrap>
                     <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
                     <span v-else>{{ props.item.phone | phone }}</span>
                     <caller :phone="props.item.phone"/>
                 </td>
+                <td></td>
                 <td>
-                    {{ props.item.comment }}
+                    <span v-if="props.item.site">{{ props.item.site }}</span>
+                    <v-avatar
+                        v-else
+                        size="36px"
+                        :title="props.item.user && props.item.user.full_name || ''"
+                    >
+                        <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
+                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                    </v-avatar>
                 </td>
-                <td>{{ props.item.site }}</td>
                 <td>
                     <lead-comments :lead="props.item" @updated="showSuccess"/>
                 </td>
@@ -123,14 +131,17 @@
                 {text: '#', value: 'id', sortable: false},
                 {text: 'Имя', value: 'name', sortable: false},
                 {text: 'Телефон', value: 'phone', sortable: false},
-                {text: 'Примечание', value: null, sortable: false},
-                {text: 'Сайт', value: 'site', sortable: false},
+                {text: 'Дата перезвона', value: 'phone', sortable: false},
+                {text: 'Источник', value: 'site', sortable: false},
                 {text: 'Комментарии', value: null, sortable: false},
                 {text: 'Дата/Время', value: 'created_at', sortable: false},
                 {text: 'Действия', value: null, sortable: false}
             ]
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             canClose () {
                 return this.isSuperadmin
             },
@@ -189,6 +200,9 @@
             }
         },
         filters: {
+            upFirst: function (val) {
+                return val ? val[0].toUpperCase() + val.substring(1) : ''
+            },
             phone: function (val) {
                 String.prototype.replaceAt = function(index, replacement) {
                     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
@@ -205,8 +219,6 @@
                     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
                 }
                 return val.replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
-
-
             }
         },
         components: {
