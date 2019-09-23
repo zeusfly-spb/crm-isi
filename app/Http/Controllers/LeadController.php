@@ -12,6 +12,10 @@ class LeadController extends Controller
     public function save(Request $request)
     {
         $lead = Lead::create($request->all());
+        if ($request->comment) {
+            $lead->addComment($request->comment, null);
+        }
+        $lead->load('comments');
         return response()->json($lead->toArray());
     }
 
@@ -60,12 +64,11 @@ class LeadController extends Controller
 
     public function addLead(Request $request)
     {
-        $user = User::find($request->user_id);
         $lead = Lead::create([
             'phone' => $request->phone,
             'name' => $request->name,
             'status' => 'process',
-            'comment' => $request->comment . ' | Добавлено сотрудником ' . $user->full_name
+            'user_id' => $request->user_id
         ]);
         return response()->json($lead->toArray());
     }
