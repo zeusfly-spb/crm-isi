@@ -49,7 +49,7 @@
                 <td>{{ props.index + 1 }}</td>
                 <td>{{ props.item.name }}</td>
                 <td>
-                    <span v-if="props.item.phone[0] == '+'">{{ props.item.phone }}</span>
+                    <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
                     <span v-else>{{ props.item.phone | phone }}</span>
 
                     <caller :phone="props.item.phone"/>
@@ -191,8 +191,23 @@
         },
         filters: {
             phone: function (val) {
+                String.prototype.replaceAt = function(index, replacement) {
+                    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+                }
+
                 return '+7 ' + val.replace(/[^0-9]/g, '')
                     .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
+                    .replaceAt(6, '*')
+                    .replaceAt(7, '*')
+                    .replaceAt(8, '*')
+            },
+            externalPhone: function (val) {
+                String.prototype.replaceAt = function(index, replacement) {
+                    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+                }
+                return val.replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
+
+
             }
         },
         components: {

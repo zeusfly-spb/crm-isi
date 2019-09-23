@@ -1,16 +1,12 @@
 <template>
-    <v-btn
-        icon
+    <v-icon
         title="Позвонить"
         @click="makeCall"
-        :disabled="!authUser.vpbx_extension"
+        v-if="authUser.vpbx_extension"
+        :class="{'green--text': !!authUser.vpbx_extension, 'grey--text': !authUser.vpbx_extension}"
     >
-        <v-icon
-            :class="{'green--text': !!authUser.vpbx_extension, 'grey--text': !authUser.vpbx_extension}"
-        >
-            phone
-        </v-icon>
-    </v-btn>
+        phone
+    </v-icon>
 </template>
 <script>
     export default {
