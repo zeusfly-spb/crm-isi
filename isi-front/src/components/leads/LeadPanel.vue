@@ -48,10 +48,9 @@
                 </td>
                 <td>{{ props.index + 1 }}</td>
                 <td>{{ props.item.name }}</td>
-                <td>
+                <td nowrap>
                     <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
                     <span v-else>{{ props.item.phone | phone }}</span>
-
                     <caller :phone="props.item.phone"/>
                 </td>
                 <td>
