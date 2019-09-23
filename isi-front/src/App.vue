@@ -80,9 +80,6 @@ export default {
             this.$router.push('/login')
         }
     },
-    created () {
-        console.dir(Favico)
-    },
     watch: {
         waitingLeadsCount (val) {
             let favicon = new Favico({
@@ -90,6 +87,10 @@ export default {
             })
             if (val) {
                 favicon.badge(val)
+                setInterval(() => {
+                    favicon.reset()
+                    favicon.badge(val)
+                }, 3000)
             } else {
                 favicon.reset()
             }
