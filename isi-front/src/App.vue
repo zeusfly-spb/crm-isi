@@ -41,11 +41,15 @@
 
 <script>
 import DateSelector from './components/DateSelector'
+import Favico from 'favico.js'
 export default {
     name: 'App',
     data: () => ({
     }),
     computed: {
+        waitingLeadsCount () {
+            return this.$store.getters.waitingLeadsCount
+        },
         tasks () {
             return this.$store.state.spinner.tasks
         },
@@ -74,6 +78,21 @@ export default {
         logOut () {
             this.$store.dispatch('logOut')
             this.$router.push('/login')
+        }
+    },
+    created () {
+        console.dir(Favico)
+    },
+    watch: {
+        waitingLeadsCount (val) {
+            let favicon = new Favico({
+                animation : 'popFade'
+            })
+            if (val) {
+                favicon.badge(val)
+            } else {
+                favicon.reset()
+            }
         }
     },
     components: {
