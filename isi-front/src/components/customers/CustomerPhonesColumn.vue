@@ -2,10 +2,12 @@
     <div>
         <div v-for="phone in phones" :key="phone.id">
             {{ phone.number | phone}}
+            <caller :phone="phone.number"/>
         </div>
     </div>
 </template>
 <script>
+    import Caller from '../leads/Caller'
     export default {
         name: 'CustomerPhonesColumn',
         props: ['phones'],
@@ -18,6 +20,9 @@
                     .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
                     .replaceAt(6, '*').replaceAt(7, '*').replaceAt(8, '*')
             }
+        },
+        components: {
+            Caller
         }
     }
 </script>
