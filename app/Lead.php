@@ -39,6 +39,6 @@ class Lead extends Model
 
     public function getLastPostponeAttribute()
     {
-        return $this->postpones->last()->date ?? null;
+        return $this->postpones->last() ?? null;
     }
 }

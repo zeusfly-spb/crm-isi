@@ -1,6 +1,5 @@
 <template>
     <v-flex>
-
         <v-menu
             :close-on-content-click="false"
             :nudge-right="40"
