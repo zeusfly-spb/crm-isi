@@ -53,7 +53,9 @@
                     <span v-else>{{ props.item.phone | phone }}</span>
                     <caller :phone="props.item.phone"/>
                 </td>
-                <td></td>
+                <td>
+                    <lead-postpones :lead="props.item"/>
+                </td>
                 <td>
                     <span v-if="props.item.site">{{ props.item.site }}</span>
                     <v-avatar
@@ -114,6 +116,7 @@
     import LeadComments from './LeadComments'
     import LeadStatus from './LeadStatus'
     import NewLeadDialog from './NewLeadDialog'
+    import LeadPostpones from './LeadPostpones'
 
     export default {
         name: 'LeadsPanel',
@@ -199,33 +202,12 @@
                 this.confirm = true
             }
         },
-        filters: {
-            upFirst: function (val) {
-                return val ? val[0].toUpperCase() + val.substring(1) : ''
-            },
-            phone: function (val) {
-                String.prototype.replaceAt = function(index, replacement) {
-                    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-                }
-
-                return '+7 ' + val.replace(/[^0-9]/g, '')
-                    .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
-                    .replaceAt(6, '*')
-                    .replaceAt(7, '*')
-                    .replaceAt(8, '*')
-            },
-            externalPhone: function (val) {
-                String.prototype.replaceAt = function(index, replacement) {
-                    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-                }
-                return val.replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
-            }
-        },
         components: {
             Caller,
             LeadComments,
             LeadStatus,
-            NewLeadDialog
+            NewLeadDialog,
+            LeadPostpones
         }
     }
 </script>

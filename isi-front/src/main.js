@@ -85,6 +85,28 @@ Vue.filter('pretty', function (value) {
     return value.toLocaleString('ru')
 })
 
+Vue.filter('phone', function (val) {
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+    return '+7 ' + val.replace(/[^0-9]/g, '')
+        .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
+        .replaceAt(6, '*')
+        .replaceAt(7, '*')
+        .replaceAt(8, '*')
+})
+
+Vue.filter('upFirst', function (val) {
+    return val ? val[0].toUpperCase() + val.substring(1) : ''
+})
+
+Vue.filter('externalPhone', function (val) {
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+    return val.replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
+})
+
 new Vue({
     store,
     router,
