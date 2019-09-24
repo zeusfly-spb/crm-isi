@@ -80,7 +80,8 @@
                     workdays: false,
                     accesses: false,
                     deals: false,
-                    expenses: false
+                    expenses: false,
+                    leads: true
                 })
                 switch (index) {
                     case 0: this.$store.commit('SET_SCAN_MODE', {...this.scanMode, workdays: true, expenses: true, deals: true})
@@ -92,7 +93,6 @@
                     case 2: this.$store.dispatch('setCurrentPage', 'stock')
                         break
                     case 3: this.$store.dispatch('setCurrentPage', 'leads')
-                        this.$store.commit('SET_SCAN_MODE', {...this.scanMode, leads: true})
                         break
                     case 4: this.$store.dispatch('setCurrentPage', 'salary')
                         break
