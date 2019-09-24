@@ -87,16 +87,16 @@ export default {
             })
             if (val) {
                 if (this.timerId) {
-                    clearInterval(this.timerId)
+                    WorkerGlobalScope.clearInterval(this.timerId)
                 }
                 favicon.badge(val)
-                this.timerId = setInterval(() => {
+                this.timerId = WorkerGlobalScope.setInterval(() => {
                     favicon.reset()
                     favicon.badge(val)
                 }, 3000)
             } else {
                 if (this.timerId) {
-                    clearInterval(this.timerId)
+                    WorkerGlobalScope.clearInterval(this.timerId)
                 }
                 favicon.reset()
             }
