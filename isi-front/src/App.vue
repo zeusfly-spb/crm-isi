@@ -45,6 +45,7 @@ import Favico from 'favico.js'
 export default {
     name: 'App',
     data: () => ({
+        timerId: null
     }),
     computed: {
         waitingLeadsCount () {
@@ -57,7 +58,6 @@ export default {
             return this.$store.state.spinner.currentPage
         },
         loading () {
-            // return this.$store.state.loading
             return this.$store.getters.busy
         },
         basePath () {
@@ -86,12 +86,18 @@ export default {
                 animation : 'popFade'
             })
             if (val) {
+                if (this.timerId) {
+                    clearInterval(this.timerId)
+                }
                 favicon.badge(val)
-                setInterval(() => {
+                this.timerId = setInterval(() => {
                     favicon.reset()
                     favicon.badge(val)
                 }, 3000)
             } else {
+                if (this.timerId) {
+                    clearInterval(this.timerId)
+                }
                 favicon.reset()
             }
         }
