@@ -16,7 +16,7 @@
         <v-icon
             v-else
             color="green"
-            :title="`Добавить комментарий к заявке с номера ${lead.phone}`"
+            title="Добавить комментарий к заявке"
             class="clickable"
             @click="activate"
         >
@@ -32,7 +32,7 @@
                     class="light-blue darken-3"
                 >
                     <span class="title white--text">
-                        {{ `Комментарии к заявке с номера ${lead.phone} от ` }} {{ lead.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}
+                        Комментарии к заявке с номера {{ lead.phone | phone }} от {{ lead.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}
                     </span>
                 </v-card-title>
                 <v-card-text>

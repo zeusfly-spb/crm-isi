@@ -38,9 +38,28 @@
                         :weekdays="[1,2,3,4,5,6,0]"
                         ref="calendar"
                         v-model="newDate"
+                        @click:date="openMenu"
                     >
                         <template v-slot:day="{ date }">
+                            <template v-for="postpone in postponesMap[date]">
+                                <v-sheet
+                                    color="blue"
+                                    class="white--text pa-1"
+                                    :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"
+                                >
+                                    {{ postpone.time.split(':').slice(0, 2).join(':') }}
+                                </v-sheet>
+                            </template>
+                            <template
+                                v-if="date === openDate"
+                            >
+                                <v-menu
+                                    full-width
+                                    offset-x
+                                >
 
+                                </v-menu>
+                            </template>
                         </template>
                     </v-calendar>
                     <v-layout>
@@ -89,7 +108,8 @@
             active: false,
             newDate: null,
             adding: false,
-            calendar: null
+            calendar: null,
+            openDate: null
         }),
         computed: {
             lastPostpone () {
@@ -97,7 +117,13 @@
             },
             postpones () {
                 let base = this.lead.postpones
-                return base.map(item => ({...item, date: item.date.split(' ')[0]}))
+                return base.map(item => ({
+                    created_at: item.created_at,
+                    user: item.user,
+                    date: item.date.split(' ')[0],
+                    time: item.date.split(' ')[1],
+                    open: false
+                }))
             },
             postponesMap () {
                 const map = {}
@@ -112,8 +138,10 @@
                     this.adding = false
                 }
             },
-            addPostpone () {
-
+            openMenu (data) {
+                console.dir(data)
+                console.dir(this.postponesMap)
+                this.openDate = data.date
             }
         },
         mounted () {

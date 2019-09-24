@@ -1,7 +1,7 @@
 <template>
     <v-flex>
         <v-icon
-            :title="`Присвоить статус 'В работе' для заявки с номера ${lead.phone}`"
+            title="Присвоить статус 'В работе'"
             v-show="status !== 'process'"
             class="green--text clickable"
             @click="showConfirm('process')"
@@ -9,7 +9,7 @@
             offline_pin
         </v-icon>
         <v-icon
-            :title="`Присвоить статус 'На модерации' для заявки с номера ${lead.phone}`"
+            title="Присвоить статус 'На модерации'"
             v-show="status !== 'moderate'"
             class="blue--text clickable"
             @click="showConfirm('moderate')"
@@ -17,7 +17,7 @@
             offline_bolt
         </v-icon>
         <v-icon
-            :title="`Присвоить статус 'Завершено' для заявки с номера ${lead.phone}`"
+            title="Присвоить статус 'Завершено'"
             v-show="status !== 'done' && canClose"
             class="red--text clickable"
             @click="showConfirm('done')"

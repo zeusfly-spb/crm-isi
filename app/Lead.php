@@ -21,7 +21,7 @@ class Lead extends Model
 
     public function postpones()
     {
-        return $this->hasMany(Postpone:: class);
+        return $this->hasMany(Postpone:: class)->with('user');
     }
 
     public function addComment(string $text, $user_id = null)
