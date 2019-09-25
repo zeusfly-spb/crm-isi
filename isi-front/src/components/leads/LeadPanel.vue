@@ -54,7 +54,7 @@
                     <caller :phone="props.item.phone"/>
                 </td>
                 <td>
-                    <lead-postpones :lead="props.item"/>
+                    <lead-postpones :lead="props.item" @message="showSuccess"/>
                 </td>
                 <td>
                     <span v-if="props.item.site">{{ props.item.site }}</span>
@@ -70,7 +70,7 @@
                 <td>
                     <lead-comments :lead="props.item" @updated="showSuccess"/>
                 </td>
-                <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}</td>
+                <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                 <td>
                     <lead-status :lead="props.item"></lead-status>
                 </td>
@@ -173,14 +173,6 @@
             }
         },
         methods: {
-            updateStatus ({lead, status}) {
-                let hint = `Заявке с номера ${lead.phone} присвоен статус '${{process: 'В работе', moderate: 'На модерации', done: 'Завершена'}[status]}'`
-                this.$store.dispatch('updateLeadStatus', {
-                    lead_id: lead.id,
-                    status: status
-                })
-                    .then(() => this.showSuccess(hint, 'green'))
-            },
             setViewMode (mode) {
                 this.currentViewMode = mode
             },

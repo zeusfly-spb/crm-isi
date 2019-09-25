@@ -6,6 +6,19 @@ export default {
         beep: false
     },
     actions: {
+        addLeadPostpone ({commit, rootState}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_lead_postpone', {
+                    ... data,
+                    user_id: rootState.authUser.id
+                })
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addLead ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead', {

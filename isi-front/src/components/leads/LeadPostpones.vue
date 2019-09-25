@@ -6,7 +6,7 @@
             class="clickable last-postpone"
             title="Открыть календарь переноса звонков по заявке"
         >
-            {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm:ss') }}
+            {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm') }}
         </span>
         <v-icon
             v-else
@@ -18,7 +18,7 @@
         </v-icon>
         <v-dialog
             v-model="active"
-            max-width="700"
+            max-width="800"
             persistent
         >
             <v-card>
@@ -55,7 +55,7 @@
                                         </span>
                                     </v-card-title>
                                     <v-card-text>
-                                        <v-time-picker v-model="selectedTime" format="24hr"></v-time-picker>
+                                        <v-time-picker v-model="selectedTime" format="24hr"/>
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -68,7 +68,7 @@
                                         <v-btn
                                             color="green darken-1"
                                             flat="flat"
-                                            @click=""
+                                            @click="savePostpone"
                                         >
                                             Назначить
                                         </v-btn>
@@ -78,7 +78,7 @@
                             <template v-for="postpone in postponesMap[date]">
                                 <v-sheet
                                     color="blue"
-                                    class="white--text pa-1"
+                                    class="white--text pa-1 mb-1"
                                     :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"
                                 >
                                     {{ postpone.time.split(':').slice(0, 2).join(':') }}
@@ -111,13 +111,6 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="active = false">Закрыть</v-btn>
-                    <v-btn color="green darken-1"
-                           flat
-                           v-if="adding"
-                           @click="addPostpone"
-                    >
-                        Добавить
-                    </v-btn>
                 </v-card-actions>
             </v-card>
 
@@ -131,7 +124,6 @@
         data: () => ({
             active: false,
             newDate: null,
-            adding: false,
             calendar: null,
             openDate: null,
             selectedTime: null
@@ -163,12 +155,26 @@
             },
             activate () {
                 this.active = true
-                if (!this.lastPostpone) {
-                    this.adding = false
-                }
             },
             selectDate (data) {
+                if (data.past) {
+                    this.$emit('message', 'Невозможно назначить звонок на дату в прошлом!', 'red')
+                    return
+                }
                 this.openDate = data.date
+            },
+            savePostpone () {
+                if (!this.openDate) return
+                let time = !!this.selectedTime ? this.selectedTime + ':00' : '00:00:00'
+                this.$store.dispatch('addLeadPostpone', {
+                    lead_id: this.lead.id,
+                    date: this.openDate,
+                    time: time
+                })
+                    .then(() => {
+                        this.resetSelected()
+                        this.$emit('message', 'Заявке назначен перезвон', 'green')
+                    })
             }
         },
         mounted () {

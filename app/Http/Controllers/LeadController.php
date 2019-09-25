@@ -75,4 +75,13 @@ class LeadController extends Controller
         }
         return response()->json($lead->toArray());
     }
+
+    public function addPostpone(Request $request)
+    {
+        $lead = Lead::find($request->lead_id);
+        $timestamp = $request->date . ' ' . $request->time;
+        $lead->addPostpone( $timestamp, $request->user_id);
+        $lead->load('comments', 'user', 'postpones');
+        return response()->json($lead->toArray());
+    }
 }
