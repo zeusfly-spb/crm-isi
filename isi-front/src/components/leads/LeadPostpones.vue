@@ -82,6 +82,14 @@
                                     :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"
                                 >
                                     {{ postpone.time.split(':').slice(0, 2).join(':') }}
+                                    <v-avatar
+                                        v-if="postpone.user"
+                                        size="18px"
+                                        class="right"
+                                    >
+                                        <img :src="basePath + postpone.user.avatar" alt="Фото" v-if="postpone.user && postpone.user.avatar">
+                                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="postpone.user && !postpone.user.avatar">
+                                    </v-avatar>
                                 </v-sheet>
                             </template>
                         </template>
@@ -129,6 +137,9 @@
             selectedTime: null
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             lastPostpone () {
                 return this.lead.last_postpone
             },
@@ -165,7 +176,7 @@
             },
             savePostpone () {
                 if (!this.openDate) return
-                let time = !!this.selectedTime ? this.selectedTime + ':00' : '00:00:00'
+                let time = this.selectedTime ? this.selectedTime + ':00' : '00:00:00'
                 this.$store.dispatch('addLeadPostpone', {
                     lead_id: this.lead.id,
                     date: this.openDate,
