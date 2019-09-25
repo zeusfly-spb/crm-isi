@@ -122,9 +122,10 @@
                 <v-text-field
                     v-model="searchString"
                     append-icon="search"
-                    label="Поиск"
+                    label="Начните вводить данные для поиска..."
                     single-line
                     hide-details
+                    @input="lazyQuerySelection"
                 ></v-text-field>
             </v-card-title>
             <v-card-text>
@@ -132,7 +133,6 @@
                     :headers="headers"
                     :items="customers"
                     hide-actions
-                    class="elevation-1"
                     :search="searchString"
                 >
                     <template v-slot:items="props">
@@ -165,13 +165,11 @@
                         </td>
                     </template>
                     <template v-slot:no-data>
-                        <span class="red--text">Нет клиентов</span>
+                        <span class="red--text">Нет записей</span>
                     </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
-
-
 
         <v-dialog v-model="confirm"
                   max-width="500"
@@ -205,10 +203,12 @@
 <script>
     import CustomerPhonesColumn from './CustomerPhonesColumn'
     import CustomerPhonesEditor from './CustomerPhonesEditor'
+    import Lodash from 'lodash'
 
     export default {
         name: 'CustomersControl',
         data: () => ({
+            loadedCustomers: [],
             searchString: '',
             snackbar: false,
             snackText: '',
@@ -243,10 +243,32 @@
         }),
         computed: {
             customers () {
-                return this.$store.state.customers
+                const excludeExists = (arr) => {
+                    let existsIds = this.$store.state.customers.map(item => item.id)
+                    let result = []
+                    arr.forEach(item => existsIds.includes(item.id) ? null : result.push(item))
+                    return result
+                }
+                return [...this.$store.state.customers, ...excludeExists(this.loadedCustomers)]
+            },
+            lazyQuerySelection () {
+                return Lodash.debounce(this.querySelection, 300)
             }
         },
         methods:{
+            querySelection () {
+                if (!this.searchString.length) {
+                    this.loadedCustomers = []
+                    return
+                }
+                this.$store.commit('ADD_TASK', 'customers')
+                this.axios.post('/api/search_customer_by_text', {text: this.searchString})
+                    .then(res => {
+                        this.loadedCustomers = res.data
+                    })
+                    .catch(e => console.error(e))
+                    .finally(() => this.$store.commit('REMOVE_TASK', 'customers'))
+            },
             showSnack (text, color) {
                 this.snackText = text
                 this.snackColor = color
@@ -296,6 +318,13 @@
         },
         created () {
             this.editedCustomer = JSON.parse(JSON.stringify(this.defaultCustomer))
+        },
+        watch: {
+            searchString (val) {
+                if (!val.length) {
+                    this.loadedCustomers = []
+                }
+            }
         },
         components: {
             CustomerPhonesColumn,

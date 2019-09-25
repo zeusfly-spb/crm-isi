@@ -83,14 +83,6 @@
                     .then(() => this.customer.phones = this.customer.phones.filter(item => +item.id !== +id))
             }
         },
-        filters: {
-            phone: function (val) {
-                return '+7 ' + val.replace(/[^0-9]/g, '')
-                    .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
-            }
-        },
-        updated () {
-        },
         watch: {
             adding (val) {
                 if (val) {
