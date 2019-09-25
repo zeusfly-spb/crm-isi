@@ -43,14 +43,36 @@
                         <template v-slot:day="{ date }">
                             <v-menu
                                 :value="date === openDate"
+                                :close-on-content-click="false"
                             >
                                 <template v-slot:activator="{ on }">
                                     <div v-on="on"></div>
                                 </template>
                                 <v-card>
+                                    <v-card-title class="light-blue darken-3">
+                                        <span class="subheading white--text" style="font-weight: bold">
+                                            Время перезвона на {{ openDate | moment('DD MMM YYYY г.')}}
+                                        </span>
+                                    </v-card-title>
                                     <v-card-text>
-                                        Time
+                                        <v-time-picker v-model="selectedTime" format="24hr"></v-time-picker>
                                     </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            flat="flat"
+                                            @click="resetSelected"
+                                        >
+                                            Отмена
+                                        </v-btn>
+                                        <v-btn
+                                            color="green darken-1"
+                                            flat="flat"
+                                            @click=""
+                                        >
+                                            Назначить
+                                        </v-btn>
+                                    </v-card-actions>
                                 </v-card>
                             </v-menu>
                             <template v-for="postpone in postponesMap[date]">
@@ -111,7 +133,8 @@
             newDate: null,
             adding: false,
             calendar: null,
-            openDate: null
+            openDate: null,
+            selectedTime: null
         }),
         computed: {
             lastPostpone () {
@@ -134,6 +157,10 @@
             }
         },
         methods: {
+            resetSelected () {
+                this.openDate = null
+                this.selectedTime = null
+            },
             activate () {
                 this.active = true
                 if (!this.lastPostpone) {
