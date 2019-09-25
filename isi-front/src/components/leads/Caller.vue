@@ -26,7 +26,7 @@
                 this.axios.post('https://crmkin.ru/tel/api/vpbx/call/make', {
                     user_id: this.authUser.id,
                     extension: this.authUser.vpbx_extension,
-                    phone: this.phone
+                    phone: this.phone[0] === '+' && this.phone[1] === '7' ? this.phone : '+7' + this.phone
                 })
             }
         }
