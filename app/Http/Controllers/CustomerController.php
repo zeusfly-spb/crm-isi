@@ -11,7 +11,10 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return response()->json(Customer::with('phones')->get()->toArray());
+        $customers = Customer::with('phones')
+            ->whereDate('created_at', now()->toDateString())
+            ->get();
+        return response()->json($customers->toArray());
     }
 
     public function create(Request $request)

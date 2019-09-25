@@ -77,6 +77,7 @@
                             </v-menu>
                             <template v-for="postpone in postponesMap[date]">
                                 <v-sheet
+                                    :key="postpone.created_at"
                                     color="blue"
                                     class="white--text pa-1 mb-1"
                                     :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"

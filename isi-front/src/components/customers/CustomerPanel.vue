@@ -116,45 +116,62 @@
             </v-card>
         </v-dialog>
 
-        <v-data-table
-                :headers="headers"
-                :items="customers"
-                hide-actions
-                class="elevation-1"
-        >
-            <template v-slot:items="props">
-                <td>{{ props.item. id }}</td>
-                <td>{{ props.item.last_name }}</td>
-                <td>{{ props.item.first_name }}</td>
-                <td>{{ props.item.patronymic }}</td>
-                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
-                <td>{{ props.item.address }}</td>
-                <td>
-                    <customer-phones-column :phones="props.item.phones"/>
-                </td>
-                <td class="justify-center layout px-0">
-                    <v-icon
-                            small
-                            class="mr-2 green--text"
-                            @click="showEditDialog(props.item)"
-                            title="Редактировать"
-                    >
-                        edit
-                    </v-icon>
-                    <v-icon
-                            class="red--text"
-                            small
-                            @click="showDeleteConfirm(props.item)"
-                            title="Удалить"
-                    >
-                        delete
-                    </v-icon>
-                </td>
-            </template>
-            <template v-slot:no-data>
-                <span class="red--text">Нет клиентов</span>
-            </template>
-        </v-data-table>
+        <v-card>
+            <v-card-title>
+                <v-spacer></v-spacer>
+                <v-text-field
+                    v-model="searchString"
+                    append-icon="search"
+                    label="Поиск"
+                    single-line
+                    hide-details
+                ></v-text-field>
+            </v-card-title>
+            <v-card-text>
+                <v-data-table
+                    :headers="headers"
+                    :items="customers"
+                    hide-actions
+                    class="elevation-1"
+                    :search="searchString"
+                >
+                    <template v-slot:items="props">
+                        <td>{{ props.item. id }}</td>
+                        <td>{{ props.item.last_name }}</td>
+                        <td>{{ props.item.first_name }}</td>
+                        <td>{{ props.item.patronymic }}</td>
+                        <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
+                        <td>{{ props.item.address }}</td>
+                        <td>
+                            <customer-phones-column :phones="props.item.phones"/>
+                        </td>
+                        <td class="justify-center layout px-0">
+                            <v-icon
+                                small
+                                class="mr-2 green--text"
+                                @click="showEditDialog(props.item)"
+                                title="Редактировать"
+                            >
+                                edit
+                            </v-icon>
+                            <v-icon
+                                class="red--text"
+                                small
+                                @click="showDeleteConfirm(props.item)"
+                                title="Удалить"
+                            >
+                                delete
+                            </v-icon>
+                        </td>
+                    </template>
+                    <template v-slot:no-data>
+                        <span class="red--text">Нет клиентов</span>
+                    </template>
+                </v-data-table>
+            </v-card-text>
+        </v-card>
+
+
 
         <v-dialog v-model="confirm"
                   max-width="500"
@@ -192,6 +209,7 @@
     export default {
         name: 'CustomersControl',
         data: () => ({
+            searchString: '',
             snackbar: false,
             snackText: '',
             snackColor: '',
