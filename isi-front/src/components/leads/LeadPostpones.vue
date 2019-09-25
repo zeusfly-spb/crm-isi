@@ -191,8 +191,10 @@
     }
     .last-postpone {
         cursor: pointer;
+        opacity: .8;
     }
     .last-postpone:hover {
-        font-weight: bold;
+        opacity: 1;
+        color: #263238;
     }
 </style>

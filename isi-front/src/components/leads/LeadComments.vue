@@ -232,7 +232,7 @@
 </script>
 <style scoped>
     .fat-able:hover {
-        font-weight: bold;
+        color: #263238;
     }
     .clickable {
         cursor: pointer;
