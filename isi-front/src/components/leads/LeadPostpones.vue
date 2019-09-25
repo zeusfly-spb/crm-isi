@@ -38,9 +38,21 @@
                         :weekdays="[1,2,3,4,5,6,0]"
                         ref="calendar"
                         v-model="newDate"
-                        @click:date="openMenu"
+                        @click:date="selectDate"
                     >
                         <template v-slot:day="{ date }">
+                            <v-menu
+                                :value="date === openDate"
+                            >
+                                <template v-slot:activator="{ on }">
+                                    <div v-on="on"></div>
+                                </template>
+                                <v-card>
+                                    <v-card-text>
+                                        Time
+                                    </v-card-text>
+                                </v-card>
+                            </v-menu>
                             <template v-for="postpone in postponesMap[date]">
                                 <v-sheet
                                     color="blue"
@@ -49,16 +61,6 @@
                                 >
                                     {{ postpone.time.split(':').slice(0, 2).join(':') }}
                                 </v-sheet>
-                            </template>
-                            <template
-                                v-if="date === openDate"
-                            >
-                                <v-menu
-                                    full-width
-                                    offset-x
-                                >
-
-                                </v-menu>
                             </template>
                         </template>
                     </v-calendar>
@@ -138,9 +140,7 @@
                     this.adding = false
                 }
             },
-            openMenu (data) {
-                console.dir(data)
-                console.dir(this.postponesMap)
+            selectDate (data) {
                 this.openDate = data.date
             }
         },
