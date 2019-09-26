@@ -18,7 +18,7 @@
         </v-icon>
         <v-dialog
             v-model="active"
-            max-width="800"
+            max-width="1000"
             persistent
         >
             <v-card>
@@ -30,6 +30,15 @@
                     >
                         Календарь переноса звонков по заявке с номера {{ lead.phone | phone }}
                     </span>
+                    <v-spacer/>
+                    <v-icon
+                        color="white"
+                        class="clickable mr-3"
+                        title="Закрыть"
+                        @click="active=false"
+                    >
+                        close
+                    </v-icon>
                 </v-card-title>
                 <v-card-text>
                     <v-calendar
@@ -82,7 +91,16 @@
                                     class="white--text pa-1 mb-1"
                                     :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"
                                 >
-                                    {{ postpone.time.split(':').slice(0, 2).join(':') }}
+                                    <v-icon
+                                        color="red"
+                                        class="clickable mr-3"
+                                        v-show="(isSuperadmin || +postpone.user_id === +authUser.id)"
+                                        title="Удалить отметку"
+                                        @click="showDeleteConfirm(postpone)"
+                                    >
+                                        close
+                                    </v-icon>
+                                    <div style="display: inline; text-align: center; font-weight: bold">{{ postpone.time.split(':').slice(0, 2).join(':') }}</div>
                                     <v-avatar
                                         v-if="postpone.user"
                                         size="18px"
@@ -117,9 +135,23 @@
                         </v-btn>
                     </v-layout>
                 </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-dialog
+            v-model="confirm"
+            max-width="500px"
+        >
+            <v-card>
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Подтвержение</span>
+                </v-card-title>
+                <v-card-text>
+                    Удалить запланированный звонок на <span v-if="postponeToDelete">{{ postponeToDelete.date + ' ' + postponeToDelete.time | moment('DD MMMM YYYY г. HH:mm') }}?</span>
+                </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="darken-1" flat @click="active = false">Закрыть</v-btn>
+                    <v-btn color="darken-1" flat @click="confirm=false">Отмена</v-btn>
+                    <v-btn color="red darken-1" flat @click="deletePostpone">Удалить</v-btn>
                 </v-card-actions>
             </v-card>
 
@@ -131,6 +163,8 @@
         name: 'LeadPostpones',
         props: ['lead'],
         data: () => ({
+            postponeToDelete: null,
+            confirm: false,
             active: false,
             newDate: null,
             calendar: null,
@@ -138,6 +172,12 @@
             selectedTime: null
         }),
         computed: {
+            authUser () {
+                return this.$store.state.authUser
+            },
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -147,11 +187,12 @@
             postpones () {
                 let base = this.lead.postpones
                 return base.map(item => ({
-                    created_at: item.created_at,
+                    id: item.id,
                     user: item.user,
                     date: item.date.split(' ')[0],
                     time: item.date.split(' ')[1],
-                    open: false
+                    open: false,
+                    created_at: item.created_at
                 }))
             },
             postponesMap () {
@@ -161,6 +202,19 @@
             }
         },
         methods: {
+            deletePostpone () {
+                this.$store.dispatch('deleteLeadPostpone', {
+                    postpone_id: this.postponeToDelete.id
+                })
+                    .then(() => {
+                        this.$emit('message', 'Удален запланированный звонок', 'green')
+                        this.confirm = false
+                    })
+            },
+            showDeleteConfirm (postpone) {
+                this.postponeToDelete = postpone
+                this.confirm = true
+            },
             resetSelected () {
                 this.openDate = null
                 this.selectedTime = null
@@ -200,6 +254,7 @@
     }
     .clickable:hover {
         opacity: 1;
+        font-weight: bold;
     }
     .last-postpone {
         cursor: pointer;

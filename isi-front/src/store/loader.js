@@ -6,6 +6,16 @@ export default {
         beep: false
     },
     actions: {
+        deleteLeadPostpone ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_lead_postpone', {... data})
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addLeadPostpone ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead_postpone', {

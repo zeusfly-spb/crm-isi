@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Lead;
 use App\LeadComment;
+use App\Postpone;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -82,6 +83,15 @@ class LeadController extends Controller
         $timestamp = $request->date . ' ' . $request->time;
         $lead->addPostpone( $timestamp, $request->user_id);
         $lead->load('comments', 'user', 'postpones');
+        return response()->json($lead->toArray());
+    }
+
+    public function deletePostpone(Request $request)
+    {
+        $postpone = Postpone::find($request->postpone_id);
+        $lead = Lead::find($postpone->lead_id);
+        $postpone->delete();
+        $lead->load('postpones');
         return response()->json($lead->toArray());
     }
 }

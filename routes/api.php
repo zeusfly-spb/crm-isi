@@ -124,5 +124,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_lead_comment', 'LeadController@deleteComment');
     Route::post('add_lead', 'LeadController@addLead');
     Route::post('add_lead_postpone', 'LeadController@addPostpone');
+    Route::post('delete_lead_postpone', 'LeadController@deletePostpone');
 
 });
