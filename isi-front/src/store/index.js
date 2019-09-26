@@ -457,9 +457,9 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setCustomers ({commit}) {
+        setCustomers ({commit, state}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_customers')
+                Vue.axios.post('/api/get_customers', {date: state.accountingDate})
                     .then(res => {
                         commit('SET_CUSTOMERS', res.data)
                         resolve(res)
@@ -693,6 +693,7 @@ export const store = new Vuex.Store({
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
             commit('ADD_TASK', 'daily')
+            dispatch('setCustomers')
             dispatch('setDeals')
             dispatch('setWorkDays')
             dispatch('setStartBalance')

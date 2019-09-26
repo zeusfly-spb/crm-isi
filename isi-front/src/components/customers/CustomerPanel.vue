@@ -15,7 +15,7 @@
              <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
              <v-text-field
                  class="right"
-                 style="width: 30em"
+                 style="width: 23em"
                  v-model="searchString"
                  append-icon="search"
                  label="Начните вводить данные для поиска..."
@@ -128,52 +128,46 @@
             </v-card>
         </v-dialog>
 
-        <v-card>
-            <v-card-title>
-                <v-spacer></v-spacer>
-            </v-card-title>
-            <v-card-text>
-                <v-data-table
-                    :headers="headers"
-                    :items="customers"
-                    hide-actions
-                    :search="searchString"
-                >
-                    <template v-slot:items="props">
-                        <td>{{ props.item. id }}</td>
-                        <td>{{ props.item.last_name }}</td>
-                        <td>{{ props.item.first_name }}</td>
-                        <td>{{ props.item.patronymic }}</td>
-                        <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
-                        <td>{{ props.item.address }}</td>
-                        <td>
-                            <customer-phones-column :phones="props.item.phones"/>
-                        </td>
-                        <td class="justify-center layout px-0">
-                            <v-icon
-                                small
-                                class="mr-2 green--text"
-                                @click="showEditDialog(props.item)"
-                                title="Редактировать"
-                            >
-                                edit
-                            </v-icon>
-                            <v-icon
-                                class="red--text"
-                                small
-                                @click="showDeleteConfirm(props.item)"
-                                title="Удалить"
-                            >
-                                delete
-                            </v-icon>
-                        </td>
-                    </template>
-                    <template v-slot:no-data>
-                        <span class="red--text">Нет записей</span>
-                    </template>
-                </v-data-table>
-            </v-card-text>
-        </v-card>
+
+        <v-data-table
+            :headers="headers"
+            :items="customers"
+            hide-actions
+            :search="searchString"
+        >
+            <template v-slot:items="props">
+                <td>{{ props.item. id }}</td>
+                <td>{{ props.item.last_name }}</td>
+                <td>{{ props.item.first_name }}</td>
+                <td>{{ props.item.patronymic }}</td>
+                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
+                <td>{{ props.item.address }}</td>
+                <td>
+                    <customer-phones-column :phones="props.item.phones"/>
+                </td>
+                <td class="justify-center layout px-0">
+                    <v-icon
+                        small
+                        class="mr-2 green--text"
+                        @click="showEditDialog(props.item)"
+                        title="Редактировать"
+                    >
+                        edit
+                    </v-icon>
+                    <v-icon
+                        class="red--text"
+                        small
+                        @click="showDeleteConfirm(props.item)"
+                        title="Удалить"
+                    >
+                        delete
+                    </v-icon>
+                </td>
+            </template>
+            <template v-slot:no-data>
+                <span class="red--text">Нет записей</span>
+            </template>
+        </v-data-table>
 
         <v-dialog v-model="confirm"
                   max-width="500"

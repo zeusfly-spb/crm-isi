@@ -9,10 +9,10 @@ use Illuminate\Support\Arr;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $customers = Customer::with('phones')
-            ->whereDate('created_at', now()->toDateString())
+            ->whereDate('created_at', $request->date)
             ->get();
         return response()->json($customers->toArray());
     }
@@ -61,7 +61,7 @@ class CustomerController extends Controller
         $text = $request->text;
         $queryBuilder = Customer::query();
         $queryBuilder = $queryBuilder
-            ->where('first_name', 'LIKE', $text . '%')
+            ->where('last_name', 'LIKE',$text . '%')
 //            ->orWhere('last_name', 'LIKE', '%' . $text . '%')
 //            ->orWhere('patronymic', 'LIKE', '%' . $text . '%')
             ->orWhereHas('phones', function($query) use($text) {
