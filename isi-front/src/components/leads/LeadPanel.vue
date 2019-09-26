@@ -39,7 +39,7 @@
                 <td>
                     <v-icon
                         class="red--text delete"
-                        :title="`Удалить заявку на номер ${props.item.phone}`"
+                        title="Удалить заявку на?"
                         @click="confirmToDelete(props.item)"
                         v-if="isSuperadmin"
                     >
@@ -88,7 +88,7 @@
                     <span class="title white--text">Подтверждение</span>
                 </v-card-title>
                 <v-card-text>
-                    <span class="title">{{ confirmText }}</span>
+                    <span class="title">Удалить заявку с номера <span v-if="confirmText[0] !== '+'">{{ confirmText  | phone}}</span> <span v-else>{{ confirmText | externalPhone}}</span>?</span>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -190,7 +190,7 @@
             },
             confirmToDelete (lead) {
                 this.leadToDelete = lead
-                this.confirmText = `Удалить заявку с номера ${lead.phone}?`
+                this.confirmText = `${lead.phone}`
                 this.confirm = true
             }
         },
