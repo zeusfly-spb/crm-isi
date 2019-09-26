@@ -39,7 +39,7 @@
                 <td>
                     <v-icon
                         class="red--text delete"
-                        title="Удалить заявку на?"
+                        title="Удалить заявку?"
                         @click="confirmToDelete(props.item)"
                         v-if="isSuperadmin"
                     >
