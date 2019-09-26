@@ -10,14 +10,26 @@
             <span>{{ snackText }}</span>
         </v-snackbar>
 
+
+        <div>
+             <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
+             <v-text-field
+                 class="right"
+                 style="width: 30em"
+                 v-model="searchString"
+                 append-icon="search"
+                 label="Начните вводить данные для поиска..."
+                 single-line
+                 hide-details
+                 @input="lazyQuerySelection"
+             />
+        </div>
+
         <v-dialog persistent
                   v-model="dialog"
                   max-width="600px"
                   @update:returnValue="closeDialog"
         >
-            <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
-            </template>
             <v-card>
                 <v-card-title>
                     <span class="headline">{{ {add: 'Добавить', edit: 'Редактировать'}[mode] }} клиента</span>
@@ -119,14 +131,6 @@
         <v-card>
             <v-card-title>
                 <v-spacer></v-spacer>
-                <v-text-field
-                    v-model="searchString"
-                    append-icon="search"
-                    label="Начните вводить данные для поиска..."
-                    single-line
-                    hide-details
-                    @input="lazyQuerySelection"
-                ></v-text-field>
             </v-card-title>
             <v-card-text>
                 <v-data-table

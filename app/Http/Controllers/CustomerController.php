@@ -61,9 +61,9 @@ class CustomerController extends Controller
         $text = $request->text;
         $queryBuilder = Customer::query();
         $queryBuilder = $queryBuilder
-            ->where('first_name', 'LIKE', '%' . $text . '%')
-            ->orWhere('last_name', 'LIKE', '%' . $text . '%')
-            ->orWhere('patronymic', 'LIKE', '%' . $text . '%')
+            ->where('first_name', 'LIKE', $text . '%')
+//            ->orWhere('last_name', 'LIKE', '%' . $text . '%')
+//            ->orWhere('patronymic', 'LIKE', '%' . $text . '%')
             ->orWhereHas('phones', function($query) use($text) {
                 $query->where('number', 'LIKE', '%' . $text . '%');
             });
