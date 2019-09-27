@@ -407,7 +407,7 @@
     <v-layout>
         <new-stock-action-dialog v-if="isSuperadmin"/>
         <v-spacer/>
-        <goods-control @updated="showSnack"/>
+        <goods-control @updated="showSnack" v-if="isSuperadmin"/>
     </v-layout>
     <stock-actions-table/>
 
