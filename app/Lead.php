@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone'];
+    protected $appends = ['last_postpone', 'last_comment'];
 
     public function comments()
     {
@@ -40,5 +40,10 @@ class Lead extends Model
     public function getLastPostponeAttribute()
     {
         return $this->postpones->last() ?? null;
+    }
+
+    public function getLastCommentAttribute()
+    {
+        return $this->comments->last() ?? null;
     }
 }

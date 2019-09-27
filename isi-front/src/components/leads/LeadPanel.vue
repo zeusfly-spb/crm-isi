@@ -54,7 +54,31 @@
                     <caller :phone="props.item.phone"/>
                 </td>
                 <td>
-                    <lead-postpones :lead="props.item" @message="showSuccess"/>
+                    <template v-if="props.item.id === openLeadId">
+                        <lead-postpones
+                            :lead="props.item"
+                            @message="showSuccess"
+                            :open="props.item.id === openLeadId"
+                            @closed="openLeadId = null"
+                        />
+                    </template>
+                    <template v-else>
+                            <span
+                                v-if="props.item.last_postpone"
+                                class="clickable"
+                                @click="showLead(props.item.id)"
+                            >
+                        {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
+                    </span>
+                        <v-icon
+                            v-else
+                            class="clickable"
+                            title="Добавить дату перезвона по заявке"
+                            @click="showLead(props.item.id)"
+                        >
+                            phone_forwarded
+                        </v-icon>
+                    </template>
                 </td>
                 <td>
                     <span v-if="props.item.site">{{ props.item.site }}</span>
@@ -68,7 +92,35 @@
                     </v-avatar>
                 </td>
                 <td>
-                    <lead-comments :lead="props.item" @updated="showSuccess"/>
+                    <template v-if="leadCommentsId === props.item.id">
+                        <lead-comments
+                            :lead="props.item"
+                            @updated="showSuccess"
+                            @close="leadCommentsId = null"
+                        />
+                    </template>
+                    <template v-else>
+                        <span v-if="props.item.last_comment"
+                              @click="leadCommentsId = props.item.id"
+                              class="clickable"
+                        >
+                            {{ props.item.last_comment.text }}
+                            <span class="green--text accent-4"
+                                  v-if="props.item.comments.length > 1"
+                            >
+                                <strong>({{ props.item.comments.length }})</strong>
+                            </span>
+                        </span>
+                        <v-icon
+                            v-else
+                            color="green"
+                            title="Добавить комментарий к заявке"
+                            class="clickable"
+                            @click="leadCommentsId = props.item.id"
+                        >
+                            add_circle
+                        </v-icon>
+                    </template>
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                 <td>
@@ -121,6 +173,8 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            leadCommentsId: null,
+            openLeadId: null,
             currentViewMode: 'wait',
             viewModes: ['wait', 'process', 'moderate', 'done', 'all'],
             snackbar: false,
@@ -173,7 +227,11 @@
             }
         },
         methods: {
+            showLead (id) {
+                this.openLeadId = id
+            },
             setViewMode (mode) {
+                this.openLeadId = null
                 this.currentViewMode = mode
             },
             showSuccess (text, color) {
@@ -204,6 +262,13 @@
     }
 </script>
 <style scoped>
+    .clickable {
+        cursor: pointer;
+        opacity: .8;
+    }
+    .clickable:hover {
+        opacity: 1;
+    }
     .delete {
         cursor: pointer;
         opacity: .6;

@@ -32,7 +32,7 @@
                     class="light-blue darken-3"
                 >
                     <span class="title white--text">
-                        Комментарии к заявке с номера {{ lead.phone | phone }} от {{ lead.created_at | moment('DD MMMM YYYY г. HH:mm:ss') }}
+                        Комментарии к заявке с номера {{ lead.phone | phone }} от {{ lead.created_at | moment('DD MMMM YYYY г. HH:mm') }}
                     </span>
                 </v-card-title>
                 <v-card-text>
@@ -149,9 +149,9 @@
 <script>
     export default {
         name: 'LeadComments',
-        props: ['lead'],
+        props: ['lead', 'open'],
         data: () => ({
-            active: false,
+            active: true,
             adding: false,
             confirm: false,
             commentToDelete: null,
@@ -171,7 +171,7 @@
                 return this.comments && this.comments.length && this.comments[0]
             },
             comments () {
-                return this.lead.comments.reverse()
+                return this.lead && this.lead.comments && this.lead.comments.reverse() || []
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate
@@ -220,6 +220,9 @@
             active (val) {
                 if (val && !this.comments.length) {
                     this.adding = true
+                }
+                if (!val) {
+                    this.$emit('close')
                 }
             },
             adding (val) {

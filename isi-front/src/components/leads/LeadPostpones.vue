@@ -161,11 +161,11 @@
 <script>
     export default {
         name: 'LeadPostpones',
-        props: ['lead'],
+        props: ['lead', 'open'],
         data: () => ({
             postponeToDelete: null,
             confirm: false,
-            active: false,
+            active: true,
             newDate: null,
             calendar: null,
             openDate: null,
@@ -245,6 +245,13 @@
         },
         mounted () {
             this.calendar = this.$refs.calendar
+        },
+        watch: {
+            active (val) {
+                if (!val) {
+                    this.$emit('close')
+                }
+            }
         }
     }
 </script>
@@ -254,7 +261,6 @@
     }
     .clickable:hover {
         opacity: 1;
-        font-weight: bold;
     }
     .last-postpone {
         cursor: pointer;
