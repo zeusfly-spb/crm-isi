@@ -1,5 +1,14 @@
 <template>
     <v-flex align-center>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
             <v-tabs
                 v-if="isSuperadmin"
                 fixed-tabs
@@ -395,7 +404,11 @@
         </v-flex>
     </v-layout>
 
-    <new-stock-action-dialog v-if="isSuperadmin"/>
+    <v-layout>
+        <new-stock-action-dialog v-if="isSuperadmin"/>
+        <v-spacer/>
+        <goods-control @updated="showSnack"/>
+    </v-layout>
     <stock-actions-table/>
 
     </v-flex>
@@ -403,9 +416,13 @@
 <script>
     import NewStockActionDialog from './NewStockActionDialog'
     import StockActionsTable from './StockActionsTable'
+    import GoodsControl from './GoodsControl'
     export default {
         name: 'StockPanel',
         data: () => ({
+            snackbar: false,
+            snackText: '',
+            snackColor: '',
             headers: [
                 {text: '#', value: 'id'},
                 {text: 'Тип', value: 'type'},
@@ -461,6 +478,11 @@
             }
         },
         methods: {
+            showSnack (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
+            },
             goodActionCount (productId, action) {
                 let actions = this.stockActions.filter(item => +item.product_id === +productId && item.type === action)
                 const add = (a, b) => +a + +b.count
@@ -487,7 +509,8 @@
         },
         components: {
             NewStockActionDialog,
-            StockActionsTable
+            StockActionsTable,
+            GoodsControl
         }
     }
 </script>

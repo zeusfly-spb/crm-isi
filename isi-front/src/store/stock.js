@@ -7,6 +7,38 @@ export default {
         options: {}
     },
     actions: {
+        deleteProduct ({commit, dispatch}, productId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_product', {id: productId})
+                    .then(res => {
+                        commit('SET_STOCK_OPTIONS', res.data)
+                        dispatch('setReserves')
+                            .then(() => resolve(res))
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        updateProduct ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_product', {...data})
+                    .then(res => {
+                        commit('UPDATE_PRODUCT', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addGood ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_product', {...data})
+                    .then(res => {
+                        commit('SET_STOCK_OPTIONS', res.data)
+                        dispatch('setReserves')
+                            .then(() => resolve(res))
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setStockOptions ({commit}) {
             commit('SET_LOADING_ON')
             commit('ADD_TASK', 'stock')
@@ -73,6 +105,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_PRODUCT (state, product) {
+            state.options.products = state.options.products.map(item => +item.id === +product.id ? product : item)
+        },
         SET_STOCK_OPTIONS (state, options) {
             state.options = options
         },
