@@ -365,7 +365,10 @@
             </v-data-table>
         </v-flex>
         <v-flex xs12 sm6 md6 justify-center>
-            <span class="title">Товары</span>
+            <span>
+                <span class="title">Товары</span>
+                <goods-control @updated="showSnack" v-if="isSuperadmin"/>
+            </span>
             <v-data-table
                 hide-actions
                 :items="goodsProductIds"
@@ -407,7 +410,6 @@
     <v-layout>
         <new-stock-action-dialog v-if="isSuperadmin"/>
         <v-spacer/>
-        <goods-control @updated="showSnack" v-if="isSuperadmin"/>
     </v-layout>
     <stock-actions-table/>
 
@@ -530,5 +532,12 @@
         color: rgba(0,0,0,0.54);
         font-weight: 500;
         font-size: 12px;
+    }
+    .clickable {
+        opacity: .8;
+        cursor: pointer;
+    }
+    .clickable:hover {
+        opacity: 1;
     }
 </style>

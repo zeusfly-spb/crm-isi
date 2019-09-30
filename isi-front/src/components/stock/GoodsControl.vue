@@ -1,14 +1,17 @@
 <template>
-    <v-flex>
-        <v-btn
-            color="primary"
-            flat
-            dark
-            @click="activate"
-            class="right"
+    <span>
+        <v-btn icon
+               title="Редактирование списка наименований товаров и цен"
         >
-            Товары
+            <v-icon
+                color="green"
+                class="clickable"
+                @click="activate"
+            >
+                edit
+            </v-icon>
         </v-btn>
+
         <v-dialog
             v-model="active"
             persistent
@@ -143,7 +146,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-flex>
+    </span>
 </template>
 <script>
     export default {
