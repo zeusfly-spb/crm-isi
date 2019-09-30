@@ -5,6 +5,7 @@
             @click="activate"
             class="clickable last-postpone"
             title="Открыть календарь переноса звонков по заявке"
+            :class="{today: lastPostpone.date.split(' ')[0] === accountingDate, lost: lastPostpone.date.split(' ')[0] < accountingDate}"
         >
             {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm') }}
         </span>
@@ -272,6 +273,14 @@
     .last-postpone:hover {
         opacity: 1;
         color: #263238;
+    }
+    .today {
+        color: #2a9055;
+        font-weight: bold;
+    }
+    .lost {
+        color: red;
+        font-weight: bold;
     }
 
 </style>

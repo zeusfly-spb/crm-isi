@@ -231,40 +231,27 @@
                         if (!b.last_postpone) {
                             return 0
                         } else {
-                            return 1
+                            return -1
                         }
                     }
                     if (!b.last_postpone) {
                         if (!a.last_postpone) {
                             return 0
                         } else {
-                            return -1
-                        }
-                    }
-                }
-                const moveUpToday = (a, b) => {
-                    if (!!a.last_postpone && !!b.last_postpone) {
-                        let dayA = a.last_postpone.date.split(' ')[0]
-                        let dayB = b.last_postpone.date.split(' ')[0]
-                        if (dayA === this.accountingDate) {
-                            if (dayB === this.accountingDate) {
-                                return 0
-                            }
-                            return -1
-                        }
-                        if (dayB === this.accountingDate) {
-                            if (dayA === this.accountingDate) {
-                                return 0
-                            }
                             return 1
                         }
-
-                    } else {
-                        return 0
                     }
                 }
+                const moveFutureDown = (a, b) => {
+                    if (!a.last_postpone || !b.last_postpone) {
+                        return 0
+                    }
+                    let timeA = a.last_postpone.date.split(' ')[0]
+                    let timeB = b.last_postpone.date.split(' ')[0]
+                    return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
+                }
                 base.sort(sortByPostpones)
-                base.sort(moveUpToday)
+                base.sort(moveFutureDown)
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
@@ -334,7 +321,7 @@
         font-weight: bold;
     }
     .lost {
-        color: #E65100;
+        color: red;
         font-weight: bold;
     }
 </style>
