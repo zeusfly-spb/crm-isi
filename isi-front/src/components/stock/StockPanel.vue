@@ -107,7 +107,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -122,7 +122,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -137,7 +137,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -152,7 +152,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -172,7 +172,7 @@
                             {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
+                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
@@ -181,7 +181,7 @@
                             {{ findActionCount('receipt', 'Стельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ findActionCount('receipt', 'Стельки', 'Колоф', props.item) }}
+                            {{ findActionCount('receipt', 'Стельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ findActionCount('receipt', 'Стельки', 'Флис', props.item) }}
@@ -190,7 +190,7 @@
                             {{ findActionCount('expense', 'Стельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ findActionCount('expense', 'Стельки', 'Колоф', props.item) }}
+                            {{ findActionCount('expense', 'Стельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ findActionCount('expense', 'Стельки', 'Флис', props.item) }}
@@ -199,7 +199,7 @@
                             {{ currentCount('Стельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ currentCount('Стельки', 'Колоф', props.item) }}
+                            {{ currentCount('Стельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ currentCount('Стельки', 'Флис', props.item) }}
@@ -263,7 +263,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -278,7 +278,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -293,7 +293,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -308,7 +308,7 @@
                         <td align="center"
                             style="border-right: 0; border-left: 0;"
                         >
-                            <span class="mat">Колоф</span>
+                            <span class="mat">Санаформ</span>
                         </td>
                         <td align="center"
                             style="border-left: 0"
@@ -328,7 +328,7 @@
                             {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Колоф').count }}
+                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
@@ -337,7 +337,7 @@
                             {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ findActionCount('receipt', 'Полустельки', 'Колоф', props.item) }}
+                            {{ findActionCount('receipt', 'Полустельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ findActionCount('receipt', 'Полустельки', 'Флис', props.item) }}
@@ -346,7 +346,7 @@
                             {{ findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ findActionCount('expense', 'Полустельки', 'Колоф', props.item) }}
+                            {{ findActionCount('expense', 'Полустельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
@@ -355,7 +355,7 @@
                             {{ currentCount('Полустельки', 'Кожа', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ currentCount('Полустельки', 'Колоф', props.item) }}
+                            {{ currentCount('Полустельки', 'Санаформ', props.item) }}
                         </td>
                         <td align="center" style="border-left: 0">
                             {{ currentCount('Полустельки', 'Флис', props.item) }}
