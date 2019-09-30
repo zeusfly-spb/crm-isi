@@ -3,13 +3,18 @@
       <v-toolbar app>
       <v-toolbar-title class="headline">
         <v-layout>
-          <img
-              v-if="isAuth"
-              :src="`${basePath}/img/logo.png`"
-              :lazy-src="`${basePath}/img/logo.png`"
-              alt="Лого"
-              height="45px"
-          />
+            <v-avatar
+                      color="white"
+                      style="box-shadow: black"
+            >
+                <img
+                    v-if="isAuth"
+                    :src="`${basePath}/img/logo.png`"
+                    :lazy-src="`${basePath}/img/logo.png`"
+                    alt="Лого"
+                    height="45px"
+                />
+            </v-avatar>
           &nbsp;
           <div>
             <div v-if="isAuth">
