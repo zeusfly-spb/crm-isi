@@ -67,7 +67,7 @@
                                 v-if="props.item.last_postpone"
                                 class="clickable"
                                 @click="showLead(props.item.id)"
-                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, lost: isLost(props.item.date)}"
+                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
                             >
                         {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                     </span>
