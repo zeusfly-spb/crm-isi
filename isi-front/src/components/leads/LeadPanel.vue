@@ -67,6 +67,7 @@
                                 v-if="props.item.last_postpone"
                                 class="clickable"
                                 @click="showLead(props.item.id)"
+                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, lost: isLost(props.item.date)}"
                             >
                         {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                     </span>
@@ -196,6 +197,9 @@
             ]
         }),
         computed: {
+            accountingDate () {
+                return this.$store.state.accountingDate
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -217,6 +221,50 @@
             },
             leads () {
                 let base = this.$store.state.loader.leads
+                const sortByPostpones = (a, b) => {
+                    if (!!a.last_postpone && !!b.laspostpone) {
+                        let timeA = parseFloat(new Date(a.last_postpone.date))
+                        let timeB = parseFloat(new Date(b.last_postpone.date))
+                        return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
+                    }
+                    if (!a.last_postpone) {
+                        if (!b.last_postpone) {
+                            return 0
+                        } else {
+                            return 1
+                        }
+                    }
+                    if (!b.last_postpone) {
+                        if (!a.last_postpone) {
+                            return 0
+                        } else {
+                            return -1
+                        }
+                    }
+                }
+                const moveUpToday = (a, b) => {
+                    if (!!a.last_postpone && !!b.last_postpone) {
+                        let dayA = a.last_postpone.date.split(' ')[0]
+                        let dayB = b.last_postpone.date.split(' ')[0]
+                        if (dayA === this.accountingDate) {
+                            if (dayB === this.accountingDate) {
+                                return 0
+                            }
+                            return -1
+                        }
+                        if (dayB === this.accountingDate) {
+                            if (dayA === this.accountingDate) {
+                                return 0
+                            }
+                            return 1
+                        }
+
+                    } else {
+                        return 0
+                    }
+                }
+                base.sort(sortByPostpones)
+                base.sort(moveUpToday)
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
@@ -227,6 +275,11 @@
             }
         },
         methods: {
+            isLost (dateTime) {
+                let rawDate = parseFloat(new Date(dateTime))
+                let nowDate = parseFloat(new Date(this.accountingDate))
+                return rawDate < nowDate
+            },
             showLead (id) {
                 this.openLeadId = id
             },
@@ -275,5 +328,13 @@
     }
     .delete:hover {
         opacity: 1;
+    }
+    .today {
+        color: #2a9055;
+        font-weight: bold;
+    }
+    .lost {
+        color: #E65100;
+        font-weight: bold;
     }
 </style>

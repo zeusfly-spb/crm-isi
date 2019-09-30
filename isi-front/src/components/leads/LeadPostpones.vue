@@ -172,6 +172,9 @@
             selectedTime: null
         }),
         computed: {
+            accountingDate () {
+                return this.$store.state.accountingDate
+            },
             authUser () {
                 return this.$store.state.authUser
             },
@@ -270,4 +273,5 @@
         opacity: 1;
         color: #263238;
     }
+
 </style>
