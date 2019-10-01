@@ -44,7 +44,7 @@
             </v-tab>
         </v-tabs>
 
-        <v-layout v-if="dates.length < 10">
+        <v-layout v-if="dates && dates.length < 10">
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
