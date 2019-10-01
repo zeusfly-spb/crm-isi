@@ -49,4 +49,12 @@ class IslandController extends Controller
         $island->update(['chief_id' => $request->chief_id]);
         return response()->json($island->toArray());
     }
+
+    public function updateVpbxExtension(Request $request)
+    {
+        $island = Island::find($request->island_id);
+        $island->update(['vpbx_extension' => $request->vpbx_extension]);
+        $island->load('users');
+        return response()->json($island->toArray());
+    }
 }

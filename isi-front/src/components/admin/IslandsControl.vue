@@ -21,10 +21,10 @@
                <td>{{ props.item.name }}</td>
                <td>{{ props.item.description }}</td>
                <td>
-                   <island-vpbx-changer :island="props.item"/>
+                   <island-vpbx-changer :island="props.item" @updated="showSuccess"/>
                </td>
                <td>
-                   <island-users-column :users="props.item.users"></island-users-column>
+                   <island-users-column :users="props.item.users"/>
                </td>
                <td>
                    <chief-updater :island="props.item" @updated="showSuccess"/>
@@ -146,7 +146,7 @@
                 {text: '#', value: 'id'},
                 {text: 'Название', value: 'name'},
                 {text: 'Описание', value: 'description'},
-                {text: 'Манго код', value: 'vpbx_extension'},
+                {text: 'Код манго', value: 'vpbx_extension'},
                 {text: 'Сотрудники', value: 'users'},
                 {text: 'Руководитель', value: 'chief_id'},
                 {text: 'Действия', align: 'center', value: null}

@@ -53,6 +53,16 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
+        updateIslandVpbx ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_island_vpbx', {...data})
+                    .then(res =>{
+                        commit('UPDATE_ISLAND', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         restoreUser ({commit}, userId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/restore_user', {
