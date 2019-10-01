@@ -3,7 +3,7 @@
         <td
             style="border: 1px solid black; padding: 0"
         >
-            <v-card style="width: 370px">
+            <v-card style="width: 30em">
                 <v-card-title>
                     <v-avatar
                         size="36px"

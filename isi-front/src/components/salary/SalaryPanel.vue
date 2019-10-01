@@ -1,5 +1,5 @@
 <template>
-    <v-card
+    <v-flex
         align-center
     >
         <v-tabs
@@ -43,11 +43,30 @@
                 </v-card>
             </v-tab>
         </v-tabs>
+
+        <v-layout v-if="dates.length < 10">
+            <v-data-table
+                :items="['', ...users]"
+                :headers="headers"
+                hide-actions
+                class="elevation-1"
+            >
+                <template v-slot:items="props">
+                    <component
+                        :is="props.index === 0 ? 'total-data-row' : 'user-row'"
+                        :user="props.item"
+                        :dates="dates"
+                    />
+                </template>
+
+            </v-data-table>
+        </v-layout>
         <v-data-table
             :items="['', ...users]"
             :headers="headers"
             hide-actions
             class="elevation-1"
+            v-else
         >
             <template v-slot:items="props">
                 <component
@@ -58,7 +77,8 @@
             </template>
 
         </v-data-table>
-    </v-card>
+
+    </v-flex>
 </template>
 <script>
     import TotalDataRow from './TotalDataRow'
@@ -78,7 +98,7 @@
                     value: null,
                     sortable: false,
                     align: 'center',
-                    width: '200px'
+                    width: '370px'
                 }, ... dates]
             },
             dates () {

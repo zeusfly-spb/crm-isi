@@ -1,58 +1,55 @@
 <template>
     <tr>
         <td
-            style="border: 1px solid black; padding: 0; height: 3em!important;"
+            style="border: 1px solid black; padding: 0; height: 3em!important; width: 30em !important"
             align="right"
         >
             <table>
-                <table>
-                    <tr
-                        class="condensed-row"
+                <tr
+                    class="condensed-row"
+                >
+                    <td
+                        align="left"
+                        style="padding-left: 0!important;"
                     >
-                        <td
-                            align="left"
-                            style="padding-left: 0!important;"
-                        >
-                            Приход наличными платежами:
-                        </td>
-                        <td
-                            align="right"
-                        >
-                            {{ totalIncome(true) | pretty }}
-                        </td>
-                    </tr>
-                    <tr
-                        class="condensed-row"
+                        Приход наличными платежами:
+                    </td>
+                    <td
+                        align="right"
                     >
-                        <td
-                            align="left"
-                            style="padding-left: 0!important;"
-                        >
-                            Приход безналичными платежами:
-                        </td>
-                        <td
-                            align="right"
-                        >
-                            {{ totalIncome(false) | pretty }}
-                        </td>
-                    </tr>
-                    <tr
-                        class="condensed-row"
+                        {{ totalIncome(true) | pretty }}
+                    </td>
+                </tr>
+                <tr
+                    class="condensed-row"
+                >
+                    <td
+                        align="left"
+                        style="padding-left: 0!important;"
                     >
-                        <td
-                            align="left"
-                            style="padding-left: 0!important;"
-                        >
-                            Приход всего:
-                        </td>
-                        <td
-                            align="right"
-                        >
-                            {{ totalIncome(false) + totalIncome(true) | pretty }}
-                        </td>
-                    </tr>
-                </table>
-
+                        Приход безналичными платежами:
+                    </td>
+                    <td
+                        align="right"
+                    >
+                        {{ totalIncome(false) | pretty }}
+                    </td>
+                </tr>
+                <tr
+                    class="condensed-row"
+                >
+                    <td
+                        align="left"
+                        style="padding-left: 0!important;"
+                    >
+                        Приход всего:
+                    </td>
+                    <td
+                        align="right"
+                    >
+                        {{ totalIncome(false) + totalIncome(true) | pretty }}
+                    </td>
+                </tr>
             </table>
         </td>
         <td
