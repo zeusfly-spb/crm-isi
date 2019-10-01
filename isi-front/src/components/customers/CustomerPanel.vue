@@ -11,7 +11,7 @@
         </v-snackbar>
 
 
-        <div>
+        <div class="mb-2">
              <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
              <v-text-field
                  class="right"
@@ -261,10 +261,7 @@
                 }
                 this.$store.commit('ADD_TASK', 'customers')
                 this.axios.post('/api/search_customer_by_text', {text: this.searchString})
-                    .then(res => {
-                        this.loadedCustomers = res.data
-                    })
-                    .catch(e => console.error(e))
+                    .then(res =>this.loadedCustomers = res.data)
                     .finally(() => this.$store.commit('REMOVE_TASK', 'customers'))
             },
             showSnack (text, color) {
@@ -298,7 +295,7 @@
                         if (!res) return
                         let action = this.mode === 'add' ? 'addCustomer' : 'updateCustomer'
                         this.$store.dispatch(action, this.editedCustomer)
-                            .then((res) => {
+                            .then(() => {
                                 this.dialog = false
                                 this.showSnack(`${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`, 'green')
                             })
