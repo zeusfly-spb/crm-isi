@@ -157,7 +157,7 @@ export const store = new Vuex.Store({
                         commit('ADD_HAND_OVER', res.data)
                         resolve(res)
                     })
-                    .catch(e => reject())
+                    .catch(e => reject(e))
             })
         },
         setHandOver ({commit}) {
@@ -295,7 +295,7 @@ export const store = new Vuex.Store({
                 if (this.state.scanMode.leads) {
                     dispatch('setLeadsOnTimer')
                 }
-            }, 5000)
+            }, 15000)
         },
         startUserDinner ({commit}) {
             return new Promise((resolve, reject) => {
