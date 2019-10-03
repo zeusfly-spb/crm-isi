@@ -43,7 +43,14 @@
                 <v-card-title class="light-blue darken-3">
                     <span class="title white--text">Новая сделка</span>
                 </v-card-title>
-                <v-card-text>
+                <v-progress-linear
+                    :indeterminate="true"
+                    style="margin: 0 auto"
+                    v-if="loadingUsers"
+                />
+                <v-card-text
+                    style="padding-top: 0"
+                >
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12 sm12 md12>
@@ -156,7 +163,7 @@
                     <v-btn color="green darken-1"
                            flat
                            @click="createDeal"
-                           :disabled="pendingRequest"
+                           :disabled="pendingRequest || loadingUsers"
                     >
                         Сохранить
                     </v-btn>
@@ -206,6 +213,7 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            loadingUsers: false,
             pendingRequest: false,
             newDealData: {
                 deal_action_id: null,
@@ -413,11 +421,13 @@
                     })
             },
             querySelection (text) {
+                this.loadingUsers = true
                 this.axios.post('/api/search_customer_by_text', {text: text})
                     .then(res => {
                         this.loadedCustomers = res.data
                     })
                     .catch(e => console.error(e))
+                    .finally(() => this.loadingUsers = false)
             },
             showSnack (text, color) {
                 this.snackText = text
