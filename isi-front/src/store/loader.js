@@ -159,10 +159,10 @@ export default {
                 })
                     .then(res => {
                         commit('SET_DAILY_PAGE', res.data)
+                        commit('REMOVE_TASK', 'daily')
                         resolve(res)
                     })
                     .catch(e => reject(e))
-                    .finally(() => commit('REMOVE_TASK', 'daily'))
             })
         }
     },
