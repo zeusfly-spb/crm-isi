@@ -72,6 +72,7 @@
                 <v-btn flat color="primary darken-1"
                        @click="startDay"
                        v-if="!isDayOpen && !isDayClosed"
+                       :disabled="loading"
                 >
                     Начать рабочий день
                 </v-btn>
@@ -119,6 +120,9 @@
             ]
         }),
         computed: {
+            loading () {
+                return this.$store.getters.busy
+            },
             basePath () {
                 return this.$store.state.basePath
             },
