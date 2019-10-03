@@ -184,12 +184,6 @@ export default {
                 state.beep = true
                 setTimeout(() => state.beep = false, 2000)
             }
-        },
-        SET_DAILY_PAGE (rootState, data) {
-            rootState.workdays = data.workdays
-            rootState.deals = data.deals
-            rootState.expenses = data.expenses
-            rootState.handover = data.handover
         }
     },
     getters: {

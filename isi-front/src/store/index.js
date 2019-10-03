@@ -295,7 +295,7 @@ export const store = new Vuex.Store({
                 if (this.state.scanMode.leads) {
                     dispatch('setLeadsOnTimer')
                 }
-            }, 15000)
+            }, 5000)
         },
         startUserDinner ({commit}) {
             return new Promise((resolve, reject) => {
@@ -625,7 +625,7 @@ export const store = new Vuex.Store({
         },
         logIn ({commit, dispatch}, query) {
             return new Promise ((resolve, reject) => {
-                // commit('SET_LOADING_ON')
+
                 commit('SET_STATUS', 'request')
                 Vue.axios.post('/api/login', {name: query.name, password: query.password})
                     .then(res => {
@@ -643,7 +643,6 @@ export const store = new Vuex.Store({
 
                         Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                         dispatch('setAuthUser')
-                        // commit('SET_LOADING_OFF')
                         resolve (res)
                     })
                     .catch(e => {
@@ -719,6 +718,12 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_DAILY_PAGE (state, data) {
+            state.workdays = data.workdays
+            state.deals = data.deals
+            state.expenses = data.expenses
+            state.handover = data.handover
+        },
         UPDATE_ISLAND (state, island) {
             state.islands = state.islands.map(item => +item.id === +island.id ? island : item)
         },
