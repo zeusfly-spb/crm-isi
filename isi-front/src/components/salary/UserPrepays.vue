@@ -130,6 +130,7 @@
             amount: '',
             comment: '',
             headers: [
+                {text: 'Действия', value: null, align: 'center'},
                 {text: 'Дата', value: 'created_at', align: 'center'},
                 {text: 'Сумма', value: 'amount', align: 'center'},
                 {text: 'Комментарий', value: 'comment', align: 'center'}
