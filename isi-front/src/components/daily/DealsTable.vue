@@ -153,7 +153,13 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="red darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="createDeal">Сохранить</v-btn>
+                    <v-btn color="green darken-1"
+                           flat
+                           @click="createDeal"
+                           :disabled="pendingRequest"
+                    >
+                        Сохранить
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -200,6 +206,7 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            pendingRequest: false,
             newDealData: {
                 deal_action_id: null,
                 product_id: null,
@@ -387,6 +394,7 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.pendingRequest = true
                         this.$store.dispatch('addDeal', {
                             ...this.newDealData,
                             user_id: this.authUser.id,
@@ -401,6 +409,7 @@
                                 this.dialog = false
                             })
                             .catch(e => this.showSnack(e.data, 'red'))
+                            .finally(() => this.pendingRequest = false)
                     })
             },
             querySelection (text) {
