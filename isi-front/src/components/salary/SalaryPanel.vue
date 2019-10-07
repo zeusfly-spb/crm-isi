@@ -61,12 +61,12 @@
 
             </v-data-table>
         </v-layout>
+
         <v-data-table
             :items="['', ...users]"
             :headers="headers"
             hide-actions
             class="elevation-1"
-            v-else
         >
             <template v-slot:items="props">
                 <component
@@ -75,7 +75,6 @@
                     :dates="dates"
                 />
             </template>
-
         </v-data-table>
 
     </v-flex>
@@ -141,12 +140,12 @@
                 this.$store.dispatch('setWorkingIslandId', id)
             }
         },
-        created () {
-            // this.$store.dispatch('setMonthData')
-        },
         components: {
             UserRow,
             TotalDataRow
         }
     }
 </script>
+<style scoped>
+
+</style>

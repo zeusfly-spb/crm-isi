@@ -13,9 +13,9 @@
             max-width="700px"
             persistent
         >
-            <v-card>
-                <v-card-title>
-                    <span class="headline">
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">
                         {{ `Премии сотрудника ${user.full_name}`}}
                     </span>
                 </v-card-title>
@@ -199,5 +199,8 @@
     }
     .clickable {
         cursor: pointer;
+    }
+    .round-corner {
+        border-radius: 5px;
     }
 </style>
