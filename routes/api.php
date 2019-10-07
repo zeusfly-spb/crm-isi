@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('start_time_break', 'WorkDayController@startTimeBreak');
     Route::post('finish_time_break', 'WorkDayController@finishTimeBreak');
     Route::post('update_workday', 'WorkDayController@update');
+    Route::post('add_workday', 'WorkDayController@addWorkDay');
 
 
     // DEALS

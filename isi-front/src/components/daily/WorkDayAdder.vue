@@ -2,7 +2,7 @@
     <v-flex>
         <v-btn
             flat
-            color="purple darken-3"
+            color="primary"
             @click="active = true"
         >
             Добавить рабочий день
@@ -76,9 +76,19 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        
-
+                        this.$store.dispatch('addWorkDay', {user_id: this.currentUserId, working_hours: this.workingHours})
+                            .then(() => {
+                                this.active = false
+                                this.$emit('snack', 'Добавлен рабочий день', 'green')
+                            })
                     })
+            }
+        },
+        watch: {
+            active (val) {
+                if (val) {
+                    [this.currentUserId, this.workingHours] = [null, '']
+                }
             }
         }
     }

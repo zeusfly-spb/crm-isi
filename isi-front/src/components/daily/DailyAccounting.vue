@@ -51,10 +51,11 @@
             </v-tab>
         </v-tabs>
         <deals-table/>
-        <work-day-adder v-if="!isToday" @snack="showSnack"/>
         <day-balance/>
         <expenses-table @snack="showSnack"/>
         <work-days-table/>
+        <work-day-adder v-if="!isToday" @snack="showSnack"/>
+
     </v-flex>
 </template>
 <script>

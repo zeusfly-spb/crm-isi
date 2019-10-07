@@ -43,4 +43,21 @@ class WorkDayController extends Controller
         $workday->load('user', 'timeBreaks');
         return response()->json($workday->toArray());
     }
+
+    public function addWorkDay(Request $request)
+    {
+        $toDelete = WorkDay::where('user_id', $request->user_id)
+            ->where('date', $request->date)
+            ->get();
+        WorkDay::destroy($toDelete->pluck('id')->all());
+
+        $workday = WorkDay::create([
+            'user_id' => $request->user_id,
+            'time_start' => '10:10:10',
+            'date' => $request->date,
+            'working_hours' => $request->working_hours
+        ]);
+        $workday->load('user', 'timeBreaks');
+        return response()->json($workday->toArray());
+    }
 }

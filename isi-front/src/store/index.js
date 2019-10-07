@@ -53,6 +53,16 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
+        addWorkDay ({commit, state}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_workday', {... data, date: state.accountingDate})
+                    .then(res => {
+                        commit('ADD_WORK_DAY', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateIslandVpbx ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_island_vpbx', {...data})
