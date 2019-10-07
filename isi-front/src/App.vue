@@ -46,6 +46,7 @@
 
 <script>
 import DateSelector from './components/DateSelector'
+import $ from 'jquery'
 export default {
     name: 'App',
     data: () => ({
@@ -102,20 +103,21 @@ export default {
         }, 2000)
     },
     created () {
-        window.onfocus = function () {
+        $(window).blur(function() {
             setInterval(() => {
                 if (this.waitingLeadsCount) {
                     this.showLeadsOnTitle()
                 }
             }, 2000)
-        }
-        window.onblur = function () {
+
+        });
+        $(window).focus(function() {
             setInterval(() => {
                 if (this.waitingLeadsCount) {
                     this.showLeadsOnTitle()
                 }
             }, 2000)
-        }
+        });
     },
     components: {
         DateSelector

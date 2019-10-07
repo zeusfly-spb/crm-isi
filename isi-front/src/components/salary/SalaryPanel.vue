@@ -67,6 +67,7 @@
             :headers="headers"
             hide-actions
             class="elevation-1"
+            v-else
         >
             <template v-slot:items="props">
                 <component
