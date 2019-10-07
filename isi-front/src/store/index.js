@@ -895,6 +895,10 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        totalDealExpense: state => {
+            const add = (a, b) => a + +b.expense
+            return state.deals.reduce(add, 0)
+        },
         totalDealIncome: state => {
             const add = (a, b) => a + +b.income
             return state.deals.reduce(add, 0)

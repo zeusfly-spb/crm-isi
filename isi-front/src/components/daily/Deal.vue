@@ -114,8 +114,8 @@
         </td>
         <td
             v-if="isTotal"
-            colspan="2"
         >
+            <span class="subheading">{{ +`${isTotal ? totalDealExpense : deal.expense}` | pretty }}</span>
         </td>
         <td v-if="!isTotal">
             <span
@@ -203,6 +203,9 @@
             }
         }),
         computed: {
+            totalDealExpense () {
+                return this.$store.getters.totalDealExpense
+            },
             totalDealIncome () {
                 return this.$store.getters.totalDealIncome
             },
