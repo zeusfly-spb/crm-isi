@@ -107,7 +107,13 @@
                 return this.monthData && this.monthData.dates.filter(item => new Date(item) < tomorrow)
             },
             users () {
-                return this.monthData && this.monthData.users || []
+                let base =  this.monthData && this.monthData.users || []
+                const add = (a, b) => a + +b.income
+                base = base.map(item => ({... item, totalIncome: item.monthDeals.reduce(add, 0)}))
+                const sortByTotalIncome = (a, b) => {
+                    return b.totalIncome - a.totalIncome
+                }
+                return base.sort(sortByTotalIncome)
             },
             monthData () {
                 return this.$store.state.salary.monthData
