@@ -51,6 +51,7 @@
             </v-tab>
         </v-tabs>
         <deals-table/>
+        <work-day-adder v-if="!isToday" @snack="showSnack"/>
         <day-balance/>
         <expenses-table @snack="showSnack"/>
         <work-days-table/>
@@ -61,6 +62,7 @@
     import DealsTable from './DealsTable.vue'
     import DayBalance from './DayBalance'
     import ExpensesTable from './ExpensesTable'
+    import WorkDayAdder from './WorkDayAdder'
     export default {
         name: 'DailyAccounting',
         data: () => ({
@@ -69,6 +71,12 @@
             snackColor: 'green'
         }),
         computed: {
+            isToday () {
+                return this.$store.state.accountingDate === this.realDate
+            },
+            realDate () {
+                return this.$store.state.realDate
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
@@ -105,7 +113,8 @@
             WorkDaysTable,
             DealsTable,
             DayBalance,
-            ExpensesTable
+            ExpensesTable,
+            WorkDayAdder
         }
     }
 </script>
