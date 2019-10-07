@@ -54,7 +54,7 @@
         <day-balance/>
         <expenses-table @snack="showSnack"/>
         <work-days-table/>
-        <work-day-adder v-if="!isToday" @snack="showSnack"/>
+        <work-day-adder v-if="isSuperadmin" @snack="showSnack"/>
 
     </v-flex>
 </template>
