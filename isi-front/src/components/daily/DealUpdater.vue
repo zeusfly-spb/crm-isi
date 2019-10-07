@@ -13,9 +13,9 @@
             persistent
             max-width="600px"
         >
-            <v-card>
-                <v-card-title>
-                    <span class="headline">Изменить продукцию по сделке</span>
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Изменить продукцию по сделке</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
@@ -197,5 +197,8 @@
 <style scoped>
     .clickable {
         cursor: pointer;
+    }
+    .round-corner {
+        border-radius: 5px;
     }
 </style>
