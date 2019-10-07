@@ -46,7 +46,6 @@
 
 <script>
 import DateSelector from './components/DateSelector'
-import Favico from 'favico.js'
 export default {
     name: 'App',
     data: () => ({
@@ -83,28 +82,39 @@ export default {
         logOut () {
             this.$store.dispatch('logOut')
             this.$router.push('/login')
+        },
+        showLeadsOnTitle () {
+            let backupTitle = document.title
+            if (this.timerId) {
+                clearTimeout(this.timerId)
+            }
+            document.title = 'Непринятые заявки ' + this.waitingLeadsCount
+            this.timerId = setTimeout(() => {
+                document.title = backupTitle
+            }, 1000)
         }
     },
-    watch: {
-        waitingLeadsCount (val) {
-            let favicon = new Favico({
-                animation : 'popFade'
-            })
-            if (val) {
-                if (this.timerId) {
-                    clearInterval(this.timerId)
-                }
-                favicon.badge(val)
-                this.timerId = setInterval(() => {
-                    favicon.reset()
-                    favicon.badge(val)
-                }, 3000)
-            } else {
-                if (this.timerId) {
-                    clearInterval(this.timerId)
-                }
-                favicon.reset()
+    mounted () {
+        setInterval(() => {
+            if (this.waitingLeadsCount) {
+                this.showLeadsOnTitle()
             }
+        }, 2000)
+    },
+    created () {
+        window.onfocus = function () {
+            setInterval(() => {
+                if (this.waitingLeadsCount) {
+                    this.showLeadsOnTitle()
+                }
+            }, 2000)
+        }
+        window.onblur = function () {
+            setInterval(() => {
+                if (this.waitingLeadsCount) {
+                    this.showLeadsOnTitle()
+                }
+            }, 2000)
         }
     },
     components: {
