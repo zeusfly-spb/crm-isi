@@ -62,21 +62,29 @@
             </v-data-table>
         </v-layout>
 
-        <v-data-table
-            :items="['', ...users]"
-            :headers="headers"
-            hide-actions
-            class="elevation-1"
+
+        <div
             v-else
+            style=" width:100%;
+                    overflow: auto;
+                    height: 100%;"
         >
-            <template v-slot:items="props">
-                <component
-                    :is="props.index === 0 ? 'total-data-row' : 'user-row'"
-                    :user="props.item"
-                    :dates="dates"
-                />
-            </template>
-        </v-data-table>
+            <v-data-table
+                :items="['', ...users]"
+                :headers="headers"
+                hide-actions
+                class="elevation-1"
+            >
+                <template v-slot:items="props">
+                    <component
+                        :is="props.index === 0 ? 'total-data-row' : 'user-row'"
+                        :user="props.item"
+                        :dates="dates"
+                    />
+                </template>
+            </v-data-table>
+        </div>
+
 
     </v-flex>
 </template>
@@ -135,6 +143,9 @@
             }
         },
         methods: {
+            inspect (data) {
+                console.dir(data)
+            },
             hDate (textDate) {
                 let date = new Date(textDate)
                 let options = {month: 'short', day: 'numeric'}
