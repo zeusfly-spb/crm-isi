@@ -66,6 +66,29 @@
         <div
             v-else
         >
+            <div
+                style="z-index: 10000; position: absolute"
+                :style="{top: bottomPosition + (screenHeight * 0.83) + 'px'}"
+                class="text-xs-center"
+            >
+                <v-btn
+                    fab
+                    small
+                    color="primary"
+                    :style="{left: screenCenter - 10 + 'px'}"
+                >
+                    <v-icon>arrow_left</v-icon>
+                </v-btn>
+                <v-btn
+                    fab
+                    small
+                    color="primary"
+                    :style="{left: screenCenter + 10 + 'px'}"
+                >
+                    <v-icon>arrow_right</v-icon>
+                </v-btn>
+            </div>
+
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
@@ -80,6 +103,7 @@
                     />
                 </template>
             </v-data-table>
+
         </div>
 
 
@@ -88,9 +112,20 @@
 <script>
     import TotalDataRow from './TotalDataRow'
     import UserRow from './UserRow'
+    import $ from 'jquery'
     export default {
         name: 'SalaryPanel',
+        data: () => ({
+            bottomPanel: false,
+            bottomPosition: 0
+        }),
         computed: {
+            screenHeight () {
+                return document.body.clientHeight
+            },
+            screenCenter () {
+                return document.body.clientWidth / 2
+            },
             headers () {
                 let dates = this.dates && this.dates.map(item => ({
                     text: this.hDate(item),
@@ -154,6 +189,18 @@
             changeCurrentIslandId (id) {
                 this.$store.dispatch('setWorkingIslandId', id)
             }
+        },
+        watch: {
+            dates (val) {
+                this.bottomPanel = val.length > 10
+            }
+        },
+        created () {
+            $(window).scroll(() => {
+                console.log($(window).scrollTop())
+                console.log(this.bottomPosition)
+                this.bottomPosition = $(window).scrollTop()
+            })
         },
         components: {
             UserRow,
