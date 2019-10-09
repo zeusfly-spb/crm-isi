@@ -643,11 +643,11 @@ export const store = new Vuex.Store({
 
                         let now = new Date()
                         now.setMinutes(1 + now.getMinutes())
-                        Cookies.set('isi-token', token, {expires: now, path: '/', domain: 'crmkin.com', secure: true})
+                        Cookies.set('isi-token', token, {expires: now, path: '/'})
                         setInterval(() => {
                             let now = new Date()
                             now.setMinutes(1 + now.getMinutes())
-                            Cookies.set('isi-token', token, {expires: now, path: '/', domain: 'crmkin.com', secure: true})
+                            Cookies.set('isi-token', token, {expires: now, path: '/'})
                         }, 30000)
                         // Cookies.set('isi-token', token)
 

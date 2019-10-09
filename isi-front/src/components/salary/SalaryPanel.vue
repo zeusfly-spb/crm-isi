@@ -65,9 +65,6 @@
 
         <div
             v-else
-            style=" width:100%;
-                    overflow: auto;
-                    height: 100%;"
         >
             <v-data-table
                 :items="['', ...users]"
