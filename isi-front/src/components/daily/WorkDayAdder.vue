@@ -13,12 +13,11 @@
         >
             <v-card class="round-corner">
                 <v-card-title class="light-blue darken-3">
-                    <span class="title white--text">Добавить рабочий день</span>
+                    <span class="title white--text">Добавить рабочий день на {{ accountingDate | moment('DD MMMM YYYY г.') }}</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
                         <v-layout wrap>
-
                             <v-flex xs12 sm8 m8>
                                 <v-select
                                     label="Сотрудник"
@@ -67,6 +66,9 @@
             workingHours: ''
         }),
         computed: {
+            accountingDate () {
+                return this.$store.state.accountingDate
+            },
             users () {
                 let fixedUsers = this.workdays.map(item => +item.user_id)
                 return this.$store.state.users.filter(item => !item.fired_at && !item.is_superadmin && item.island_id && !fixedUsers.includes(+item.id))
