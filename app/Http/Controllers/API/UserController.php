@@ -104,7 +104,7 @@ class UserController extends Controller
     public function saveUser(Request $request)
     {
         $user = User::find($request->id);
-        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name', 'document_pack']);
+        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name', 'document_pack', 'island']);
 
         if ($request->password && $request->c_password && $request->password === $request->c_password) {
             $users = User::where('name', $request->name)->get();
