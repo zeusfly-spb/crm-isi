@@ -712,19 +712,30 @@ export const store = new Vuex.Store({
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
             commit('ADD_TASK', 'daily')
-            dispatch('setCustomers')
-            dispatch('setDeals')
-            dispatch('setWorkDays')
-            dispatch('setStartBalance')
-            dispatch('setExpenses')
-            dispatch('setHandOver')
-                .finally(() => commit('REMOVE_TASK', 'daily'))
-
-            dispatch('setReserves')
-            dispatch('setStockActions')
-
-            dispatch('setMonthData')
-            dispatch('setLeads')
+            dispatch('setAccountingDate')
+                .then(() => {
+                    // daily page
+                    dispatch('setRealDate')
+                        .then(() => {
+                            dispatch('setIslands')
+                                .then(() => {
+                                    dispatch('loadDailyPage')
+                                        .then(() => {
+                                            // other pages
+                                            commit('REMOVE_TASK', 'daily')
+                                            dispatch('setUsers')
+                                            dispatch('setGroups')
+                                            dispatch('startScanTimer')
+                                            dispatch('setCustomers')
+                                            dispatch('setReserves')
+                                            dispatch('setStockActions')
+                                            dispatch('setStockOptions')
+                                            dispatch('setMonthData')
+                                            dispatch('setLeads')
+                                        })
+                                })
+                        })
+                })
         }
     },
     mutations: {
