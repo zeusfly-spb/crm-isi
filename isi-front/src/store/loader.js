@@ -7,12 +7,15 @@ export default {
         withDone: false
     },
     actions: {
-        setDoneMode ({commit, dispatch}, doneMode) {
+        setDoneMode ({commit, dispatch, rootState}, doneMode) {
             commit('SET_DONE_MODE', doneMode)
+            commit('SET_SCAN_MODE', {...rootState.scanMode, leads: false})
             if (doneMode) {
                 dispatch('setLeads')
+                    .then(() => commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true}))
             } else {
                 dispatch('setLeadsOnTimer')
+                    .then(() => commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true}))
             }
         },
         deleteLeadPostpone ({commit}, data) {
