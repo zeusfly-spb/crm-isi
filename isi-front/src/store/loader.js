@@ -8,10 +8,12 @@ export default {
     },
     actions: {
         setDoneMode ({commit, dispatch}, doneMode) {
-            return new Promise((resolve, reject) => {
-                commit('SET_DONE_MODE', doneMode)
+            commit('SET_DONE_MODE', doneMode)
+            if (doneMode) {
                 dispatch('setLeads')
-            })
+            } else {
+                dispatch('setLeadsOnTimer')
+            }
         },
         deleteLeadPostpone ({commit}, data) {
             return new Promise((resolve, reject) => {
