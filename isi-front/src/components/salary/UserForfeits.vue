@@ -168,7 +168,6 @@
             deleteForfeit () {
                 this.$store.dispatch('deleteUserForfeit', this.forfeitToDelete.id)
                     .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
             },
             showPrompt (forfeit) {
                 this.forfeitToDelete = forfeit
@@ -182,7 +181,6 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
-                    .finally(() => this.$emit('update'))
             }
         },
         watch: {
@@ -195,6 +193,9 @@
                 if (value) {
                     [this.amount, this.comment] = [0, '']
                 }
+            },
+            totalForfeitsAmount (val) {
+                this.$emit('update', {forfeits: val})
             }
         }
     }

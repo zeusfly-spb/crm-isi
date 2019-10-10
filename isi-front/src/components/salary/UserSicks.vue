@@ -162,7 +162,6 @@
             deleteSick () {
                 this.$store.dispatch('deleteUserSick', {id: this.sickToDelete.id})
                     .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
             },
             showPrompt (sick) {
                 this.sickToDelete = sick
@@ -176,7 +175,6 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
-                    .finally(() => this.$emit('update'))
             }
         },
         watch: {
@@ -189,6 +187,9 @@
                 if (value) {
                     [this.amount, this.comment] = [0, '']
                 }
+            },
+            totalSicksAmount (val) {
+                this.$emit('update', {sicks: val})
             }
         }
     }

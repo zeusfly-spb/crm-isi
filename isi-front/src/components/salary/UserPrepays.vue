@@ -161,7 +161,6 @@
             deletePrepay () {
                 this.$store.dispatch('deleteUserPrepay', this.prepayToDelete)
                     .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
             },
             showPrompt (prepay) {
                 this.prepayToDelete = prepay
@@ -174,7 +173,6 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
-                    .finally(() => this.$emit('update'))
             }
         },
         watch: {
@@ -182,6 +180,9 @@
                 if (value) {
                     [this.amount, this.comment, this.adding] = [0, '', false]
                 }
+            },
+            totalPrepaysAmount (val) {
+                this.$emit('update', {prepays: val})
             }
         }
     }

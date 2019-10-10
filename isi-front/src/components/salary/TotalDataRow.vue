@@ -55,7 +55,7 @@
         <td
             v-for="(date, index) in dates"
             :key="index"
-            width="10em"
+            width="5em"
             style="border: 1px solid black!important; padding: 0"
             :title="`ИТОГО за ${hDate(date)}`"
             :class="{'red lighten-5': isHoliday(date)}"

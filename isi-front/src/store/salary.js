@@ -3,6 +3,7 @@ import Vue from 'vue'
 export default {
     state: {
         monthData: null,
+        mustUpdate: false,
     },
     actions: {
         deleteUserPrepay ({commit}, data) {
@@ -230,6 +231,8 @@ export default {
                 return rawData
             }
             state.monthData = addMonthCharges(addMonthDates(addMonthWorkdays(addMonthDeals(data))))
+            state.mustUpdate = true
+            setTimeout(() => state.mustUpdate = false, 300)
         }
     },
     getters: {

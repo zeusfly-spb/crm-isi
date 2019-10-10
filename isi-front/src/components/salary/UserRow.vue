@@ -170,7 +170,7 @@
         </td>
         <td v-for="(date, index) in dates" :key="'main' + index"
             style="border: 1px solid black; padding: 0"
-            width="10em"
+            width="5em"
             :title="`${user.full_name} за ${hDate(date)}`"
         >
             <v-list dense
@@ -235,6 +235,9 @@
             totalVacations: 0
         }),
         computed: {
+            mustUpdate () {
+                return this.$store.state.salary.mustUpdate
+            },
             subDealsTotal () {
                 return this.user.chief_rate * this.subDealsAmount
             },
@@ -296,12 +299,32 @@
                 if (!targetWorkday) return false
                 return (!!targetWorkday.time_start && !targetWorkday.time_finish)
             },
-            calculateTotals () {
-                this.totalPrizes = this.$refs.prizes && this.$refs.prizes.totalPrizesAmount
-                this.totalForfeits = this.$refs.forfeits && this.$refs.forfeits.totalForfeitsAmount
-                this.totalSicks = this.$refs.sicks && this.$refs.sicks.totalSicksAmount
-                this.totalPrepays = this.$refs.prepays && this.$refs.prepays.totalPrepaysAmount
-                this.totalVacations = this.$refs.vacations && this.$refs.vacations.totalVacationsAmount
+            calculateTotals (data) {
+                if (data && data.prizes) {
+                    this.totalPrizes = data.prizes
+                } else {
+                    this.totalPrizes = this.$refs.prizes && this.$refs.prizes.totalPrizesAmount
+                }
+                if (data && data.forfeits) {
+                    this.totalForfeits = data.forfeits
+                } else {
+                    this.totalForfeits = this.$refs.forfeits && this.$refs.forfeits.totalForfeitsAmount
+                }
+                if (data && data.sicks) {
+                    this.totalSicks = data.sicks
+                } else {
+                    this.totalSicks = this.$refs.sicks && this.$refs.sicks.totalSicksAmount
+                }
+                if (data && data.prepays) {
+                    this.totalPrepays = data.prepays
+                } else {
+                    this.totalPrepays = this.$refs.prepays && this.$refs.prepays.totalPrepaysAmount
+                }
+                if (data && data.vacations) {
+                    this.totalVacations = data.vacations
+                } else {
+                    this.totalVacations = this.$refs.vacations && this.$refs.vacations.totalVacationsAmount
+                }
             },
             isHoliday (textDate) {
                 let date = new Date(textDate)
@@ -337,6 +360,13 @@
         },
         mounted () {
             this.calculateTotals()
+        },
+        watch: {
+            mustUpdate (val) {
+                if (val) {
+                    this.calculateTotals()
+                }
+            }
         },
         components: {
             UserVacations,

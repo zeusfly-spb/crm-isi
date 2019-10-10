@@ -173,12 +173,10 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
-                    .finally(() => this.$emit('update'))
             },
             deleteVacation () {
                 this.$store.dispatch('deleteUserVacation', {id: this.vacationToDelete.id})
                     .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
             }
         },
         watch: {
@@ -191,6 +189,9 @@
                 if (value) {
                     [this.amount, this.comment] = [0, '']
                 }
+            },
+            totalVacationsAmount (val) {
+                this.$emit('update', {vacations: val})
             }
         }
     }

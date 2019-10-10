@@ -162,7 +162,6 @@
             deletePrize () {
                 this.$store.dispatch('deleteUserPrize', {id: this.prizeToDelete.id})
                     .then(() => this.prompt = false)
-                    .finally(() => this.$emit('update'))
             },
             showPrompt (prize) {
                 this.prizeToDelete = prize
@@ -176,7 +175,6 @@
                     comment: this.comment
                 })
                     .then(() => this.adding = false)
-                    .finally(() => this.$emit('update'))
             }
         },
         watch: {
@@ -189,6 +187,9 @@
                 if (value) {
                     [this.amount, this.comment] = [0, '']
                 }
+            },
+            totalPrizesAmount (val) {
+                this.$emit('update', {prizes: val})
             }
         }
     }
