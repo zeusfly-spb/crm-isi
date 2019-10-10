@@ -131,7 +131,6 @@ export default {
             })
         },
         setMonthData ({commit, rootState}) {
-            commit('SET_LOADING_ON')
             commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_month_data', {
@@ -140,7 +139,6 @@ export default {
                 })
                     .then(res => {
                         commit('SET_MONTH_DATA', res.data)
-                        commit('SET_LOADING_OFF')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -204,7 +202,34 @@ export default {
             target[data.field_name] = data.user[data.field_name]
         },
         SET_MONTH_DATA (state, data) {
-            state.monthData = data
+            let firstDate = data.dates[0]
+            let lastDate = data.dates[data.dates.length - 1]
+            const getDate = (timestamp) => timestamp.split(' ')[0] || null
+            const addMonthDeals = rawData => {
+                rawData.users = rawData.users.map(user => ({...user, monthDeals:
+                        user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate)}))
+                return rawData
+            }
+            const addMonthWorkdays = rawData => {
+                rawData.users = rawData.users.map(user => ({...user, monthWorkdays:
+                        user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate)}))
+                return rawData
+            }
+            const addMonthDates = rawData => {
+                rawData.users = rawData.users.map(user => ({...user, dates: data.dates}))
+                return rawData
+            }
+            const addMonthCharges = rawData => {
+                rawData.users = rawData.users.map(user => ({...user,
+                    monthPrizes: user.prizes && user.prizes.length && user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
+                    monthForfeits: user.forfeits && user.forfeits && user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
+                    monthSicks: user.sicks && user.sicks.length && user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
+                    monthPrepays: user.prepays && user.prepays.length && user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
+                    monthVacations: user.vacations && user.vacations.length && user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+                }))
+                return rawData
+            }
+            state.monthData = addMonthCharges(addMonthDates(addMonthWorkdays(addMonthDeals(data))))
         }
     },
     getters: {

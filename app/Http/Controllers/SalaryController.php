@@ -29,7 +29,7 @@ class SalaryController extends Controller
             $currentDate = strtotime("+1 day", $currentDate);
         }
 
-        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands')
+        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
             ->where('is_superadmin', false)
             ->whereNotNull('island_id')
             ->whereNull('fired_at');
@@ -42,18 +42,7 @@ class SalaryController extends Controller
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
         }
-
         $users = $queryBuilder->get();
-        foreach ($users as &$user) {
-            $user['monthDeals'] = $user->deals()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthWorkdays'] = $user->workdays()->whereYear('date', $year)->whereMonth('date', $month)->get()->toArray();
-            $user['dates'] = $monthDates;
-            $user['monthPrizes'] = $user->prizes()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthForfeits'] = $user->forfeits()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthSicks'] = $user->sicks()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthPrepays'] = $user->prepays()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-            $user['monthVacations'] = $user->vacations()->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->toArray();
-        }
 
         $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
         if ($request->island_id) {
