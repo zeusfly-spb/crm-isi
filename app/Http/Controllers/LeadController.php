@@ -20,9 +20,13 @@ class LeadController extends Controller
         return response()->json($lead->toArray());
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $leads = Lead::with('comments', 'user', 'postpones')->get()->reverse()->values();
+        if ($request->with_done) {
+            $leads = Lead::with('comments', 'user', 'postpones')->get()->reverse()->values();
+        } else {
+            $leads = Lead::with('comments', 'user', 'postpones')->where('status', '<>', 'done')->get()->reverse()->values();
+        }
         return response()->json($leads->toArray());
     }
 

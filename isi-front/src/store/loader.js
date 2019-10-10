@@ -3,9 +3,16 @@ import Vue from 'vue'
 export default {
     state: {
         leads: [],
-        beep: false
+        beep: false,
+        withDone: false
     },
     actions: {
+        setDoneMode ({commit, dispatch}, doneMode) {
+            return new Promise((resolve, reject) => {
+                commit('SET_DONE_MODE', doneMode)
+                dispatch('setLeadsOnTimer')
+            })
+        },
         deleteLeadPostpone ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_postpone', {... data})
@@ -88,9 +95,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setLeadsOnTimer ({commit, rootState}) {
+        setLeadsOnTimer ({commit, rootState, state}) {
             return new Promise((resolve ,reject) => {
-                Vue.axios.post('/api/get_leads', {date: rootState.accountingDate})
+                Vue.axios.post('/api/get_leads', {
+                    date: rootState.accountingDate,
+                    with_done: state.withDone
+                })
                     .then(res => {
                         commit('SET_LEADS', res.data)
                         resolve(res)
@@ -98,10 +108,13 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setLeads ({commit, rootState}) {
+        setLeads ({commit, rootState, state}) {
             return new Promise((resolve ,reject) => {
                 commit('ADD_TASK', 'leads')
-                Vue.axios.post('/api/get_leads', {date: rootState.accountingDate})
+                Vue.axios.post('/api/get_leads', {
+                    date: rootState.accountingDate,
+                    with_done: state.withDone
+                })
                     .then(res => {
                         commit('SET_LEADS', res.data)
                         resolve(res)
@@ -167,6 +180,9 @@ export default {
         }
     },
     mutations: {
+        SET_DONE_MODE (state, done) {
+            state.withDone = done
+        },
         ADD_LEAD (state, lead) {
             state.leads.push(lead)
         },
