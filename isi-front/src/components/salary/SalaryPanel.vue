@@ -65,35 +65,39 @@
 
         <div
             v-else
+            style="width: 100%"
         >
-            <div
-                style="z-index: 10000; position: absolute"
-                :style="{top: bottomPosition + (screenHeight * 0.83) + 'px'}"
-                class="text-xs-center"
-            >
-                <v-btn
-                    fab
-                    small
-                    color="primary"
-                    :style="{left: screenCenter - 10 + 'px'}"
-                >
-                    <v-icon>arrow_left</v-icon>
-                </v-btn>
-                <v-btn
-                    fab
-                    small
-                    color="primary"
-                    :style="{left: screenCenter + 10 + 'px'}"
-                >
-                    <v-icon>arrow_right</v-icon>
-                </v-btn>
-            </div>
+<!--            <div-->
+<!--                style="z-index: 10000; position: absolute"-->
+<!--                :style="{top: bottomPosition + (screenHeight * 0.83) + 'px'}"-->
+<!--                class="text-xs-center"-->
+<!--            >-->
+<!--                <v-btn-->
+<!--                    fab-->
+<!--                    small-->
+<!--                    color="primary"-->
+<!--                    :style="{left: screenCenter - 10 + 'px'}"-->
+<!--                    @click="$vuetify.goTo('#long-list', 10, 200)"-->
+<!--                >-->
+<!--                    <v-icon>arrow_left</v-icon>-->
+<!--                </v-btn>-->
+<!--                <v-btn-->
+<!--                    fab-->
+<!--                    small-->
+<!--                    color="primary"-->
+<!--                    :style="{left: screenCenter + 10 + 'px'}"-->
+<!--                    @click="$vuetify.goTo('#long-list', -10, 200)"-->
+<!--                >-->
+<!--                    <v-icon>arrow_right</v-icon>-->
+<!--                </v-btn>-->
+<!--            </div>-->
 
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
                 hide-actions
                 class="elevation-1"
+                id="long-list"
             >
                 <template v-slot:items="props">
                     <component
@@ -113,13 +117,23 @@
     import TotalDataRow from './TotalDataRow'
     import UserRow from './UserRow'
     import $ from 'jquery'
+
     export default {
         name: 'SalaryPanel',
         data: () => ({
             bottomPanel: false,
-            bottomPosition: 0
+            bottomPosition: 0,
+            ops: {
+                vuescroll: {},
+                scrollPanel: {},
+                rail: {},
+                bar: {}
+            }
         }),
         computed: {
+            screenWidth () {
+                return document.body.clientWidth
+            },
             screenHeight () {
                 return document.body.clientHeight
             },
@@ -175,6 +189,14 @@
             }
         },
         methods: {
+            scrollListRight () {
+                let container = document.getElementById('long-list')
+                container.scrollLeft = 10
+            },
+            scrollListLeft () {
+                let container = document.getElementById('long-list')
+                container.scrollLeft = -10
+            },
             inspect (data) {
                 console.dir(data)
             },
@@ -195,12 +217,22 @@
                 this.bottomPanel = val.length > 10
             }
         },
-        created () {
+        mounted () {
             $(window).scroll(() => {
-                console.log($(window).scrollTop())
-                console.log(this.bottomPosition)
                 this.bottomPosition = $(window).scrollTop()
             })
+
+            // $('#long-list').on('mousedown', function(e) {
+            //     $('#long-list').on('mousemove', function(evt) {
+            //         $('html,body').stop(false, true).animate({
+            //             scrollLeft: e.pageX - evt.clientX
+            //         });
+            //     });
+            // });
+
+            // $('#long-list').on('mouseup', function() {
+            //     $('#long-list').off('mousemove');
+            // });
         },
         components: {
             UserRow,
@@ -209,5 +241,8 @@
     }
 </script>
 <style scoped>
-
+    .wrapper {
+        height: 300px;
+        width: 300px;
+    }
 </style>

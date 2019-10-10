@@ -120,7 +120,7 @@
                 return this.$store.state.realDate
             },
             canUpdate () {
-                return !this.isToday ? false : this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id
+                return this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id && this.isToday
             },
             basePath () {
                 return this.$store.state.basePath
