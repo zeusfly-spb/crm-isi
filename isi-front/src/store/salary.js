@@ -208,14 +208,14 @@ export default {
             const getDate = (timestamp) => timestamp.split(' ')[0] || null
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({...user,
+                    dates: data.dates,
                     monthDeals: user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || [],
                     monthWorkdays: user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate) || [],
-                    dates: data.dates,
-                    monthPrizes: user.prizes && user.prizes.length && user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
-                    monthForfeits: user.forfeits && user.forfeits && user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
-                    monthSicks: user.sicks && user.sicks.length && user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
-                    monthPrepays: user.prepays && user.prepays.length && user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
-                    monthVacations: user.vacations && user.vacations.length && user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+                    monthPrizes: user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
+                    monthForfeits: user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
+                    monthSicks: user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
+                    monthPrepays: user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
+                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
                 }))
                 return rawData
             }

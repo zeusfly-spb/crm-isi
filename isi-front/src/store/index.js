@@ -706,35 +706,113 @@ export const store = new Vuex.Store({
                 }
             })
         },
-        changeAccountingDate ({commit, dispatch}, date) {
+        changeAccountingDate ({commit, dispatch, getters}, date) {
+            const loadSalaryPage = () => {
+                commit('ADD_TASK', 'salary')
+                dispatch('setMonthData')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'salary')
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('startScanTimer')
+                        dispatch('setCustomers')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                        dispatch('setLeads')
+                    })
+            }
+            const loadDailyPage = () => {
+                commit('ADD_TASK', 'daily')
+                dispatch('loadDailyPage')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'daily')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('startScanTimer')
+                        dispatch('setCustomers')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                        dispatch('setMonthData')
+                        dispatch('setLeads')
+                    })
+            }
+            const loadStockPage = () => {
+                commit('ADD_TASK', 'stock')
+                dispatch('setReserves')
+                    .then(() => dispatch('setStockActions')
+                        .then(() => dispatch('setStockOptions')
+                            .then(() => {
+                                commit('REMOVE_TASK', 'stock')
+                                dispatch('loadDailyPage')
+                                dispatch('setUsers')
+                                dispatch('setGroups')
+                                dispatch('startScanTimer')
+                                dispatch('setCustomers')
+                                dispatch('setReserves')
+                                dispatch('setStockActions')
+                                dispatch('setStockOptions')
+                                dispatch('setMonthData')
+                                dispatch('setLeads')
+                            })
+                        ))
+            }
+            const loadCustomersPage = () => {
+                commit('ADD_TASK', 'customers')
+                dispatch('setCustomers')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'customers')
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('startScanTimer')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                        dispatch('setMonthData')
+                        dispatch('setLeads')
+                    })
+            }
+            const loadAdminPage = () => {
+                commit('ADD_TASK', 'admin')
+                dispatch('setUsers')
+                    .then(() => dispatch('setGroups')
+                        .then(() => {
+                            commit('REMOVE_TASK', 'admin')
+                            dispatch('loadDailyPage')
+                            dispatch('startScanTimer')
+                            dispatch('setReserves')
+                            dispatch('setStockActions')
+                            dispatch('setStockOptions')
+                            dispatch('setMonthData')
+                            dispatch('setLeads')
+                        })
+                    )
+            }
+
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
-            commit('ADD_TASK', 'daily')
             dispatch('setAccountingDate')
                 .then(() => {
-                    // daily page
                     dispatch('setRealDate')
-                        .then(() => {
-                            dispatch('setIslands')
-                                .then(() => {
-                                    dispatch('loadDailyPage')
-                                        .then(() => {
-                                            // other pages
-                                            commit('REMOVE_TASK', 'daily')
-                                            dispatch('setUsers')
-                                            dispatch('setGroups')
-                                            dispatch('startScanTimer')
-                                            dispatch('setCustomers')
-                                            dispatch('setReserves')
-                                            dispatch('setStockActions')
-                                            dispatch('setStockOptions')
-                                            dispatch('setMonthData')
-                                            dispatch('setLeads')
-                                        })
-                                })
-                        })
+                        .then(() => dispatch('setIslands')
+                            .then(() => {
+                                switch (getters.currentPage) {
+                                    case 'daily': loadDailyPage()
+                                        break
+                                    case 'salary': loadSalaryPage()
+                                        break
+                                    case 'stock': loadStockPage()
+                                        break
+                                    case 'customers': loadCustomersPage()
+                                        break
+                                    case 'admin': loadAdminPage()
+                                        break
+                                }
+                            }))
                 })
-
         }
     },
     mutations: {

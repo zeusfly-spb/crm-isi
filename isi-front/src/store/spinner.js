@@ -24,6 +24,7 @@ export default {
         }
     },
     getters: {
+        currentPage: state => state.currentPage,
         busy: state => {
             let pageTasks = state.tasks.filter(item => item === state.currentPage)
             return !!pageTasks.length
