@@ -206,22 +206,11 @@ export default {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
             const getDate = (timestamp) => timestamp.split(' ')[0] || null
-            const addMonthDeals = rawData => {
-                rawData.users = rawData.users.map(user => ({...user, monthDeals:
-                        user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate)}))
-                return rawData
-            }
-            const addMonthWorkdays = rawData => {
-                rawData.users = rawData.users.map(user => ({...user, monthWorkdays:
-                        user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate)}))
-                return rawData
-            }
-            const addMonthDates = rawData => {
-                rawData.users = rawData.users.map(user => ({...user, dates: data.dates}))
-                return rawData
-            }
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({...user,
+                    monthDeals: user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || [],
+                    monthWorkdays: user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate) || [],
+                    dates: data.dates,
                     monthPrizes: user.prizes && user.prizes.length && user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
                     monthForfeits: user.forfeits && user.forfeits && user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
                     monthSicks: user.sicks && user.sicks.length && user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
@@ -230,7 +219,7 @@ export default {
                 }))
                 return rawData
             }
-            state.monthData = addMonthCharges(addMonthDates(addMonthWorkdays(addMonthDeals(data))))
+            state.monthData = addMonthCharges(data)
             state.mustUpdate = true
             setTimeout(() => state.mustUpdate = false, 300)
         }

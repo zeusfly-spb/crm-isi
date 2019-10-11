@@ -677,7 +677,6 @@ export const store = new Vuex.Store({
         },
         setAccountingDate ({commit, dispatch}) {
             return new Promise((resolve, reject) => {
-                // commit('SET_LOADING_ON')
                 // Verify that current date changed
                 let now = new Date().toISOString().split('T')[0]
                 let savedRealDate = Cookies.get('saved_real')
@@ -698,7 +697,6 @@ export const store = new Vuex.Store({
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
                             dispatch('setStartBalance')
-                            // commit('SET_LOADING_OFF')
                             resolve(res)
                         })
                         .catch(e => {
