@@ -17,15 +17,15 @@
                 :key="index"
                 :depressed="mode === currentViewMode"
                 :color="mode === currentViewMode ? 'grey lighten-1' : null"
-                :title="mode === 'done' && !doneMode ? 'Чтобы узнать количество завершенных заявок, переключите режим' : ''"
+                :title="(mode === 'done' || mode === 'all') && !doneMode ? 'Чтобы узнать количество завершенных заявок, переключите режим' : ''"
             >
                 {{ {wait: 'Ожидают', process: 'В работе', done: 'Завершенные', moderate: 'На модерации', all: 'Все'}[mode] }}
                 (
-                <span v-if="mode === 'all'">{{ counts.all }}</span>
+                <span v-if="mode === 'all'">{{ doneMode && counts && counts.all || '*' }}</span>
                 <span v-if="mode === 'wait'">{{ counts.wait }}</span>
                 <span v-if="mode === 'process'">{{ counts.process }}</span>
                 <span v-if="mode === 'moderate'">{{ counts.moderate }}</span>
-                <span v-if="mode === 'done'">{{ doneMode && counts && counts.done || '?' }}</span>
+                <span v-if="mode === 'done'">{{ doneMode && counts && counts.done || '*' }}</span>
                 )
             </v-btn>
             <new-lead-dialog @updated="showSuccess" style="display: inline"/>
@@ -277,7 +277,7 @@
             setViewMode (mode) {
                 this.openLeadId = null
                 this.currentViewMode = mode
-                this.$store.dispatch('setDoneMode', mode === 'done')
+                this.$store.dispatch('setDoneMode', mode === 'done' || mode === 'all')
             },
             showSuccess (text, color) {
                 this.snackText = text
