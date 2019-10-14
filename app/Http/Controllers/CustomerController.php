@@ -20,14 +20,20 @@ class CustomerController extends Controller
     public function create(Request $request)
     {
         $input = $request->all();
-
         $input = Arr::except($input, ['phone', 'phones']);
-        $customer = Customer::create($input);
+        $phone = $request->phone;
 
+        $exists = Customer::whereHas('phones', function($query) use($phone) {
+                $query->where('number', $phone);
+            })
+            ->first();
+        if ($exists) {
+            return response()->json(['exists' => true]);
+        }
+        $customer = Customer::create($input);
         if ($request->phone) {
             $customer->phones()->create(['number' => $request->phone]);
         }
-
         $customer->load('phones');
         return response()->json($customer->toArray());
     }
