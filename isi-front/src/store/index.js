@@ -471,6 +471,10 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_customer', {...customer})
                     .then(res => {
+                        if (res.data.exists) {
+                            resolve(res)
+                            return
+                        }
                         commit('ADD_CUSTOMER', res.data)
                         resolve(res)
                     })

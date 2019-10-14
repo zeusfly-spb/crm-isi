@@ -295,7 +295,11 @@
                         if (!res) return
                         let action = this.mode === 'add' ? 'addCustomer' : 'updateCustomer'
                         this.$store.dispatch(action, this.editedCustomer)
-                            .then(() => {
+                            .then((res) => {
+                                if (res.data.exists) {
+                                    this.showSnack('Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.', 'red')
+                                    return
+                                }
                                 this.dialog = false
                                 this.showSnack(`${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`, 'green')
                             })
