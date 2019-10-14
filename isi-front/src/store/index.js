@@ -288,18 +288,18 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        startScanTimer ({dispatch}) {
+        startScanTimer ({dispatch, getters}) {
             setInterval(() => {
-                if (this.state.scanMode.workdays) {
+                if (this.state.scanMode.workdays && getters.isToday) {
                     dispatch('setWorkDays')
                 }
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')
                 }
-                if (this.state.scanMode.expenses) {
+                if (this.state.scanMode.expenses && getters.isToday) {
                     dispatch('setExpenses')
                 }
-                if (this.state.scanMode.deals) {
+                if (this.state.scanMode.deals && getters.isToday) {
                     dispatch('setDeals')
                 }
                 if (this.state.scanMode.leads) {
@@ -987,6 +987,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        isToday: state => state.realDate === state.accountingDate,
         totalDealExpense: state => {
             const add = (a, b) => a + +b.expense
             return state.deals.reduce(add, 0)
