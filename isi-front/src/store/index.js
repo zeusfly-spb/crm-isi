@@ -719,12 +719,10 @@ export const store = new Vuex.Store({
                         dispatch('loadDailyPage')
                         dispatch('setUsers')
                         dispatch('setGroups')
-                        dispatch('startScanTimer')
                         dispatch('setCustomers')
                         dispatch('setReserves')
                         dispatch('setStockActions')
                         dispatch('setStockOptions')
-                        dispatch('setLeads')
                     })
             }
             const loadDailyPage = () => {
@@ -734,13 +732,11 @@ export const store = new Vuex.Store({
                         commit('REMOVE_TASK', 'daily')
                         dispatch('setUsers')
                         dispatch('setGroups')
-                        dispatch('startScanTimer')
                         dispatch('setCustomers')
                         dispatch('setReserves')
                         dispatch('setStockActions')
                         dispatch('setStockOptions')
                         dispatch('setMonthData')
-                        dispatch('setLeads')
                     })
             }
             const loadStockPage = () => {
@@ -753,13 +749,11 @@ export const store = new Vuex.Store({
                                 dispatch('loadDailyPage')
                                 dispatch('setUsers')
                                 dispatch('setGroups')
-                                dispatch('startScanTimer')
                                 dispatch('setCustomers')
                                 dispatch('setReserves')
                                 dispatch('setStockActions')
                                 dispatch('setStockOptions')
                                 dispatch('setMonthData')
-                                dispatch('setLeads')
                             })
                         ))
             }
@@ -771,12 +765,10 @@ export const store = new Vuex.Store({
                         dispatch('loadDailyPage')
                         dispatch('setUsers')
                         dispatch('setGroups')
-                        dispatch('startScanTimer')
                         dispatch('setReserves')
                         dispatch('setStockActions')
                         dispatch('setStockOptions')
                         dispatch('setMonthData')
-                        dispatch('setLeads')
                     })
             }
             const loadAdminPage = () => {
@@ -786,12 +778,10 @@ export const store = new Vuex.Store({
                         .then(() => {
                             commit('REMOVE_TASK', 'admin')
                             dispatch('loadDailyPage')
-                            dispatch('startScanTimer')
                             dispatch('setReserves')
                             dispatch('setStockActions')
                             dispatch('setStockOptions')
                             dispatch('setMonthData')
-                            dispatch('setLeads')
                         })
                     )
             }
