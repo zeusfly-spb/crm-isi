@@ -710,20 +710,30 @@ export const store = new Vuex.Store({
                 }
             })
         },
-        changeAccountingDate ({commit, dispatch, getters}, date) {
+        changeAccountingDate ({commit, dispatch, getters, state}, date) {
             const loadSalaryPage = () => {
-                commit('ADD_TASK', 'salary')
-                dispatch('setMonthData')
-                    .then(() => {
-                        commit('REMOVE_TASK', 'salary')
-                        dispatch('loadDailyPage')
-                        dispatch('setUsers')
-                        dispatch('setGroups')
-                        dispatch('setCustomers')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
-                    })
+                if (anotherMonth) {
+                    commit('ADD_TASK', 'salary')
+                    dispatch('setMonthData')
+                        .then(() => {
+                            commit('REMOVE_TASK', 'salary')
+                            dispatch('loadDailyPage')
+                            dispatch('setUsers')
+                            dispatch('setGroups')
+                            dispatch('setCustomers')
+                            dispatch('setReserves')
+                            dispatch('setStockActions')
+                            dispatch('setStockOptions')
+                        })
+                } else {
+                    dispatch('loadDailyPage')
+                    dispatch('setUsers')
+                    dispatch('setGroups')
+                    dispatch('setCustomers')
+                    dispatch('setReserves')
+                    dispatch('setStockActions')
+                    dispatch('setStockOptions')
+                }
             }
             const loadDailyPage = () => {
                 commit('ADD_TASK', 'daily')
@@ -736,7 +746,9 @@ export const store = new Vuex.Store({
                         dispatch('setReserves')
                         dispatch('setStockActions')
                         dispatch('setStockOptions')
-                        dispatch('setMonthData')
+                        if (anotherMonth) {
+                            dispatch('setMonthData')
+                        }
                     })
             }
             const loadStockPage = () => {
@@ -753,7 +765,9 @@ export const store = new Vuex.Store({
                                 dispatch('setReserves')
                                 dispatch('setStockActions')
                                 dispatch('setStockOptions')
-                                dispatch('setMonthData')
+                                if (anotherMonth) {
+                                    dispatch('setMonthData')
+                                }
                             })
                         ))
             }
@@ -768,7 +782,9 @@ export const store = new Vuex.Store({
                         dispatch('setReserves')
                         dispatch('setStockActions')
                         dispatch('setStockOptions')
-                        dispatch('setMonthData')
+                        if (anotherMonth) {
+                            dispatch('setMonthData')
+                        }
                     })
             }
             const loadAdminPage = () => {
@@ -781,11 +797,14 @@ export const store = new Vuex.Store({
                             dispatch('setReserves')
                             dispatch('setStockActions')
                             dispatch('setStockOptions')
-                            dispatch('setMonthData')
+                            if (anotherMonth) {
+                                dispatch('setMonthData')
+                            }
                         })
                     )
             }
 
+            let anotherMonth = new Date(state.accountingDate).getMonth() !== new Date(date).getMonth()
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
             dispatch('setAccountingDate')

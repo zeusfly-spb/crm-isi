@@ -68,7 +68,7 @@
             onselect="return false"
             @mousedown="listMouseDown"
             @mouseup="listMouseUp"
-            @mousemove="listMouseMove"
+            @mouseout="listMouseOut"
         >
             <v-data-table
                 :items="['', ...users]"
@@ -149,8 +149,8 @@
             }
         },
         methods: {
-            listMouseMove () {
-                if (!dragMode) {
+            listMouseOut () {
+                if (!this.dragMode) {
                     document.body.style.cursor = 'default'
                 }
             },
