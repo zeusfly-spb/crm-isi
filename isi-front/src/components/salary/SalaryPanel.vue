@@ -69,6 +69,7 @@
             @mousedown="listMouseDown"
             @mouseup="listMouseUp"
             @mouseout="listMouseOut"
+            @mousemove="listMouseMove"
         >
             <v-data-table
                 :items="['', ...users]"
@@ -150,6 +151,11 @@
         },
         methods: {
             listMouseOut () {
+                if (!this.dragMode) {
+                    document.body.style.cursor = 'default'
+                }
+            },
+            listMouseMove () {
                 if (!this.dragMode) {
                     document.body.style.cursor = 'default'
                 }
