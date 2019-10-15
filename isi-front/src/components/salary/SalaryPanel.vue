@@ -58,41 +58,18 @@
                         :dates="dates"
                     />
                 </template>
-
             </v-data-table>
         </v-layout>
-
 
         <div
             v-else
             style="width: 100%; overflow: hidden"
             id="long-list"
+            onselect="return false"
+            @mousedown="listMouseDown"
+            @mouseup="listMouseUp"
+            @mousemove="listMouseMove"
         >
-<!--            <div-->
-<!--                style="z-index: 10000; position: absolute"-->
-<!--                :style="{top: bottomPosition + (screenHeight * 0.83) + 'px'}"-->
-<!--                class="text-xs-center"-->
-<!--            >-->
-<!--                <v-btn-->
-<!--                    fab-->
-<!--                    small-->
-<!--                    color="primary"-->
-<!--                    :style="{left: screenCenter - 10 + 'px'}"-->
-<!--                    @click="$vuetify.goTo('#long-list', 10, 200)"-->
-<!--                >-->
-<!--                    <v-icon>arrow_left</v-icon>-->
-<!--                </v-btn>-->
-<!--                <v-btn-->
-<!--                    fab-->
-<!--                    small-->
-<!--                    color="primary"-->
-<!--                    :style="{left: screenCenter + 10 + 'px'}"-->
-<!--                    @click="$vuetify.goTo('#long-list', -10, 200)"-->
-<!--                >-->
-<!--                    <v-icon>arrow_right</v-icon>-->
-<!--                </v-btn>-->
-<!--            </div>-->
-
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
@@ -116,30 +93,13 @@
 <script>
     import TotalDataRow from './TotalDataRow'
     import UserRow from './UserRow'
-    import $ from 'jquery'
 
     export default {
         name: 'SalaryPanel',
         data: () => ({
-            bottomPanel: false,
-            bottomPosition: 0,
-            ops: {
-                vuescroll: {},
-                scrollPanel: {},
-                rail: {},
-                bar: {}
-            }
+            dragMode: false
         }),
         computed: {
-            screenWidth () {
-                return document.body.clientWidth
-            },
-            screenHeight () {
-                return document.body.clientHeight
-            },
-            screenCenter () {
-                return document.body.clientWidth / 2
-            },
             headers () {
                 let dates = this.dates && this.dates.map(item => ({
                     text: this.hDate(item),
@@ -189,16 +149,19 @@
             }
         },
         methods: {
-            scrollListRight () {
-                let container = document.getElementById('long-list')
-                container.scrollLeft = 10
+            listMouseMove () {
+                if (!dragMode) {
+                    document.body.style.cursor = 'default'
+                }
             },
-            scrollListLeft () {
-                let container = document.getElementById('long-list')
-                container.scrollLeft = -10
+            listMouseUp () {
+                this.dragMode = false
+                document.body.style.cursor = 'default'
             },
-            inspect (data) {
-                console.dir(data)
+            listMouseDown (e) {
+                this.dragMode = true
+                let centerX = document.body.clientWidth / 2
+                document.body.style.cursor = e.clientX < centerX ? 'w-resize' : 'e-resize'
             },
             hDate (textDate) {
                 let date = new Date(textDate)
@@ -216,23 +179,6 @@
             dates (val) {
                 this.bottomPanel = val.length > 10
             }
-        },
-        mounted () {
-            $(window).scroll(() => {
-                this.bottomPosition = $(window).scrollTop()
-            })
-
-            // $('#long-list').on('mousedown', function(e) {
-            //     $('#long-list').on('mousemove', function(evt) {
-            //         $('html,body').stop(false, true).animate({
-            //             scrollLeft: e.pageX - evt.clientX
-            //         });
-            //     });
-            // });
-
-            // $('#long-list').on('mouseup', function() {
-            //     $('#long-list').off('mousemove');
-            // });
         },
         components: {
             UserRow,
