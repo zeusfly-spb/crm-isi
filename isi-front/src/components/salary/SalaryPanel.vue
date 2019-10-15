@@ -65,7 +65,8 @@
 
         <div
             v-else
-            style="width: 100%"
+            style="width: 100%; overflow: hidden"
+            id="long-list"
         >
 <!--            <div-->
 <!--                style="z-index: 10000; position: absolute"-->
@@ -97,7 +98,6 @@
                 :headers="headers"
                 hide-actions
                 class="elevation-1"
-                id="long-list"
             >
                 <template v-slot:items="props">
                     <component
@@ -240,9 +240,11 @@
         }
     }
 </script>
-<style scoped>
-    .wrapper {
-        height: 300px;
-        width: 300px;
+<style>
+    ::selection {
+        background: transparent;
+    }
+    ::-moz-selection {
+        background: transparent;
     }
 </style>
