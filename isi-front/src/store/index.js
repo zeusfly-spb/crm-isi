@@ -9,6 +9,7 @@ import stock from './stock'
 import salary from './salary'
 import spinner from './spinner'
 import loader from './loader'
+import settings from './settings'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ export const store = new Vuex.Store({
         stock,
         salary,
         spinner,
-        loader
+        loader,
+        settings
     },
     state: {
         loading: 0,
