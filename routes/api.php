@@ -131,4 +131,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('add_lead_postpone', 'LeadController@addPostpone');
     Route::post('delete_lead_postpone', 'LeadController@deletePostpone');
 
+    //SETTINGS
+    Route::post('get_setting', 'LoaderController@loadSetting');
+
 });

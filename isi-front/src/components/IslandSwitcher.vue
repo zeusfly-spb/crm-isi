@@ -47,7 +47,7 @@
         name: 'IslandSwitcher',
         computed: {
             maxAvaCount () {
-                return this.$store.state.settings.switcherPanel.maxAvaCount
+                return this.$store.state.settings.data.switcherPanel.maxAvaCount
             },
             workingIslandId () {
                 return this.$store.state.workingIslandId

@@ -6,6 +6,7 @@ use App\Deal;
 use App\Expense;
 use App\HandOver;
 use App\WorkDay;
+use App\Setting;
 use Illuminate\Http\Request;
 
 class LoaderController extends Controller
@@ -48,5 +49,14 @@ class LoaderController extends Controller
         $handoverAmount = $amount;
 
         return response()->json(['workdays' => $workdays, 'deals' => $deals, 'expenses' => $expenses, 'handover' => $handoverAmount]);
+    }
+
+    public function loadSetting()
+    {
+        $setting = Setting::find(1);
+        if ($setting) {
+            return response()->json($setting->toArray());
+        }
+        return response()->json([]);
     }
 }

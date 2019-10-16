@@ -379,25 +379,28 @@ export const store = new Vuex.Store({
             })
         },
         enterCRM ({dispatch, commit}) {
-            dispatch('setAccountingDate')
+            dispatch('setSetting')
                 .then(() => {
-                    // daily page
-                    dispatch('setRealDate')
+                    dispatch('setAccountingDate')
                         .then(() => {
-                            dispatch('setIslands')
+                            // daily page
+                            dispatch('setRealDate')
                                 .then(() => {
-                                    dispatch('loadDailyPage')
+                                    dispatch('setIslands')
                                         .then(() => {
-                                            // other pages
-                                            dispatch('setUsers')
-                                            dispatch('setGroups')
-                                            dispatch('startScanTimer')
-                                            dispatch('setCustomers')
-                                            dispatch('setReserves')
-                                            dispatch('setStockActions')
-                                            dispatch('setStockOptions')
-                                            dispatch('setMonthData')
-                                            dispatch('setLeads')
+                                            dispatch('loadDailyPage')
+                                                .then(() => {
+                                                    // other pages
+                                                    dispatch('setUsers')
+                                                    dispatch('setGroups')
+                                                    dispatch('startScanTimer')
+                                                    dispatch('setCustomers')
+                                                    dispatch('setReserves')
+                                                    dispatch('setStockActions')
+                                                    dispatch('setStockOptions')
+                                                    dispatch('setMonthData')
+                                                    dispatch('setLeads')
+                                                })
                                         })
                                 })
                         })
