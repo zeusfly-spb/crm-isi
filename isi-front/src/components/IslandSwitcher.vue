@@ -20,7 +20,7 @@
                 <v-card-text style="padding: 10px!important;">
                     <v-avatar
                         size="30px"
-                        v-for="user in tab.users"
+                        v-for="user in sliceUsers(tab)"
                         :key="user.id"
                         style="margin-right: .1em; margin-left: .1em"
                     >
@@ -46,6 +46,9 @@
     export default {
         name: 'IslandSwitcher',
         computed: {
+            maxAvaCount () {
+                return this.$store.state.settings.switcherPanel.maxAvaCount
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
@@ -63,6 +66,12 @@
             }
         },
         methods: {
+            sliceUsers (tab) {
+                if (tab.users.length > this.maxAvaCount) {
+                    return tab.users.slice(0, this.maxAvaCount)
+                }
+                return  tab.users
+            },
             setCurrentIslandId (index) {
                 this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             },
