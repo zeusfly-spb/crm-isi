@@ -133,5 +133,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     //SETTINGS
     Route::post('get_setting', 'LoaderController@loadSetting');
+    Route::post('update_setting', 'SettingsController@updateSetting');
 
 });

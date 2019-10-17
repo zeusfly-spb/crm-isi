@@ -1,5 +1,14 @@
 <template>
     <v-container grid-list-md>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
         <v-layout wrap>
             <v-flex xs12 sm6 md4>
                 <v-card class="round-corner">
@@ -34,7 +43,10 @@
     export default {
         name: 'SettingsControl',
         data: () => ({
-            avaCountValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            avaCountValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            snackbar: false,
+            snackColor: 'green',
+            snackText: ''
         }),
         computed: {
             maxAvaCount: {
@@ -42,8 +54,17 @@
                     return this.$store.state.settings.data.switcherPanel.maxAvaCount
                 },
                 set (val) {
-
+                    let allData = {...this.$store.state.settings.data, switcherPanel: {maxAvaCount: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Количество аватаров сотрудников на панели выбора островка изменено', 'green'))
                 }
+            }
+        },
+        methods: {
+            showSnack (text, color) {
+                this.snackColor = color
+                this.snackText = text
+                this.snackbar = true
             }
         }
     }
