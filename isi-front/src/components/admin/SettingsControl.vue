@@ -18,10 +18,10 @@
                         <span class="subheading white--text"
                               style="margin: 0 1em"
                         >
-                            Переключатель островков
+                            Панель выбора островка
                         </span>
                     </v-card-title>
-                    <v-card-text>
+                    <v-card-text class="text-xs-center">
                         <span>
                             <span>
                                 Максимальное количество аватаров
