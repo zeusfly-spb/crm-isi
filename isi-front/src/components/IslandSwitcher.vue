@@ -27,7 +27,14 @@
                         <img :src="`${basePath}${user.avatar ? user.avatar : '/img/default.jpg'}`"
                              alt="Фото"
                              :title="user.full_name"
+                             v-if="user.avatar !== 'plus'"
                         />
+                        <span
+                            v-else
+                            :title="hiddenUsers(tab).map(item => item.full_name).join(' ,')"
+                        >
+                            + {{ hiddenUsers(tab).length }}
+                        </span>
                     </v-avatar>
 
                     <v-card-actions class="m-0 p-0" style="padding: 5px!important;"
@@ -66,9 +73,16 @@
             }
         },
         methods: {
+            hiddenUsers (tab) {
+                let hiddenCount = tab.users.length - this.maxAvaCount
+                if (hiddenCount) {
+                    return tab.users.slice(this.maxAvaCount, tab.users.length)
+                }
+                return []
+            },
             sliceUsers (tab) {
                 if (tab.users.length > this.maxAvaCount) {
-                    return tab.users.slice(0, this.maxAvaCount)
+                    return [... tab.users.slice(0, this.maxAvaCount), {avatar: 'plus'}]
                 }
                 return  tab.users
             },
