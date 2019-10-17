@@ -349,6 +349,9 @@ export const store = new Vuex.Store({
                 Vue.axios.post('/api/get_accounting_date')
                     .then(res => {
                         commit('SET_REAL_DATE', res.data.date)
+                        if (res.data.setting) {
+                            commit('SET_SETTING', res.data.setting)
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -378,33 +381,30 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        enterCRM ({dispatch, commit}) {
-            dispatch('setSetting')
-                .then(() => {
-                    dispatch('setAccountingDate')
-                        .then(() => {
-                            // daily page
-                            dispatch('setRealDate')
-                                .then(() => {
-                                    dispatch('setIslands')
-                                        .then(() => {
-                                            dispatch('loadDailyPage')
-                                                .then(() => {
-                                                    // other pages
-                                                    dispatch('setUsers')
-                                                    dispatch('setGroups')
-                                                    dispatch('startScanTimer')
-                                                    dispatch('setCustomers')
-                                                    dispatch('setReserves')
-                                                    dispatch('setStockActions')
-                                                    dispatch('setStockOptions')
-                                                    dispatch('setMonthData')
-                                                    dispatch('setLeads')
-                                                })
-                                        })
-                                })
-                        })
-                })
+        enterCRM ({dispatch}) {
+                dispatch('setAccountingDate')
+                    .then(() => {
+                        // daily page
+                        dispatch('setRealDate')
+                            .then(() => {
+                                dispatch('setIslands')
+                                    .then(() => {
+                                        dispatch('loadDailyPage')
+                                            .then(() => {
+                                                // other pages
+                                                dispatch('setUsers')
+                                                dispatch('setGroups')
+                                                dispatch('startScanTimer')
+                                                dispatch('setCustomers')
+                                                dispatch('setReserves')
+                                                dispatch('setStockActions')
+                                                dispatch('setStockOptions')
+                                                dispatch('setMonthData')
+                                                dispatch('setLeads')
+                                            })
+                                    })
+                            })
+                    })
         },
         setWorkDays ({commit}) {
             return new Promise((resolve, reject) => {
