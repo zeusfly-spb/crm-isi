@@ -38,12 +38,22 @@
                         hide-headers
                     >
                         <template v-slot:items="props">
-                            <td>{{ props.item.title }}</td>
+                            <td>
+                                <v-icon
+                                    v-if="props.item.custom"
+                                    :title="`Удалить наименование документа '${props.item.title}'`"
+                                    color="red darken-4"
+                                    class="clickable"
+                                >
+                                    close
+                                </v-icon>
+                                {{ props.item.title }}
+                            </td>
                             <td align="right">
                                 <v-icon
                                     class="mr-3 clickable"
                                     :title="`Посмотреть изображение документа '${props.item.title}'`"
-                                    v-if="images[props.item.field]"
+                                    v-if="images[props.item.field] && !props.item.custom"
                                     color="teal darken-3"
                                     @click="showImage(props.item)"
                                 >
@@ -59,7 +69,7 @@
                                     cloud_upload
                                 </v-icon>
                                 <v-icon
-                                    v-if="images[props.item.field]"
+                                    v-if="images[props.item.field] && !props.item.custom"
                                     class="clickable"
                                     :title="`Удалить изображение документа '${props.item.title}'`"
                                     color="red darken-4"
@@ -179,16 +189,23 @@
                     value: null,
                     align: 'center'
                 }
-            ],
-            docs: [
-                {field: 'passport', title: 'Паспорт'},
-                {field: 'inn', title: 'ИНН'},
-                {field: 'snils', title: 'СНИЛС'},
-                {field: 'contract', title: 'Трудовой договор'},
-                {field: 'secret', title: 'Коммерческая тайна'},
             ]
+
         }),
         computed: {
+            docs() {
+                return [
+                    {field: 'passport', title: 'Паспорт'},
+                    {field: 'inn', title: 'ИНН'},
+                    {field: 'snils', title: 'СНИЛС'},
+                    {field: 'contract', title: 'Трудовой договор'},
+                    {field: 'secret', title: 'Коммерческая тайна'},
+                    ...this.customDocs
+                ]
+            },
+            customDocs () {
+                return this.user.document_pack.custom_docs.map(item => ({...item, title: item.name, custom: true}))
+            },
             basePath () {
                 return this.$store.state.basePath
             },
