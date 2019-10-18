@@ -30,6 +30,7 @@
                     <span class="title white--text">{{ `Документы сотрудника ${user.full_name}` }}</span>
                 </v-card-title>
                 <v-card-text>
+                    <custom-doc-adder :user="user" @added="showSuccess"/>
                     <v-data-table
                         :headers="headers"
                         :items="docs"
@@ -150,6 +151,7 @@
     </v-flex>
 </template>
 <script>
+    import CustomDocAdder from './CustomDocAdder'
     export default {
         name: 'DocPack',
         props: ['user'],
@@ -195,6 +197,9 @@
             }
         },
         methods: {
+            showSuccess (text) {
+                this.$emit('updated', text)
+            },
             deleteImage () {
                 this.$store.dispatch('deleteDocumentImage', {
                     id: this.images.id,
@@ -246,6 +251,9 @@
                     this.preview = true
                 }
             }
+        },
+        components: {
+            CustomDocAdder
         }
     }
 </script>

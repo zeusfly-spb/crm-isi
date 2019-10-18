@@ -39,4 +39,12 @@ class DocumentPackController extends Controller
         $user = User::with('documentPack')->find($documentPack->user_id);
         return response()->json($user->toArray());
     }
+
+    public function addCustomDoc(Request $request)
+    {
+        $documentPack = DocumentPack::find($request->id);
+        $documentPack->addCustomDoc($request->name);
+        $user = User::with('documentPack')->find($documentPack->user_id);
+        return response()->json($user->toArray());
+    }
 }

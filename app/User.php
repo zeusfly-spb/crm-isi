@@ -210,7 +210,7 @@ class User extends Authenticatable
 
     public function documentPack()
     {
-        return $this->hasOne(DocumentPack::class);
+        return $this->hasOne(DocumentPack::class)->with('customDocs');
     }
 
     public function createDocumentPack()

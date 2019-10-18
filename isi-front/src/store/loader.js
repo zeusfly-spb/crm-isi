@@ -7,6 +7,16 @@ export default {
         withDone: false
     },
     actions: {
+        addCustomDoc ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_custom_doc', {... data})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setDoneMode ({commit, dispatch, rootState}, doneMode) {
             commit('SET_DONE_MODE', doneMode)
             commit('SET_SCAN_MODE', {...rootState.scanMode, leads: false})

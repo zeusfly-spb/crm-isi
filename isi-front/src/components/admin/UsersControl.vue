@@ -201,7 +201,7 @@
                                     :error-messages="errors.collect('phone')"
                                     v-validate="'digits:10'"
                                     mask="(###) ### - ####"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.address" label="Адрес"></v-text-field>
