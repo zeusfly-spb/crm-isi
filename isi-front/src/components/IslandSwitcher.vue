@@ -33,7 +33,7 @@
                             v-else
                             :title="hiddenUsers(tab).map(item => item.full_name).join(' ,')"
                         >
-                            + {{ hiddenUsers(tab).length }}
+                            +{{ hiddenUsers(tab).length }}
                         </span>
                     </v-avatar>
 

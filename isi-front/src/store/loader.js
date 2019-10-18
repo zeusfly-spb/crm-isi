@@ -7,6 +7,16 @@ export default {
         withDone: false
     },
     actions: {
+        deleteCustomDoc ({commit}, id) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_custom_doc', {id: id})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addCustomDoc ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_custom_doc', {... data})

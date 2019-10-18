@@ -214,6 +214,10 @@
             }
         },
         methods: {
+            deleteCustomDoc (customDoc) {
+                this.$store.dispatch('deleteCustomDoc', customDoc.id)
+                    .then(() => this.$emit('updated', `Удалено наименование документа ${customDoc.title} у пользователя ${this.user.full_name}`))
+            },
             showSuccess (text) {
                 this.$emit('updated', text)
             },

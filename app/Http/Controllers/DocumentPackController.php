@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CustomDoc;
 use App\DocumentPack;
 use App\User;
 use Illuminate\Http\Request;
@@ -45,6 +46,15 @@ class DocumentPackController extends Controller
         $documentPack = DocumentPack::find($request->id);
         $documentPack->addCustomDoc($request->name);
         $user = User::with('documentPack')->find($documentPack->user_id);
+        return response()->json($user->toArray());
+    }
+
+    public function deleteCustomDoc(Request $request)
+    {
+        $customDoc = CustomDoc::find($request->id);
+        $user = User::find($customDoc->documentPack->user_id);
+        $customDoc->delete();
+        $user->load('documentPack');
         return response()->json($user->toArray());
     }
 }
