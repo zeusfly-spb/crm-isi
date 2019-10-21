@@ -73,7 +73,7 @@
                 const add = (a, b) => a + b.income
                 const addCharges = (user) => {
                     let userRow = this.monthData && this.monthData.users && this.monthData.users.find(item => item.id === user.id) || null
-                    let totalIncome = userRow && userRow.deals && userRow.deals.reduce(add, 0) || 0
+                    let totalIncome = userRow && userRow.monthDeals && userRow.monthDeals.reduce(add, 0) || 0
                     return {...user, totalIncome: totalIncome}
                 }
                 const sortByIncome = (a, b) => {
