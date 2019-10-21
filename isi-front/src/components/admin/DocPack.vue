@@ -61,7 +61,7 @@
                                     remove_red_eye
                                 </v-icon>
                                 <v-icon
-                                    :class="{'mr-3': images[props.item.field]}"
+                                    :class="{'mr-3': images[props.item.field] || props.item.custom && props.item.location}"
                                     class="clickable"
                                     :title="`Загрузить изображение документа '${props.item.title}'`"
                                     color="light-blue darken-3"
@@ -70,7 +70,7 @@
                                     cloud_upload
                                 </v-icon>
                                 <v-icon
-                                    v-if="images[props.item.field] && !props.item.custom"
+                                    v-if="images[props.item.field] && !props.item.custom || props.item.custom && props.item.location"
                                     class="clickable"
                                     :title="`Удалить изображение документа '${props.item.title}'`"
                                     color="red darken-4"
@@ -249,14 +249,22 @@
                 this.$emit('updated', text)
             },
             deleteImage () {
-                this.$store.dispatch('deleteDocumentImage', {
-                    id: this.images.id,
-                    field_name: this.imageToDelete.field
-                })
-                    .then(() => {
-                        this.confirm = false
-                        this.$emit('updated', `Изображение документа '${this.imageToDelete.title}' удалено`)
+                if (this.imageToDelete.custom) {
+                    this.$store.dispatch('deleteCustomImage', this.imageToDelete.id)
+                        .then(() => {
+                            this.confirm = false
+                            this.$emit('updated', `Изображение документа '${this.imageToDelete.title}' удалено`)
+                        })
+                } else {
+                    this.$store.dispatch('deleteDocumentImage', {
+                        id: this.images.id,
+                        field_name: this.imageToDelete.field
                     })
+                        .then(() => {
+                            this.confirm = false
+                            this.$emit('updated', `Изображение документа '${this.imageToDelete.title}' удалено`)
+                        })
+                }
             },
             showDeleteConfirm (image) {
                 this.imageToDelete = image

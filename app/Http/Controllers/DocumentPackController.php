@@ -77,4 +77,14 @@ class DocumentPackController extends Controller
         $user->load('documentPack');
         return response()->json($user->toArray());
     }
+
+    public function deleteCustomDocImage(Request $request)
+    {
+        $customDoc = CustomDoc::find($request->id);
+        $user = User::find($customDoc->documentPack->user_id);
+        Storage::delete($customDoc->location);
+        $customDoc->update(['location' => null]);
+        $user->load('documentPack');
+        return response()->json($user->toArray());
+    }
 }

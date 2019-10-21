@@ -7,6 +7,16 @@ export default {
         withDone: false
     },
     actions: {
+        deleteCustomImage ({commit}, id) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_custom_image', {id: id})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         uploadCustomImage ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/upload_custom_image', data)
