@@ -57,4 +57,24 @@ class DocumentPackController extends Controller
         $user->load('documentPack');
         return response()->json($user->toArray());
     }
+
+    public function updateCustomDocImage(Request $request)
+    {
+        $customDoc = CustomDoc::find($request->id);
+        $user = User::find($customDoc->documentPack->user_id);
+
+        if ($customDoc->location) {
+            Storage::delete($customDoc->location);
+        }
+
+        if ($request->hasFile('image')) {
+            $fileName = (string) Uuid::generate(4);
+            $request->file('image')->storeAs(
+                'public/documents', $fileName
+            );
+            $customDoc->update(['location' => '/storage/documents/' . $fileName]);
+        }
+        $user->load('documentPack');
+        return response()->json($user->toArray());
+    }
 }

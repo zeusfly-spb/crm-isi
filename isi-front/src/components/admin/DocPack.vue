@@ -54,7 +54,7 @@
                                 <v-icon
                                     class="mr-3 clickable"
                                     :title="`Посмотреть изображение документа '${props.item.title}'`"
-                                    v-if="images[props.item.field] && !props.item.custom"
+                                    v-if="images[props.item.field] && !props.item.custom || props.item.custom && props.item.location"
                                     color="teal darken-3"
                                     @click="showImage(props.item)"
                                 >
@@ -123,7 +123,11 @@
                 <v-card-text>
                     <img
                         :src="`${basePath}${images[viewingImage && viewingImage.field ? viewingImage.field : null]}`"
-                        v-if="viewingImage"
+                        v-if="viewingImage && !viewingImage.custom && images[viewingImage.field]"
+                    />
+                    <img
+                        :src="`${basePath}${viewingImage.location}`"
+                        v-if="viewingImage && viewingImage.custom && viewingImage.location"
                     />
                 </v-card-text>
                 <v-card-actions>
@@ -156,7 +160,7 @@
                         Удалить
                     </v-btn>
                     <v-btn
-                        v-if=""
+                        v-if="customDocToDelete"
                         color="red darken-1"
                         flat="flat"
                         @click="deleteCustomDoc"
@@ -267,12 +271,20 @@
                 this.preview = false
             },
             uploadDocumentImage () {
-                let data = new FormData
-                data.append('id', this.images.id)
-                data.append('field_name', this.uploadingImage.field)
-                data.append('image', this.image)
-                this.$store.dispatch('uploadDocumentImage', data)
-                    .then(() => this.reset())
+                if (this.uploadingImage.custom) {
+                    let data = new FormData
+                    data.append('id', this.uploadingImage.id)
+                    data.append('image', this.image)
+                    this.$store.dispatch('uploadCustomImage', data)
+                        .then(() => this.reset())
+                } else {
+                    let data = new FormData
+                    data.append('id', this.images.id)
+                    data.append('field_name', this.uploadingImage.field)
+                    data.append('image', this.image)
+                    this.$store.dispatch('uploadDocumentImage', data)
+                        .then(() => this.reset())
+                }
             },
             showImageInput (image) {
                 this.uploadingImage = image

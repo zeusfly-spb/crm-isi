@@ -121,6 +121,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_image', 'DocumentPackController@deleteImage');
     Route::post('add_custom_doc', 'DocumentPackController@addCustomDoc');
     Route::post('delete_custom_doc', 'DocumentPackController@deleteCustomDoc');
+    Route::post('upload_custom_image', 'DocumentPackController@updateCustomDocImage');
 
     // LEADS
     Route::post('get_leads', 'LeadController@index');
