@@ -44,6 +44,7 @@
                                     :title="`Удалить наименование документа '${props.item.title}'`"
                                     color="red darken-4"
                                     class="clickable"
+                                    @click="showCustomDocDeleteConfirm(props.item)"
                                 >
                                     close
                                 </v-icon>
@@ -147,9 +148,18 @@
                         Отмена
                     </v-btn>
                     <v-btn
+                        v-if="imageToDelete"
                         color="red darken-1"
                         flat="flat"
                         @click="deleteImage"
+                    >
+                        Удалить
+                    </v-btn>
+                    <v-btn
+                        v-if=""
+                        color="red darken-1"
+                        flat="flat"
+                        @click="deleteCustomDoc"
                     >
                         Удалить
                     </v-btn>
@@ -166,6 +176,7 @@
         name: 'DocPack',
         props: ['user'],
         data: () => ({
+            customDocToDelete: null,
             imageToDelete: null,
             confirmText: '',
             confirm: false,
@@ -214,9 +225,21 @@
             }
         },
         methods: {
-            deleteCustomDoc (customDoc) {
-                this.$store.dispatch('deleteCustomDoc', customDoc.id)
-                    .then(() => this.$emit('updated', `Удалено наименование документа ${customDoc.title} у пользователя ${this.user.full_name}`))
+            showCustomDocDeleteConfirm (custom) {
+                if (custom.location) {
+                    this.$emit('alert', `Чтобы удалить наменование, сначала удалите загруженное изображение!`)
+                    return
+                }
+                this.customDocToDelete = custom
+                this.confirmText = `Удалить наименование документа '${custom.name}' сотрудника ${this.user.full_name}?`
+                this.confirm = true
+            },
+            deleteCustomDoc () {
+                this.$store.dispatch('deleteCustomDoc', this.customDocToDelete.id)
+                    .then(() => {
+                        this.confirm = false
+                        this.$emit('updated', `Удалено наименование документа ${this.customDocToDelete.title} у пользователя ${this.user.full_name}`)
+                    })
             },
             showSuccess (text) {
                 this.$emit('updated', text)
@@ -270,6 +293,11 @@
             image (value) {
                 if (value) {
                     this.preview = true
+                }
+            },
+            confirm (val) {
+                if (!val) {
+                    this.imageToDelete = this.customDocToDelete = null
                 }
             }
         },

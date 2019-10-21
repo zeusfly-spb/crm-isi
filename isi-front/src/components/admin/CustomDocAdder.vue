@@ -20,6 +20,7 @@
                 </v-card-title>
                 <v-card-text>
                     <v-text-field
+                        autofocus
                         v-model="name"
                         label="Наименование документа"
                         data-vv-as="Наименование документа"
@@ -65,6 +66,14 @@
             },
             deactivate () {
                 this.active = false
+            }
+        },
+        watch: {
+            active (val) {
+                this.errors.clear()
+                if (!val) {
+                    this.name = ''
+                }
             }
         }
     }
