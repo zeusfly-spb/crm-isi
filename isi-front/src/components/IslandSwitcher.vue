@@ -56,6 +56,9 @@
             monthData () {
                 return this.$store.state.salary.monthData
             },
+            sortingParam () {
+                return this.$store.state.settings.data.switcherPanel.sortingParam
+            },
             maxAvaCount () {
                 return this.$store.state.settings.data.switcherPanel.maxAvaCount
             },
@@ -69,20 +72,33 @@
                 return [{id: 0, name: 'Все островки', users: [{avatar: '/img/logo.png'}]}, ...this.islands]
             },
             islands () {
-                let raw = this.$store.state.islands
+                let result = this.$store.state.islands
                 const add = (a, b) => a + b.income
+                const sumHours = (a, b) => a + +b.working_hours
                 const addCharges = (user) => {
                     let userRow = this.monthData && this.monthData.users && this.monthData.users.find(item => item.id === user.id) || null
                     let totalIncome = userRow && userRow.monthDeals && userRow.monthDeals.reduce(add, 0) || 0
-                    return {...user, totalIncome: totalIncome}
+                    let totalHours = userRow && userRow.monthWorkdays && userRow.monthWorkdays.reduce(sumHours, 0) || 0
+                    return {...user, totalIncome: totalIncome, totalHours: totalHours}
                 }
                 const sortByIncome = (a, b) => {
                     let incomeA = a && a.totalIncome ? a.totalIncome : 0
                     let incomeB = b && b.totalIncome ? b.totalIncome : 0
                     return incomeB - incomeA
                 }
-                let unsorted =  raw.map(island => ({...island, users: island.users.map(user => addCharges(user))}))
-                return unsorted.map(island => ({...island, users: island.users.sort(sortByIncome)}))
+                const sortByHours = (a, b) => {
+                    let hoursA = a && a.totalHours || 0
+                    let hoursB = b && b.totalHours || 0
+                    return hoursB - hoursA
+                }
+                result =  result.map(island => ({...island, users: island.users.map(user => addCharges(user))}))
+                switch (this.sortingParam) {
+                    case 'income': result = result.map(island => ({...island, users: island.users.sort(sortByIncome)}))
+                        break
+                    case 'hours': result = result.map(island => ({...island, users: island.users.sort(sortByHours)}))
+                        break
+                }
+                return result
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin

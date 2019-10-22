@@ -7,7 +7,8 @@ class SettingsTableSeeder extends Seeder
 {
     private $data = [
         'switcherPanel' => [
-            'maxAvaCount' => 3
+            'maxAvaCount' => 3,
+            'sortingParam' => 'income'
         ]
     ];
     /**

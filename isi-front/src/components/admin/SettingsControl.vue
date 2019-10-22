@@ -38,7 +38,7 @@
                                 Показатель сортировки
                             </v-flex>
                             <v-radio-group
-                                    v-model="row"
+                                    v-model="sortingParam"
                                     column
                             >
                                 <v-radio label="Оборот" value="income"></v-radio>
@@ -72,14 +72,27 @@
             snackText: ''
         }),
         computed: {
+            base () {
+                return this.$store.state.settings.data
+            },
+            sortingParam: {
+                get () {
+                    return this.$store.state.settings.data.switcherPanel.sortingParam
+                },
+                set (val) {
+                    let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, sortingParam: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Изменен критерий сортировки сотрудников', 'green'))
+                }
+            },
             maxAvaCount: {
                 get () {
                     return this.$store.state.settings.data.switcherPanel.maxAvaCount
                 },
                 set (val) {
-                    let allData = {...this.$store.state.settings.data, switcherPanel: {maxAvaCount: val}}
+                    let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, maxAvaCount: val}}
                     this.$store.dispatch('updateSetting', {data: allData})
-                        .then(() => this.showSnack('Количество аватаров сотрудников на панели выбора островка изменено', 'green'))
+                        .then(() => this.showSnack('Изменено число аватаров на панели выбора', 'green'))
                 }
             }
         },

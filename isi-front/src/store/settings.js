@@ -4,7 +4,8 @@ export default {
     state: {
         data: {
             switcherPanel: {
-                maxAvaCount: 5
+                maxAvaCount: 5,
+                sortingParam: 'income'
             }
         }
     },
