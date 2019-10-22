@@ -63,9 +63,6 @@
     export default {
         name: 'SettingsControl',
         data: () => ({
-            reverseList: false,
-            chiefFirst: false,
-            row: null,
             avaCountValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             snackbar: false,
             snackColor: 'green',
@@ -74,6 +71,26 @@
         computed: {
             base () {
                 return this.$store.state.settings.data
+            },
+            reverseList: {
+                get () {
+                    return this.$store.state.settings.data.switcherPanel.reverseList
+                },
+                set (val) {
+                    let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, reverseList: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Измено направление сортировки', 'green'))
+                }
+            },
+            chiefFirst: {
+                get () {
+                    return this.$store.state.settings.data.switcherPanel.chiefFirst
+                },
+                set (val) {
+                    let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, chiefFirst: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Измена позиция руководителя', 'green'))
+                }
             },
             sortingParam: {
                 get () {

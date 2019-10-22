@@ -5,7 +5,9 @@ export default {
         data: {
             switcherPanel: {
                 maxAvaCount: 5,
-                sortingParam: 'income'
+                sortingParam: 'income',
+                chiefFirst: false,
+                reverseList: false
             }
         }
     },

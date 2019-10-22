@@ -56,6 +56,12 @@
             monthData () {
                 return this.$store.state.salary.monthData
             },
+            reverseList () {
+                return this.$store.state.settings.data.switcherPanel.reverseList
+            },
+            chiefFirst () {
+                return this.$store.state.settings.data.switcherPanel.chiefFirst
+            },
             sortingParam () {
                 return this.$store.state.settings.data.switcherPanel.sortingParam
             },
@@ -102,6 +108,9 @@
                         break
                     case 'standing': result = result.map(island => ({...island, users: island.users.sort(cortByStanding)}))
                         break
+                }
+                if (this.reverseList) {
+                    result = result.map(island => ({...island, users: island.users.reverse()}))
                 }
                 return result
             },
