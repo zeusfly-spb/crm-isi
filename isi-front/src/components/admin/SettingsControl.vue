@@ -21,7 +21,7 @@
                             Панель выбора островка
                         </span>
                     </v-card-title>
-                    <v-card-text class="text-xs-center">
+                    <v-card-text>
                         <span>
                             <span>
                                 Максимальное количество аватаров
@@ -33,6 +33,20 @@
                                    style="width: 2em; display: inline-flex"
                                />
                         </span>
+                        <v-layout>
+                            <v-flex align-self-center>
+                                Показатель сортировки
+                            </v-flex>
+                            <v-radio-group
+                                    v-model="row"
+                                    column
+                            >
+                                <v-radio label="Оборот" value="income"></v-radio>
+                                <v-radio label="Часы" value="hours"></v-radio>
+                                <v-radio label="Стаж" value="standing"></v-radio>
+                            </v-radio-group>
+                        </v-layout>
+
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -43,6 +57,7 @@
     export default {
         name: 'SettingsControl',
         data: () => ({
+            row: null,
             avaCountValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             snackbar: false,
             snackColor: 'green',
