@@ -97,8 +97,13 @@
                     let hoursB = b && b.totalHours || 0
                     return hoursB - hoursA
                 }
-                const cortByStanding = (a, b) => {
+                const sortByStanding = (a, b) => {
                     return a.created_at < b.created_at ? -1 : a.created_at > b.created_at ? 1 : 0
+                }
+                const riseChief = (island) => {
+                        const byChiefId = (a, b) => a.id === island.chief_id ? -1 : 1
+                    island.users = island.users.sort(byChiefId)
+                    return island
                 }
                 result =  result.map(island => ({...island, users: island.users.map(user => addCharges(user))}))
                 switch (this.sortingParam) {
@@ -106,11 +111,14 @@
                         break
                     case 'hours': result = result.map(island => ({...island, users: island.users.sort(sortByHours)}))
                         break
-                    case 'standing': result = result.map(island => ({...island, users: island.users.sort(cortByStanding)}))
+                    case 'standing': result = result.map(island => ({...island, users: island.users.sort(sortByStanding)}))
                         break
                 }
                 if (this.reverseList) {
                     result = result.map(island => ({...island, users: island.users.reverse()}))
+                }
+                if (this.chiefFirst) {
+                    result = result.map(island => riseChief(island))
                 }
                 return result
             },
