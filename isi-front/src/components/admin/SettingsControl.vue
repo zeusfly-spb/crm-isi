@@ -79,7 +79,7 @@
                 set (val) {
                     let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, reverseList: val}}
                     this.$store.dispatch('updateSetting', {data: allData})
-                        .then(() => this.showSnack('Измено направление сортировки', 'green'))
+                        .then(() => this.showSnack('Изменено направление сортировки', 'green'))
                 }
             },
             chiefFirst: {
@@ -89,7 +89,7 @@
                 set (val) {
                     let allData = {...this.base, switcherPanel: {...this.base.switcherPanel, chiefFirst: val}}
                     this.$store.dispatch('updateSetting', {data: allData})
-                        .then(() => this.showSnack('Измена позиция руководителя', 'green'))
+                        .then(() => this.showSnack('Изменена позиция руководителя', 'green'))
                 }
             },
             sortingParam: {
