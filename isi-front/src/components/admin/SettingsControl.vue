@@ -46,6 +46,12 @@
                                 <v-radio label="Стаж" value="standing"></v-radio>
                             </v-radio-group>
                         </v-layout>
+                        <v-layout>
+                            <v-switch v-model="chiefFirst" label="Показывать руководителя первым"/>
+                        </v-layout>
+                        <v-layout>
+                            <v-switch v-model="reverseList" label="Реверс списка"/>
+                        </v-layout>
 
                     </v-card-text>
                 </v-card>
@@ -57,6 +63,8 @@
     export default {
         name: 'SettingsControl',
         data: () => ({
+            reverseList: false,
+            chiefFirst: false,
             row: null,
             avaCountValues: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             snackbar: false,
