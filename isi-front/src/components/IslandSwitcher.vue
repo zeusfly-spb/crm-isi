@@ -91,11 +91,16 @@
                     let hoursB = b && b.totalHours || 0
                     return hoursB - hoursA
                 }
+                const cortByStanding = (a, b) => {
+                    return a.created_at < b.created_at ? -1 : a.created_at > b.created_at ? 1 : 0
+                }
                 result =  result.map(island => ({...island, users: island.users.map(user => addCharges(user))}))
                 switch (this.sortingParam) {
                     case 'income': result = result.map(island => ({...island, users: island.users.sort(sortByIncome)}))
                         break
                     case 'hours': result = result.map(island => ({...island, users: island.users.sort(sortByHours)}))
+                        break
+                    case 'standing': result = result.map(island => ({...island, users: island.users.sort(cortByStanding)}))
                         break
                 }
                 return result
