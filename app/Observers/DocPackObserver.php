@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\CustomDoc;
 use App\DocumentPack;
 
 class DocPackObserver
@@ -36,7 +37,7 @@ class DocPackObserver
      */
     public function deleted(DocumentPack $documentPack)
     {
-        //
+        CustomDoc::destroy($documentPack->customDocs->pluck('id'));
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\DocumentPack;
+use App\Observers\UserObserver;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\DocPackObserver;
 
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         DocumentPack::observe(DocPackObserver::class);
+        User::observe(UserObserver::class);
     }
 }
