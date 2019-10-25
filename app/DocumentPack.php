@@ -8,6 +8,7 @@ class DocumentPack extends Model
 {
     protected $guarded = [];
     protected $appends = ['filled'];
+    private $defaultDocs = ['Паспорт', 'ИНН', 'СНИЛС', 'Трудовой договор', 'Коммерческая тайна'];
 
     public function user()
     {
@@ -27,5 +28,14 @@ class DocumentPack extends Model
     public function addCustomDoc($name)
     {
         return  $this->customDocs()->create(['name' => $name]);
+    }
+
+    public function createDefaultDocs()
+    {
+        foreach($this->defaultDocs as $doc) {
+            $this->addCustomDoc($doc);
+        }
+        $this->load('customDocs');
+        return $this->customDocs;
     }
 }

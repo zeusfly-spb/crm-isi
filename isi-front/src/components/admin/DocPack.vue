@@ -210,11 +210,11 @@
         computed: {
             docs() {
                 return [
-                    {field: 'passport', title: 'Паспорт'},
-                    {field: 'inn', title: 'ИНН'},
-                    {field: 'snils', title: 'СНИЛС'},
-                    {field: 'contract', title: 'Трудовой договор'},
-                    {field: 'secret', title: 'Коммерческая тайна'},
+                    // {field: 'passport', title: 'Паспорт'},
+                    // {field: 'inn', title: 'ИНН'},
+                    // {field: 'snils', title: 'СНИЛС'},
+                    // {field: 'contract', title: 'Трудовой договор'},
+                    // {field: 'secret', title: 'Коммерческая тайна'},
                     ...this.customDocs
                 ]
             },
