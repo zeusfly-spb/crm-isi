@@ -79,7 +79,6 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $user->load('documentPack');
-//        $user->createDocumentPack();
         $success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
         $success['user'] = $user;

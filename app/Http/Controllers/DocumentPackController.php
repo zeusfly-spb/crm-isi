@@ -44,7 +44,10 @@ class DocumentPackController extends Controller
     public function addCustomDoc(Request $request)
     {
         $documentPack = DocumentPack::find($request->id);
-        $documentPack->addCustomDoc($request->name);
+        $customDoc = $documentPack->addCustomDoc($request->name);
+        if ($request->parent_id) {
+            $customDoc->update(['parent_id' => $request->parent_id]);
+        }
         $user = User::with('documentPack')->find($documentPack->user_id);
         return response()->json($user->toArray());
     }

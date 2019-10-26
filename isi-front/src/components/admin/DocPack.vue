@@ -4,7 +4,6 @@
             class="clickable"
             :title="`Пакет документов сотрудника ${user.full_name}`"
             @click="active = true"
-            :class="{'red--text': !user.document_pack.filled}"
         >
             insert_drive_file
         </v-icon>
@@ -41,7 +40,8 @@
                             <td>
                                 <v-icon
                                     v-if="props.item.custom"
-                                    :title="`Удалить наименование документа '${props.item.title}'`"
+                                    :title="props.item.pages.filter(item => item.location).length ? 'Чтобы удалить наименование, предварительно удалите все загруженные изображения' : `Удалить наименование документа '${props.item.title}'`"
+                                    :disabled="props.item.pages.filter(item => item.location).length > 0"
                                     color="red darken-4"
                                     class="clickable"
                                     @click="showCustomDocDeleteConfirm(props.item)"
@@ -49,6 +49,58 @@
                                     close
                                 </v-icon>
                                 {{ props.item.title }}
+                                <v-icon
+                                    small
+                                    :title="`Добавить страницу документа ${props.item.title}`"
+                                    class="clickable"
+                                    @click="addPage(props.item)"
+                                >
+                                    add_box
+                                </v-icon>
+                                <div v-if="props.item.pages && props.item.pages.length">
+                                    <div v-for="page in props.item.pages" :key="page.id" class="pl-5">
+                                        <v-icon
+                                            small
+                                            :title="`Удалить наименование документа '${page.title}'`"
+                                            color="red darken-4"
+                                            class="clickable"
+                                            @click="showCustomDocDeleteConfirm(page)"
+                                        >
+                                            close
+                                        </v-icon>
+                                        <span class="mr-2">{{ page.name }}</span>
+                                        <v-icon
+                                            small
+                                            class="clickable"
+                                            :title="`Посмотреть изображение документа '${page.title}'`"
+                                            v-if="page.location"
+                                            color="teal darken-3"
+                                            @click="showImage(page)"
+                                        >
+                                            remove_red_eye
+                                        </v-icon>
+                                        <v-icon
+                                            small
+                                            :class="{'mr-1 ml-1': page.location}"
+                                            class="clickable"
+                                            :title="`Загрузить изображение документа '${page.title}'`"
+                                            color="light-blue darken-3"
+                                            @click="showImageInput(page)"
+                                        >
+                                            cloud_upload
+                                        </v-icon>
+                                        <v-icon
+                                            small
+                                            v-if="page.location"
+                                            class="clickable"
+                                            :title="`Удалить изображение документа '${page.title}'`"
+                                            color="red darken-4"
+                                            @click="showDeleteConfirm(page)"
+                                        >
+                                            delete_forever
+                                        </v-icon>
+                                    </div>
+                                </div>
                             </td>
                             <td align="right">
                                 <v-icon
@@ -79,6 +131,9 @@
                                     delete_forever
                                 </v-icon>
                             </td>
+                        </template>
+                        <template v-slot:no-data>
+                            <span class="red--text">Нет изображений</span>
                         </template>
                     </v-data-table>
                 </v-card-text>
@@ -209,14 +264,9 @@
         }),
         computed: {
             docs() {
-                return [
-                    // {field: 'passport', title: 'Паспорт'},
-                    // {field: 'inn', title: 'ИНН'},
-                    // {field: 'snils', title: 'СНИЛС'},
-                    // {field: 'contract', title: 'Трудовой договор'},
-                    // {field: 'secret', title: 'Коммерческая тайна'},
-                    ...this.customDocs
-                ]
+                let base = [...this.customDocs]
+                base = base.map(doc => ({...doc, pages: base.filter(item => +item.parent_id === +doc.id)}))
+                return base.filter(doc => !doc.parent_id)
             },
             customDocs () {
                 return this.user.document_pack.custom_docs.map(item => ({...item, title: item.name, custom: true}))
@@ -229,6 +279,16 @@
             }
         },
         methods: {
+            addPage (doc) {
+                this.$store.dispatch('addCustomDoc', {
+                    id: this.user.document_pack.id,
+                    name: `${doc.title} страница ${doc.pages.length + 2}`,
+                    parent_id: doc.id
+                })
+                    .then(() => {
+                        this.$emit('updated', `Добавлена страница для документа ${doc.title}`)
+                    })
+            },
             showCustomDocDeleteConfirm (custom) {
                 if (custom.location) {
                     this.$emit('alert', `Чтобы удалить наменование, сначала удалите загруженное изображение!`)
