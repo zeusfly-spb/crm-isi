@@ -38,6 +38,7 @@
     </v-toolbar>
 
     <v-content>
+        <call-reminder/>
         <v-progress-linear :indeterminate="true" v-if="loading"/>
         <router-view></router-view>
     </v-content>
@@ -46,6 +47,7 @@
 
 <script>
 import DateSelector from './components/DateSelector'
+import CallReminder from './components/leads/CallReminder'
 import $ from 'jquery'
 export default {
     name: 'App',
@@ -120,7 +122,8 @@ export default {
         });
     },
     components: {
-        DateSelector
+        DateSelector,
+        CallReminder
     }
 }
 </script>

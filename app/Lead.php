@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone', 'last_comment'];
+    protected $appends = ['last_postpone', 'last_comment', 'last_call'];
+    protected $casts = [
+        'calls' => 'array',
+    ];
 
     public function comments()
     {
@@ -45,5 +48,21 @@ class Lead extends Model
     public function getLastCommentAttribute()
     {
         return $this->comments->last() ?? null;
+    }
+
+    public function addCall($call)
+    {
+        $calls = $this->calls;
+        $calls[] = $call;
+        $this->update(['calls' => $calls]);
+    }
+
+    public function getLastCallAttribute()
+    {
+        if ($this->calls && count($this->calls)) {
+            return $this->calls[count($this->calls) - 1] ?? null;
+        } else {
+            return null;
+        }
     }
 }

@@ -99,4 +99,12 @@ class LeadController extends Controller
         $lead->load('postpones');
         return response()->json($lead->toArray());
     }
+
+    public function addCall(Request $request)
+    {
+        $lead = Lead::find($request->lead_id);
+        $lead->addCall((object)['timestamp' =>  now()->toDateTimeString(), 'user_id' => $request->user_id]);
+        $lead->load('postpones');
+        return response()->json($lead->toArray());
+    }
 }

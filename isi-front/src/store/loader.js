@@ -7,6 +7,19 @@ export default {
         withDone: false
     },
     actions: {
+        addLeadCall ({commit, rootState}, leadId) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_lead_call', {
+                    user_id: rootState.authUser.id,
+                    lead_id: leadId
+                })
+                    .then(res => {
+                        commit('UPDATE_LEAD', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteCustomImage ({commit}, id) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_custom_image', {id: id})

@@ -7,6 +7,11 @@
         >
             insert_drive_file
         </v-icon>
+        <span v-if="!filled" class="headline red--text"
+              title="Не все копии обязательных документов загружены"
+        >
+            <strong>!</strong>
+        </span>
         <input type="file"
                name="image"
                ref="imageInput"
@@ -259,10 +264,18 @@
                     value: null,
                     align: 'center'
                 }
-            ]
-
+            ],
+            requiredTitles: ['Паспорт', 'ИНН', 'СНИЛС']
         }),
         computed: {
+            filled () {
+                const present = (name) => {
+                    let target = this.docs.find(item => item.title === name)
+                    return !!(target && !!target.location)
+                }
+                let result = this.requiredTitles.map(item => present(item))
+                return !result.filter(item => item === false).length
+            },
             docs() {
                 let base = [...this.customDocs]
                 base = base.map(doc => ({...doc, pages: base.filter(item => +item.parent_id === +doc.id)}))
