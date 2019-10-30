@@ -2,16 +2,12 @@
     <v-flex>
         <v-icon
             class="clickable"
-            :title="`Пакет документов сотрудника ${user.full_name}`"
             @click="active = true"
+            :color="filled ? null : 'red'"
+            :title="filled ? `Пакет документов сотрудника ${user.full_name}` : 'Недостаточно копий обязательных документов'"
         >
-            insert_drive_file
+            {{ filled ? 'folder' : 'folder_open'}}
         </v-icon>
-        <span v-if="!filled" class="headline red--text"
-              title="Не все копии обязательных документов загружены"
-        >
-            <strong>!</strong>
-        </span>
         <input type="file"
                name="image"
                ref="imageInput"
