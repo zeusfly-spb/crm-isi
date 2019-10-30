@@ -47,11 +47,9 @@
         },
         methods: {
             makeCall () {
-                console.log(`Calling ${this.phone}`)
                 if (this.lead) {
                     this.$store.dispatch('addLeadCall', this.lead.id)
                 }
-                return
                 this.axios.post('https://crmkin.ru/tel/api/vpbx/call/make', {
                     user_id: this.authUser.id,
                     extension: this.authUser.vpbx_extension,

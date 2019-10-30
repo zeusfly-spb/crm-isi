@@ -56,10 +56,14 @@
                     </v-card-text>
                 </v-card>
             </v-flex>
+            <v-flex xs12 sm6 md4>
+                <salary-settings @updated="showSnack"/>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
 <script>
+    import SalarySettings from './settings/SalarySettings'
     export default {
         name: 'SettingsControl',
         data: () => ({
@@ -119,6 +123,9 @@
                 this.snackText = text
                 this.snackbar = true
             }
+        },
+        components: {
+            SalarySettings
         }
     }
 </script>

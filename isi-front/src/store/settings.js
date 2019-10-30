@@ -8,6 +8,9 @@ export default {
                 sortingParam: 'income',
                 chiefFirst: false,
                 reverseList: false
+            },
+            salaryPage: {
+                visible: false
             }
         }
     },

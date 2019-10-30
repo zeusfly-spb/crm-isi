@@ -11,6 +11,9 @@ class SettingsTableSeeder extends Seeder
             'sortingParam' => 'income',
             'chiefFirst' => false,
             'reverseList' => false
+        ],
+        'salaryPage' => [
+            'visible' => false
         ]
     ];
     /**
