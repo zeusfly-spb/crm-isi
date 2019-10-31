@@ -1,5 +1,5 @@
 <template>
-    <v-card class="round-corner">
+    <v-card class="round-corner" style="height: 400px">
         <v-snackbar
             v-model="snackbar"
             auto-height

@@ -11,7 +11,7 @@
         </v-snackbar>
         <v-layout wrap>
             <v-flex xs12 sm6 md4>
-                <v-card class="round-corner">
+                <v-card class="round-corner" style="height: 400px">
                     <v-card-title class="light-blue darken-3"
                                   style="height: 2em; margin: 0; padding: 0"
                     >
