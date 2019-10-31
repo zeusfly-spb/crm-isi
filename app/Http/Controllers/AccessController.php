@@ -29,9 +29,9 @@ class AccessController extends Controller
         }
         $setting = Setting::find(1);
         if ($setting) {
-            return response()->json(['status' => $access->status, 'setting' => $setting->toArray()]);
+            return response()->json(['access' => $access->toArray(), 'setting' => $setting->toArray()]);
         }
-        return response()->json(['status' => $access->status]);
+        return response()->json(['access' => $access->toArray()]);
     }
 
     public function getAllAccesses()
