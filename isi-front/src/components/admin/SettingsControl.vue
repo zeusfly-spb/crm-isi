@@ -57,7 +57,7 @@
                 </v-card>
             </v-flex>
             <v-flex xs12 sm6 md4>
-                <salary-settings @updated="showSnack"/>
+                <salary-settings/>
             </v-flex>
         </v-layout>
     </v-container>

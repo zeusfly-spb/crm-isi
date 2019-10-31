@@ -48,10 +48,16 @@
     export default {
         name: 'HomeView',
         data: () => ({
-            regularTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки'],
             adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            regularTabs () {
+                let base =  ['Учет на день', 'База клиентов', 'Склад', 'Заявки']
+                return this.salaryVisible ? [...base, 'Зарплата'] : base
+            },
+            salaryVisible () {
+                return this.$store.state.settings.data.salaryPage.visible
+            },
             beep () {
                 return this.$store.state.loader.beep
             },
