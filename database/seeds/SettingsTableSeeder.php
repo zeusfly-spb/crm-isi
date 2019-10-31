@@ -13,7 +13,11 @@ class SettingsTableSeeder extends Seeder
             'reverseList' => false
         ],
         'salaryPage' => [
-            'visible' => false
+            'visible' => false,
+            'showPersonal' => true,
+            'showOther' => false,
+            'showTotal' => false,
+            'showChief' => false
         ]
     ];
     /**

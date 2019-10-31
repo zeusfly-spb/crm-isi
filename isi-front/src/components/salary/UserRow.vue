@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr v-show="visible">
         <td
             style="border: 1px solid black; padding: 0"
         >
@@ -65,7 +65,7 @@
                             </td>
                         </tr>
                         <tr
-                            v-if="isChief"
+                            v-if="isChief && showChiefInfo"
                             class="light-blue lighten-4"
                         >
                             <td class="info-tab">
@@ -235,6 +235,24 @@
             totalVacations: 0
         }),
         computed: {
+            showChiefInfo () {
+                return this.isSuperadmin ? true : this.$store.state.settings.data.salaryPage.showChief
+            },
+            visible () {
+                if (this.isSuperadmin) {
+                    return true
+                }
+                if (this.showPersonal && +this.$store.state.authUser.id === +this.user.id || this.showOther && +this.$store.state.authUser.id !== +this.user.id) {
+                    return true
+                }
+                return false
+            },
+            showPersonal () {
+                return this.$store.state.settings.data.salaryPage.showPersonal
+            },
+            showOther () {
+                return this.$store.state.settings.data.salaryPage.showOther
+            },
             mustUpdate () {
                 return this.$store.state.salary.mustUpdate
             },

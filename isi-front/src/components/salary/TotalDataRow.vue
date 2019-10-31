@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr v-if="isSuperadmin || showTotal">
         <td
             style="border: 1px solid black; padding: 0; height: 3em!important; width: 30em !important"
             align="right"
@@ -98,6 +98,12 @@
         name: 'TotalDataRow',
         props: ['dates'],
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
+            showTotal () {
+                return this.$store.state.settings.data.salaryPage.showTotal
+            },
             deals () {
                 return this.$store.state.salary.monthData && this.$store.state.salary.monthData.allDeals
             },

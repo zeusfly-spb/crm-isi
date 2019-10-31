@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Access;
+use App\Setting;
 use Illuminate\Http\Request;
 use Webpatser\Uuid\Uuid;
 
@@ -26,7 +27,11 @@ class AccessController extends Controller
         if (!$access) {
             return response()->json(['status' => 'none']);
         }
-        return response()->json($access->toArray());
+        $setting = Setting::find(1);
+        if ($setting) {
+            return response()->json(['status' => $access->status, 'setting' => $setting->toArray()]);
+        }
+        return response()->json(['status' => $access->status]);
     }
 
     public function getAllAccesses()

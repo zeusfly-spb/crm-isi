@@ -19,9 +19,28 @@
             </span>
         </v-card-title>
         <v-card-text>
-            <v-layout>
-                <v-switch v-model="visible" label="Показывать страницу зарплаты"/>
-            </v-layout>
+            <v-switch v-model="visible" label="Показывать страницу зарплаты"/>
+            <v-checkbox
+                v-model="showPersonal"
+                label="Персональные данные"
+                :disabled="!visible"
+            />
+            <v-checkbox
+                v-model="showOther"
+                label="Данные остальных"
+                :disabled="!visible"
+
+            />
+            <v-checkbox
+                v-model="showTotal"
+                label="Общие данные"
+                :disabled="!visible"
+            />
+            <v-checkbox
+                v-model="showChief"
+                label="Данные руководителя"
+                :disabled="!visible"
+            />
         </v-card-text>
 
     </v-card>
@@ -37,6 +56,46 @@
         computed: {
             base () {
                 return this.$store.state.settings.data
+            },
+            showChief: {
+                get () {
+                    return this.base.salaryPage.showChief
+                },
+                set (val) {
+                    let allData = {...this.base, salaryPage: {...this.base.salaryPage, showChief: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Изменена видимость данных руководителя', 'green'))
+                }
+            },
+            showTotal: {
+                get () {
+                    return this.base.salaryPage.showTotal
+                },
+                set (val) {
+                    let allData = {...this.base, salaryPage: {...this.base.salaryPage, showTotal: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Изменена видимость общих данных островка', 'green'))
+                }
+            },
+            showOther: {
+                get () {
+                    return this.base.salaryPage.showOther
+                },
+                set (val) {
+                    let allData = {...this.base, salaryPage: {...this.base.salaryPage, showOther: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Изменена видимость данных зарплаты других сотрудников', 'green'))
+                }
+            },
+            showPersonal: {
+                get () {
+                    return this.base.salaryPage.showPersonal
+                },
+                set (val) {
+                    let allData = {...this.base, salaryPage: {...this.base.salaryPage, showPersonal: val}}
+                    this.$store.dispatch('updateSetting', {data: allData})
+                        .then(() => this.showSnack('Изменена видимость персональных данных зарплаты для сотрудников', 'green'))
+                }
             },
             visible: {
                 get () {
