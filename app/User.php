@@ -223,8 +223,11 @@ class User extends Authenticatable
         return $this->hasMany(Island::class, 'chief_id', 'id')->with('users');
     }
 
-    public function getVpbxExtensionAttribute($value)
+    public function getVpbxExtensionAttribute()
     {
-        return $this->island->vpbx_extension ?? $value;
+        if ($this->island->vpbx_extension) {
+            return $this->island->vpbx_extension;
+        }
+        return $this->attributes['vpbx_extension'];
     }
 }
