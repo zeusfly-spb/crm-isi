@@ -48,11 +48,27 @@
                     </v-icon>
                 </td>
                 <td>{{ props.index + 1 }}</td>
-                <td>{{ props.item.name | upFirst }}</td>
+                <td>
+                    {{ props.item.name | upFirst }}
+                    <v-icon
+                        class="clickable"
+                        :color="props.item.customer ? 'green' : 'yellow darken-3'"
+                        @click="showInteractions(props.item.id)"
+                        title="Показать историю взаимодействия"
+                    >
+                        list_alt
+                    </v-icon>
+                    <interactions-card
+                        v-if="+interactionsOpenId === +props.item.id"
+                        :lead="props.item"
+                        :customer="props.item.customer"
+                        @close="interactionsOpenId = null"
+                    />
+                </td>
                 <td nowrap>
                     <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
                     <span v-else>{{ props.item.phone | phone }}</span>
-                    <caller :phone="props.item.phone"/>
+                    <caller :phone="props.item.phone" :lead="props.item"/>
                 </td>
                 <td>
                     <template v-if="props.item.id === openLeadId">
@@ -171,10 +187,12 @@
     import LeadStatus from './LeadStatus'
     import NewLeadDialog from './NewLeadDialog'
     import LeadPostpones from './LeadPostpones'
+    import InteractionsCard from '../customers/InteractionsCard'
 
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            interactionsOpenId: null,
             leadCommentsId: null,
             openLeadId: null,
             currentViewMode: 'wait',
@@ -266,6 +284,9 @@
             }
         },
         methods: {
+            showInteractions (id) {
+                this.interactionsOpenId = id
+            },
             isLost (dateTime) {
                 let rawDate = parseFloat(new Date(dateTime))
                 let nowDate = parseFloat(new Date(this.accountingDate))
@@ -302,7 +323,8 @@
             LeadComments,
             LeadStatus,
             NewLeadDialog,
-            LeadPostpones
+            LeadPostpones,
+            InteractionsCard
         }
     }
 </script>

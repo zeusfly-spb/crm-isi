@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone', 'last_comment', 'last_call'];
+    protected $appends = ['last_postpone', 'last_comment', 'last_call', 'customer'];
     protected $casts = [
         'calls' => 'array',
     ];
@@ -64,5 +64,21 @@ class Lead extends Model
         } else {
             return null;
         }
+    }
+
+    public function getPhoneAttribute($val)
+    {
+        $modified = preg_replace("~\D~", "", $val);
+        return substr($modified, -10);
+    }
+
+    public function number()
+    {
+        return $this->belongsTo(Phone::class, 'phone', 'number')->with('customer');
+    }
+
+    public function getCustomerAttribute()
+    {
+        return $this->number->customer ?? null;
     }
 }

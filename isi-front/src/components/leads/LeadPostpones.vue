@@ -22,7 +22,7 @@
             max-width="1000"
             persistent
         >
-            <v-card>
+            <v-card style="border-radius: 5px">
                 <v-card-title
                     class="light-blue darken-3"
                 >

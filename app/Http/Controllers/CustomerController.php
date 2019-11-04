@@ -11,7 +11,7 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $customers = Customer::with('phones')
+        $customers = Customer::with('phones', 'deals')
             ->whereDate('created_at', $request->date)
             ->get();
         return response()->json($customers->toArray());
@@ -34,7 +34,7 @@ class CustomerController extends Controller
         if ($request->phone) {
             $customer->phones()->create(['number' => $request->phone]);
         }
-        $customer->load('phones');
+        $customer->load('phones', 'deals');
         return response()->json($customer->toArray());
     }
 
@@ -44,21 +44,21 @@ class CustomerController extends Controller
         $input = Arr::except($request->all(), ['id', 'phones', 'phone', 'full_name']);
 
         $customer->update($input);
-        $customer->load('phones');
+        $customer->load('phones', 'deals');
         return response()->json($customer->toArray());
     }
 
     public function deletePhone(Request $request)
     {
         Phone::destroy($request->phone_id);
-        return response()->json(Customer::with('phones')->find($request->customer_id)->toArray());
+        return response()->json(Customer::with('phones', 'deals')->find($request->customer_id)->toArray());
     }
 
     public function addPhone(Request $request)
     {
         $customer = Customer::find($request->customer_id);
         $customer->phones()->create(['number' => $request->number]);
-        $customer->load('phones');
+        $customer->load('phones', 'deals');
         return response()->json($customer->toArray());
     }
 
@@ -73,7 +73,7 @@ class CustomerController extends Controller
             ->orWhereHas('phones', function($query) use($text) {
                 $query->where('number', 'LIKE', '%' . $text . '%');
             });
-        return response()->json($queryBuilder->with('phones')->get()->toArray());
+        return response()->json($queryBuilder->with('phones', 'deals')->get()->toArray());
     }
 
     public function delete(Request $request)

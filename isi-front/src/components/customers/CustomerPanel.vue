@@ -138,7 +138,20 @@
             <template v-slot:items="props">
                 <td>{{ props.item. id }}</td>
                 <td>{{ props.item.last_name }}</td>
-                <td>{{ props.item.first_name }}</td>
+                <td>
+                    {{ props.item.first_name }}
+                    <v-icon
+                        color="green"
+                        @click="showInteractions(props.item.id)"
+                    >
+                        list_alt
+                    </v-icon>
+                    <interactions-card
+                        :customer="props.item"
+                        v-if="+interactionsOpenId === +props.item.id"
+                        @close="interactionsOpenId = null"
+                    />
+                </td>
                 <td>{{ props.item.patronymic }}</td>
                 <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
                 <td>{{ props.item.address }}</td>
@@ -201,11 +214,13 @@
 <script>
     import CustomerPhonesColumn from './CustomerPhonesColumn'
     import CustomerPhonesEditor from './CustomerPhonesEditor'
+    import InteractionsCard from './InteractionsCard'
     import Lodash from 'lodash'
 
     export default {
         name: 'CustomersControl',
         data: () => ({
+            interactionsOpenId: null,
             loadedCustomers: [],
             searchString: '',
             snackbar: false,
@@ -254,6 +269,9 @@
             }
         },
         methods:{
+            showInteractions (id) {
+                this.interactionsOpenId = id
+            },
             querySelection () {
                 if (!this.searchString.length) {
                     this.loadedCustomers = []
@@ -327,7 +345,8 @@
         },
         components: {
             CustomerPhonesColumn,
-            CustomerPhonesEditor
+            CustomerPhonesEditor,
+            InteractionsCard
         }
     }
 </script>

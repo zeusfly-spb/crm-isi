@@ -10,6 +10,11 @@ class Phone extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->with('deals');
+    }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class, 'phone', 'number');
     }
 }
