@@ -143,6 +143,7 @@
                     <v-icon
                         color="green"
                         @click="showInteractions(props.item.id)"
+                        :title="`Показать историю взаимодействия с клиентом ${props.item.full_name}`"
                     >
                         list_alt
                     </v-icon>
