@@ -42,7 +42,7 @@
                         >
                             <template v-slot:items="props">
                                 <td align="left">{{ props.item.name }}</td>
-                                <td align="center">{{ props.item.phone | phone }}</td>
+                                <td align="left">{{ props.item.phone | phone }}</td>
                                 <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                             </template>
                         </v-data-table>
@@ -67,7 +67,7 @@
                                         <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
                                     </v-avatar>
                                 </td>
-                                <td align="center">{{ props.item.text }}</td>
+                                <td align="left">{{ props.item.text }}</td>
                                 <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                             </template>
                         </v-data-table>
@@ -109,7 +109,7 @@
                         >
                             <template v-slot:items="props">
                                 <td align="left"><span class="title green--text">{{ props.item.full_name }}</span></td>
-                                <td align="center">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
+                                <td align="left">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
                                 <td align="right">{{ props.item.address }}</td>
                             </template>
                         </v-data-table>
@@ -137,7 +137,7 @@
                                     </v-avatar>
                                     {{ props.item.action.text }}
                                 </td>
-                                <td align="center">{{ props.item.insole.name }}</td>
+                                <td align="left">{{ props.item.insole.name }}</td>
                                 <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                             </template>
                         </v-data-table>
