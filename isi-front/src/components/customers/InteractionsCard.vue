@@ -120,25 +120,33 @@
                         <strong>Сделки ({{ deals.length }})</strong>
                         <v-data-table
                             :headers="dealsHeaders"
-                            :items="deals"
+                            :items="[...deals, {id: null}]"
                             hide-actions
                             hide-headers
                         >
                             <template v-slot:items="props">
-                                <td align="left">
-                                    <v-avatar
-                                        size="36px"
-                                        :title="props.item.user && props.item.user.full_name || ''"
-                                        class="mr-1"
-                                    >
-                                        <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
-                                        <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
-                                    </v-avatar>
-                                    {{ props.item.action.text }}
-                                </td>
-                                <td align="left">{{ props.item.insole.name }}</td>
-                                <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
+                                <tr v-if="props.item.id">
+                                    <td align="left">
+                                        <v-avatar
+                                            size="36px"
+                                            :title="props.item.user && props.item.user.full_name || ''"
+                                            class="mr-1"
+                                        >
+                                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
+                                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                                            <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
+                                        </v-avatar>
+                                        {{ props.item.action.text }}
+                                    </td>
+                                    <td align="left">{{ props.item.insole.name }}</td>
+                                    <td align="right">{{ props.item.income | pretty }} &#8381;</td>
+                                    <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="2"></td>
+                                    <td align="right"><strong>ИТОГО: {{ deals.reduce((a, b) => a + +b.income, 0) | pretty }} &#8381;</strong></td>
+                                    <td></td>
+                                </tr>
                             </template>
                         </v-data-table>
                     </div>
@@ -176,7 +184,8 @@
             dealsHeaders: [
                 {text: 'Сотрудник / Вид сделки', align: 'left'},
                 {text: 'Наименование', align: 'center'},
-                {text: 'Дата / Время', align: 'right'},
+                {text: 'Цена', align: 'left'},
+                {text: 'Дата / Время', align: 'right'}
             ]
         }),
         computed: {
