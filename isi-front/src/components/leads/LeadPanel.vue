@@ -55,7 +55,7 @@
                         @click="showInteractions(props.item.id)"
                         title="Показать историю взаимодействия"
                     >
-                        list_alt
+                        contacts
                     </v-icon>
                     {{ props.item.name | upFirst }}
                     <interactions-card

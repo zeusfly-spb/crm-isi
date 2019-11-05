@@ -12,7 +12,7 @@
                         :color="customer ? 'green' : 'yellow darken-3'"
                         class="pr-2"
                     >
-                        list_alt
+                        contacts
                     </v-icon>
                     <span class="title white--text">
                         История взаимодействия

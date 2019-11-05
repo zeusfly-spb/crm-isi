@@ -144,7 +144,7 @@
                         @click="showInteractions(props.item.id)"
                         :title="`Показать историю взаимодействия с клиентом ${props.item.full_name}`"
                     >
-                        list_alt
+                        contacts
                     </v-icon>
                     {{ props.item.first_name }}
                     <interactions-card
