@@ -40,7 +40,7 @@
                                     data-vv-as="Количество часов"
                                     data-vv-name="hours"
                                     :error-messages="errors.collect('hours')"
-                                    v-validate="'required|numeric'"
+                                    v-validate="'required|decimal'"
                                 />
                             </v-flex>
                         </v-layout>
