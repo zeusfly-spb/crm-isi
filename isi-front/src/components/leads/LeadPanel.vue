@@ -49,7 +49,6 @@
                 </td>
                 <td>{{ props.index + 1 }}</td>
                 <td>
-                    {{ props.item.name | upFirst }}
                     <v-icon
                         class="clickable"
                         :color="props.item.customer ? 'green' : 'yellow darken-3'"
@@ -58,6 +57,7 @@
                     >
                         list_alt
                     </v-icon>
+                    {{ props.item.name | upFirst }}
                     <interactions-card
                         v-if="+interactionsOpenId === +props.item.id"
                         :lead="props.item"

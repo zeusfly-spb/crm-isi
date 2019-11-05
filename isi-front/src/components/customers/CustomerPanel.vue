@@ -139,7 +139,6 @@
                 <td>{{ props.item. id }}</td>
                 <td>{{ props.item.last_name }}</td>
                 <td>
-                    {{ props.item.first_name }}
                     <v-icon
                         color="green"
                         @click="showInteractions(props.item.id)"
@@ -147,6 +146,7 @@
                     >
                         list_alt
                     </v-icon>
+                    {{ props.item.first_name }}
                     <interactions-card
                         :customer="props.item"
                         v-if="+interactionsOpenId === +props.item.id"
