@@ -112,9 +112,9 @@
                     Добавить сотрудника
                 </v-btn>
             </template>
-            <v-card>
-                <v-card-title>
-                    <span class="headline">{{ {add: 'Добавить', edit: 'Редактировать'}[mode] }} сотрудника</span>
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">{{ {add: 'Добавить', edit: 'Редактировать'}[mode] }} сотрудника</span>
                 </v-card-title>
 
                 <v-card-text>
@@ -204,10 +204,10 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.address" label="Адрес"></v-text-field>
+                                <v-text-field v-model="editedUser.address" label="Адрес"/>
                             </v-flex>
 
-                            <v-flex xs12 sm6 md8>
+                            <v-flex xs12 sm6 md4>
                                 <img
                                     v-if="editedUser.avatar"
                                     :src="basePath + editedUser.avatar"
@@ -228,8 +228,6 @@
                                     ref="avatarPhoto"
                                     title="Изменить фото"
                                 />
-
-
                                 <br>
                                 <sup>Фото</sup>
                                 <input type="file"
@@ -239,6 +237,17 @@
                                        @change="loadAvatar"
                                        style="display: none"
                                 >
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>&nbsp;</sub>
+                                <v-text-field
+                                    v-model="editedUser.email"
+                                    label="Электронная почта"
+                                    data-vv-as="Адрес электронной почты"
+                                    data-vv-name="email"
+                                    :error-messages="errors.collect('email')"
+                                    v-validate="'email'"
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <sub>Группа</sub>
@@ -346,6 +355,7 @@
                 phone: '',
                 group_id: '',
                 island_id: '',
+                email: '',
                 avatar: null
             },
             snackbar: false,
@@ -600,4 +610,9 @@
         }
     }
 </script>
+<style scoped>
+    .round-corner {
+        border-radius: 5px;
+    }
+</style>
 
