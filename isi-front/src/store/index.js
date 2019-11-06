@@ -545,7 +545,8 @@ export const store = new Vuex.Store({
             Vue.axios.post('/api/get_accesses')
                 .then(res => commit('SET_ACCESS_REQUESTS', res.data))
         },
-        checkAccess: async function ({commit, dispatch}) {
+        checkAccess: async function ({commit, dispatch, getters}) {
+            if (getters.isSuperadmin) return
             let exists = Cookies.get('isi-access')
             if (!exists) {
                 commit('SET_ACCESS', 'none')

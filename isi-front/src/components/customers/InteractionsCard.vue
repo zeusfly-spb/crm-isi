@@ -108,7 +108,18 @@
                             hide-actions
                         >
                             <template v-slot:items="props">
-                                <td align="left"><span class="title green--text">{{ props.item.full_name }}</span></td>
+                                <td align="left">
+                                    <span class="title green--text ">{{ props.item.full_name }}</span>
+                                    <v-btn icon>
+                                        <v-icon
+                                            color="green"
+                                            :disabled="edit"
+                                        >
+                                            edit
+                                        </v-icon>
+                                    </v-btn>
+
+                                </td>
                                 <td align="left">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
                                 <td align="right">{{ props.item.address }}</td>
                             </template>
@@ -161,6 +172,7 @@
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
         data: () => ({
+            edit: false,
             active: true,
             leadHeaders: [
                 {text: 'Имя', align: 'left', sortable: false},
