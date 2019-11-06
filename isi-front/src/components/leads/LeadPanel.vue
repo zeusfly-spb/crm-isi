@@ -244,7 +244,7 @@
             leads () {
                 let base = this.$store.state.loader.leads
                 const sortByPostpones = (a, b) => {
-                    if (!!a.last_postpone && !!b.laspostpone) {
+                    if (!!a.last_postpone && !!b.last_postpone) {
                         let timeA = parseFloat(new Date(a.last_postpone.date))
                         let timeB = parseFloat(new Date(b.last_postpone.date))
                         return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
