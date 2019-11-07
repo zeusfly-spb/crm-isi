@@ -272,8 +272,21 @@
                     let timeB = b.last_postpone.date.split(' ')[0]
                     return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
                 }
+                const sortByTimeInDay = (a, b) => {
+                    if (!a.last_postpone || !b.last_postpone) {
+                        return 0
+                    }
+                    if (!a.last_postpone.date.split(' ')[0] !== !b.last_postpone.date.split(' ')[0]) {
+                        return 0
+                    }
+                    let timeA = a.last_postpone.date.split(' ')[1]
+                    let timeB = b.last_postpone.date.split(' ')[1]
+                    return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
+                }
                 base.sort(sortByPostpones)
+                base.sort(sortByTimeInDay)
                 base.sort(moveFutureDown)
+
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
