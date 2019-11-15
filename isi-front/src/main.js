@@ -107,6 +107,21 @@ Vue.filter('externalPhone', function (val) {
     return val.replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
 })
 
+Vue.filter('email', function(val) {
+    if (!val) return ''
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+    let name = val.split('@')[0]
+    let domain = val.split('@')[1]
+    if (name.length <= 3) {
+        name = '***'
+    } else {
+        name = name.replaceAt(name.length, '*').replaceAt(name.length - 1, '*').replaceAt(name.length - 2, '*')
+    }
+    return name + '@' + domain
+})
+
 new Vue({
     store,
     router,

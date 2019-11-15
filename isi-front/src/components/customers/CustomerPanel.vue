@@ -169,6 +169,7 @@
                 <td>
                     <customer-phones-column :phones="props.item.phones"/>
                 </td>
+                <td>{{ props.item.email | email }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -263,6 +264,7 @@
                 {text: 'Дата рождения', value: 'birth_date'},
                 {text: 'Адрес', value: 'address'},
                 {text: 'Телефоны', value: null},
+                {text: 'Электронная почта', value: null},
                 {text: 'Действия', value: null, align: 'center'}
             ]
         }),
