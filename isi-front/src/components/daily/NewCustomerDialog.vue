@@ -6,9 +6,11 @@
             max-width="600px"
 
         >
-            <v-card>
-                <v-card-title>
-                    <span class="headline">Новый клиент</span>
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title class="light-blue darken-3" >
+                    <span class="title white--text">Новый клиент</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
@@ -17,7 +19,7 @@
                                 <v-text-field
                                     v-model="editedCustomer.last_name"
                                     label="Фамилия"
-                                ></v-text-field>
+                                />
                             </v-flex>
 
                             <v-flex xs12 sm6 md4>
@@ -28,14 +30,14 @@
                                     data-vv-name="first-name"
                                     :error-messages="errors.collect('first-name')"
                                     v-validate="'required'"
-                                ></v-text-field>
+                                />
                             </v-flex>
 
                             <v-flex xs12 sm6 md4>
                                 <v-text-field
                                     v-model="editedCustomer.patronymic"
                                     label="Отчество"
-                                ></v-text-field>
+                                />
                             </v-flex>
 
                             <v-flex xs12 sm6 md4>
@@ -55,14 +57,14 @@
                                             prepend-icon="event"
                                             readonly
                                             v-on="on"
-                                        ></v-text-field>
+                                        />
                                     </template>
                                     <v-date-picker
                                         v-model="date"
                                         no-title
                                         scrollable
                                         @change="datePicked"
-                                    ></v-date-picker>
+                                    />
                                 </v-menu>
                             </v-flex>
 
@@ -70,7 +72,7 @@
                                 <v-text-field
                                     v-model="editedCustomer.address"
                                     label="Адрес"
-                                ></v-text-field>
+                                />
                             </v-flex>
 
                             <v-flex xs12 sm6 md4>
@@ -82,7 +84,18 @@
                                     :error-messages="errors.collect('phone')"
                                     v-validate="'required|digits:10'"
                                     mask="(###) ### - ####"
-                                ></v-text-field>
+                                />
+                            </v-flex>
+
+                            <v-flex xs12 sm6 md4>
+                                <v-text-field
+                                    v-model="editedCustomer.email"
+                                    label="Электронная почта"
+                                    data-vv-as="Адрес электронной почты"
+                                    data-vv-name="email"
+                                    :error-messages="errors.collect('email')"
+                                    v-validate="'email'"
+                                />
                             </v-flex>
 
                         </v-layout>
@@ -113,7 +126,8 @@
                 patronymic: '',
                 address: '',
                 birth_date: '',
-                phone: ''
+                phone: '',
+                email: ''
             },
         }),
         methods: {
@@ -144,3 +158,9 @@
         }
     }
 </script>
+<style scoped>
+    .round-corner {
+        border-radius: 5px;
+    }
+</style>
+
