@@ -1,5 +1,13 @@
 <template>
     <v-layout align-center justify-center row fill-height>
+        <v-btn
+            icon
+            title="Переключить на предыдущий день"
+            v-if="!isToday"
+            @click="toPrev"
+        >
+            <v-icon>navigate_before</v-icon>
+        </v-btn>
         <div>
 
             <v-menu
@@ -27,8 +35,15 @@
                 >
                 </v-date-picker>
             </v-menu>
-
         </div>
+        <v-btn
+            icon
+            title="Переключить на следующий день"
+            v-if="!isToday"
+            @click="toNext"
+        >
+            <v-icon>navigate_next</v-icon>
+        </v-btn>
     </v-layout>
 
 </template>
@@ -42,9 +57,24 @@
         computed: {
             accountingDate () {
                 return this.$store.state.accountingDate
+            },
+            isToday () {
+                return this.$store.getters.isToday
             }
         },
         methods: {
+            toPrev () {
+                let current = new Date(this.accountingDate)
+                let prev = new Date()
+                prev.setDate(current.getDate() - 1)
+                this.datePicked(prev.toISOString().split('T')[0])
+            },
+            toNext () {
+                let current = new Date(this.accountingDate)
+                let next = new Date()
+                next.setDate(current.getDate() + 1)
+                this.datePicked(next.toISOString().split('T')[0])
+            },
             datePicked (val) {
                 this.$store.dispatch('changeAccountingDate', val)
                 this.menu = false
