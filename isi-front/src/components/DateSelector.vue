@@ -3,7 +3,6 @@
         <v-btn
             icon
             title="Переключить на предыдущий день"
-            v-if="!isToday"
             @click="toPrev"
         >
             <v-icon>navigate_before</v-icon>
@@ -39,7 +38,6 @@
         <v-btn
             icon
             title="Переключить на следующий день"
-            v-if="!isToday"
             @click="toNext"
         >
             <v-icon>navigate_next</v-icon>
@@ -64,14 +62,14 @@
         },
         methods: {
             toPrev () {
-                let current = new Date(this.accountingDate)
-                let prev = new Date()
+                let current = new Date(this.accountingDate + 'T12:00:00')
+                let prev = new Date(this.accountingDate + 'T12:00:00')
                 prev.setDate(current.getDate() - 1)
                 this.datePicked(prev.toISOString().split('T')[0])
             },
             toNext () {
-                let current = new Date(this.accountingDate)
-                let next = new Date()
+                let current = new Date(this.accountingDate + 'T12:00:00')
+                let next = new Date(this.accountingDate + 'T12:00:00')
                 next.setDate(current.getDate() + 1)
                 this.datePicked(next.toISOString().split('T')[0])
             },
