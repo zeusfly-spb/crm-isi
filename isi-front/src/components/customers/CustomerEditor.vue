@@ -65,6 +65,8 @@
                                 no-title
                                 scrollable
                                 @change="datePicked"
+                                locale="ru"
+                                first-day-of-week="1"
                             />
                         </v-menu>
                         <sup>Дата рождения</sup>

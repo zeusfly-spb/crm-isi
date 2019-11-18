@@ -123,6 +123,7 @@
                                     <v-btn icon
                                            v-if="!edit"
                                            @click="edit = true"
+                                           title="Редактировать данные клиента"
                                     >
                                         <v-icon
                                             color="green"
