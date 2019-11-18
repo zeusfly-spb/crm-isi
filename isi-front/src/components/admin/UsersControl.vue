@@ -127,7 +127,7 @@
                                               data-vv-name="name"
                                               :error-messages="errors.collect('name')"
                                               v-validate="mode === 'add' ? 'required|max:10' : null"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.password"
@@ -138,7 +138,7 @@
                                               :error-messages="errors.collect('password')"
                                               v-validate="mode === 'add' ? 'required' : null"
                                               ref="password"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.c_password"
@@ -148,7 +148,7 @@
                                               data-vv-name="password_confirm"
                                               :error-messages="errors.collect('password_confirm')"
                                               v-validate="mode === 'add' ? 'required|confirmed:password' : null"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field v-model="editedUser.last_name" label="Фамилия"></v-text-field>
@@ -160,10 +160,10 @@
                                               data-vv-name="first_name"
                                               :error-messages="errors.collect('first_name')"
                                               v-validate="'required'"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="editedUser.patronymic" label="Отчество"></v-text-field>
+                                <v-text-field v-model="editedUser.patronymic" label="Отчество"/>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-menu
@@ -182,12 +182,11 @@
                                             prepend-icon="event"
                                             readonly
                                             v-on="on"
-                                        ></v-text-field>
+                                        />
                                     </template>
                                     <v-date-picker v-model="date" no-title scrollable
                                                    @change="datePicked"
-                                    >
-                                    </v-date-picker>
+                                    />
                                 </v-menu>
                                 <sup>Дата рождения </sup>
 

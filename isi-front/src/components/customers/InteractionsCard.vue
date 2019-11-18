@@ -3,6 +3,7 @@
         <v-dialog
             v-model="active"
             max-width="1000px"
+            :persistent="edit"
         >
             <v-card class="round-corner">
                 <v-card-title
@@ -110,20 +111,22 @@
                             <template v-slot:items="props">
                                 <td align="left">
                                     <span class="title green--text ">{{ props.item.full_name }}</span>
-                                    <v-btn icon>
+                                    <v-btn icon
+                                           v-if="!edit"
+                                    >
                                         <v-icon
                                             color="green"
-                                            :disabled="edit"
+                                            @click="edit = true"
                                         >
                                             edit
                                         </v-icon>
                                     </v-btn>
-
                                 </td>
                                 <td align="left">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
                                 <td align="right">{{ props.item.address }}</td>
                             </template>
                         </v-data-table>
+                        <customer-editor :customer="customer" v-if="edit" @cancel="edit = false"/>
                     </div>
                     <div
                         v-if="deals.length"
@@ -168,6 +171,7 @@
     </v-flex>
 </template>
 <script>
+    import CustomerEditor from './CustomerEditor'
     export default {
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
@@ -230,10 +234,13 @@
                     this.$emit('close')
                 }
             }
+        },
+        components: {
+            CustomerEditor
         }
     }
 </script>
-<style scoped>
+<style>
 .round-corner {
     border-radius: 5px;
 }

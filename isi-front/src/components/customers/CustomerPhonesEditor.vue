@@ -8,12 +8,12 @@
                 small
                 @click="deletePhone(phone.id)"
                 title="Удалить"
-                v-if="customer.phones.length > 1"
+                v-if="customer.phones && customer.phones.length > 1"
             >
                 delete
             </v-icon>
         </div>
-        <div v-if="!customer.phones.length" class="red--text">Нет телефонов</div>
+        <div v-if="!customer.phones || !customer.phones.length" class="red--text">Нет телефонов</div>
         <v-text-field
             label="Номер"
             v-show="adding"
@@ -24,7 +24,7 @@
             v-validate="'required|digits:10'"
             mask="(###) ### - ####"
             ref="newNumber"
-        ></v-text-field>
+        />
         &nbsp;
         <v-icon
             class="green--text"
