@@ -41,7 +41,7 @@ class CustomerController extends Controller
     public function update(Request $request)
     {
         $customer = Customer::find($request->id);
-        $input = Arr::except($request->all(), ['id', 'phones', 'phone', 'full_name']);
+        $input = Arr::except($request->all(), ['id', 'phones', 'phone', 'full_name', 'deals']);
 
         $customer->update($input);
         $customer->load('phones', 'deals');

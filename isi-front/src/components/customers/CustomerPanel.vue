@@ -161,6 +161,7 @@
                         :customer="props.item"
                         v-if="+interactionsOpenId === +props.item.id"
                         @close="interactionsOpenId = null"
+                        @change="querySelection"
                     />
                 </td>
                 <td>{{ props.item.patronymic }}</td>
@@ -306,6 +307,7 @@
                     .then(() => {
                         this.confirm = false
                         this.showSnack(`Клиент ${this.customerToDelete.full_name} удален`, 'green')
+                        this.querySelection()
                     })
             },
             showDeleteConfirm (customer) {
@@ -334,6 +336,7 @@
                                 }
                                 this.dialog = false
                                 this.showSnack(`${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`, 'green')
+                                this.querySelection()
                             })
                     })
             },

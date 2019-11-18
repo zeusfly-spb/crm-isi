@@ -1,5 +1,14 @@
 <template>
     <v-flex>
+        <v-snackbar
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
+        >
+            <span>{{ snackText }}</span>
+        </v-snackbar>
         <v-dialog
             v-model="active"
             max-width="1000px"
@@ -113,10 +122,10 @@
                                     <span class="title green--text ">{{ props.item.full_name }}</span>
                                     <v-btn icon
                                            v-if="!edit"
+                                           @click="edit = true"
                                     >
                                         <v-icon
                                             color="green"
-                                            @click="edit = true"
                                         >
                                             edit
                                         </v-icon>
@@ -126,7 +135,13 @@
                                 <td align="right">{{ props.item.address }}</td>
                             </template>
                         </v-data-table>
-                        <customer-editor :customer="customer" v-if="edit" @cancel="edit = false"/>
+                        <customer-editor
+                            :customer="customer"
+                            v-if="edit"
+                            @close="edit = false"
+                            @snack="showSnack"
+                            @change="$emit('change')"
+                        />
                     </div>
                     <div
                         v-if="deals.length"
@@ -176,6 +191,9 @@
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
         data: () => ({
+            snackbar: false,
+            snackText: '',
+            snackColor: 'green',
             edit: false,
             active: true,
             leadHeaders: [
@@ -226,6 +244,13 @@
                 let base = this.customer && this.customer.deals || []
                 base = base.map(item => ({...item, user: this.users.find(user => +user.id === +item.user_id) || null}))
                 return  base.reverse() || []
+            }
+        },
+        methods: {
+            showSnack (text, color) {
+                this.snackText = text
+                this.snackColor = color
+                this.snackbar = true
             }
         },
         watch: {

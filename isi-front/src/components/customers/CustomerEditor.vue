@@ -121,10 +121,20 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.$store.dispatch('updateCustomer', this.editedCustomer)
+                            .then((res) => {
+                                if (res.data.exists) {
+                                    this.$emit('snack', 'Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.', 'red')
+                                    return
+                                }
+                                this.$emit('close')
+                                this.$emit('snack', 'Данные клиента изменены', 'green')
+                                this.$emit('change')
+                            })
                     })
             },
             cancelEdit () {
-                this.$emit('cancel')
+                this.$emit('close')
             },
             datePicked (date) {
                 this.editedCustomer.birth_date = new Date(date).toISOString().split('T')[0]
