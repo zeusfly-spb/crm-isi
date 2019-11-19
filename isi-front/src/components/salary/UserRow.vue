@@ -272,7 +272,7 @@
                 return this.user && this.user.controlled_islands.length
             },
             grandTotal () {
-                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits - this.totalSicks - this.totalVacations
+                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations
             },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome
