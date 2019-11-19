@@ -86,8 +86,8 @@
                                 @click="showLead(props.item.id)"
                                 :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
                             >
-                        {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
-                    </span>
+                                {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
+                            </span>
                         <v-icon
                             v-else
                             class="clickable"
@@ -142,7 +142,7 @@
                 </td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                 <td>
-                    <lead-status :lead="props.item"></lead-status>
+                    <lead-status :lead="props.item"/>
                 </td>
             </template>
             <template v-slot:no-data>

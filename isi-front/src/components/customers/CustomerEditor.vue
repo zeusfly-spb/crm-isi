@@ -1,5 +1,8 @@
 <template>
-    <v-card class="round-corner">
+    <v-card
+        class="round-corner"
+        color="teal lighten-5"
+    >
         <v-card-text>
             <v-container grid-list-md>
                 <v-layout wrap>
