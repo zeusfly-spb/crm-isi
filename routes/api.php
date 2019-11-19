@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('add_user_vacation', 'SalaryController@addUserVacation');
     Route::post('delete_user_vacation', 'SalaryController@deleteUserVacation');
     Route::post('delete_user_prepay', 'SalaryController@deleteUserPrepay');
+    Route::post('update_user_rates', 'API\UserController@updateRates');
 
     // LOADER
     Route::post('load_daily_page', 'LoaderController@loadDailyPage');

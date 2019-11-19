@@ -40,8 +40,10 @@
                                 <strong>{{ +totalHours.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
-                                <rate-updater v-if="isSuperadmin"
-                                              :user="user" mode="hours"
+                                <month-rate-editor
+                                    :user="user"
+                                    type="hours"
+                                    v-if="isSuperadmin"
                                 />
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
@@ -57,7 +59,11 @@
                                 <strong >{{ +totalIncome.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
-                                <rate-updater v-if="isSuperadmin" :user="user" mode="sales" :caption="user.sales_rate"/>
+                                <month-rate-editor
+                                    :user="user"
+                                    type="sales"
+                                    v-if="isSuperadmin"
+                                />
                                 <strong v-else>{{ user.sales_rate }}</strong>
                             </td>
                             <td class="info-tab">
@@ -224,6 +230,7 @@
     import UserSicks from './UserSicks'
     import UserPrepays from './UserPrepays'
     import UserVacations from './UserVacations'
+    import MonthRateEditor from './MonthRateEditor'
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -392,7 +399,8 @@
             UserPrizes,
             UserForfeits,
             UserSicks,
-            UserPrepays
+            UserPrepays,
+            MonthRateEditor
         }
     }
 </script>

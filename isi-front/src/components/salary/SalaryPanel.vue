@@ -58,9 +58,12 @@
     export default {
         name: 'SalaryPanel',
         data: () => ({
-            dragMode: false
+            dragMode: false,
         }),
         computed: {
+            currentMonth () {
+                return this.$store.state.accountingDate && this.$store.state.accountingDate.split('-').slice(0, 2).join('-') || null
+            },
             headers () {
                 let dates = this.dates && this.dates.map(item => ({
                     text: this.hDate(item),
@@ -82,12 +85,38 @@
                 return this.monthData && this.monthData.dates.filter(item => new Date(item) < tomorrow)
             },
             users () {
+                const setHourRate = (user) => {
+                    let hourRates = user.rates && user.rates.filter(item => item.type === 'hours') || []
+                    let accurateRate = hourRates.find(item => item.month === this.currentMonth) && hourRates.find(item => item.month === this.currentMonth).value || null
+                    if (accurateRate) {
+                        user.hour_rate = accurateRate
+                    } else {
+                        hourRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
+                        let prevRate = hourRates.find(item => item.month < this.currentMonth) && hourRates.find(item => item.month < this.currentMonth).value || null
+                        user.hour_rate = prevRate ? prevRate : 0
+                    }
+                    return user
+                }
+                const setSalesRate = (user) => {
+                    let salesRates = user.rates && user.rates.filter(item => item.type === 'sales') || []
+                    let accurateRate = salesRates.find(item => item.month === this.currentMonth) && salesRates.find(item => item.month === this.currentMonth).value || null
+                    if (accurateRate) {
+                        user.sales_rate = accurateRate
+                    } else {
+                        salesRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
+                        let prevRate = salesRates.find(item => item.month < this.currentMonth) && salesRates.find(item => item.month < this.currentMonth).value || null
+                        user.sales_rate = prevRate ? prevRate : 0
+                    }
+                    return user
+                }
                 let base =  this.monthData && this.monthData.users || []
                 const add = (a, b) => a + +b.income
                 base = base.map(item => ({... item, totalIncome: item.monthDeals.reduce(add, 0)}))
                 const sortByTotalIncome = (a, b) => {
                     return b.totalIncome - a.totalIncome
                 }
+                base = base.map(user => setHourRate(user))
+                base = base.map(user => setSalesRate(user))
                 return base.sort(sortByTotalIncome)
             },
             monthData () {

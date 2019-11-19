@@ -208,4 +208,12 @@ class UserController extends Controller
         $user->load('documentPack');
         return response()->json($user->toArray());
     }
+
+    public function updateRates(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->update(['rates' => $request->rates]);
+        $user->load('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations');
+        return response()->json($user->toArray());
+    }
 }

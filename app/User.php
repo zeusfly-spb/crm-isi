@@ -35,7 +35,8 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'is_superadmin' => 'boolean'
+        'is_superadmin' => 'boolean',
+        'rates' => 'array'
     ];
 
     public function getFullNameAttribute()

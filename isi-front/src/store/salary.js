@@ -6,6 +6,16 @@ export default {
         mustUpdate: false,
     },
     actions: {
+        updateUserRates ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_user_rates', {... data})
+                    .then(res => {
+                        commit('UPDATE_MONTH_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteUserPrepay ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_user_prepay', {... data})
@@ -148,6 +158,20 @@ export default {
         }
     },
     mutations: {
+        UPDATE_MONTH_USER (state, user) {
+            let firstDate = state.monthData.dates[0]
+            let lastDate = state.monthData.dates[state.monthData.dates.length - 1]
+            const getDate = (timestamp) => timestamp.split(' ')[0] || null
+            user.dates = state.monthData.dates
+            user.monthDeals = user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || []
+            user.monthWorkdays = user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate) || []
+            user.monthPrizes = user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || []
+            user.monthForfeits = user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || []
+            user.monthSicks = user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || []
+            user.monthPrepays = user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || []
+            user.monthVacations = user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+            state.monthData.users = state.monthData.users.map(item => +item.id === +user.id ? user : item)
+        },
         DELETE_USER_PREPAY (state, data) {
             let user = state.monthData.users.find(item => +item.id === +data.user_id)
             user.monthPrepays = user.monthPrepays.filter(item => +item.id !== +data.prepay_id)

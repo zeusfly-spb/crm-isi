@@ -21,7 +21,7 @@
             @blur="cancel"
             @keyup.esc="cancel"
             @keyup.enter="saveRate"
-        ></v-text-field>
+        />
     </v-flex>
 </template>
 <script>
