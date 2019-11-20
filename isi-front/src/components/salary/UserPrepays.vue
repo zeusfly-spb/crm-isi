@@ -10,11 +10,11 @@
         <strong v-else>{{ +totalPrepaysAmount.toFixed(2) | pretty }}</strong>
         <v-dialog
             v-model="dialog"
-            max-width="700px"
+            max-width="1000px"
         >
-            <v-card>
-                <v-card-title>
-                <span class="headline">
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                <span class="title white--text">
                     {{ `Выплаты сотруднику ${user.full_name}`}}
                 </span>
                 </v-card-title>

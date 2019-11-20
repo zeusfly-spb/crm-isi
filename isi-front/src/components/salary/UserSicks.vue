@@ -10,12 +10,20 @@
         <strong v-else>{{ +totalSicksAmount.toFixed(2) | pretty }}</strong>
         <v-dialog
             v-model="dialog"
-            max-width="700px"
+            max-width="1000px"
         >
             <v-card class="round-corner">
                 <v-card-title class="light-blue darken-3">
                 <span class="title white--text">
                     {{ `Больничные сотрудника ${user.full_name}`}}
+                </span>
+                <v-spacer/>
+                <span class="white--text">
+                    <em>
+                        <strong>
+                            Принят {{ user.created_at | moment('DD MMMM YYYY г.') }}
+                        </strong>
+                    </em>
                 </span>
                 </v-card-title>
                 <v-card-text>
@@ -24,7 +32,7 @@
                     >
                         <v-flex>
                             <v-data-table
-                                :items="sicks"
+                                :items="allSicks"
                                 :headers="headers"
                                 hide-actions
                             >
@@ -152,6 +160,9 @@
             },
             sicks () {
                 return this.user.monthSicks || []
+            },
+            allSicks () {
+                return this.user.sicks || []
             },
             totalSicksAmount () {
                 const add = (a, b) => a + +b.amount
