@@ -2,7 +2,7 @@
     <v-layout justify-center class="mt-1">
         <v-flex xs12 sm6 md4 justify-center>
 
-            <div class="text-xs-center" v-if="isToday">
+            <div class="text-xs-center">
                 <table style="margin: auto">
                     <tr
                         v-for="expense in expenses"
@@ -13,6 +13,7 @@
                                 class="red--text delete"
                                 :title="`Удалить расход ${expense.comment} ${expense.amount}р.`"
                                 @click="attemptToDelete(expense)"
+                                v-if="isToday"
                             >
                                 clear
                             </v-icon>

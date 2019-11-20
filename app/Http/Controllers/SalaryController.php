@@ -34,14 +34,16 @@ class SalaryController extends Controller
             ->whereNotNull('island_id')
             ->whereNull('fired_at');
 
-        $queryBuilder = $queryBuilder
-            ->where('created_at', '<', $startDate)
-            ->orWhereBetween('created_at', [$startDate, $endDate])
-            ->whereNotNull('island_id');
-
         if ($request->island_id) {
             $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
+        } else {
+            $queryBuilder = $queryBuilder->whereNotNull('island_id');
         }
+
+        $queryBuilder = $queryBuilder
+            ->where('created_at', '<', $startDate)
+            ->orWhereBetween('created_at', [$startDate, $endDate]);
+
         $users = $queryBuilder->get();
 
         $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
