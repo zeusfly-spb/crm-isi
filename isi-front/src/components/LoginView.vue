@@ -22,7 +22,7 @@
                                           @keyup.enter="logIn"
                                           v-validate="'required'"
                                           data-vv-as="«Логин»"
-                            ></v-text-field>
+                            />
                             <span class="red--text">{{ errors.first('name') }}</span>
 
                             <v-text-field prepend-icon="lock" name="password" label="Пароль" type="password"
@@ -30,11 +30,11 @@
                                           @keyup.enter="logIn"
                                           v-validate="'required'"
                                           data-vv-as="«Пароль»"
-                            ></v-text-field>
+                            />
                             <span class="red--text">{{ errors.first('password') }}</span>
 
                             <v-card-actions>
-                                <v-spacer></v-spacer>
+                                <v-spacer/>
                                 <v-btn primary @click="logIn">ВХОД</v-btn>
                             </v-card-actions>
                         </v-form>

@@ -138,7 +138,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update(['island_id' => $request->island_id]);
-        return response()->json($user);
+        return response()->json($user->toArray());
     }
 
     public function startDay(Request $request)

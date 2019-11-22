@@ -29,30 +29,35 @@ class SalaryController extends Controller
             $currentDate = strtotime("+1 day", $currentDate);
         }
 
-        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
-            ->where('is_superadmin', false)
-            ->whereNotNull('island_id')
-            ->whereNull('fired_at');
-
-        if ($request->island_id) {
-            $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
-        } else {
-            $queryBuilder = $queryBuilder->whereNotNull('island_id');
-        }
-
-        $queryBuilder = $queryBuilder
-            ->where('created_at', '<', $startDate)
-            ->orWhereBetween('created_at', [$startDate, $endDate]);
-
-        $users = $queryBuilder->get();
-
-        $dealsBuilder = Deal::with('user')->whereMonth('created_at', $month);
+        $dealsBuilder = Deal::with('user')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month);
         if ($request->island_id) {
             $dealsBuilder = $dealsBuilder->where('island_id', $request->island_id);
         }
-        $allDeals = $dealsBuilder->get()->toArray();
+        $allDeals = $dealsBuilder->get();
 
-        return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals]);
+        $dealsUserIds = $allDeals->pluck('user_id')->unique()->all();
+        $users = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
+            ->find($dealsUserIds);
+
+//        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
+//            ->where('is_superadmin', false)
+//            ->whereNotNull('island_id')
+//            ->whereNull('fired_at');
+//        if ($request->island_id) {
+//            $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
+//        } else {
+//            $queryBuilder = $queryBuilder->whereNotNull('island_id');
+//        }
+//        $queryBuilder = $queryBuilder
+//            ->where('created_at', '<', $startDate)
+//            ->orWhereBetween('created_at', [$startDate, $endDate]);
+//        $users = $queryBuilder->get();
+
+
+
+        return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()]);
     }
 
     public function updateUserRate(Request $request)

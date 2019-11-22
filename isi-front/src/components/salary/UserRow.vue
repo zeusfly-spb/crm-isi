@@ -362,15 +362,15 @@
                 return date.toLocaleDateString('ru-RU', options)
             },
             getDealsExpense (dateString) {
-                let deals = this.user.deals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
                 return deals.reduce((a, b) => a + +b.expense, 0)
             },
             getDealsIncome (dateString) {
-                let deals = this.user.deals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
                 return deals.reduce((a, b) => a + +b.income, 0)
             },
             getDealCount (dateString) {
-                return this.user.deals.filter(deal => deal.created_at.split(' ')[0] === dateString).length
+                return this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString).length
             },
             getHours (dateString) {
                 let targetDay = this.user.workdays.find(day => day.date === dateString)

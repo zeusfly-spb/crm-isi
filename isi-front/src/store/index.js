@@ -514,6 +514,8 @@ export const store = new Vuex.Store({
                 })
                     .then(res => {
                         commit('SET_AUTH_USER_ISLAND', res.data.island_id)
+                        commit('UPDATE_USER', res.data)
+                        commit('SET_AUTH_USER', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
