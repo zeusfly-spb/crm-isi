@@ -371,9 +371,12 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        startUserDay ({commit}) {
+        startUserDay ({commit, state}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/start_day', {user_id: this.state.authUser.id})
+                Vue.axios.post('/api/start_day', {
+                    user_id: state.authUser.id,
+                    island_id: state.workingIslandId
+                })
                     .then(res => {
                         commit('ADD_WORK_DAY', res.data)
                         resolve(res)

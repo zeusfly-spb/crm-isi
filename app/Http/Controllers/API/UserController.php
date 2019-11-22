@@ -144,7 +144,7 @@ class UserController extends Controller
     public function startDay(Request $request)
     {
         $user = User::find($request->user_id);
-        $workday = $user->startDay();
+        $workday = $user->startDay($request->island_id);
         return response()->json($workday->toArray());
     }
 

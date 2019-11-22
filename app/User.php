@@ -76,12 +76,13 @@ class User extends Authenticatable
         return $this->hasMany(WorkDay::class);
     }
 
-    public function startDay()
+    public function startDay($island_id)
     {
         $now = now();
         $workday = $this->workdays()->create([
             'date' => $now->toDateString(),
-            'time_start' => $now->toTimeString()
+            'time_start' => $now->toTimeString(),
+            'island_id' => $island_id
         ]);
         $workday->load('user');
         return $workday;

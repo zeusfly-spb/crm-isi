@@ -125,11 +125,11 @@
             monthData () {
                 const leaveSelected = (user) => {
                     user.monthDeals = user.monthDeals.filter(item => +item.island_id === +this.workingIslandId)
+                    user.monthWorkdays = user.monthWorkdays.filter(item => +item.island_id === +this.workingIslandId)
                     return user
                 }
                 let base = JSON.parse(JSON.stringify(this.$store.state.salary.monthData))
                 if (this.workingIslandId && base) {
-                    console.log('островок выбран')
                     base.users = base.users.map(item => leaveSelected(item))
                 }
                 return base
