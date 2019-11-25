@@ -56,7 +56,8 @@ class WorkDayController extends Controller
             'user_id' => $request->user_id,
             'time_start' => '10:10:10',
             'date' => $request->date,
-            'working_hours' => $request->working_hours
+            'working_hours' => $request->working_hours,
+            'island_id' => $request->island_id
         ]);
         $workday->load('user', 'timeBreaks');
         return response()->json($workday->toArray());

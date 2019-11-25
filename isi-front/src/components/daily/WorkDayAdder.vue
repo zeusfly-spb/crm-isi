@@ -4,6 +4,7 @@
             flat
             color="primary"
             @click="active = true"
+            :disabled="!workingIslandId"
         >
             Добавить рабочий день
         </v-btn>
@@ -75,6 +76,9 @@
             },
             workdays () {
                 return this.$store.state.workdays
+            },
+            workingIslandId () {
+                return this.$store.state.workingIslandId
             }
         },
         methods: {
@@ -82,7 +86,11 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        this.$store.dispatch('addWorkDay', {user_id: this.currentUserId, working_hours: this.workingHours})
+                        this.$store.dispatch('addWorkDay', {
+                            user_id: this.currentUserId,
+                            working_hours: this.workingHours,
+                            island_id: this.$store.state.workingIslandId
+                        })
                             .then(() => {
                                 this.active = false
                                 this.$emit('snack', 'Добавлен рабочий день', 'green')
