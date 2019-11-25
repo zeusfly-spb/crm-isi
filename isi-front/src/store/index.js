@@ -375,7 +375,7 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/start_day', {
                     user_id: state.authUser.id,
-                    island_id: state.workingIslandId
+                    island_id: state.access.island_id || null
                 })
                     .then(res => {
                         commit('ADD_WORK_DAY', res.data)
