@@ -3,7 +3,7 @@
         <strong
             @click="dialog = true"
             class="clickable"
-            v-if="canUpdate"
+            v-if="canUpdate && workingIslandId"
         >
             {{ +totalPrepaysAmount.toFixed(2) | pretty }}
         </strong>
@@ -137,6 +137,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             canUpdate () {
                 return this.isSuperadmin
             },
@@ -150,7 +153,11 @@
                 return this.$store.getters.isSuperadmin
             },
             prepays () {
-                return this.user.monthPrepays || []
+                let base = this.user.monthPrepays || []
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base
             },
             totalPrepaysAmount () {
                 const add = (a, b) => a + +b.amount
@@ -170,7 +177,8 @@
                 this.$store.dispatch('addUserPrepay', {
                     user_id: this.user.id,
                     amount: this.amount,
-                    comment: this.comment
+                    comment: this.comment,
+                    island_id: this.workingIslandId
                 })
                     .then(() => this.adding = false)
             }

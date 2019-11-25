@@ -3,7 +3,7 @@
         <strong
             @click="dialog = true"
             class="clickable"
-            v-if="canUpdate"
+            v-if="canUpdate && workingIslandId"
         >
             {{ +totalSicksAmount.toFixed(2) | pretty }}
         </strong>
@@ -146,6 +146,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             canUpdate () {
                 return this.isSuperadmin
             },
@@ -159,7 +162,11 @@
                 return this.$store.getters.isSuperadmin
             },
             sicks () {
-                return this.user.monthSicks || []
+                let base = this.user.monthSicks || []
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base
             },
             allSicks () {
                 return this.user.sicks || []
@@ -183,7 +190,8 @@
                 this.$store.dispatch('addUserSick', {
                     user_id: this.user.id,
                     amount: this.amount,
-                    comment: this.comment
+                    comment: this.comment,
+                    island_id: this.workingIslandId
                 })
                     .then(() => this.adding = false)
             }

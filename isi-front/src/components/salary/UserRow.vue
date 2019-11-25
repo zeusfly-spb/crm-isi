@@ -242,6 +242,9 @@
             totalVacations: 0
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             showChiefInfo () {
                 return this.isSuperadmin ? true : this.$store.state.settings.data.salaryPage.showChief
             },
@@ -293,20 +296,32 @@
             totalExpense () {
                 const add = (a, b) => a + +b.expense
                 let deals = this.user && this.user.monthDeals
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 return deals.reduce(add, 0)
             },
             totalIncome () {
                 const add = (a, b) => a + +b.income
                 let deals = this.user && this.user.monthDeals
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 return deals.reduce(add, 0)
             },
             totalHours () {
                 let workdays = this.user && this.user.monthWorkdays
+                if (this.workingIslandId) {
+                    workdays = workdays.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 const add = (a, b) => a + +b.working_hours
                 return workdays.reduce(add, 0)
             },
             totalDeals () {
                 let deals = this.user && this.user.monthDeals
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 return deals.length
             },
             basePath () {
@@ -363,24 +378,46 @@
             },
             getDealsExpense (dateString) {
                 let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 return deals.reduce((a, b) => a + +b.expense, 0)
             },
             getDealsIncome (dateString) {
                 let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId)
+                }
                 return deals.reduce((a, b) => a + +b.income, 0)
             },
             getDealCount (dateString) {
-                return this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString).length
+                let base = this.user.monthDeals
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base.filter(deal => deal.created_at.split(' ')[0] === dateString).length
             },
             getHours (dateString) {
-                let targetDay = this.user.monthWorkdays.find(day => day.date === dateString)
+                let base = this.user.monthWorkdays
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                let targetDay = base.find(day => day.date === dateString)
                 return targetDay && targetDay.working_hours || 0
             },
             getForfeits (dateString) {
-                return this.user.monthForfeits.filter(item => item.created_at.split(' ')[0] === dateString)
+                let base = this.user.monthForfeits
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base.filter(item => item.created_at.split(' ')[0] === dateString)
             },
             getPrizes (dateString) {
-                return this.user.monthPrizes.filter(item => item.created_at.split(' ')[0] === dateString)
+                let base = this.user.monthPrizes
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base.filter(item => item.created_at.split(' ')[0] === dateString)
             }
         },
         mounted () {

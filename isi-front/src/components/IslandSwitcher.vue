@@ -120,7 +120,7 @@
                 if (this.chiefFirst) {
                     result = result.map(island => riseChief(island))
                 }
-                return result
+                return JSON.parse(JSON.stringify(result))
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin

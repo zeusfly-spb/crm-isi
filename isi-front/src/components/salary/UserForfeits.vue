@@ -3,7 +3,7 @@
         <strong
             @click="dialog = true"
             class="clickable"
-            v-if="canUpdate"
+            v-if="canUpdate && workingIslandId"
         >
             {{ +totalForfeitsAmount.toFixed(2) | pretty }}
         </strong>
@@ -144,6 +144,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             canUpdate () {
                 return this.isSuperadmin
             },
@@ -157,7 +160,11 @@
                 return this.$store.getters.isSuperadmin
             },
             forfeits () {
-                return this.user.monthForfeits || []
+                let base = this.user.monthForfeits || []
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base
             },
             totalForfeitsAmount () {
                 const add = (a, b) => a + +b.amount
@@ -178,7 +185,8 @@
                 this.$store.dispatch('addUserForfeit', {
                     user_id: this.user.id,
                     amount: this.amount,
-                    comment: this.comment
+                    comment: this.comment,
+                    island_id: this.workingIslandId
                 })
                     .then(() => this.adding = false)
             }

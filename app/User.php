@@ -165,48 +165,53 @@ class User extends Authenticatable
         return $this->hasMany(Vacation::class);
     }
 
-    public function addPrize(int $amount, string $date, string $comment = '')
+    public function addPrize(int $amount, int $islandId, string $date, string $comment = '')
     {
         return $this->prizes()->create([
             'amount' => $amount,
             'comment' => $comment,
-            'created_at' => $date
+            'created_at' => $date,
+            'island_id' => $islandId
         ]);
     }
 
-    public function addForfeit(int $amount, string $date, string $comment = '')
+    public function addForfeit(int $amount, int $islandId, string $date, string $comment = '')
     {
         return $this->forfeits()->create([
             'amount' => $amount,
             'comment' => $comment,
-            'created_at' => $date
+            'created_at' => $date,
+            'island_id' => $islandId
         ]);
     }
 
-    public function addSick(int $amount, string $date, string $comment = '')
+    public function addSick(int $amount, int $islandId, string $date, string $comment = '')
     {
         return $this->sicks()->create([
                 'amount' => $amount,
                 'comment' => $comment,
-                'created_at' => $date
+                'created_at' => $date,
+                'island_id' => $islandId
         ]);
     }
 
-    public function addPrepay(int $amount, string $date, $comment = '')
+    public function addPrepay(int $amount, int $islandId, string $date, $comment = '')
     {
         return $this->prepays()->create([
             'amount' => $amount,
             'comment' => $comment,
-            'created_at' => $date
+            'created_at' => $date,
+            'island_id' => $islandId
         ]);
     }
 
-    public function addVacation(int $amount, string $date, $comment = '')
+    public function addVacation(int $amount, int $islandId, string $date, $comment = '')
     {
         return $this->vacations()->create([
             'amount' => $amount,
             'comment' => $comment,
-            'created_at' => $date
+            'created_at' => $date,
+            'island_id' => $islandId
         ]);
     }
 

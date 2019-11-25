@@ -3,7 +3,7 @@
         <strong
             @click="dialog = true"
             class="clickable"
-            v-if="canUpdate"
+            v-if="canUpdate && workingIslandId"
         >
             {{ +totalPrizesAmount.toFixed(2) | pretty }}
         </strong>
@@ -138,6 +138,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             canUpdate () {
                 return this.isSuperadmin
             },
@@ -151,7 +154,11 @@
                 return this.$store.getters.isSuperadmin
             },
             prizes () {
-                return this.user.monthPrizes || []
+                let base = this.user.monthPrizes || []
+                if (this.workingIslandId) {
+                    base = base.filter(item => +item.island_id === +this.workingIslandId)
+                }
+                return base
             },
             totalPrizesAmount () {
                 const add = (a, b) => a + +b.amount
@@ -172,7 +179,8 @@
                 this.$store.dispatch('addUserPrize', {
                     user_id: this.user.id,
                     amount: this.amount,
-                    comment: this.comment
+                    comment: this.comment,
+                    island_id: this.workingIslandId
                 })
                     .then(() => this.adding = false)
             }
