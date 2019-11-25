@@ -325,7 +325,7 @@
                 return (!!targetWorkday.time_start && !targetWorkday.time_finish)
             },
             calculateTotals (data) {
-                if (data && data.prizes) {
+                if (data && data.monthPrizes) {
                     this.totalPrizes = data.prizes
                 } else {
                     this.totalPrizes = this.$refs.prizes && this.$refs.prizes.totalPrizesAmount
@@ -373,7 +373,7 @@
                 return this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString).length
             },
             getHours (dateString) {
-                let targetDay = this.user.workdays.find(day => day.date === dateString)
+                let targetDay = this.user.monthWorkdays.find(day => day.date === dateString)
                 return targetDay && targetDay.working_hours || 0
             },
             getForfeits (dateString) {

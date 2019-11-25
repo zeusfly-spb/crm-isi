@@ -557,7 +557,7 @@ export const store = new Vuex.Store({
                 commit('SET_ACCESS', 'none')
             } else {
                 let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
-                commit('SET_ACCESS', res.data.access.status)
+                commit('SET_ACCESS', res.data.access)
                 if (res.data.setting) {
                     commit('SET_SETTING', res.data.setting)
                 }

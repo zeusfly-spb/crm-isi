@@ -25,7 +25,8 @@ class AccessController extends Controller
     {
         $access = Access::where('device_id', $request->device_id)->first();
         if (!$access) {
-            return response()->json(['status' => 'none']);
+
+            return response()->json(['access' => (object)['status' => 'none']]);
         }
         $setting = Setting::find(1);
         if ($setting) {

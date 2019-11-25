@@ -2,7 +2,7 @@
     <v-layout align-center justify-center row fill-height>
         <v-flex xs12 md3 class="grey lighten-4">
             <v-container class="text-xs-center">
-                <v-card flat v-if="access === 'none'">
+                <v-card flat v-if="access && access.status === 'none'">
                     <v-card-title primary-title>
                         <h4 class="red--text">Доступ запрещен</h4>
                     </v-card-title>
@@ -11,7 +11,7 @@
                                       label="Комментарий"
                                       v-model="comment"
                                       @keyup.enter="logIn"
-                        ></v-text-field>
+                        />
 
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -19,14 +19,14 @@
                         </v-card-actions>
                     </v-form>
                 </v-card>
-                <v-card flat v-if="access === 'requested'">
+                <v-card flat v-if="access && access.status === 'requested'">
                     <div class="title">Запрос отправлен</div>
                     <div class="title red--text">Ожидайте получения доступа</div>
                 </v-card>
-                <v-card flat v-if="access === 'denied'">
+                <v-card flat v-if="access && access.status === 'denied'">
                     <div class="headline red--text">Доступ запрещен!</div>
                 </v-card>
-                <v-card flat v-if="!access">
+                <v-card flat v-if="!(access && access.status)">
                     Проверка доступа
                     <v-progress-circular
                         indeterminate
@@ -67,7 +67,7 @@
         },
         watch: {
             access (value) {
-                if (value === 'allowed') {
+                if (value && value.status === 'allowed') {
                     this.$store.dispatch('enterCRM')
                     this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
                     this.$router.push('/home')
