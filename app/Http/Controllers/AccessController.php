@@ -23,9 +23,8 @@ class AccessController extends Controller
 
     public function getAccessStatus(Request $request)
     {
-        $access = Access::where('device_id', $request->device_id)->first();
+        $access = Access::with('island')->where('device_id', $request->device_id)->first();
         if (!$access) {
-
             return response()->json(['access' => (object)['status' => 'none']]);
         }
         $setting = Setting::find(1);

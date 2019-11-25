@@ -8,7 +8,14 @@
                       style="box-shadow: black"
             >
                 <img
-                    v-if="isAuth"
+                    v-if="isAuth && !authUser.is_superadmin && authUser.avatar"
+                    :src="`${basePath}${authUser.avatar}`"
+                    :lazy-src="`${basePath}${authUser.avatar}`"
+                    alt="Лого"
+                    height="45px"
+                />
+                <img
+                    v-else
                     :src="`${basePath}/img/logo.png`"
                     :lazy-src="`${basePath}/img/logo.png`"
                     alt="Лого"
@@ -19,7 +26,10 @@
           <div>
             <div v-if="isAuth">
               <span>Островки</span>
-              <div class="title font-weight-bold">{{ authUser && authUser.full_name }}</div>
+              <div class="title font-weight-bold">
+                  {{ authUser && authUser.full_name }}
+                  <span v-if="access" class="blue--text">({{ access.island.name }})</span>
+              </div>
             </div>
           </div>
         </v-layout>
@@ -55,6 +65,9 @@ export default {
         timerId: null
     }),
     computed: {
+        access () {
+            return this.$store.state.access
+        },
         waitingLeadsCount () {
             return this.$store.getters.waitingLeadsCount
         },

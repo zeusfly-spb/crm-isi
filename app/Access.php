@@ -8,4 +8,8 @@ class Access extends Model
 {
     protected $guarded = [];
 
+    public function island()
+    {
+        return $this->belongsTo(Island::class);
+    }
 }
