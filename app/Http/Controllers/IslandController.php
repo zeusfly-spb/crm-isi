@@ -64,6 +64,7 @@ class IslandController extends Controller
         $user = User::find($request->user_id);
         $user->islands()->sync($request->island_ids);
         $user->load('documentPack', 'islands');
-        return response()->json($user->toArray());
+        $islands = Island::with('users')->find($request->island_ids);
+        return response()->json(['user' => $user->toArray(), 'islands' => $islands->toArray()]);
     }
 }
