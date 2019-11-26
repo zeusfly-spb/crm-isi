@@ -7,6 +7,16 @@ export default {
         withDone: false
     },
     actions: {
+        updateUserIslands ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_user_islands', {... data})
+                    .then(res => {
+                        commit('UPDATE_USER', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addLeadCall ({commit, rootState}, leadId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead_call', {

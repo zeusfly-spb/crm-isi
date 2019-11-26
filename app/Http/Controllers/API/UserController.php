@@ -93,12 +93,13 @@ class UserController extends Controller
     public function details()
     {
         $user = Auth::user();
+        $user->load('islands');
         return response()->json(['success' => $user], $this-> successStatus);
     }
 
     public function getUsers()
     {
-        return response()->json(User::with('documentPack')->get()->toArray());
+        return response()->json(User::with('documentPack', 'islands')->get()->toArray());
     }
 
     public function saveUser(Request $request)
@@ -125,7 +126,7 @@ class UserController extends Controller
         }
 
         $user->update($input);
-        $user->load('documentPack');
+        $user->load('documentPack', 'islands');
         return $user->toArray();
     }
 
@@ -134,12 +135,12 @@ class UserController extends Controller
         return response()->json(['result' => User::destroy($request->id)]);
     }
 
-    public function setUserIsland(Request $request)
-    {
-        $user = User::find($request->user_id);
-        $user->update(['island_id' => $request->island_id]);
-        return response()->json($user->toArray());
-    }
+//    public function setUserIsland(Request $request)
+//    {
+//        $user = User::find($request->user_id);
+//        $user->update(['island_id' => $request->island_id]);
+//        return response()->json($user->toArray());
+//    }
 
     public function startDay(Request $request)
     {
@@ -189,7 +190,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update(['fired_at' => $request->date]);
-        $user->load('documentPack');
+        $user->load('documentPack', 'islands');
         return response()->json($user->toArray());
     }
 
@@ -197,7 +198,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update(['fired_at' => null]);
-        $user->load('documentPack');
+        $user->load('documentPack', 'islands');
         return response()->json($user->toArray());
     }
 
@@ -205,7 +206,7 @@ class UserController extends Controller
     {
         $user = User::find($request->user_id);
         $user->update([$request->field => $request->date]);
-        $user->load('documentPack');
+        $user->load('documentPack', 'islands');
         return response()->json($user->toArray());
     }
 

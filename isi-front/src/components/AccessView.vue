@@ -10,7 +10,7 @@
                         <v-text-field prepend-icon="lock_open"
                                       label="Комментарий"
                                       v-model="comment"
-                                      @keyup.enter="logIn"
+                                      @keyup.enter="sendRequest"
                         />
 
                         <v-card-actions>
@@ -26,11 +26,15 @@
                 <v-card flat v-if="access && access.status === 'denied'">
                     <div class="headline red--text">Доступ запрещен!</div>
                 </v-card>
+                <v-card flat v-if="access && !userIslandsIds.includes(access.island_id)">
+                    <div class="headline red--text">Отсутствует доступ к островку данного устройства!</div>
+                </v-card>
+
                 <v-card flat v-if="!(access && access.status)">
                     Проверка доступа
                     <v-progress-circular
                         indeterminate
-                    ></v-progress-circular>
+                    />
                 </v-card>
 
             </v-container>
@@ -46,6 +50,9 @@
             comment: ''
         }),
         computed: {
+            userIslandsIds () {
+                return this.authUser.islands && this.authUser.islands.map(item => item.id)
+            },
             authUser () {
                 return this.$store.state.authUser
             },
@@ -67,7 +74,7 @@
         },
         watch: {
             access (value) {
-                if (value && value.status === 'allowed') {
+                if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id)) {
                     this.$store.dispatch('enterCRM')
                     this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
                     this.$router.push('/home')

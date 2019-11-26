@@ -66,9 +66,10 @@ class User extends Authenticatable
         return $this->belongsTo(Group::class);
     }
 
-    public function island()
+    public function islands()
     {
-        return $this->belongsTo(Island::class)->withDefault(['name' => 'Без островка']);
+//        return $this->belongsTo(Island::class)->withDefault(['name' => 'Без островка']);
+        return $this->belongsToMany(Island::class);
     }
 
     public function workdays()
@@ -232,9 +233,9 @@ class User extends Authenticatable
 
     public function getVpbxExtensionAttribute($value)
     {
-        if ($this->island->vpbx_extension) {
-            return $this->island->vpbx_extension;
-        }
+//        if ($this->island->vpbx_extension) {
+//            return $this->island->vpbx_extension;
+//        }
         return $this->attributes['vpbx_extension'] ?? $value;
     }
 }

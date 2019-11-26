@@ -16,7 +16,8 @@ class Island extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class)->where('fired_at', null);
+//        return $this->hasMany(User::class)->where('fired_at', null);
+        return $this->belongsToMany(User::class);
     }
 
     public function startDays()

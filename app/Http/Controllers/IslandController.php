@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Island;
+use App\User;
 use Illuminate\Http\Request;
 
 class IslandController extends Controller
@@ -56,5 +57,13 @@ class IslandController extends Controller
         $island->update(['vpbx_extension' => $request->vpbx_extension]);
         $island->load('users');
         return response()->json($island->toArray());
+    }
+
+    public function updateUserIslands(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->islands()->sync($request->island_ids);
+        $user->load('documentPack', 'islands');
+        return response()->json($user->toArray());
     }
 }

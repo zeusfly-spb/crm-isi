@@ -509,21 +509,21 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setUserIsland ({commit}, islandId) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/set_user_island', {
-                    user_id: this.state.authUser.id,
-                    island_id: islandId
-                })
-                    .then(res => {
-                        commit('SET_AUTH_USER_ISLAND', res.data.island_id)
-                        commit('UPDATE_USER', res.data)
-                        commit('SET_AUTH_USER', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-        },
+        // setUserIsland ({commit}, islandId) {
+        //     return new Promise((resolve, reject) => {
+        //         Vue.axios.post('/api/set_user_island', {
+        //             user_id: this.state.authUser.id,
+        //             island_id: islandId
+        //         })
+        //             .then(res => {
+        //                 commit('SET_AUTH_USER_ISLAND', res.data.island_id)
+        //                 commit('UPDATE_USER', res.data)
+        //                 commit('SET_AUTH_USER', res.data)
+        //                 resolve(res)
+        //             })
+        //             .catch(e => reject(e))
+        //     })
+        // },
         addIsland ({commit}, island) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_island', {...island})
@@ -554,16 +554,16 @@ export const store = new Vuex.Store({
             if (getters.isSuperadmin) return
             let exists = Cookies.get('isi-access')
             if (!exists) {
-                commit('SET_ACCESS', 'none')
+                commit('SET_ACCESS', {status: 'none'})
             } else {
                 let res = await Vue.axios.post('/api/check_access_status', {device_id: exists})
                 commit('SET_ACCESS', res.data.access)
                 if (res.data.setting) {
                     commit('SET_SETTING', res.data.setting)
                 }
-                if (!this.state.authUser.is_superadmin && (this.state.authUser.island_id !== res.data.access.island_id)) {
-                    dispatch('setUserIsland', res.data.access.island_id)
-                }
+                // if (!this.state.authUser.is_superadmin && (this.state.authUser.island_id !== res.data.access.island_id)) {
+                //     dispatch('setUserIsland', res.data.access.island_id)
+                // }
             }
         },
         deleteGroup ({commit}, id) {
@@ -951,6 +951,7 @@ export const store = new Vuex.Store({
         },
         SET_ACCESS (state, access) {
             state.access = access
+            state.workingIslandId = access.island_id || null
         },
         SET_BASE_PATH (state, path) {
             state.basePath = path

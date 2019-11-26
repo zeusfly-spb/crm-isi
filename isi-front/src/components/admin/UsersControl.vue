@@ -50,7 +50,8 @@
                 <td align="center">
                     <doc-pack :user="props.item" @updated="showSuccess" @alert="showError"/>
                 </td>
-                <td>{{ islandName(props.item.island_id) }}</td>
+<!--                <td>{{ islandName(props.item.island_id) }}</td>-->
+                <td><user-islands-column :user="props.item" @success="showSuccess"/></td>
                 <td>{{ groupName(props.item.group_id) }}</td>
                 <td v-if="currentViewMode !== 'all'">
                     <date-updater :user="props.item" field="created_at" @updated="showSuccess"/>
@@ -326,6 +327,7 @@
 <script>
     import DocPack from './DocPack'
     import DateUpdater from './DateUpdater'
+    import UserIslandsColumn from './UserIslandsColumn'
     export default {
         data: () => ({
             toRestoreUserId: null,
@@ -431,7 +433,7 @@
                         value: null
                     },
                     {
-                        text: 'Островок',
+                        text: 'Островки',
                         value: null
                     },
                     {
@@ -605,7 +607,8 @@
         },
         components: {
             DocPack,
-            DateUpdater
+            DateUpdater,
+            UserIslandsColumn
         }
     }
 </script>

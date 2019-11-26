@@ -29,7 +29,6 @@
                 v-model="showOther"
                 label="Данные остальных"
                 :disabled="!visible"
-
             />
             <v-checkbox
                 v-model="showTotal"
