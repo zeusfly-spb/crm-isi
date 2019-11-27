@@ -36,7 +36,7 @@ class AccessController extends Controller
 
     public function getAllAccesses()
     {
-        return response()->json(Access::all()->toArray());
+        return response()->json(Access::with('island')->get()->toArray());
     }
 
     public function setStatus(Request $request)

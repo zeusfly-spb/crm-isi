@@ -28,7 +28,7 @@
               <span>Островки</span>
               <div class="title font-weight-bold">
                   {{ authUser && authUser.full_name }}
-                  <span v-if="access" class="blue--text">({{ access.island.name }})</span>
+                  <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
               </div>
             </div>
           </div>

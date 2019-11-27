@@ -22,7 +22,7 @@
                 <td>{{ props.item.device_id }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
-                <td>{{ islandName(props.item.island_id) }}</td>
+                <td>{{ props.item.island && props.item.island.name || 'без островка' }}</td>
                 <td :class="{'blue--text': props.item.status === 'requested', 'green--text': props.item.status === 'allowed', 'red--text': props.item.status === 'denied'}">
                         {{ {requested: 'Ожидает', allowed: 'Разрешен', denied: 'Запрещен'}[props.item.status] }}
                 </td>
@@ -184,10 +184,6 @@
             showDeleteConfirm (access) {
                 this.accessToDelete = access
                 this.deleteConfirm = true
-            },
-            islandName (id) {
-                let island = this.islands.find(island => +island.id === +id)
-                return island && island.name || ''
             },
             showSuccess (text) {
                 this.snackColor = 'green'
