@@ -24,7 +24,7 @@
                    <island-vpbx-changer :island="props.item" @updated="showSuccess"/>
                </td>
                <td>
-                   <island-users-column :users="props.item.users"/>
+                   <island-users-column :island="props.item" @success="showSuccess"/>
                </td>
                <td>
                    <chief-updater :island="props.item" @updated="showSuccess"/>

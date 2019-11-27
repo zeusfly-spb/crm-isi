@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_chief_id', 'IslandController@updateChiefId');
     Route::post('update_island_vpbx', 'IslandController@updateVpbxExtension');
     Route::post('update_user_islands', 'IslandController@updateUserIslands');
+    Route::post('update_island_users', 'IslandController@updateIslandUsers');
 
     // CUSTOMERS
     Route::post('get_customers', 'CustomerController@index');

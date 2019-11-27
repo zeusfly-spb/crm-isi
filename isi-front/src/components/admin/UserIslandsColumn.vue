@@ -71,12 +71,11 @@
                 return this.userIslands.map(item => item.id)
             },
             userIslands () {
-                return this.user && this.user.islands.length && this.user.islands || [{name: '-'}]
+                return this.user && this.user.islands.length && this.user.islands || [{name: 'нет'}]
             },
             islands () {
                 let base = this.$store.state.islands
-                let result = base.map(item => ({... item, accepted: this.userIslandsIds.length && this.userIslandsIds.includes(item.id) || false}))
-                return result
+                return base.map(item => ({... item, accepted: this.userIslandsIds.length && this.userIslandsIds.includes(item.id) || false}))
             }
         },
         methods: {
@@ -107,7 +106,7 @@
         }
     }
 </script>
-<style scoped>
+<style>
     .dense {
         padding: 0 1em;
     }

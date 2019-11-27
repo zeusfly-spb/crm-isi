@@ -67,4 +67,13 @@ class IslandController extends Controller
         $islands = Island::with('users')->find($request->island_ids);
         return response()->json(['user' => $user->toArray(), 'islands' => $islands->toArray()]);
     }
+
+    public function updateIslandUsers(Request $request)
+    {
+        $island = Island::find($request->island_id);
+        $island->users()->sync($request->user_ids);
+        $island->load('users');
+        $users = User::with('documentPack', 'islands')->find($request->user_ids);
+        return response()->json(['island' => $island->toArray(), 'users' => $users->toArray()]);
+    }
 }
