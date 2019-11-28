@@ -3,8 +3,8 @@
         <div
             :title="`Изменить список доступных островков пользователя ${user.full_name}`"
             @click="activate"
-            style="cursor: pointer"
             :class="{'grey--text': active}"
+            class="clickable"
         >
             <div v-for="island in userIslands" :key="island.id">
                 {{ island.name }}

@@ -4,8 +4,8 @@
              :key="index"
              :class="{'grey--text': active}"
              @click="activate"
-             style="cursor: pointer"
              title="Изменить список сотрудников островка"
+             class="clickable"
         >
             <v-avatar
                 size="30px"

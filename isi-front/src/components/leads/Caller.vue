@@ -74,7 +74,7 @@
                         this.flash = !this.flash
                     }, 500)
                 } else {
-                    if (!this.timet) clearInterval(this.timer)
+                    if (!this.timer) clearInterval(this.timer)
                 }
             }
         }
