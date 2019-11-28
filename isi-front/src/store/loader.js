@@ -7,6 +7,16 @@ export default {
         withDone: false
     },
     actions: {
+        updateAccessIsland ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_access_island', {... data})
+                    .then(res => {
+                        commit('UPDATE_ACCESS_REQUEST', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateIslandUsers ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_island_users', {... data})

@@ -261,8 +261,7 @@
                                     data-vv-as="Группа"
                                     :error-messages="errors.collect('group')"
                                     v-validate="'required'"
-                                >
-                                </v-select>
+                                />
                             </v-flex>
                         </v-layout>
                     </v-container>

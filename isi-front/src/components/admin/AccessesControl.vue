@@ -22,7 +22,7 @@
                 <td>{{ props.item.device_id }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
-                <td>{{ props.item.island && props.item.island.name || 'без островка' }}</td>
+                <td><access-island-changer :access="props.item" @success="showSuccess"/></td>
                 <td :class="{'blue--text': props.item.status === 'requested', 'green--text': props.item.status === 'allowed', 'red--text': props.item.status === 'denied'}">
                         {{ {requested: 'Ожидает', allowed: 'Разрешен', denied: 'Запрещен'}[props.item.status] }}
                 </td>
@@ -140,6 +140,7 @@
     </v-flex>
 </template>
 <script>
+    import AccessIslandChanger from './AccessIslandChanger'
     export default {
         name: 'AccessesControl',
         data: () => ({
@@ -200,7 +201,7 @@
                         this.$store.dispatch('setAccessRequests')
                         let island = this.islands.find(island => +island.id === +this.selectedIslandId)
                         let islandName = island && island.name || ''
-                        this.showSuccess(`Статус доступа изменент на Разрешен с привязкой к сотровку "${islandName}"`)
+                        this.showSuccess(`Статус доступа изменент на Разрешен с привязкой к островку "${islandName}"`)
                         this.confirm = false
                     })
 
@@ -226,6 +227,9 @@
                 let user = this.users.find(item => item.id === id)
                 return user && user.full_name || ''
             }
+        },
+        components: {
+            AccessIslandChanger
         }
     }
 </script>

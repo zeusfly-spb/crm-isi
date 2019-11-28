@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_accesses', 'AccessController@getAllAccesses');
     Route::post('set_access_status', 'AccessController@setStatus');
     Route::post('delete_access', 'AccessController@delete');
+    Route::post('update_access_island', 'AccessController@updateAccessIsland');
 
     // ISLANDS
     Route::post('get_islands', 'IslandController@getAll');

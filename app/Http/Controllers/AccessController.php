@@ -41,7 +41,7 @@ class AccessController extends Controller
 
     public function setStatus(Request $request)
     {
-        $access = Access::find($request->access_id);
+        $access = Access::with('island')->find($request->access_id);
         $access->update(['status' => $request->status, 'island_id' => $request->island_id]);
         return response()->json(['access' => $access->toArray()]);
     }
@@ -49,5 +49,13 @@ class AccessController extends Controller
     public function delete(Request $request)
     {
         return response()->json(['result' => Access::destroy($request->access_id)]);
+    }
+
+    public function updateAccessIsland(Request $request)
+    {
+        $access = Access::find($request->access_id);
+        $access->update(['island_id' => $request->island_id]);
+        $access->load('island');
+        return response()->json($access->toArray());
     }
 }
