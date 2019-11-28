@@ -12,7 +12,6 @@
                                       v-model="comment"
                                       @keyup.enter="sendRequest"
                         />
-
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn primary @click="sendRequest">Запросить доступ</v-btn>
@@ -26,7 +25,7 @@
                 <v-card flat v-if="access && access.status === 'denied'">
                     <div class="headline red--text">Доступ запрещен!</div>
                 </v-card>
-                <v-card flat v-if="access && !userIslandsIds.includes(access.island_id)">
+                <v-card flat v-if="access && access.status === 'allowed' && !userIslandsIds.includes(access.island_id)">
                     <div class="headline red--text">Отсутствует доступ к островку данного устройства!</div>
                 </v-card>
 
@@ -73,6 +72,11 @@
             }
         },
         watch: {
+            'access.status' (val) {
+                if (val !== 'allowed') {
+                    this.$router.push('/access')
+                }
+            },
             access (value) {
                 if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id)) {
                     this.$store.dispatch('enterCRM')

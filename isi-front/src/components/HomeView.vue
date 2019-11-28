@@ -51,6 +51,9 @@
             adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
         }),
         computed: {
+            access () {
+                return this.$store.state.access
+            },
             regularTabs () {
                 let base =  ['Учет на день', 'База клиентов', 'Склад', 'Заявки']
                 return this.salaryVisible ? [...base, 'Зарплата'] : base
@@ -104,6 +107,14 @@
                         break
                     case 5: this.$store.dispatch('setCurrentPage', 'admin')
                         break
+                }
+            }
+        },
+        watch: {
+            access (val) {
+                let userIslandIds = this.user && this.user.islands.length && this.user.islands.map(item => item.id) || []
+                if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
+                    this.$router.push('/access')
                 }
             }
         },
