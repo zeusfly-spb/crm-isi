@@ -65,6 +65,9 @@ export default {
         timerId: null
     }),
     computed: {
+        currentIsland () {
+            return this.$store.getters.workingIsland
+        },
         access () {
             return this.$store.state.access
         },

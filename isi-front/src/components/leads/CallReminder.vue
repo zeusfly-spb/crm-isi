@@ -3,7 +3,7 @@
         <v-alert
             :value="true"
             color="warning"
-            v-if="nowLeads.length"
+            v-if="nowLeads.length && !!authUser"
         >
             <span class="title">Ожидают связи:</span>
             &nbsp;
@@ -23,6 +23,9 @@
     export default {
         name: 'CallReminder',
         computed: {
+            authUser () {
+                return this.$store.state.authUser
+            },
             mustScroll () {
                 return true
             },

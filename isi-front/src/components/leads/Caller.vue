@@ -3,13 +3,13 @@
         icon
         title="Позвонить"
         @click="makeCall"
-        :disabled="!authUser.vpbx_extension"
+        :disabled="!currentVpxExtension"
         :color="flash ? 'white' : null"
         :large="flash && scalable"
     >
         <v-icon
             v-if="!mustBlink ? flash : true"
-            :color="!!authUser.vpbx_extension ? 'green' : 'grey'"
+            :color="!!currentVpxExtension ? 'green' : 'grey'"
         >
             phone
         </v-icon>
@@ -43,6 +43,9 @@
         computed: {
             authUser () {
                 return this.$store.state.authUser
+            },
+            currentVpxExtension () {
+                return this.$store.getters.currentVpbxExtension
             }
         },
         methods: {
@@ -52,7 +55,7 @@
                 }
                 this.axios.post('https://crmkin.ru/tel/api/vpbx/call/make', {
                     user_id: this.authUser.id,
-                    extension: this.authUser.vpbx_extension,
+                    extension: this.currentVpxExtension,
                     phone: this.phone[0] === '+' && this.phone[1] === '7' ? this.phone : '+7' + this.phone
                 })
             }

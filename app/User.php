@@ -30,8 +30,7 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'full_name',
-        'vpbx_extension'
+        'full_name'
     ];
 
     protected $casts = [
@@ -231,11 +230,11 @@ class User extends Authenticatable
         return $this->hasMany(Island::class, 'chief_id', 'id')->with('users');
     }
 
-    public function getVpbxExtensionAttribute($value)
-    {
+//    public function getVpbxExtensionAttribute($value)
+//    {
 //        if ($this->island->vpbx_extension) {
 //            return $this->island->vpbx_extension;
 //        }
-        return $this->attributes['vpbx_extension'] ?? $value;
-    }
+//        return $this->attributes['vpbx_extension'] ?? $value;
+//    }
 }
