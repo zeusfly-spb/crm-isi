@@ -2,11 +2,11 @@
     <span>
         <v-btn icon
                title="Редактирование списка наименований товаров и цен"
+               @click="activate"
         >
             <v-icon
                 color="green"
                 class="clickable"
-                @click="activate"
             >
                 edit
             </v-icon>
@@ -42,6 +42,14 @@
                             <td>{{ props.index + 1 }}</td>
                             <td>{{ props.item.name }}</td>
                             <td>{{ props.item.price }}</td>
+                            <td align="center">
+                                <v-icon
+                                    v-if="!!props.item.changeable_price"
+                                    color="green"
+                                >
+                                    check
+                                </v-icon>
+                            </td>
                             <td
                                 align="right"
                             >
@@ -103,6 +111,12 @@
                                               v-validate="'required|numeric'"
                                 />
                             </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <v-checkbox
+                                    v-model="editGood.changeable_price"
+                                    label="Изменяемая цена"
+                                />
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -154,11 +168,11 @@
         data: () => ({
             goodToDelete: null,
             dialog: false,
-            newGood: {name: '', price: ''},
+            newGood: {name: '', price: '', changeable_price: false},
             adding: false,
             confirm: false,
             editDialogHeader: '',
-            editGood: {name: '', price: ''},
+            editGood: {name: '', price: '', changeable_price: false},
             backupGood: null,
             edit: false,
             active: false,
@@ -166,6 +180,7 @@
                 {text: '#', value: null, sortable: false},
                 {text: 'Наименование', value: 'name'},
                 {text: 'Цена', value: 'price'},
+                {text: 'Изменяемая цена', value: 'changeable_price', align: 'center'},
                 {text: 'Действия', value: null, sortable: false, align: 'right'}
             ]
         }),
@@ -242,7 +257,7 @@
         watch: {
             adding (val) {
                 if (val) {
-                    this.newGood = {name: '', price: ''}
+                    this.newGood = {name: '', price: '', changeable_price: false}
                 }
             }
         }

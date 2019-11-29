@@ -134,12 +134,12 @@
                                 <sub>Сумма</sub>
                                 <v-text-field
                                     :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
-                                    :readonly="newDealActionType === 'sale'"
+                                    :readonly="newDealActionType === 'sale' && !newDealProduct.changeable_price"
                                     v-model="newDealIncome"
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
-                                    v-validate="['produce', 'return'].includes(newDealActionType) ? 'required|integer' : null"
+                                    v-validate="['produce', 'return'].includes(newDealActionType) || newDealProduct && newDealProduct.changeable_price ? 'required|integer' : null"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
