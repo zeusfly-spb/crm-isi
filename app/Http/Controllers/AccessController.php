@@ -17,6 +17,7 @@ class AccessController extends Controller
             'device_id' => $device_id,
             'status' => 'requested',
             'comment' => $request->comment,
+            'user_info' => $request->header('User-Agent')
         ]);
         return response()->json($access->toArray());
     }

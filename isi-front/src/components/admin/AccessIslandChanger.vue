@@ -1,10 +1,10 @@
 <template>
     <v-flex>
         <span
-            class="touchable"
+            :class="{touchable: allowed}"
             v-if="!active"
             @click="activate"
-            title="Изменить островок привязки"
+            :title="allowed ? 'Изменить островок привязки' : 'Чтобы изменить островок привязки, смените статус'"
         >
             {{ access.island && access.island.name || 'Без островка' }}
         </span>
@@ -30,6 +30,9 @@
             active: false
         }),
         computed: {
+            allowed () {
+                return this.access.status && this.access.status === 'allowed'
+            },
             islands () {
                 return [{id: null, name: 'Без островка'}, ... this.$store.state.islands]
             }

@@ -19,7 +19,7 @@
             <template v-slot:items="props">
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.created_at | moment('DD MMMM YYYY г.')}}</td>
-                <td>{{ props.item.device_id }}</td>
+                <td>{{ props.item.user_info }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
                 <td><access-island-changer :access="props.item" @success="showSuccess"/></td>
@@ -75,8 +75,10 @@
         <v-dialog v-model="confirm"
                   max-width="500"
         >
-            <v-card>
-                <v-card-title class="subheading">
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title class="subheading light-blue darken-3 white--text">
                     Выберите островок для привязки устройства
                 </v-card-title>
 
@@ -155,7 +157,7 @@
             headers: [
                 {text: '#', value: 'id'},
                 {text: 'Дата', value: 'created_at'},
-                {text: 'Идентификатор утройства', value: 'device_id'},
+                {text: 'Информация об устройстве', value: null},
                 {text: 'Отправитель', value: 'user_id'},
                 {text: 'Комментарий', value: 'comment'},
                 {text: 'Островок привязки', value: null},
