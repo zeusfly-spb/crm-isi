@@ -80,7 +80,7 @@
             access (value) {
                 if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id)) {
                     this.$store.dispatch('enterCRM')
-                    this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
+//                    this.$store.commit('SET_OWN_ISLAND_AS_WORKING')
                     this.$router.push('/home')
                 }
             }
