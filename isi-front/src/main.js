@@ -68,7 +68,9 @@ if (token) {
         .then(() => {
             if (store.getters.isSuperadmin || store.getters.isAllowed) {
                 store.dispatch('enterCRM')
-                    .then(() => router.push('/home'))
+                    .then(() => {
+                        router.push('/home').catch(e => {})
+                    })
             } else {
                 // store.dispatch('checkAccess')
                 router.push('/access')

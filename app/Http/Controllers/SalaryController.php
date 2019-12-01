@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Deal;
 use App\Forfeit;
+use App\Island;
 use App\Prepay;
 use App\Prize;
 use App\Sick;
@@ -36,24 +37,25 @@ class SalaryController extends Controller
             $dealsBuilder = $dealsBuilder->where('island_id', $request->island_id);
         }
         $allDeals = $dealsBuilder->get();
-
+/**
         $dealsUserIds = $allDeals->pluck('user_id')->unique()->all();
         $users = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
             ->find($dealsUserIds);
+**/
 
-//        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
-//            ->where('is_superadmin', false)
-//            ->whereNotNull('island_id')
-//            ->whereNull('fired_at');
-//        if ($request->island_id) {
-//            $queryBuilder = $queryBuilder->where('island_id', $request->island_id);
-//        } else {
-//            $queryBuilder = $queryBuilder->whereNotNull('island_id');
-//        }
-//        $queryBuilder = $queryBuilder
-//            ->where('created_at', '<', $startDate)
-//            ->orWhereBetween('created_at', [$startDate, $endDate]);
-//        $users = $queryBuilder->get();
+        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
+            ->where('is_superadmin', false)
+            ->whereNull('fired_at');
+
+        if ($request->island_id) {
+            $island = Island::with('users')->find($request->island_id);
+            $queryBuilder = $queryBuilder->whereIn('id', $island->users->pluck('id')->all());
+        }
+
+        $queryBuilder = $queryBuilder
+            ->where('created_at', '<', $startDate)
+            ->orWhereBetween('created_at', [$startDate, $endDate]);
+        $users = $queryBuilder->get();
 
 
 

@@ -279,7 +279,7 @@
                 return monthDeals.filter(item => +item.user_id !== +this.user.id)
             },
             isChief () {
-                return this.user && this.user.controlled_islands.length
+                return this.user && this.user.controlled_islands.length && this.user.controlled_islands.map(item => item.id).includes(this.workingIslandId)
             },
             grandTotal () {
                 return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations
