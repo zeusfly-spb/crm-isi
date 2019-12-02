@@ -324,9 +324,9 @@
 </template>
 
 <script>
-    import DocPack from './DocPack'
-    import DateUpdater from './DateUpdater'
-    import UserIslandsColumn from './UserIslandsColumn'
+    import DocPack from './users/DocPack'
+    import DateUpdater from './users/DateUpdater'
+    import UserIslandsColumn from './users/UserIslandsColumn'
     export default {
         data: () => ({
             toRestoreUserId: null,

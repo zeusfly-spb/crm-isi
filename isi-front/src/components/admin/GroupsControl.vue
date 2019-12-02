@@ -119,7 +119,7 @@
 </template>
 
 <script>
-    import GroupUsersColumn from './GroupUsersColumn'
+    import GroupUsersColumn from './groups/GroupUsersColumn'
     export default {
         name: 'GroupsControl',
         data: () => ({

@@ -37,27 +37,40 @@ class SalaryController extends Controller
             $dealsBuilder = $dealsBuilder->where('island_id', $request->island_id);
         }
         $allDeals = $dealsBuilder->get();
-/**
-        $dealsUserIds = $allDeals->pluck('user_id')->unique()->all();
-        $users = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
-            ->find($dealsUserIds);
-**/
+
 
         $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
             ->where('is_superadmin', false)
             ->whereNull('fired_at');
-
         if ($request->island_id) {
             $island = Island::with('users')->find($request->island_id);
-            $queryBuilder = $queryBuilder->whereIn('id', $island->users->pluck('id')->all());
+            $salaryDisplay = $island->options['salary_display'] ?? 'attach';
+
+            switch ($salaryDisplay) {
+                case 'attach':
+                    $queryBuilder = $queryBuilder->whereIn('id', $island->users->pluck('id')->all());
+                    break;
+                case 'time':
+                    $periodUserIds = $island->WorkDays->whereBetween('created_at', [$startDate, $endDate])->pluck('user_id')->all();
+                    $queryBuilder = $queryBuilder->whereIn('id', $periodUserIds);
+                    break;
+                case 'attach_time':
+                    $attached = $island->users->pluck('id')->all();
+                    $byTime = $island->WorkDays->whereBetween('created_at', [$startDate, $endDate])->pluck('user_id')->all();
+                    $merged = array_merge($attached, $byTime);
+                    $queryBuilder = $queryBuilder->whereIn('id', $merged);
+                    break;
+                case 'selected':
+                    $selected = $island->options['selected_user_ids'] ?? [];
+                    $queryBuilder = $queryBuilder->whereIn('id', $selected);
+                    break;
+            }
+
+        } else {
+            $queryBuilder = $queryBuilder->whereHas('islands');
         }
 
-        $queryBuilder = $queryBuilder
-            ->where('created_at', '<', $startDate)
-            ->orWhereBetween('created_at', [$startDate, $endDate]);
         $users = $queryBuilder->get();
-
-
 
         return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()]);
     }

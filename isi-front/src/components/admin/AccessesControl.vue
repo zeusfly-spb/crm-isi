@@ -142,7 +142,7 @@
     </v-flex>
 </template>
 <script>
-    import AccessIslandChanger from './AccessIslandChanger'
+    import AccessIslandChanger from './accesses/AccessIslandChanger'
     export default {
         name: 'AccessesControl',
         data: () => ({

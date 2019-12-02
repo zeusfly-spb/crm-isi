@@ -41,9 +41,9 @@
                                     v-model="sortingParam"
                                     column
                             >
-                                <v-radio label="Оборот" value="income"></v-radio>
-                                <v-radio label="Часы" value="hours"></v-radio>
-                                <v-radio label="Стаж" value="standing"></v-radio>
+                                <v-radio label="Оборот" value="income"/>
+                                <v-radio label="Часы" value="hours"/>
+                                <v-radio label="Стаж" value="standing"/>
                             </v-radio-group>
                         </v-layout>
                         <v-layout>

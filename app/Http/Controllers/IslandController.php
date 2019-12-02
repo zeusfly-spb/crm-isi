@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Island;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class IslandController extends Controller
 {
@@ -14,6 +15,15 @@ class IslandController extends Controller
             'name' => $request->name,
             'description' => $request->description
         ]);
+        $island->load('users');
+        return response()->json($island->toArray());
+    }
+
+    public function update(Request $request)
+    {
+        $island = Island::find($request->id);
+        $inputs = Arr::except($request->all(), ['users']);
+        $island->update($inputs);
         $island->load('users');
         return response()->json($island->toArray());
     }

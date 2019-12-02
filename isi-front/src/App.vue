@@ -94,7 +94,10 @@ export default {
       },
       accountingDate () {
           return this.$store.state.accountingDate
-      }
+      },
+        islands () {
+            return this.$store.state.islands
+        }
 
     },
     methods: {

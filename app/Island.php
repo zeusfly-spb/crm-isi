@@ -14,9 +14,17 @@ class Island extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    public function workDays()
+    {
+        return $this->hasMany(WorkDay::class);
+    }
+
     public function users()
     {
-//        return $this->hasMany(User::class)->where('fired_at', null);
         return $this->belongsToMany(User::class);
     }
 
