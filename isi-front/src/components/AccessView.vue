@@ -50,7 +50,7 @@
         }),
         computed: {
             userIslandsIds () {
-                return this.authUser.islands && this.authUser.island.map(item => item.id)
+                return this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
             },
             authUser () {
                 return this.$store.state.authUser
