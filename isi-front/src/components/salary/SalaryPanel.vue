@@ -89,7 +89,7 @@
             },
             users () {
                 const setHourRate = (user) => {
-                    let hourRates = user.rates && user.rates.filter(item => item.type === 'hours') || []
+                    let hourRates = user.rates && user.rates.filter(item => item.type === 'hours' && item.island_id === this.workingIslandId) || []
                     let accurateRate = hourRates.find(item => item.month === this.currentMonth) && hourRates.find(item => item.month === this.currentMonth).value || null
                     if (accurateRate) {
                         user.hour_rate = accurateRate
@@ -101,7 +101,7 @@
                     return user
                 }
                 const setSalesRate = (user) => {
-                    let salesRates = user.rates && user.rates.filter(item => item.type === 'sales') || []
+                    let salesRates = user.rates && user.rates.filter(item => item.type === 'sales' && item.island_id === this.workingIslandId) || []
                     let accurateRate = salesRates.find(item => item.month === this.currentMonth) && salesRates.find(item => item.month === this.currentMonth).value || null
                     if (accurateRate) {
                         user.sales_rate = accurateRate

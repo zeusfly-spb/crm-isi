@@ -44,6 +44,9 @@
             snackColor: 'green'
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             rates () {
                 return this.user && this.user.rates
             },
@@ -79,16 +82,16 @@
             },
             updateRate () {
                 let value = +this.user[this.targetFieldName]
-                let exists = this.rates && this.rates.find(item => item.month === this.currentMonth && item.type === this.type) || null
+                let exists = this.rates && this.rates.find(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId) || null
                 let updated
                 if (exists) {
-                    updated = this.rates.map(item => item.month === this.currentMonth && item.type === this.type ? {... item, value: value} : item)
+                    updated = this.rates.map(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId ? {... item, value: value} : item)
                 } else {
                     if (this.rates) {
-                        this.rates.push({type: this.type, month: this.currentMonth, value: value})
+                        this.rates.push({type: this.type, month: this.currentMonth, island_id: this.workingIslandId, value: value})
                         updated = this.rates
                     } else {
-                        updated = [{type: this.type, month: this.currentMonth, value: value}]
+                        updated = [{type: this.type, month: this.currentMonth, island_id: this.workingIslandId, value: value}]
                     }
                 }
                 this.$store.dispatch('updateUserRates', {
