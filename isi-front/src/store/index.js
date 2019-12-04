@@ -537,7 +537,7 @@ export const store = new Vuex.Store({
             Vue.axios.post('/api/get_accesses')
                 .then(res => commit('SET_ACCESS_REQUESTS', res.data))
         },
-        checkAccess: async function ({commit, dispatch, getters}) {
+        checkAccess: async function ({commit, getters}) {
             if (getters.isSuperadmin) return
             let exists = Cookies.get('isi-access')
             if (!exists) {
@@ -587,9 +587,14 @@ export const store = new Vuex.Store({
             })
         },
         setGroups ({commit}) {
-            Vue.axios.post('/api/get_groups')
-                .then(res => commit('SET_GROUPS', res.data))
-                .catch(e => console.error(e))
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_groups')
+                    .then(res => {
+                        commit('SET_GROUPS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
         },
         deleteUser ({commit}, id) {
             return new Promise((resolve, reject) => {
@@ -626,9 +631,7 @@ export const store = new Vuex.Store({
                         commit('ADD_USER', res.data.success.user)
                         resolve(res)
                     })
-                    .catch(e => {
-                        reject(e)
-                    })
+                    .catch(e => reject(e))
             })
         },
         setUsers ({commit}) {
@@ -704,10 +707,7 @@ export const store = new Vuex.Store({
                             dispatch('setStartBalance')
                             resolve(res)
                         })
-                        .catch(e => {
-                            console.error(e)
-                            reject(e)
-                        })
+                        .catch(e => reject(e))
                 }
             })
         },
