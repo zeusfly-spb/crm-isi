@@ -321,7 +321,7 @@
             deleteLead () {
                 this.$store.dispatch('deleteLead', {lead_id: this.leadToDelete.id})
                     .then(() => {
-                        this.showSuccess(`Заявка с номера ${this.leadToDelete.phone} удалена`, 'green')
+                        this.showSuccess(`Заявка с номера ${this.$options.filters.phone(this.leadToDelete.phone)} удалена`, 'green')
                         this.confirm = false
                     })
             },

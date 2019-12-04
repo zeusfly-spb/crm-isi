@@ -208,7 +208,7 @@
                         })
                             .then(() => {
                                 this.adding = false
-                                this.$emit('updated', `Добавлен комментарий к заявке с номера ${this.lead.phone}`, 'green')
+                                this.$emit('updated', `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`, 'green')
                             })
                     })
             },
