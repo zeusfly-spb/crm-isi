@@ -96,7 +96,7 @@
                     } else {
                         hourRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
                         let prevRate = hourRates.find(item => item.month < this.currentMonth) && hourRates.find(item => item.month < this.currentMonth).value || null
-                        user.hour_rate = prevRate ? prevRate : 0
+                        user.hour_rate = prevRate || 0
                     }
                     return user
                 }
@@ -108,7 +108,19 @@
                     } else {
                         salesRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
                         let prevRate = salesRates.find(item => item.month < this.currentMonth) && salesRates.find(item => item.month < this.currentMonth).value || null
-                        user.sales_rate = prevRate ? prevRate : 0
+                        user.sales_rate = prevRate || 0
+                    }
+                    return user
+                }
+                const setChiefRate = (user) => {
+                    let chiefRates = user.rates && user.rates.filter(item => item.type === 'chief' && item.island_id === this.workingIslandId) || []
+                    let accurateRate = chiefRates.find(item => item.month === this.currentMonth) && chiefRates.find(item => item.month === this.currentMonth).value || null
+                    if (accurateRate) {
+                        user.chief_rate = accurateRate
+                    } else {
+                        chiefRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
+                        let prevRate = chiefRates.find(item => item.month < this.currentMonth) && chiefRates.find(item => item.month < this.currentMonth).value || null
+                        user.chief_rate = prevRate || 0
                     }
                     return user
                 }
@@ -120,6 +132,7 @@
                 }
                 base = base.map(user => setHourRate(user))
                 base = base.map(user => setSalesRate(user))
+                base = base.map(user => setChiefRate(user))
                 return base.sort(sortByTotalIncome)
             },
             monthData () {

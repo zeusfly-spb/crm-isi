@@ -43,7 +43,7 @@
                                 <month-rate-editor
                                     :user="user"
                                     type="hours"
-                                    v-if="isSuperadmin"
+                                    v-if="isSuperadmin && workingIslandId"
                                 />
                                 <strong v-else>{{ user.hour_rate }}</strong>
                             </td>
@@ -62,7 +62,7 @@
                                 <month-rate-editor
                                     :user="user"
                                     type="sales"
-                                    v-if="isSuperadmin"
+                                    v-if="isSuperadmin && workingIslandId"
                                 />
                                 <strong v-else>{{ user.sales_rate }}</strong>
                             </td>
@@ -81,7 +81,11 @@
                                 <strong >{{ +subDealsAmount.toFixed(2) | pretty }}</strong>
                             </td>
                             <td class="info-tab">
-                                <rate-updater v-if="isSuperadmin" :user="user" mode="chief" :caption="user.sales_rate"/>
+                                <month-rate-editor
+                                    :user="user"
+                                    type="chief"
+                                    v-if="isSuperadmin && workingIslandId"
+                                />
                                 <strong v-else>{{ user.chief_rate }}</strong>
                             </td>
                             <td class="info-tab">
