@@ -54,6 +54,17 @@ export const store = new Vuex.Store({
             let date = new Date(dateString)
             let options = {month: 'short', day: 'numeric', year: 'numeric'}
             return date.toLocaleDateString('ru-RU', options)
+        },
+        userRate: ({user, island_id, month, rate}) => {
+            let targetRates = user.rates && user.rates.filter(item => item.type === rate && item.island_id === island_id) || []
+            let accurateRate = targetRates.find(item => item.month === month) && targetRates.find(item => item.month === month).value || null
+            if (accurateRate) {
+                return accurateRate
+            } else {
+                targetRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
+                let prevRate = targetRates.find(item => item.month < month) && targetRates.find(item => item.month < month).value || null
+                return prevRate || 0
+            }
         }
     },
     actions: {

@@ -51,9 +51,15 @@
 </template>
 <script>
     export default {
-        name: 'TotalField',
+        name: 'UserTotalField',
         props: ['user'],
         computed: {
+            userIslands () {
+                return this.user && this.user.islands
+            },
+            currentMonth () {
+                return this.$store.state.accountingDate && this.$store.state.accountingDate.split('-').slice(0, 2).join('-') || null
+            },
             workdays () {
                 return this.user && this.user.monthWorkdays || []
             },
@@ -62,7 +68,9 @@
                 return this.workdays.reduce(add, 0)
             },
             totalHourAmount () {
+                const add = (a, b) => a + +b.working_hours
                 let existsIslandIds = [... new Set(this.workdays.map(item => item.island_id))]
+                let existsIslands = this.userIslands.filter(item => existsIslandIds.includes(item.id))
             },
             basePath () {
                 return this.$store.state.basePath
