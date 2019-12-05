@@ -2,7 +2,6 @@
     <tr v-show="visible">
         <td
             style="border: 1px solid black; padding: 0"
-            v-show="workingIslandId"
         >
             <v-card style="width: 30em">
                 <v-card-title>
@@ -179,10 +178,10 @@
 
             </v-card>
         </td>
-        <user-total-field
-            v-show="!workingIslandId"
-            :user="user"
-        />
+<!--        <user-total-field-->
+<!--            v-show="!workingIslandId"-->
+<!--            :user="user"-->
+<!--        />-->
         <td v-for="(date, index) in dates" :key="'main' + index"
             style="border: 1px solid black; padding: 0"
             width="5em"

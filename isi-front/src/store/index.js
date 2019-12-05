@@ -1013,7 +1013,7 @@ export const store = new Vuex.Store({
         },
         isAuth: state => !!state.authUser,
         token: () => Cookies.get('isi-token') || null,
-        isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.status === 'allowed'),
+        isAllowed: state => !!state.authUser && (state.authUser.is_superadmin || state.access && state.access.status === 'allowed'),
         isSuperadmin: state => !!state.authUser && state.authUser.is_superadmin,
         isDayOpen: state => {
             let currentDate = new Date(state.realDate).toISOString().split('T')[0]
