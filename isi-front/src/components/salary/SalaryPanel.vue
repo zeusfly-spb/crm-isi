@@ -124,15 +124,23 @@
                     }
                     return user
                 }
+                const setTotalData = (user) => {
+                    return user
+                }
                 let base =  this.monthData && this.monthData.users || []
                 const add = (a, b) => a + +b.income
                 base = base.map(item => ({... item, totalIncome: item.monthDeals.reduce(add, 0)}))
                 const sortByTotalIncome = (a, b) => {
                     return b.totalIncome - a.totalIncome
                 }
-                base = base.map(user => setHourRate(user))
-                base = base.map(user => setSalesRate(user))
-                base = base.map(user => setChiefRate(user))
+                if (this.workingIslandId) {
+                    base = base.map(user => setHourRate(user))
+                    base = base.map(user => setSalesRate(user))
+                    base = base.map(user => setChiefRate(user))
+                } else {
+                    base = base.map(user => setTotalData(user))
+                }
+
                 return base.sort(sortByTotalIncome)
             },
             monthData () {

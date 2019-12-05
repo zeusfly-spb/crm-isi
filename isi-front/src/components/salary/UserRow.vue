@@ -2,6 +2,7 @@
     <tr v-show="visible">
         <td
             style="border: 1px solid black; padding: 0"
+            v-show="workingIslandId"
         >
             <v-card style="width: 30em">
                 <v-card-title>
@@ -178,6 +179,10 @@
 
             </v-card>
         </td>
+        <user-total-field
+            v-show="!workingIslandId"
+            :user="user"
+        />
         <td v-for="(date, index) in dates" :key="'main' + index"
             style="border: 1px solid black; padding: 0"
             width="5em"
@@ -235,6 +240,7 @@
     import UserPrepays from './UserPrepays'
     import UserVacations from './UserVacations'
     import MonthRateEditor from './MonthRateEditor'
+    import UserTotalField from './UserTotalField'
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -441,7 +447,8 @@
             UserForfeits,
             UserSicks,
             UserPrepays,
-            MonthRateEditor
+            MonthRateEditor,
+            UserTotalField
         }
     }
 </script>
