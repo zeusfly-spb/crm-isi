@@ -1,12 +1,15 @@
 <template>
     <td
         style="border: 1px solid black; padding: 0"
+        align="right"
     >
         <v-card
             style="width: 30em"
             elevation="0"
         >
-            <v-card-title>
+            <v-card-title
+                class="pb-0"
+            >
                 <v-avatar
                     size="36px"
                     class="align-center"
@@ -19,7 +22,7 @@
                 </div>
             </v-card-title>
             <v-card-text
-                class="p-0"
+                class="p-0 pt-0"
             >
                 <table>
                     <tr>
@@ -38,10 +41,22 @@
                             Часы
                         </td>
                         <td class="info-tab">
-                            <strong>{{ totalHours }}</strong>
+                            <strong>{{ +totalHours.toFixed(2) | pretty }}</strong>
                         </td>
                         <td class="info-tab">
-                            <strong>{{ totalHourAmount }}</strong>
+                            <strong>{{ +totalHourAmount.toFixed(2) | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="info-tab">
+                            Оборот
+                        </td>
+                        <td class="info-tab">
+                            <strong >{{ +totalIncome.toFixed(2) | pretty }}</strong>
+                        </td>
+
+                        <td class="info-tab">
+                            <strong>{{ +totalIncomeAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -61,23 +76,40 @@
             workdays () {
                 return this.user && this.user.monthWorkdays || []
             },
+            deals () {
+                return this.user && this.user.monthDeals || []
+            },
             totalHours () {
-                const add = (a, b) => a + +b.working_hours
-                return this.workdays.reduce(add, 0)
+                return this.workdays.reduce((a, b) => a + +b.working_hours, 0)
             },
             totalHourAmount () {
-                const add = (a, b) => a + +b.working_hours
-                let existsIslandIds = [... new Set(this.workdays.map(item => item.island_id))]
-                let existsIslands = existsIslandIds.map(id => ({id: id}))
-                let withHours = existsIslands.map(island => ({
-                    ... island,
-                    hours: this.workdays.filter(workday => workday.island_id === island.id).reduce(add, 0)
-                }))
-                let withAmounts = withHours.map(island => ({
-                    ... island,
-                    amount: island.hours * this.$store.state.userRate({user: this.user, island_id: island.id, month: this.currentMonth, rate: 'hours'})
-                }))
-                return withAmounts.reduce((a, b) => a + b.amount, 0)
+                return [... new Set(this.workdays.map(item => item.island_id))]
+                    .map(id => ({id: id}))
+                    .map(island => ({
+                        ... island,
+                        hours: this.workdays.filter(workday => workday.island_id === island.id).reduce((a, b) => a + +b.working_hours, 0)
+                    }))
+                    .map(island => ({
+                        ... island,
+                        amount: island.hours * this.$store.state.userRate({user: this.user, island_id: island.id, month: this.currentMonth, rate: 'hours'})
+                    }))
+                    .reduce((a, b) => a + b.amount, 0)
+            },
+            totalIncome () {
+                return this.deals.reduce((a, b) => a + +b.income, 0)
+            },
+            totalIncomeAmount () {
+                return [... new Set(this.deals.map(deal => deal.island_id))]
+                    .map(item => ({id: item}))
+                    .map(island => ({
+                        ... island,
+                        totalDeals: this.deals.filter(deal => deal.island_id === island.id).reduce((a, b) => a + +b.income, 0)
+                    }))
+                    .map(island => ({
+                        ... island,
+                        dealsAmount: island.totalDeals * this.$store.state.userRate({user: this.user, island_id: island.id, month: this.currentMonth, rate: 'sales'})
+                    }))
+                    .reduce((a, b) => a + b.dealsAmount, 0)
             },
             basePath () {
                 return this.$store.state.basePath
