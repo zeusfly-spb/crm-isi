@@ -4,6 +4,7 @@
     >
         <v-card
             style="width: 30em"
+            elevation="0"
         >
             <v-card-title>
                 <v-avatar
@@ -26,7 +27,7 @@
                             Наименование
                         </td>
                         <td class="info-tab">
-                            Количество
+                            Всего
                         </td>
                         <td class="info-tab">
                             Сумма
@@ -40,7 +41,7 @@
                             <strong>{{ totalHours }}</strong>
                         </td>
                         <td class="info-tab">
-                            <strong>{{  }}</strong>
+                            <strong>{{ totalHourAmount }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -54,9 +55,6 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
-            userIslands () {
-                return this.user && this.user.islands
-            },
             currentMonth () {
                 return this.$store.state.accountingDate && this.$store.state.accountingDate.split('-').slice(0, 2).join('-') || null
             },
@@ -70,7 +68,16 @@
             totalHourAmount () {
                 const add = (a, b) => a + +b.working_hours
                 let existsIslandIds = [... new Set(this.workdays.map(item => item.island_id))]
-                let existsIslands = this.userIslands.filter(item => existsIslandIds.includes(item.id))
+                let existsIslands = existsIslandIds.map(id => ({id: id}))
+                let withHours = existsIslands.map(island => ({
+                    ... island,
+                    hours: this.workdays.filter(workday => workday.island_id === island.id).reduce(add, 0)
+                }))
+                let withAmounts = withHours.map(island => ({
+                    ... island,
+                    amount: island.hours * this.$store.state.userRate({user: this.user, island_id: island.id, month: this.currentMonth, rate: 'hours'})
+                }))
+                return withAmounts.reduce((a, b) => a + b.amount, 0)
             },
             basePath () {
                 return this.$store.state.basePath
@@ -78,3 +85,16 @@
         }
     }
 </script>
+<style scoped>
+    .total-tab {
+        height: 1em;
+        padding: .1em 1em!important;
+        text-align: left;
+    }
+    .info-tab {
+        height: 1em;
+        padding: .1em 1em!important;
+        text-align: right!important;
+    }
+</style>
+
