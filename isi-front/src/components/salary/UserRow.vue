@@ -3,9 +3,12 @@
         <td
             style="border: 1px solid black; padding: 0"
             v-show="workingIslandId"
+            align="right"
         >
             <v-card style="width: 30em">
-                <v-card-title>
+                <v-card-title
+                    class="pb-0"
+                >
                     <v-avatar
                         size="36px"
                         class="align-center"
@@ -17,7 +20,7 @@
                         <strong>{{ user.full_name }}</strong>
                     </div>
                 </v-card-title>
-                <v-card-text class="p-0">
+                <v-card-text class="p-0 pt-0">
                     <table>
                         <tr>
                             <td class="info-tab">

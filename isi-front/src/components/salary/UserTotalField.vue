@@ -73,6 +73,42 @@
                             <strong>{{ +controlledIslandsAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
+                    <tr v-if="totalPrizesAmount">
+                        <td class="info-tab">
+                            Премии
+                        </td>
+                        <td class="info-tab"/>
+                        <td class="info-tab">
+                            <strong>{{ totalPrizesAmount | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr v-if="totalForfeitsAmount">
+                        <td class="info-tab">
+                            Штрафы
+                        </td>
+                        <td class="info-tab"/>
+                        <td class="info-tab">
+                            <strong>{{ totalForfeitsAmount | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr v-if="totalSicksAmount">
+                        <td class="info-tab">
+                            Больничные
+                        </td>
+                        <td class="info-tab"/>
+                        <td class="info-tab">
+                            <strong>{{ totalSicksAmount | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr v-if="totalVacationsAmount">
+                        <td class="info-tab">
+                            Отпускные
+                        </td>
+                        <td class="info-tab"/>
+                        <td class="info-tab">
+                            <strong>{{ totalVacationsAmount | pretty }}</strong>
+                        </td>
+                    </tr>
                 </table>
             </v-card-text>
 
@@ -146,6 +182,18 @@
                         chiefAmount: island.dealsIncome * this.$store.state.userRate({user: this.user, month: this.currentMonth, island_id: island.id, rate: 'chief'})
                     }))
                     .reduce((a, b) => a + b.chiefAmount, 0)
+            },
+            totalPrizesAmount () {
+                return this.user && this.user.monthPrizes && this.user.monthPrizes.reduce((a, b) => a + +b.amount, 0) || 0
+            },
+            totalForfeitsAmount () {
+                return this.user && this.user.monthForfeits && this.user.monthForfeits.reduce((a, b) => a + +b.amount, 0) || 0
+            },
+            totalSicksAmount () {
+                return this.user && this.user.monthSicks && this.user.monthSicks.reduce((a, b) => a + +b.amount, 0) || 0
+            },
+            totalVacationsAmount () {
+                return this.user && this.user.monthVacations && this.user.monthVacations.reduce((a, b) => a + +b.amount, 0) || 0
             },
             basePath () {
                 return this.$store.state.basePath
