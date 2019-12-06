@@ -59,6 +59,20 @@
                             <strong>{{ +totalIncomeAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
+                    <tr
+                        v-if="isChief"
+                        class="light-blue lighten-4"
+                    >
+                        <td class="info-tab">
+                            Руководящий оборот
+                        </td>
+                        <td class="info-tab">
+                            <strong >{{ +controlledIslandsIncome.toFixed(2) | pretty }}</strong>
+                        </td>
+                        <td class="info-tab">
+                            <strong>{{ +controlledIslandsAmount.toFixed(2) | pretty }}</strong>
+                        </td>
+                    </tr>
                 </table>
             </v-card-text>
 
@@ -70,6 +84,9 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            isChief () {
+                return this.user && this.user.controlled_islands.length
+            },
             currentMonth () {
                 return this.$store.state.accountingDate && this.$store.state.accountingDate.split('-').slice(0, 2).join('-') || null
             },
@@ -110,6 +127,25 @@
                         dealsAmount: island.totalDeals * this.$store.state.userRate({user: this.user, island_id: island.id, month: this.currentMonth, rate: 'sales'})
                     }))
                     .reduce((a, b) => a + b.dealsAmount, 0)
+            },
+            controlledIslandIds () {
+                return this.user && this.user.controlled_islands.map(item => +item.id) || []
+            },
+            controlledIslandsIncome () {
+                return this.$store.state.salary.monthData.allDeals
+                    .filter(deal => this.controlledIslandIds.includes(deal.island_id))
+                    .reduce((a, b) => a + +b.income, 0)
+            },
+            controlledIslandsAmount () {
+                return this.controlledIslandIds
+                    .map(item => ({id: item}))
+                    .map(island => ({... island, deals: this.$store.state.salary.monthData.allDeals.filter(deal => deal.island_id === island.id)}))
+                    .map(island => ({... island, dealsIncome: island.deals.reduce((a, b) => a + +b.income, 0)}))
+                    .map(island => ({
+                        ... island,
+                        chiefAmount: island.dealsIncome * this.$store.state.userRate({user: this.user, month: this.currentMonth, island_id: island.id, rate: 'chief'})
+                    }))
+                    .reduce((a, b) => a + b.chiefAmount, 0)
             },
             basePath () {
                 return this.$store.state.basePath
