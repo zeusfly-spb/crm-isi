@@ -73,7 +73,7 @@
                             <strong>{{ +controlledIslandsAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
-                    <tr v-if="totalPrizesAmount">
+                    <tr>
                         <td class="info-tab">
                             Премии
                         </td>
@@ -82,7 +82,7 @@
                             <strong>{{ totalPrizesAmount | pretty }}</strong>
                         </td>
                     </tr>
-                    <tr v-if="totalForfeitsAmount">
+                    <tr>
                         <td class="info-tab">
                             Штрафы
                         </td>
@@ -91,7 +91,7 @@
                             <strong>{{ totalForfeitsAmount | pretty }}</strong>
                         </td>
                     </tr>
-                    <tr v-if="totalSicksAmount">
+                    <tr>
                         <td class="info-tab">
                             Больничные
                         </td>
@@ -100,13 +100,43 @@
                             <strong>{{ totalSicksAmount | pretty }}</strong>
                         </td>
                     </tr>
-                    <tr v-if="totalVacationsAmount">
+                    <tr>
                         <td class="info-tab">
                             Отпускные
                         </td>
                         <td class="info-tab"/>
                         <td class="info-tab">
                             <strong>{{ totalVacationsAmount | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="total-tab"
+                            colspan="2"
+                        >
+                            <strong>ИТОГО</strong>
+                        </td>
+                        <td class="info-tab">
+                            <strong>{{ +grandTotal.toFixed(2) | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="total-tab"
+                            colspan="2"
+                        >
+                            <strong>Остаток</strong>
+                        </td>
+                        <td class="info-tab">
+                            <strong>{{ +(grandTotal - totalPrepaysAmount).toFixed(2) | pretty }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="total-tab"
+                            colspan="2"
+                        >
+                            <strong>Выдано</strong>
+                        </td>
+                        <td class="info-tab">
+                            <strong>{{ +totalPrepaysAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -120,6 +150,9 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            grandTotal () {
+                return this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount + this.totalSicksAmount + this.totalVacationsAmount
+            },
             isChief () {
                 return this.user && this.user.controlled_islands.length
             },
@@ -175,13 +208,16 @@
             controlledIslandsAmount () {
                 return this.controlledIslandIds
                     .map(item => ({id: item}))
-                    .map(island => ({... island, deals: this.$store.state.salary.monthData.allDeals.filter(deal => deal.island_id === island.id)}))
+                    .map(island => ({... island, deals: this.$store.state.salary.monthData.allDeals.filter(deal => deal.island_id === island.id && deal.user_id !== this.user.id)}))
                     .map(island => ({... island, dealsIncome: island.deals.reduce((a, b) => a + +b.income, 0)}))
                     .map(island => ({
                         ... island,
                         chiefAmount: island.dealsIncome * this.$store.state.userRate({user: this.user, month: this.currentMonth, island_id: island.id, rate: 'chief'})
                     }))
                     .reduce((a, b) => a + b.chiefAmount, 0)
+            },
+            totalPrepaysAmount () {
+                return this.user && this.user.monthPrepays && this.user.monthPrepays.reduce((a, b) => a + +b.amount, 0) || 0
             },
             totalPrizesAmount () {
                 return this.user && this.user.monthPrizes && this.user.monthPrizes.reduce((a, b) => a + +b.amount, 0) || 0

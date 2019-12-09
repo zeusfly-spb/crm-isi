@@ -236,7 +236,6 @@
     </tr>
 </template>
 <script>
-    import RateUpdater from './RateUpdater'
     import UserPrizes from './UserPrizes'
     import UserForfeits from './UserForfeits'
     import UserSicks from './UserSicks'
@@ -445,7 +444,6 @@
         },
         components: {
             UserVacations,
-            RateUpdater,
             UserPrizes,
             UserForfeits,
             UserSicks,
