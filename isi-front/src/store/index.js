@@ -913,9 +913,6 @@ export const store = new Vuex.Store({
         SET_WORK_DAYS (state, workdays) {
             state.workdays = workdays
         },
-        // SET_OWN_ISLAND_AS_WORKING (state) {
-        //     state.workingIslandId = state.authUser.island_id
-        // },
         SET_WORKING_ISLAND_ID (state, id) {
             state.workingIslandId = id
         },

@@ -65,6 +65,9 @@ export default {
         timerId: null
     }),
     computed: {
+        statData () {
+            return this.$store.state.salary.statData
+        },
         currentIsland () {
             return this.$store.getters.workingIsland
         },

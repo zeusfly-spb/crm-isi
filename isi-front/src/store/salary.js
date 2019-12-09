@@ -4,6 +4,7 @@ export default {
     state: {
         monthData: null,
         mustUpdate: false,
+        statData: null
     },
     actions: {
         updateUserRates ({commit}, data) {
@@ -149,7 +150,10 @@ export default {
                     date: rootState.accountingDate
                 })
                     .then(res => {
-                        commit('SET_MONTH_DATA', res.data)
+                        commit('SET_MONTH_DATA', JSON.parse(JSON.stringify(res.data)))
+                        if (!rootState.workingIslandId) {
+                            commit('SET_STAT_DATA', res.data)
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -158,6 +162,9 @@ export default {
         }
     },
     mutations: {
+        SET_STAT_DATA (state, data) {
+            state.statData = data
+        },
         UPDATE_MONTH_USER (state, user) {
             let firstDate = state.monthData.dates[0]
             let lastDate = state.monthData.dates[state.monthData.dates.length - 1]

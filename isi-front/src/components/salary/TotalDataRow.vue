@@ -3,6 +3,7 @@
         <td
             style="border: 1px solid black; padding: 0; height: 3em!important; width: 30em !important"
             align="right"
+            v-if="!busy"
         >
             <table>
                 <tr
@@ -52,7 +53,16 @@
                 </tr>
             </table>
         </td>
+        <td v-else
+            align="center"
+        >
+            Загрузка... &nbsp;
+            <v-progress-circular
+                indeterminate
+            />
+        </td>
         <td
+            v-if="!busy"
             v-for="(date, index) in dates"
             :key="index"
             width="5em"
@@ -98,6 +108,9 @@
         name: 'TotalDataRow',
         props: ['dates'],
         computed: {
+            busy () {
+                return this.$store.getters.busy
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
