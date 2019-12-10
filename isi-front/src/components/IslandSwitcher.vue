@@ -81,10 +81,14 @@
                 let result = this.$store.state.islands
                 const add = (a, b) => a + b.income
                 const sumHours = (a, b) => a + +b.working_hours
-                const addCharges = (user) => {
+                const addCharges = ({user, island_id}) => {
                     let userRow = this.monthData && this.monthData.users && this.monthData.users.find(item => item.id === user.id) || null
-                    let totalIncome = userRow && userRow.monthDeals && userRow.monthDeals.reduce(add, 0) || 0
-                    let totalHours = userRow && userRow.monthWorkdays && userRow.monthWorkdays.reduce(sumHours, 0) || 0
+                    let totalIncome = userRow && userRow.deals && userRow.deals
+                        .filter(deal => deal.island_id === island_id)
+                        .reduce(add, 0) || 0
+                    let totalHours = userRow && userRow.workdays && userRow.workdays
+                        .filter(workday => workday.island_id === island_id)
+                        .reduce(sumHours, 0) || 0
                     return {...user, totalIncome: totalIncome, totalHours: totalHours}
                 }
                 const sortByIncome = (a, b) => {
@@ -101,11 +105,11 @@
                     return a.created_at < b.created_at ? -1 : a.created_at > b.created_at ? 1 : 0
                 }
                 const riseChief = (island) => {
-                        const byChiefId = (a, b) => a.id === island.chief_id ? -1 : 1
+                    const byChiefId = (a, b) => a.id === island.chief_id ? -1 : 1
                     island.users = island.users.sort(byChiefId)
                     return island
                 }
-                result =  result.map(island => ({...island, users: island.users.map(user => addCharges(user))}))
+                result =  result.map(island => ({...island, users: island.users.map(user => addCharges({user: user, island_id: island.id}))}))
                 switch (this.sortingParam) {
                     case 'income': result = result.map(island => ({...island, users: island.users.sort(sortByIncome)}))
                         break
