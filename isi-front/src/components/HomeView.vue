@@ -103,9 +103,7 @@
                 switch (index) {
                     case 0: this.$store.commit('SET_SCAN_MODE', {...this.scanMode, workdays: true, expenses: true, deals: true})
                         this.$store.dispatch('setCurrentPage', 'daily')
-                        if (!this.savedPage && this.switchCount === 1 || this.switchCount > 1 && !!this.savedPage) {
-                            this.$store.dispatch('changeSavedPage', 'daily')
-                        }
+                        this.$store.dispatch('changeSavedPage', 'daily')
                         break
                     case 1: this.$store.dispatch('setCustomers')
                         this.$store.dispatch('setCurrentPage', 'customers')
