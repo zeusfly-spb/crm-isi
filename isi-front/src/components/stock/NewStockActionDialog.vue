@@ -101,6 +101,7 @@
                         color="primary darken-1"
                         flat="flat"
                         @click="saveAction"
+                        :disabled="!availableAction"
                     >
                         Добавить
                     </v-btn>
@@ -115,6 +116,7 @@
         data: () => ({
             newActionData: {},
             dialog: false,
+            availableAction: true,
             actionTypes: [
                 {text: 'Приход', type: 'receipt'},
                 {text: 'Расход', type: 'expense'}
@@ -157,8 +159,9 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.availableAction = false
                         this.$store.dispatch('addStockAction', this.newActionData)
-                            .then(() => this.dialog = false)
+                            .then(() => [this.dialog, this.availableAction] = [false, true])
                     })
             },
             showDialog () {
