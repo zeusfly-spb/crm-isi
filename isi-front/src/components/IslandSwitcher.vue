@@ -81,13 +81,15 @@
                 let result = this.$store.state.islands
                 const add = (a, b) => a + b.income
                 const sumHours = (a, b) => a + +b.working_hours
+                const getDate = (timestamp) => timestamp.split(' ')[0]
+                let dates = {start: this.monthData && this.monthData.dates[0], end: this.monthData && this.monthData.dates[this.monthData.dates.length - 1]}
                 const addCharges = ({user, island_id}) => {
                     let userRow = this.monthData && this.monthData.users && this.monthData.users.find(item => item.id === user.id) || null
                     let totalIncome = userRow && userRow.deals && userRow.deals
-                        .filter(deal => deal.island_id === island_id)
+                        .filter(deal => deal.island_id === island_id && getDate(deal.created_at) >= dates.start && getDate(deal.created_at) <= dates.end)
                         .reduce(add, 0) || 0
                     let totalHours = userRow && userRow.workdays && userRow.workdays
-                        .filter(workday => workday.island_id === island_id)
+                        .filter(workday => workday.island_id === island_id && getDate(workday.created_at) >= dates.start && getDate(workday.created_at) <= dates.end)
                         .reduce(sumHours, 0) || 0
                     return {...user, totalIncome: totalIncome, totalHours: totalHours}
                 }

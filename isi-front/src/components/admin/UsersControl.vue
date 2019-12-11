@@ -278,8 +278,8 @@
         <v-dialog v-model="confirm"
                   max-width="500"
         >
-            <v-card>
-                <v-card-title class="subheading">
+            <v-card class="round-corner">
+                <v-card-title class="subheading light-blue darken-3 white--text">
                     {{ confirmText }}
                 </v-card-title>
                 <v-card-actions>
