@@ -131,23 +131,28 @@
             switch (this.savedPage) {
                 case 'daily':
                     this.tabControl = 0
+                    this.$store.dispatch('setCurrentPage', 'daily')
                     break
                 case 'customers':
                     this.tabControl = 1
+                    this.$store.dispatch('setCurrentPage', 'customers')
                     break
                 case 'stock':
                     this.tabControl = 2
+                    this.$store.dispatch('setCurrentPage', 'stock')
                     break
                 case 'leads':
                     this.tabControl = 3
+                    this.$store.dispatch('setCurrentPage', 'leads')
                     break
                 case 'salary':
                     this.tabControl = 4
+                    this.$store.dispatch('setCurrentPage', 'salary')
                     break
                 case 'admin':
                     this.tabControl = 5
+                    this.$store.dispatch('setCurrentPage', 'admin')
                     break
-
             }
         },
         watch: {
