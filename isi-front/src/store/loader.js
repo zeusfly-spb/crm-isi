@@ -1,12 +1,22 @@
+const Cookies = require('js-cookie')
 import Vue from 'vue'
 
 export default {
     state: {
         leads: [],
         beep: false,
-        withDone: false
+        withDone: false,
+        savedPage: null
     },
     actions: {
+        setSavedPage ({commit}) {
+            let savedPage = Cookies.get('saved-page') || null
+            commit('CHANGE_SAVED_PAGE', savedPage)
+        },
+        changeSavedPage ({commit}, page) {
+            Cookies.set('saved-page', page)
+            commit('CHANGE_SAVED_PAGE', page)
+        },
         updateAccessIsland ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_access_island', {... data})
@@ -278,6 +288,9 @@ export default {
         }
     },
     mutations: {
+        CHANGE_SAVED_PAGE (state, page) {
+            state.savedPage = page
+        },
         SET_DONE_MODE (state, done) {
             state.withDone = done
         },

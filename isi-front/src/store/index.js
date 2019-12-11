@@ -998,6 +998,7 @@ export const store = new Vuex.Store({
 
             Cookies.remove('accounting_date')
             Cookies.remove('isi-token')
+            Cookies.remove('saved-page')
             delete Vue.axios.defaults.headers.common['Authorization']
             state.authUser = null
             state.status = 'logout'

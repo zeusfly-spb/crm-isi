@@ -1,7 +1,9 @@
 <template>
     <v-flex align-center row>
-        <v-tabs fixed-tabs
-                @change="loadContent"
+        <v-tabs
+            fixed-tabs
+            @change="loadContent"
+            v-model="tabControl"
         >
             <v-tab
                 v-for="(item, index) in tabs"
@@ -48,9 +50,14 @@
     export default {
         name: 'HomeView',
         data: () => ({
-            adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование']
+            adminTabs: ['Учет на день', 'База клиентов', 'Склад', 'Заявки', 'Зарплата', 'Администрирование'],
+            switchCount: 0,
+            tabControl: 0
         }),
         computed: {
+            savedPage () {
+                return this.$store.state.loader.savedPage
+            },
             access () {
                 return this.$store.state.access
             },
@@ -85,6 +92,7 @@
         },
         methods: {
             loadContent (index) {
+                this.switchCount++
                 this.$store.commit('SET_SCAN_MODE', {
                     workdays: false,
                     accesses: false,
@@ -95,19 +103,53 @@
                 switch (index) {
                     case 0: this.$store.commit('SET_SCAN_MODE', {...this.scanMode, workdays: true, expenses: true, deals: true})
                         this.$store.dispatch('setCurrentPage', 'daily')
+                        if (!this.savedPage && this.switchCount === 1 || this.switchCount > 1 && !!this.savedPage) {
+                            this.$store.dispatch('changeSavedPage', 'daily')
+                        }
                         break
                     case 1: this.$store.dispatch('setCustomers')
                         this.$store.dispatch('setCurrentPage', 'customers')
+                        this.$store.dispatch('changeSavedPage', 'customers')
                         break
                     case 2: this.$store.dispatch('setCurrentPage', 'stock')
+                        this.$store.dispatch('changeSavedPage', 'stock')
                         break
                     case 3: this.$store.dispatch('setCurrentPage', 'leads')
+                        this.$store.dispatch('changeSavedPage', 'leads')
                         break
                     case 4: this.$store.dispatch('setCurrentPage', 'salary')
+                        this.$store.dispatch('changeSavedPage', 'salary')
                         break
                     case 5: this.$store.dispatch('setCurrentPage', 'admin')
+                        this.$store.dispatch('changeSavedPage', 'admin')
                         break
                 }
+            }
+        },
+        beforeCreate () {
+            this.$store.dispatch('setSavedPage')
+        },
+        created () {
+            switch (this.savedPage) {
+                case 'daily':
+                    this.tabControl = 0
+                    break
+                case 'customers':
+                    this.tabControl = 1
+                    break
+                case 'stock':
+                    this.tabControl = 2
+                    break
+                case 'leads':
+                    this.tabControl = 3
+                    break
+                case 'salary':
+                    this.tabControl = 4
+                    break
+                case 'admin':
+                    this.tabControl = 5
+                    break
+
             }
         },
         watch: {
