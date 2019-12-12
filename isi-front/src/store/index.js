@@ -931,9 +931,6 @@ export const store = new Vuex.Store({
         REMOVE_ACCESS_REQUEST (state, accessId) {
             state.accessRequests = state.accessRequests.filter(item => item.id !== accessId)
         },
-        SET_AUTH_USER_ISLAND (state, islandId) {
-            state.authUser = {... state.authUser, island_id: islandId}
-        },
         ADD_ISLAND(state, island) {
             state.islands.push(island)
         },
