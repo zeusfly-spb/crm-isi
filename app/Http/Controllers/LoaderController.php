@@ -18,9 +18,7 @@ class LoaderController extends Controller
 
         $workdaysBuilder = WorkDay::with('user', 'timeBreaks')->whereDate('date', $request->date);
         if ($island_id > 0) {
-            $workdaysBuilder = $workdaysBuilder->whereHas('user', function($query) use ($island_id) {
-                $query->where('island_id', $island_id);
-            });
+            $workdaysBuilder = $workdaysBuilder->where('island_id', $island_id);
         }
         $workdays = $workdaysBuilder->get()->toArray();
 
