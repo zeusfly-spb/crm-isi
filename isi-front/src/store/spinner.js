@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
-        currentPage: '',
+        currentPage: 'daily',
         tasks: []
     },
     actions: {

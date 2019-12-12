@@ -122,40 +122,22 @@
                         this.$store.dispatch('changeSavedPage', 'admin')
                         break
                 }
+            },
+            restoreSavedPage () {
+                if (this.savedPage === this.$store.state.spinner.currentPage) return
+                this.tabControl = {daily: 0, customers: 1, stock: 2, leads: 3, salary: 4, admin: 5}[this.savedPage]
+                this.$store.dispatch('setCurrentPage', this.savedPage)
             }
         },
         beforeCreate () {
             this.$store.dispatch('setSavedPage')
         },
-        created () {
-            switch (this.savedPage) {
-                case 'daily':
-                    this.tabControl = 0
-                    this.$store.dispatch('setCurrentPage', 'daily')
-                    break
-                case 'customers':
-                    this.tabControl = 1
-                    this.$store.dispatch('setCurrentPage', 'customers')
-                    break
-                case 'stock':
-                    this.tabControl = 2
-                    this.$store.dispatch('setCurrentPage', 'stock')
-                    break
-                case 'leads':
-                    this.tabControl = 3
-                    this.$store.dispatch('setCurrentPage', 'leads')
-                    break
-                case 'salary':
-                    this.tabControl = 4
-                    this.$store.dispatch('setCurrentPage', 'salary')
-                    break
-                case 'admin':
-                    this.tabControl = 5
-                    this.$store.dispatch('setCurrentPage', 'admin')
-                    break
-            }
-        },
         watch: {
+            user (val) {
+                if (!!val) {
+                    this.restoreSavedPage()
+                }
+            },
             access (val) {
                 let userIslandIds = this.user && this.user.islands.length && this.user.islands.map(item => item.id) || []
                 if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
