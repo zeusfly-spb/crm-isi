@@ -9,6 +9,35 @@ export default {
         savedPage: null
     },
     actions: {
+        priorPrepare ({commit, dispatch, state}) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/prior_prepare')
+                    .then(res => {
+                        let now = new Date().toISOString().split('T')[0]
+                        let savedRealDate = Cookies.get('saved_real')
+                        if (!savedRealDate) {
+                            Cookies.set('saved_real', now)
+                        } else if (savedRealDate < now) {
+                            Cookies.set('saved_real', now)
+                            Cookies.set('accounting_date', now)
+                        }
+                        let savedDate = Cookies.get('accounting_date')
+                        if (savedDate) {
+                            commit('SET_ACCOUNTING_DATE', savedDate)
+                        } else {
+                            commit('SET_ACCOUNTING_DATE', res.data.date)
+                        }
+                        dispatch('setStartBalance')
+                        commit('SET_REAL_DATE', res.data.date)
+                        if (res.data.setting) {
+                            commit('SET_SETTING', res.data.setting)
+                        }
+                        commit('SET_ISLANDS', res.data.islands)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setSavedPage ({commit}) {
             let savedPage = Cookies.get('saved-page') || null
             commit('CHANGE_SAVED_PAGE', savedPage)

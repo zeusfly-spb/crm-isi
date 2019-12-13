@@ -398,29 +398,30 @@ export const store = new Vuex.Store({
             })
         },
         enterCRM ({dispatch}) {
-                dispatch('setAccountingDate')
-                    .then(() => {
-                        // daily page
-                        dispatch('setRealDate')
-                            .then(() => {
-                                dispatch('setIslands')
-                                    .then(() => {
-                                        dispatch('loadDailyPage')
-                                            .then(() => {
-                                                // other pages
-                                                dispatch('setUsers')
-                                                dispatch('setGroups')
-                                                dispatch('startScanTimer')
-                                                dispatch('setCustomers')
-                                                dispatch('setReserves')
-                                                dispatch('setStockActions')
-                                                dispatch('setStockOptions')
-                                                dispatch('setMonthData')
-                                                dispatch('setLeads')
-                                            })
-                                    })
-                            })
-                    })
+                // dispatch('setAccountingDate')
+                //     .then(() => {
+                //         // daily page
+                //         dispatch('setRealDate')
+                //             .then(() => {
+                //                 dispatch('setIslands')
+            dispatch('priorPrepare')
+                .then(() => {
+                    dispatch('loadDailyPage')
+                        .then(() => {
+                            // other pages
+                            dispatch('setUsers')
+                            dispatch('setGroups')
+                            dispatch('startScanTimer')
+                            dispatch('setCustomers')
+                            dispatch('setReserves')
+                            dispatch('setStockActions')
+                            dispatch('setStockOptions')
+                            dispatch('setMonthData')
+                            dispatch('setLeads')
+                        })
+                })
+                            // })
+                    // })
         },
         setWorkDays ({commit}) {
             return new Promise((resolve, reject) => {
@@ -819,24 +820,20 @@ export const store = new Vuex.Store({
             let anotherMonth = new Date(state.accountingDate).getMonth() !== new Date(date).getMonth()
             Cookies.set('accounting_date', date)
             commit('SET_ACCOUNTING_DATE', date)
-            dispatch('setAccountingDate')
+            dispatch('priorPrepare')
                 .then(() => {
-                    dispatch('setRealDate')
-                        .then(() => dispatch('setIslands')
-                            .then(() => {
-                                switch (getters.currentPage) {
-                                    case 'daily': loadDailyPage()
-                                        break
-                                    case 'salary': loadSalaryPage()
-                                        break
-                                    case 'stock': loadStockPage()
-                                        break
-                                    case 'customers': loadCustomersPage()
-                                        break
-                                    case 'admin': loadAdminPage()
-                                        break
-                                }
-                            }))
+                    switch (getters.currentPage) {
+                        case 'daily': loadDailyPage()
+                            break
+                        case 'salary': loadSalaryPage()
+                            break
+                        case 'stock': loadStockPage()
+                            break
+                        case 'customers': loadCustomersPage()
+                            break
+                        case 'admin': loadAdminPage()
+                            break
+                    }
                 })
         }
     },

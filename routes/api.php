@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     // LOADER
     Route::post('load_daily_page', 'LoaderController@loadDailyPage');
+    Route::post('prior_prepare', 'LoaderController@priorPrepare');
 
     // DOCUMENT PACK
     Route::post('upload_image', 'DocumentPackController@updateImage');

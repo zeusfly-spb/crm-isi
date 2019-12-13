@@ -8,9 +8,23 @@ use App\HandOver;
 use App\WorkDay;
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use App\Island;
 
 class LoaderController extends Controller
 {
+    public function priorPrepare()
+    {
+        $result = ['date' => now()->toDateString()];
+        $setting = Setting::find(1);
+        if ($setting) {
+            $result = Arr::add($result, 'setting', $setting->toArray());
+        }
+        $islands = Island::with('users')->get();
+        $result = Arr::add($result, 'islands', $islands->toArray());
+        return response()->json($result);
+    }
+
     public function loadDailyPage(Request $request)
     {
         $date = $request->date;
