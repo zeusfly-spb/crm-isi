@@ -5,7 +5,6 @@
         centered
         slider-color="green"
         height="70"
-        @change="setCurrentIslandId"
         hide-slider
     >
         <v-tab
@@ -145,9 +144,6 @@
                     return [... tab.users.slice(0, this.maxAvaCount), {avatar: 'plus'}]
                 }
                 return  tab.users
-            },
-            setCurrentIslandId (index) {
-                this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
             },
             changeCurrentIslandId (id) {
                 this.$store.dispatch('setWorkingIslandId', id)

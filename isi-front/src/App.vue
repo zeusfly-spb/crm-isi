@@ -6,6 +6,7 @@
             <v-avatar
                       color="white"
                       style="box-shadow: black"
+                      v-if="isAuth"
             >
                 <img
                     v-if="isAuth && !authUser.is_superadmin && authUser.avatar"
@@ -49,8 +50,38 @@
 
     <v-content>
         <call-reminder/>
+        <query-inspector/>
         <v-progress-linear :indeterminate="true" v-if="loading"/>
-        <router-view></router-view>
+        <v-flex align-center row>
+            <v-tabs
+                v-if="isAuth"
+                fixed-tabs
+            >
+                <v-tab
+                    v-for="(tab, index) in tabs"
+                    :to="{path: tab.href, query: {... $route.query}}"
+                    :key="index"
+                    router
+                >
+                    <v-badge color="red"
+                             v-if="tab.href === '/leads' && waitingLeadsCount"
+                    >
+                        <template v-slot:badge>
+                            <span>{{ waitingLeadsCount }}</span>
+                        </template>
+                        {{ tab.title }}
+                    </v-badge>
+                    <span v-else>{{ tab.title }}</span>
+                </v-tab>
+            </v-tabs>
+            <audio
+                :src="`${basePath}/beep.wav`" autoplay
+                v-if="beep"
+            />
+        </v-flex>
+        <transition name="slide-right">
+            <router-view/>
+        </transition>
     </v-content>
   </v-app>
 </template>
@@ -58,18 +89,36 @@
 <script>
 import DateSelector from './components/DateSelector'
 import CallReminder from './components/leads/CallReminder'
+import QueryInspector from './components/QueryInspector'
 import $ from 'jquery'
 export default {
     name: 'App',
     data: () => ({
-        timerId: null
+        timerId: null,
+        adminTabs: [
+            {title: 'Учет на день', href: '/daily'},
+            {title: 'База клиентов', href: '/customers' },
+            {title: 'Склад', href: '/stock'},
+            {title: 'Заявки', href: '/leads'},
+            {title: 'Зарплата', href: '/salary'},
+            {title: 'Администрация', href: '/admin'}
+        ]
     }),
     computed: {
-        savedPage () {
-            return this.$store.state.loader.savedPage
+        beep () {
+            return this.$store.state.loader.beep
         },
-        currentIsland () {
-            return this.$store.getters.workingIsland
+        salaryVisible () {
+            return this.$store.state.settings.data.salaryPage.visible
+        },
+        regularTabs () {
+            return this.salaryVisible ? this.adminTabs.filter(item => item.href !== '/admin') : this.adminTabs.filter(item => item.href !== '/salary' && item.href !== '/admin')
+        },
+        tabs () {
+            return this.isSuperadmin ? this.adminTabs : this.regularTabs
+        },
+        isSuperadmin () {
+            return this.$store.getters.isSuperadmin
         },
         access () {
             return this.$store.state.access
@@ -145,7 +194,8 @@ export default {
     },
     components: {
         DateSelector,
-        CallReminder
+        CallReminder,
+        QueryInspector
     }
 }
 </script>

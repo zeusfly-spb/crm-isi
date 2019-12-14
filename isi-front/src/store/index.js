@@ -398,12 +398,6 @@ export const store = new Vuex.Store({
             })
         },
         enterCRM ({dispatch}) {
-                // dispatch('setAccountingDate')
-                //     .then(() => {
-                //         // daily page
-                //         dispatch('setRealDate')
-                //             .then(() => {
-                //                 dispatch('setIslands')
             dispatch('priorPrepare')
                 .then(() => {
                     dispatch('loadDailyPage')
@@ -420,8 +414,6 @@ export const store = new Vuex.Store({
                             dispatch('setLeads')
                         })
                 })
-                            // })
-                    // })
         },
         setWorkDays ({commit}) {
             return new Promise((resolve, reject) => {

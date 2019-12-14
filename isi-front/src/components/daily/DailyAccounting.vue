@@ -34,6 +34,9 @@
             snackColor: 'green'
         }),
         computed: {
+            isAuth () {
+                return this.$store.getters.isAuth
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             }

@@ -71,7 +71,7 @@
                                         .then(() => {
                                             if (this.$store.getters.isAllowed || this.$store.state.access === 'allowed') {
                                                 this.$store.dispatch('enterCRM')
-                                                    .then(() => this.$router.push('/home'))
+                                                    .then(() => this.$router.push('/daily'))
                                             } else {
                                                 this.$router.push('/access')
                                             }
@@ -84,6 +84,11 @@
                             })
                     })
 
+            }
+        },
+        beforeMount() {
+            if (this.$store.getters.isAuth) {
+                this.$router.push('/daily')
             }
         }
     }

@@ -180,13 +180,8 @@
                 let date = new Date(textDate)
                 let options = {month: 'short', day: 'numeric'}
                 return date.toLocaleDateString('ru-RU', options)
-            },
-            setCurrentIslandId (index) {
-                this.$store.dispatch('setWorkingIslandId', this.tabs[index].id)
-            },
-            changeCurrentIslandId (id) {
-                this.$store.dispatch('setWorkingIslandId', id)
             }
+
         },
         watch: {
             dates (val) {

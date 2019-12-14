@@ -25,14 +25,14 @@
                         prepend-icon="event"
                         readonly
                         v-on="on"
-                    ></v-text-field>
+                    />
                 </template>
-                <v-date-picker v-model="date" no-title scrollable
-                               @change="datePicked"
-                               locale="ru"
-                               first-day-of-week="1"
-                >
-                </v-date-picker>
+                <v-date-picker
+                    v-model="date" no-title scrollable
+                    @change="datePicked"
+                    locale="ru"
+                    first-day-of-week="1"
+                />
             </v-menu>
         </div>
         <v-btn
