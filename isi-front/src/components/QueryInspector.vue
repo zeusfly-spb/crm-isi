@@ -43,26 +43,6 @@
                         }
                     }
                 }
-                if (!this.islands || !this.islands.length) return
-                if (val.island) {
-                    if (this.islandIds.length && this.islandIds.includes(+val.island)) {
-                        if (+this.$store.state.workingIslandId !== +val.island) {
-                            this.$store.dispatch('setWorkingIslandId', +val.island)
-                        }
-                    } else {
-                        if (!this.$store.state.workingIslandId) {
-                            let removed = {}
-                            for (let key in this.$route.query) {
-                                if (key !== 'island') {
-                                    removed[key] = this.$route[key]
-                                }
-                            }
-                            this.$router.replace({query: removed})
-                        } else {
-                            this.$router.replace({query: {... this.$route.query, island: this.$store.state.workingIslandId}})
-                        }
-                    }
-                }
             }
         },
         mounted () {
@@ -71,7 +51,7 @@
         watch: {
             islands (val) {
                 if (val && val.length) {
-                    if (this.$route.query.island && this.islandIds.includes(+this.$route.query.island)) {
+                    if (this.$route.query.island && this.islandIds.includes(+this.$route.query.island) && this.workingIslandId !== +this.$route.query.island) {
                         this.$store.dispatch('setWorkingIslandId', +this.$route.query.island)
                     }
                 }
