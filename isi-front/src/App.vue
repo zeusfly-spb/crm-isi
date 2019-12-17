@@ -192,6 +192,14 @@ export default {
             }, 2000)
         });
     },
+    watch: {
+        access (val) {
+            let userIslandIds = this.authUser && this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
+            if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
+                this.$router.push({path: '/access', query: this.$route.query})
+            }
+        }
+    },
     components: {
         DateSelector,
         CallReminder,
