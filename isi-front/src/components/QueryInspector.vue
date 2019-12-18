@@ -43,6 +43,9 @@
                         }
                     }
                 }
+                if (val.island) {
+                    this.$router.replace({query: {... this.$route.query, island: val.island}})
+                }
             }
         },
         mounted () {
@@ -59,8 +62,6 @@
             workingIslandId (val) {
                 if (+val) {
                     this.$router.replace({query: {... this.$route.query, island: val}})
-                } else {
-                    this.$router.replace({query: {... this.$route.query, island: 0}})
                 }
             },
             accountingDate (val) {

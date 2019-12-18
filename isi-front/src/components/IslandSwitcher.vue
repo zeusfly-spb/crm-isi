@@ -147,6 +147,7 @@
             },
             changeCurrentIslandId (id) {
                 this.$store.dispatch('setWorkingIslandId', id)
+                this.$router.replace({query: {... this.$route.query, island: id}})
             }
         }
     }
