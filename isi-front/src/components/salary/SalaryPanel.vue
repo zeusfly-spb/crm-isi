@@ -115,11 +115,15 @@
                 const setChiefRate = (user) => {
                     let chiefRates = user.rates && user.rates.filter(item => item.type === 'chief' && item.island_id === this.workingIslandId) || []
                     let accurateRate = chiefRates.find(item => item.month === this.currentMonth) && chiefRates.find(item => item.month === this.currentMonth).value || null
+                    console.dir(chiefRates)
+                    console.log(this.currentMonth, 'текущий месяц')
                     if (accurateRate) {
                         user.chief_rate = accurateRate
+                        console.log(accurateRate, ' точный')
                     } else {
                         chiefRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
                         let prevRate = chiefRates.find(item => item.month < this.currentMonth) && chiefRates.find(item => item.month < this.currentMonth).value || null
+                        console.log(prevRate, ' предыдущий')
                         user.chief_rate = prevRate || 0
                     }
                     return user

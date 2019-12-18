@@ -219,9 +219,8 @@ class UserController extends Controller
 
     public function updateRates(Request $request)
     {
-        $user = User::find($request->user_id);
+        $user = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')->find($request->user_id);
         $user->update(['rates' => $request->rates]);
-        $user->load('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations');
         return response()->json($user->toArray());
     }
 }
