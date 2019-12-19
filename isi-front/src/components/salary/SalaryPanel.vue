@@ -88,37 +88,13 @@
                 return this.monthData && this.monthData.dates.filter(item => new Date(item) < tomorrow)
             },
             users () {
-                const setHourRate = (user) => {
-                    let hourRates = user.rates && user.rates.filter(item => item.type === 'hours' && item.island_id === this.workingIslandId) || []
-                    let accurateRate = hourRates.find(item => item.month === this.currentMonth) && hourRates.find(item => item.month === this.currentMonth).value || null
-                    if (accurateRate) {
-                        user.hour_rate = accurateRate
-                    } else {
-                        hourRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
-                        let prevRate = hourRates.find(item => item.month < this.currentMonth) && hourRates.find(item => item.month < this.currentMonth).value || null
-                        user.hour_rate = prevRate || 0
-                    }
-                    return user
-                }
-                const setSalesRate = (user) => {
-                    let salesRates = user.rates && user.rates.filter(item => item.type === 'sales' && item.island_id === this.workingIslandId) || []
-                    let accurateRate = salesRates.find(item => item.month === this.currentMonth) && salesRates.find(item => item.month === this.currentMonth).value || null
-                    if (accurateRate) {
-                        user.sales_rate = accurateRate
-                    } else {
-                        salesRates.sort((a, b) => a.month < b.month ? 1 : a.month > b.month ? -1 : 0)
-                        let prevRate = salesRates.find(item => item.month < this.currentMonth) && salesRates.find(item => item.month < this.currentMonth).value || null
-                        user.sales_rate = prevRate || 0
-                    }
-                    return user
-                }
-                const setChiefRate = (user) => {
+                const setUserRates = (user) => {
+                    user.hour_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'hours'})
+                    user.sales_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'sales'})
                     user.chief_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'chief'})
                     return user
                 }
-                const setTotalData = (user) => {
-                    return user
-                }
+
                 let base =  this.monthData && this.monthData.users || []
                 const add = (a, b) => a + +b.income
                 base = base.map(item => ({... item, totalIncome: item.monthDeals.reduce(add, 0)}))
@@ -126,13 +102,8 @@
                     return b.totalIncome - a.totalIncome
                 }
                 if (this.workingIslandId) {
-                    base = base.map(user => setHourRate(user))
-                    base = base.map(user => setSalesRate(user))
-                    base = base.map(user => setChiefRate(user))
-                } else {
-                    base = base.map(user => setTotalData(user))
+                    base = base.map(user => setUserRates(user))
                 }
-
                 return base.sort(sortByTotalIncome)
             },
             monthData () {
