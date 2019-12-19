@@ -397,22 +397,98 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        enterCRM ({dispatch}) {
-            dispatch('priorPrepare')
-                .then(() => {
-                    dispatch('loadDailyPage')
+        enterCRM ({dispatch, getters, commit}) {
+            const loadDailyPage = () => {
+                dispatch('loadDailyPage')
+                    .then(() => {
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('setCustomers')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                        dispatch('setMonthData')
+                    })
+            }
+            const loadCustomersPage = () => {
+                commit('ADD_TASK', 'customers')
+                dispatch('setCustomers')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'customers')
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                        dispatch('setMonthData')
+                    })
+            }
+            const loadStockPage = () => {
+                commit('ADD_TASK', 'stock')
+                dispatch('setReserves')
+                    .then(() => dispatch('setStockActions')
+                        .then(() => dispatch('setStockOptions')
+                            .then(() => {
+                                commit('REMOVE_TASK', 'stock')
+                                dispatch('loadDailyPage')
+                                dispatch('setUsers')
+                                dispatch('setGroups')
+                                dispatch('setCustomers')
+                                dispatch('setMonthData')
+                            })
+                        ))
+
+            }
+            const loadSalaryPage = () => {
+                commit('ADD_TASK', 'salary')
+                dispatch('setMonthData')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'salary')
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('setCustomers')
+                        dispatch('setReserves')
+                        dispatch('setStockActions')
+                        dispatch('setStockOptions')
+                    })
+
+            }
+            const loadAdminPage = () => {
+                commit('ADD_TASK', 'admin')
+                dispatch('setUsers')
+                    .then(() => dispatch('setGroups')
                         .then(() => {
-                            // other pages
-                            dispatch('setUsers')
-                            dispatch('setGroups')
-                            dispatch('startScanTimer')
-                            dispatch('setCustomers')
+                            commit('REMOVE_TASK', 'admin')
+                            dispatch('loadDailyPage')
                             dispatch('setReserves')
                             dispatch('setStockActions')
                             dispatch('setStockOptions')
                             dispatch('setMonthData')
-                            dispatch('setLeads')
                         })
+                    )
+            }
+            dispatch('priorPrepare')
+                .then(() => {
+                    dispatch('startScanTimer')
+                    switch (getters.currentPage) {
+                        case 'daily':
+                            loadDailyPage()
+                            break
+                        case 'customers':
+                            loadCustomersPage()
+                            break
+                        case 'stock':
+                            loadStockPage()
+                            break
+                        case 'salary':
+                            loadSalaryPage()
+                            break
+                        case 'admin':
+                            loadAdminPage()
+                            break
+                    }
                 })
         },
         setWorkDays ({commit}) {
