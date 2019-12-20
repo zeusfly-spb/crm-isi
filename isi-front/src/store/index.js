@@ -322,30 +322,6 @@ export const store = new Vuex.Store({
                 }
             }, 5000)
         },
-        startUserDinner ({commit}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/start_dinner', {
-                    user_id: this.state.authUser.id
-                })
-                    .then(res => {
-                        commit('UPDATE_WORK_DAY', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-        },
-        finishUserDinner ({commit}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/finish_dinner', {
-                    user_id: this.state.authUser.id
-                })
-                    .then(res => {
-                        commit('UPDATE_WORK_DAY', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-        },
         resumeUserDay ({commit}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/resume_day', {user_id: this.state.authUser.id})
@@ -614,8 +590,14 @@ export const store = new Vuex.Store({
             })
         },
         setAccessRequests ({commit}) {
-            Vue.axios.post('/api/get_accesses')
-                .then(res => commit('SET_ACCESS_REQUESTS', res.data))
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/get_accesses')
+                    .then(res => {
+                        commit('SET_ACCESS_REQUESTS', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
         },
         checkAccess: async function ({commit, getters}) {
             if (getters.isSuperadmin) return
@@ -628,9 +610,6 @@ export const store = new Vuex.Store({
                 if (res.data.setting) {
                     commit('SET_SETTING', res.data.setting)
                 }
-                // if (!this.state.authUser.is_superadmin && (this.state.authUser.island_id !== res.data.access.island_id)) {
-                //     dispatch('setUserIsland', res.data.access.island_id)
-                // }
             }
         },
         deleteGroup ({commit}, id) {
