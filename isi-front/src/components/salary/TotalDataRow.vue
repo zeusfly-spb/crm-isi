@@ -121,7 +121,11 @@
                 return deals.reduce(add, 0)
             },
             hDate (textDate) {
-                let date = new Date(textDate)
+                let serverTimeOffset = 180 * 60 * 1000
+                let tempTime = new Date(textDate)
+                let localTimeOffset = tempTime.getTimezoneOffset() * -1 * 60 * 1000
+                
+                let date = new Date(tempTime.getTime() + serverTimeOffset + (serverTimeOffset - localTimeOffset))
                 let options = {month: 'short', day: 'numeric', year: 'numeric'}
                 return date.toLocaleDateString('ru-RU', options)
             },
