@@ -9,7 +9,24 @@ export default {
         savedPage: null
     },
     actions: {
-        priorPrepare ({commit, dispatch, state}) {
+        loadStockPage ({commit, rootState}) {
+            commit('ADD_TASK', 'stock')
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/load_stock_page', {
+                    date: rootState.accountingDate,
+                    island_id: rootState.workingIslandId
+                })
+                    .then(res => {
+                        commit('SET_RESERVES', res.data.reserves)
+                        commit('SET_STOCK_ACTIONS', res.data.stock_actions)
+                        commit('SET_STOCK_OPTIONS', res.data.stock_options)
+                        commit('REMOVE_TASK', 'stock')
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        priorPrepare ({commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/prior_prepare')
                     .then(res => {

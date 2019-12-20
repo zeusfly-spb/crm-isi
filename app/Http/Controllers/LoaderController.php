@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\DealAction;
 use App\Expense;
 use App\HandOver;
+use App\Stock\Product;
+use App\Stock\Reserve;
+use App\Stock\Size;
+use App\Stock\StockAction;
+use App\Stock\Type;
 use App\WorkDay;
 use App\Setting;
 use Illuminate\Http\Request;
@@ -13,6 +19,27 @@ use App\Island;
 
 class LoaderController extends Controller
 {
+    public function loadStockPage(Request $request)
+    {
+        $reserveBuilder = Reserve::with('product', 'type', 'size')->whereDate('created_at', $request->date);
+        if ($request->island_id) {
+            $reserveBuilder = $reserveBuilder->where('island_id', $request->island_id);
+        }
+        $reserves = $reserveBuilder->get()->toArray();
+        $stockActionsBuilder = StockAction::with('product', 'size', 'user')->whereDate('created_at', $request->date);
+        if ($request->island_id) {
+            $stockActionsBuilder = $stockActionsBuilder->where('island_id', $request->island_id);
+        }
+        $stock_actions = $stockActionsBuilder->get()->toArray();
+        $stock_options = [
+            'products' => Product::all()->toArray(),
+            'types' => Type::all()->toArray(),
+            'sizes' => Size::all()->toArray(),
+            'deal_actions' => DealAction::all()->toArray()
+        ];
+        return response()->json(['reserves' => $reserves, 'stock_actions' => $stock_actions, 'stock_options' => $stock_options]);
+    }
+
     public function priorPrepare()
     {
         $result = ['date' => now()->toDateString()];

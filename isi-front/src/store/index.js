@@ -380,9 +380,7 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('setCustomers')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
+                        dispatch('loadStockPage')
                         dispatch('setMonthData')
                     })
             }
@@ -394,27 +392,19 @@ export const store = new Vuex.Store({
                         dispatch('loadDailyPage')
                         dispatch('setUsers')
                         dispatch('setGroups')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
+                        dispatch('loadStockPage')
                         dispatch('setMonthData')
                     })
             }
             const loadStockPage = () => {
-                commit('ADD_TASK', 'stock')
-                dispatch('setReserves')
-                    .then(() => dispatch('setStockActions')
-                        .then(() => dispatch('setStockOptions')
-                            .then(() => {
-                                commit('REMOVE_TASK', 'stock')
-                                dispatch('loadDailyPage')
-                                dispatch('setUsers')
-                                dispatch('setGroups')
-                                dispatch('setCustomers')
-                                dispatch('setMonthData')
-                            })
-                        ))
-
+                dispatch('loadStockPage')
+                    .then(() => {
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('setCustomers')
+                        dispatch('setMonthData')
+                    })
             }
             const loadSalaryPage = () => {
                 commit('ADD_TASK', 'salary')
@@ -425,9 +415,7 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('setCustomers')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
+                        dispatch('loadStockPage')
                     })
 
             }
@@ -438,10 +426,7 @@ export const store = new Vuex.Store({
                         .then(() => {
                             commit('REMOVE_TASK', 'admin')
                             dispatch('loadDailyPage')
-                            dispatch('setReserves')
-                            dispatch('setStockActions')
-                            dispatch('setStockOptions')
-                            dispatch('setMonthData')
+                            dispatch('loadStockPage')
                         })
                     )
             }
@@ -487,9 +472,10 @@ export const store = new Vuex.Store({
                     dispatch('loadDailyPage')
                         .then(() => {
                             dispatch('setStartBalance')
-                            dispatch('setReserves')
-                            dispatch('setStockActions')
-                            dispatch('setMonthData')
+                            // dispatch('setReserves')
+                            // dispatch('setStockActions')
+                            // dispatch('setMonthData')
+                            dispatch('loadStockPage')
                         })
                 })
         },
@@ -781,18 +767,14 @@ export const store = new Vuex.Store({
                             dispatch('setUsers')
                             dispatch('setGroups')
                             dispatch('setCustomers')
-                            dispatch('setReserves')
-                            dispatch('setStockActions')
-                            dispatch('setStockOptions')
+                            dispatch('loadStockPage')
                         })
                 } else {
                     dispatch('loadDailyPage')
                     dispatch('setUsers')
                     dispatch('setGroups')
                     dispatch('setCustomers')
-                    dispatch('setReserves')
-                    dispatch('setStockActions')
-                    dispatch('setStockOptions')
+                    dispatch('loadStockPage')
                 }
             }
             const loadDailyPage = () => {
@@ -803,9 +785,8 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('setCustomers')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
+                        dispatch('loadStockPage')
+
                         if (anotherMonth) {
                             dispatch('setMonthData')
                         }
@@ -822,9 +803,7 @@ export const store = new Vuex.Store({
                                 dispatch('setUsers')
                                 dispatch('setGroups')
                                 dispatch('setCustomers')
-                                dispatch('setReserves')
-                                dispatch('setStockActions')
-                                dispatch('setStockOptions')
+                                dispatch('loadStockPage')
                                 if (anotherMonth) {
                                     dispatch('setMonthData')
                                 }
@@ -839,9 +818,7 @@ export const store = new Vuex.Store({
                         dispatch('loadDailyPage')
                         dispatch('setUsers')
                         dispatch('setGroups')
-                        dispatch('setReserves')
-                        dispatch('setStockActions')
-                        dispatch('setStockOptions')
+                        dispatch('loadStockPage')
                         if (anotherMonth) {
                             dispatch('setMonthData')
                         }
@@ -854,9 +831,7 @@ export const store = new Vuex.Store({
                         .then(() => {
                             commit('REMOVE_TASK', 'admin')
                             dispatch('loadDailyPage')
-                            dispatch('setReserves')
-                            dispatch('setStockActions')
-                            dispatch('setStockOptions')
+                            dispatch('loadStockPage')
                             if (anotherMonth) {
                                 dispatch('setMonthData')
                             }
