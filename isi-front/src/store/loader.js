@@ -30,10 +30,9 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/prior_prepare')
                     .then(res => {
-                        let serverTimeOffset = 180 * 60 * 1000
                         let tempTime = new Date()
-                        let localTimeOffset = tempTime.getTimezoneOffset() * -1 * 60 * 1000
-                        let now = new Date(tempTime.getTime() + serverTimeOffset + (serverTimeOffset - localTimeOffset))
+                        let localTimeOffset = tempTime.getTimezoneOffset() * 60000
+                        let now = new Date(tempTime.getTime() - localTimeOffset)
                             .toISOString()
                             .split('T')[0]
                         let savedRealDate = Cookies.get('saved_real')
