@@ -472,10 +472,8 @@ export const store = new Vuex.Store({
                     dispatch('loadDailyPage')
                         .then(() => {
                             dispatch('setStartBalance')
-                            // dispatch('setReserves')
-                            // dispatch('setStockActions')
-                            // dispatch('setMonthData')
                             dispatch('loadStockPage')
+                            dispatch('setMonthData')
                         })
                 })
         },
