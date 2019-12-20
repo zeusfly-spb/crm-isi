@@ -140,11 +140,12 @@
                 document.body.style.cursor = e.clientX < centerX ? 'w-resize' : 'e-resize'
             },
             hDate (textDate) {
-                let date = new Date(textDate)
+                let tempTime = new Date(textDate)
+                let localTimeOffset = tempTime.getTimezoneOffset()
+                let date = new Date(tempTime.getTime() - localTimeOffset * 60000)
                 let options = {month: 'short', day: 'numeric'}
                 return date.toLocaleDateString('ru-RU', options)
             }
-
         },
         watch: {
             dates (val) {
