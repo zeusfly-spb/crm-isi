@@ -729,7 +729,12 @@ export const store = new Vuex.Store({
         setAccountingDate ({commit, dispatch}) {
             return new Promise((resolve, reject) => {
                 // Verify that current date changed
-                let now = new Date().toISOString().split('T')[0]
+                let serverTimeOffset = 180 * 60 * 1000
+                let tempTime = new Date()
+                let localTimeOffset = tempTime.getTimezoneOffset() * -1 * 60 * 1000
+                let now = new Date(tempTime.getTime() + serverTimeOffset + (serverTimeOffset - localTimeOffset))
+                    .toISOString()
+                    .split('T')[0]
                 let savedRealDate = Cookies.get('saved_real')
                 if (!savedRealDate) {
                     Cookies.set('saved_real', now)
