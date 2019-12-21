@@ -121,11 +121,7 @@
                 return deals.reduce(add, 0)
             },
             hDate (textDate) {
-                let tempTime = new Date(textDate)
-                let localTimeOffset = tempTime.getTimezoneOffset()
-                let date = new Date(tempTime.getTime() - localTimeOffset * 60000)
-                let options = {month: 'short', day: 'numeric', year: 'numeric'}
-                return date.toLocaleDateString('ru-RU', options)
+                return this.$moment(textDate).format('D MMM')
             },
             totalIncome (isCache) {
                 let deals = this.deals && this.deals.filter(item => item.is_cache === isCache)
