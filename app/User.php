@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
@@ -227,6 +228,29 @@ class User extends Authenticatable
     public function controlledIslands()
     {
         return $this->hasMany(Island::class, 'chief_id', 'id')->with('users');
+    }
+
+    public function rate(string  $type, int $island_id, string $month)
+    {
+        $islandTypeRates = array_filter($this->rates, function ($val) use ($type, $island_id) {
+            return $val['type'] == $type && Arr::has($val, ['island_id']) && $val['island_id'] == $island_id;
+        });
+        if (!count($islandTypeRates)) {
+            return 0;
+        }
+        $accurate = Arr::first($islandTypeRates, function ($val) use ($month) {
+            return $val['month'] == $month;
+        });
+        if ($accurate) {
+            return $accurate['value'];
+        }
+        uasort($islandTypeRates, function ($a, $b) {
+            return ($a['month'] < $b['month']) ? -1 : 1;
+        });
+        $last = Arr::last($islandTypeRates, function ($val) use ($month) {
+            return $val['month'] < $month;
+        });
+        return $last['value'] ?? 0;
     }
 
 }

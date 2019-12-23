@@ -159,4 +159,5 @@ class Island extends Model
     {
         return $this->belongsTo(User::class, 'chief_id', 'id');
     }
+
 }

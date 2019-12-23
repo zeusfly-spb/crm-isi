@@ -12,10 +12,25 @@ use App\User;
 use App\Vacation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class SalaryController extends Controller
 {
     public function monthData(Request $request)
+    {
+        $dateArray = explode('-', $request->date);
+        array_pop($dateArray);
+        $monthStr = implode('-', $dateArray);
+        $cache_name = 'salary_' . $request->island_id . '_' . $monthStr;
+
+        $salary_data = Cache::rememberForever($cache_name, function () use ($request) {
+            return $this->calculateMonthData($request);
+        });
+
+        return response()->json($salary_data);
+    }
+
+    public function calculateMonthData(Request $request)
     {
         $date = new Carbon($request->date);
         $year = $date->year;
@@ -69,10 +84,9 @@ class SalaryController extends Controller
         } else {
             $queryBuilder = $queryBuilder->whereHas('islands');
         }
-
         $users = $queryBuilder->get();
 
-        return response()->json(['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()]);
+        return ['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()];
     }
 
     public function updateUserRate(Request $request)

@@ -7,6 +7,8 @@ use App\Observers\UserObserver;
 use App\User;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\DocPackObserver;
+use App\Deal;
+use App\Observers\DealObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
     {
         DocumentPack::observe(DocPackObserver::class);
         User::observe(UserObserver::class);
+        Deal::observe (DealObserver::class);
     }
 }
