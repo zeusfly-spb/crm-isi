@@ -6,6 +6,7 @@
         slider-color="green"
         height="70"
         hide-slider
+        @change="switched"
     >
         <v-tab
             v-for="tab in tabs"
@@ -148,6 +149,13 @@
             changeCurrentIslandId (id) {
                 this.$store.dispatch('setWorkingIslandId', id)
                 this.$router.replace({query: {... this.$route.query, island: id}})
+            },
+            switched (val) {
+                let selectedIslandId = this.tabs[val].id
+                if (selectedIslandId !== this.workingIslandId) {
+                    this.$store.dispatch('setWorkingIslandId', selectedIslandId)
+                    this.$router.replace({query: {... this.$route.query, island: selectedIslandId}})
+                }
             }
         }
     }
