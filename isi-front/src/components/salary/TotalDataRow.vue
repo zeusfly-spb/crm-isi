@@ -129,8 +129,8 @@
                 return deals && deals.reduce(add, 0)
             },
             isHoliday (textDate) {
-                let date = new Date(textDate)
-                return [0, 6].includes(date.getDay())
+                let day = this.$moment(textDate).format('dddd')
+                return ['суббота', 'воскресенье'].includes(day)
             }
         }
     }
