@@ -42,21 +42,16 @@ class CacheSalary extends Command
     {
         $islandIds = Island::all()->pluck('id')->all();
         foreach ($islandIds as $id) {
-            $cacheName = 'island_' . $id . '_deals';
-            $oldCount = Cache::get($cacheName, 0);
-            $newCount = Island::find($id)->deals->count();
-            if ($newCount !== $oldCount) {
-                $date = now()->toDateString();
-                $dateArray = explode('-', $date);
-                array_pop($dateArray);
-                $monthStr = implode('-', $dateArray);
-                $cache_name = 'salary_' . $id . '_' . $monthStr;
-                Cache::forget($cache_name);
+            $date = now()->toDateString();
+            $dateArray = explode('-', $date);
+            array_pop($dateArray);
+            $monthStr = implode('-', $dateArray);
+            $cache_name = 'salary_' . $id . '_' . $monthStr;
+            if (!Cache::has($cache_name)) {
                 Cache::put($cache_name, DealPerformedListener::retrieveMonthData($date, $id));
                 $cache_name = 'salary_0_' . $monthStr;
                 Cache::forget($cache_name);
                 Cache::put($cache_name, DealPerformedListener::retrieveMonthData($date, 0));
-                Cache::put($cacheName, $newCount);
                 $this->info($id . '# Island salary counted');
             }
         }
