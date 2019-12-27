@@ -12,6 +12,7 @@
             v-for="tab in tabs"
             :key="tab.id"
             @click="changeCurrentIslandId(tab.id)"
+            @tap="changeCurrentIslandId(tab.id)"
         >
             <v-card
                 :class="{'blue lighten-3': tab.id === workingIslandId}"
