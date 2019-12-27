@@ -16,17 +16,8 @@ class PrizeObserver
      */
     public function created(Prize $prize)
     {
-//        $created = $prize->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $prize->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($prize);
 
+        CalculateSalary::dispatch($prize);
     }
 
     /**
@@ -37,17 +28,7 @@ class PrizeObserver
      */
     public function updated(Prize $prize)
     {
-//        $created = $prize->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $prize->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
         CalculateSalary::dispatch($prize);
-
     }
 
     /**
@@ -58,15 +39,6 @@ class PrizeObserver
      */
     public function deleted(Prize $prize)
     {
-//        $created = $prize->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $prize->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
         CalculateSalary::dispatch($prize);
     }
 
