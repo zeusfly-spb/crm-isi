@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\CalculateSalary;
 use App\Prepay;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,15 +16,17 @@ class PrepayObserver
      */
     public function created(Prepay $prepay)
     {
-        $created = $prepay->created_at;
-        $date = explode(' ', $created)[0];
-        $dateArray = explode('-', $date);
-        array_pop($dateArray);
-        $monthStr = implode('-', $dateArray);
-        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
-        Cache::forget($cache_name);
-        $cache_name = 'salary_0_' . $monthStr;
-        Cache::forget($cache_name);
+//        $created = $prepay->created_at;
+//        $date = explode(' ', $created)[0];
+//        $dateArray = explode('-', $date);
+//        array_pop($dateArray);
+//        $monthStr = implode('-', $dateArray);
+//        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
+//        Cache::forget($cache_name);
+//        $cache_name = 'salary_0_' . $monthStr;
+//        Cache::forget($cache_name);
+        CalculateSalary::dispatch($prepay);
+
     }
 
     /**
@@ -34,15 +37,17 @@ class PrepayObserver
      */
     public function updated(Prepay $prepay)
     {
-        $created = $prepay->created_at;
-        $date = explode(' ', $created)[0];
-        $dateArray = explode('-', $date);
-        array_pop($dateArray);
-        $monthStr = implode('-', $dateArray);
-        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
-        Cache::forget($cache_name);
-        $cache_name = 'salary_0_' . $monthStr;
-        Cache::forget($cache_name);
+//        $created = $prepay->created_at;
+//        $date = explode(' ', $created)[0];
+//        $dateArray = explode('-', $date);
+//        array_pop($dateArray);
+//        $monthStr = implode('-', $dateArray);
+//        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
+//        Cache::forget($cache_name);
+//        $cache_name = 'salary_0_' . $monthStr;
+//        Cache::forget($cache_name);
+        CalculateSalary::dispatch($prepay);
+
     }
 
     /**
@@ -53,15 +58,16 @@ class PrepayObserver
      */
     public function deleted(Prepay $prepay)
     {
-        $created = $prepay->created_at;
-        $date = explode(' ', $created)[0];
-        $dateArray = explode('-', $date);
-        array_pop($dateArray);
-        $monthStr = implode('-', $dateArray);
-        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
-        Cache::forget($cache_name);
-        $cache_name = 'salary_0_' . $monthStr;
-        Cache::forget($cache_name);
+//        $created = $prepay->created_at;
+//        $date = explode(' ', $created)[0];
+//        $dateArray = explode('-', $date);
+//        array_pop($dateArray);
+//        $monthStr = implode('-', $dateArray);
+//        $cache_name = 'salary_' . $prepay->island_id . '_' . $monthStr;
+//        Cache::forget($cache_name);
+//        $cache_name = 'salary_0_' . $monthStr;
+//        Cache::forget($cache_name);
+        CalculateSalary::dispatch($prepay);
     }
 
     /**

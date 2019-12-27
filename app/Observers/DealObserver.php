@@ -5,6 +5,8 @@ namespace App\Observers;
 use App\Deal;
 use App\Events\DealPerformed;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\CalculateSalary;
+
 
 class DealObserver
 {
@@ -17,15 +19,16 @@ class DealObserver
     public function created(Deal $deal)
     {
 //        event(new DealPerformed($deal));
-        $created = $deal->created_at;
-        $date = explode(' ', $created)[0];
-        $dateArray = explode('-', $date);
-        array_pop($dateArray);
-        $monthStr = implode('-', $dateArray);
-        $cache_name = 'salary_' . $deal->island_id . '_' . $monthStr;
-        Cache::forget($cache_name);
-        $cache_name = 'salary_0_' . $monthStr;
-        Cache::forget($cache_name);
+//        $created = $deal->created_at;
+//        $date = explode(' ', $created)[0];
+//        $dateArray = explode('-', $date);
+//        array_pop($dateArray);
+//        $monthStr = implode('-', $dateArray);
+//        $cache_name = 'salary_' . $deal->island_id . '_' . $monthStr;
+//        Cache::forget($cache_name);
+//        $cache_name = 'salary_0_' . $monthStr;
+//        Cache::forget($cache_name);
+        CalculateSalary::dispatch($deal);
     }
 
     /**
@@ -36,15 +39,16 @@ class DealObserver
      */
     public function updated(Deal $deal)
     {
-        $created = $deal->created_at;
-        $date = explode(' ', $created)[0];
-        $dateArray = explode('-', $date);
-        array_pop($dateArray);
-        $monthStr = implode('-', $dateArray);
-        $cache_name = 'salary_' . $deal->island_id . '_' . $monthStr;
-        Cache::forget($cache_name);
-        $cache_name = 'salary_0_' . $monthStr;
-        Cache::forget($cache_name);
+//        $created = $deal->created_at;
+//        $date = explode(' ', $created)[0];
+//        $dateArray = explode('-', $date);
+//        array_pop($dateArray);
+//        $monthStr = implode('-', $dateArray);
+//        $cache_name = 'salary_' . $deal->island_id . '_' . $monthStr;
+//        Cache::forget($cache_name);
+//        $cache_name = 'salary_0_' . $monthStr;
+//        Cache::forget($cache_name);
+        CalculateSalary::dispatch($deal);
     }
 
     /**
