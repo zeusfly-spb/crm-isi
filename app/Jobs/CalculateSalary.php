@@ -15,7 +15,6 @@ class CalculateSalary implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $model;
     protected $island_id;
     protected $date;
 
