@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\User;
+use App\Jobs\UpdateUser;
+use Illuminate\Support\Facades\Cache;
 
 class UserObserver
 {
@@ -26,7 +28,19 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        //
+        $rateMonths = [];
+        foreach ($user->rates as $rate) {
+            $rateMonths[] = $rate['month'];
+        }
+        $rateMonths = array_unique($rateMonths);
+        $islandIds = $user->islands->pluck('id')->all();
+        foreach ($islandIds as $islandId) {
+            foreach ($rateMonths as $month) {
+                $cache_name = 'salary_' . $islandId . '_' . $month;
+                Cache::forget($cache_name);
+            }
+        }
+        Cache::forget('salary_0_' . $month);
     }
 
     /**

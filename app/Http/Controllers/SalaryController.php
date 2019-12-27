@@ -23,11 +23,12 @@ class SalaryController extends Controller
         $monthStr = implode('-', $dateArray);
         $cache_name = 'salary_' . $request->island_id . '_' . $monthStr;
 
-        $salary_data = Cache::rememberForever($cache_name, function () use ($request) {
-            return $this->calculateMonthData($request);
-        });
+//        $salary_data = Cache::rememberForever($cache_name, function () use ($request) {
+//            return $this->calculateMonthData($request);
+//        });
 
-        return response()->json($salary_data);
+//        return response()->json($salary_data);
+        return response()->json($this->calculateMonthData($request));
     }
 
     public function calculateMonthData(Request $request)
