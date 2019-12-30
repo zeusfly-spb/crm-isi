@@ -29,18 +29,20 @@ class UserObserver
     public function updated(User $user)
     {
         $rateMonths = [];
-        foreach ($user->rates as $rate) {
-            $rateMonths[] = $rate['month'];
+        if ($user->rates) {
+            foreach ($user->rates as $rate) {
+                $rateMonths[] = $rate['month'];
+            }
         }
         $rateMonths = array_unique($rateMonths);
         $islandIds = $user->islands->pluck('id')->all();
-        foreach ($islandIds as $islandId) {
-            foreach ($rateMonths as $month) {
+        foreach ($rateMonths as $month) {
+            foreach ($islandIds as $islandId) {
                 $cache_name = 'salary_' . $islandId . '_' . $month;
                 Cache::forget($cache_name);
             }
+            Cache::forget('salary_0_' . $month);
         }
-        Cache::forget('salary_0_' . $month);
     }
 
     /**
