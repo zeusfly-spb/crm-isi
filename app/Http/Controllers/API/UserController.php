@@ -105,12 +105,12 @@ class UserController extends Controller
     public function saveUser(Request $request)
     {
         $user = User::find($request->id);
-        $input = Arr::except($request->all(), ['password', 'c_password', 'full_name', 'document_pack', 'islands']);
+        $input = Arr::except($request->all(), ['id','password', 'c_password', 'full_name', 'document_pack', 'islands', 'rates']);
 
         if ($request->password && $request->c_password && $request->password === $request->c_password) {
             $users = User::where('name', $request->name)->get();
-            foreach ($users as $user) {
-                if (Hash::check($request->password, $user->password)) {
+            foreach ($users as $check_user) {
+                if (Hash::check($request->password, $check_user->password)) {
                     return response()->json(['error' => 'Пользователь с такими данными уже зарегистрирован  ']);
                 }
             }
@@ -134,13 +134,6 @@ class UserController extends Controller
     {
         return response()->json(['result' => User::destroy($request->id)]);
     }
-
-//    public function setUserIsland(Request $request)
-//    {
-//        $user = User::find($request->user_id);
-//        $user->update(['island_id' => $request->island_id]);
-//        return response()->json($user->toArray());
-//    }
 
     public function startDay(Request $request)
     {
