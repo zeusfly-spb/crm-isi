@@ -337,12 +337,12 @@
             customers () {
                 const extendByNumbers = (customer) => {
                     let phones = ''
-                    if (customer.phones.length) {
+                    if (customer.phones && customer.phones.length) {
                         customer.phones.forEach((item, index) => {
                             phones = phones + `${index === 0 ? '' : ', '}${item.number}`
                         })
                     }
-                    customer.full_name += ` телефон${customer.phones.length > 1 ? 'ы' : ''}: ` + phones
+                    customer.full_name += ` телефон${customer.phones && customer.phones.length > 1 ? 'ы' : ''}: ` + phones
                     return customer
                 }
 
