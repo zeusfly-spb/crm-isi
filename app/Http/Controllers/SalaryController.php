@@ -22,18 +22,15 @@ class SalaryController extends Controller
         array_pop($dateArray);
         $monthStr = implode('-', $dateArray);
         $cache_name = 'salary_' . $request->island_id . '_' . $monthStr;
-
         $salary_data = Cache::rememberForever($cache_name, function () use ($request) {
-            return $this->calculateMonthData($request);
+            return $this->retrieveMonthData($request->date, $request->island_id);
         });
-
         return response()->json($salary_data);
-//        return response()->json($this->calculateMonthData($request));
     }
 
-    public function calculateMonthData(Request $request)
+    static function retrieveMonthData(string $date, int $island_id)
     {
-        $date = new Carbon($request->date);
+        $date = new Carbon($date);
         $year = $date->year;
         $month = $date->month;
         $startDate = $date->startOfMonth()->toDateString();
@@ -49,19 +46,16 @@ class SalaryController extends Controller
         $dealsBuilder = Deal::with('user')
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month);
-        if ($request->island_id) {
-            $dealsBuilder = $dealsBuilder->where('island_id', $request->island_id);
+        if ($island_id) {
+            $dealsBuilder = $dealsBuilder->where('island_id', $island_id);
         }
         $allDeals = $dealsBuilder->get();
-
-
         $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
             ->where('is_superadmin', false)
             ->whereNull('fired_at');
-        if ($request->island_id) {
-            $island = Island::with('users')->find($request->island_id);
+        if ($island_id) {
+            $island = Island::with('users')->find($island_id);
             $salaryDisplay = $island->options['salary_display'] ?? 'attach';
-
             switch ($salaryDisplay) {
                 case 'attach':
                     $queryBuilder = $queryBuilder->whereIn('id', $island->users->pluck('id')->all());
@@ -86,7 +80,6 @@ class SalaryController extends Controller
             $queryBuilder = $queryBuilder->whereHas('islands');
         }
         $users = $queryBuilder->get();
-
         return ['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()];
     }
 

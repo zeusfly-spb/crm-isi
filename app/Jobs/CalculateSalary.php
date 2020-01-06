@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Listeners\DealPerformedListener;
+use App\Http\Controllers\SalaryController;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -41,9 +42,9 @@ class CalculateSalary implements ShouldQueue
         $monthStr = implode('-', $dateArray);
         $cache_name = 'salary_' . $this->island_id . '_' . $monthStr;
         Cache::forget($cache_name);
-        Cache::put($cache_name, DealPerformedListener::retrieveMonthData($this->date, $this->island_id));
+        Cache::put($cache_name, SalaryController::retrieveMonthData($this->date, $this->island_id));
         $cache_name = 'salary_0_' . $monthStr;
         Cache::forget($cache_name);
-        Cache::put($cache_name, DealPerformedListener::retrieveMonthData($this->date, 0));
+        Cache::put($cache_name, SalaryController::retrieveMonthData($this->date, 0));
     }
 }
