@@ -129,13 +129,28 @@
                             Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                         </td>
                         <td align="center" style="border-right: 0">
-                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                            <span v-if="workingIslandId">
+                                {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                            </span>
+                            <span v-else>
+                                {{ normalInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Кожа').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
+                            <span v-if="workingIslandId">
+                                {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
+                            </span>
+                            <span v-else>
+                                {{ normalInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Санаформ').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-left: 0">
-                            {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                            <span v-if="workingIslandId">
+                                {{ normalInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                            </span>
+                            <span v-else>
+                                {{ normalInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Флис').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-right: 0">
                             {{ findActionCount('receipt', 'Стельки', 'Кожа', props.item) }}
@@ -285,13 +300,28 @@
                             Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                         </td>
                         <td align="center" style="border-right: 0">
-                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                            <span v-if="workingIslandId">
+                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
+                            </span>
+                            <span v-else>
+                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Кожа').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-left: 0; border-right: 0">
-                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
+                            <span v-if="workingIslandId">
+                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
+                            </span>
+                            <span v-else>
+                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Санаформ').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-left: 0">
-                            {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                            <span v-if="workingIslandId">
+                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
+                            </span>
+                            <span v-else>
+                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Флис').reduce((a, b) => a + b.count, 0) }}
+                            </span>
                         </td>
                         <td align="center" style="border-right: 0">
                             {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
@@ -395,6 +425,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             goodsProductIds () {
                 return [... new Set(this.goodsReserves.map(item => +item.product_id))]
             },

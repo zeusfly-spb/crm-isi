@@ -15,7 +15,8 @@ class Island extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'options' => 'array'
+        'options' => 'array',
+        'chiefs' => 'array'
     ];
 
     public function workDays()
@@ -160,4 +161,23 @@ class Island extends Model
         return $this->belongsTo(User::class, 'chief_id', 'id');
     }
 
+    public function setChiefToDate(string $date, int $user_id)
+    {
+        $chiefs = collect($this->chiefs);
+        $exists = $chiefs->where('date', $date)->first();
+        if ($exists) {
+            $exists->user_id = $user_id;
+        } else {
+            $chiefs->push((object) ['date' => $date, 'user_id' => $user_id]);
+            $chiefs->sortBy('date');
+        }
+        return $this->update(['chiefs' => $chiefs->all()]);
+    }
+
+    public function getChiefAtDate(string $date)
+    {
+        $chiefs = collect($this->chiefs);
+        $user_id = $chiefs->where('date', '<=', $date)->first();
+        return User::find($user_id) ?? null;
+    }
 }
