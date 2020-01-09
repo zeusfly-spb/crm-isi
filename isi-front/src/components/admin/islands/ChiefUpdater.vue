@@ -37,9 +37,12 @@
             active: false
         }),
         computed: {
+            accountingDate () {
+                return this.$store.state.accountingDate
+            },
             selectedChiefId: {
                 get () {
-                    return this.island && this.island.chief_id || null
+                    return this.island && this.chiefId || null
                 },
                 set (val) {
                     this.$store.dispatch('updateIslandChiefId', {
@@ -54,16 +57,25 @@
                         })
                 }
             },
+            chiefId () {
+                if (!this.island.chiefs) {
+                    return null
+                }
+                let chiefs = this.island.chiefs
+                chiefs.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
+                let target = chiefs.find(chief => chief.date === this.accountingDate || chief.date < this.accountingDate)
+                return target && target.user_id || null
+            },
             users () {
-                let users = this.$store.state.users.filter(item => !item.fired_at && !!item.island_id && !item.is_superadmin)
+                let users = this.$store.state.users.filter(item => !item.fired_at && !item.is_superadmin)
                 return [{id: null, full_name: 'Нет'}, ... users]
             },
             chiefName () {
-                let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
+                let target = this.island && this.users && this.users.find(user => +user.id === +this.chiefId) || null
                 return target && target.full_name || 'Нет'
             },
             chiefAvatar () {
-                let target = this.island && this.island.chief_id && this.users && this.users.find(user => +user.id === +this.island.chief_id) || null
+                let target = this.island && this.users && this.users.find(user => +user.id === +this.chiefId) || null
                 return target && target.avatar || '/img/default.jpg'
             },
             basePath () {

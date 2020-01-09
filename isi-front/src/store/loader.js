@@ -281,9 +281,9 @@ export default {
                     .finally(() => commit('REMOVE_TASK', 'leads'))
             })
         },
-        updateIslandChiefId ({commit}, data) {
+        updateIslandChiefId ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_chief_id', {... data})
+                Vue.axios.post('/api/update_chief_id', {... data, date: rootState.accountingDate})
                     .then(res => {
                         commit('UPDATE_ISLAND', res.data)
                         resolve(res)

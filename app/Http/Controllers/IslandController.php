@@ -57,7 +57,18 @@ class IslandController extends Controller
     public function updateChiefId(Request $request)
     {
         $island = Island::with('users')->find($request->island_id);
-        $island->update(['chief_id' => $request->chief_id]);
+        if ($island->chiefs) {
+            $chiefs = collect($island->chiefs);
+            $exists = $chiefs->where('date', $request->date)->first();
+            if ($exists) {
+                $exists['user_id'] = $request->chief_id;
+            } else {
+                $chiefs->push((object) ['date' => $request->date, 'user_id' => $request->chief_id]) ;
+            }
+        } else {
+            $chiefs = collect([(object) ['date' => $request->date, 'user_id' => $request->chief_id]]);
+        }
+        $island->update(['chiefs' => $chiefs->all()]);
         return response()->json($island->toArray());
     }
 

@@ -169,7 +169,6 @@ class Island extends Model
             $exists->user_id = $user_id;
         } else {
             $chiefs->push((object) ['date' => $date, 'user_id' => $user_id]);
-            $chiefs->sortBy('date');
         }
         return $this->update(['chiefs' => $chiefs->all()]);
     }
