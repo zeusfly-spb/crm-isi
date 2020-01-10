@@ -62,6 +62,9 @@
                     return null
                 }
                 let chiefs = this.island.chiefs
+                if (!chiefs.length) {
+                    return null
+                }
                 chiefs.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
                 let target = chiefs.find(chief => chief.date === this.accountingDate || chief.date < this.accountingDate)
                 return target && target.user_id || null

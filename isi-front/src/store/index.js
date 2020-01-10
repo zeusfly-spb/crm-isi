@@ -871,7 +871,7 @@ export const store = new Vuex.Store({
         APPEND_USER_ISLANDS (state) {
             state.islands = state.islands.map(island => ({
                 ...island,
-                chief_id: island.chiefs && island.chiefs
+                chief_id: island.chiefs && island.chiefs.length && island.chiefs
                     .sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
                     .find(chief => chief.date === state.accountingDate || chief.date < state.accountingDate).user_id || null
             }))
