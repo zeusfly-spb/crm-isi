@@ -105,6 +105,9 @@ export default {
         ]
     }),
     computed: {
+        users () {
+            return this.$store.state.users
+        },
         beep () {
             return this.$store.state.loader.beep
         },

@@ -61,10 +61,11 @@ class IslandController extends Controller
             $chiefs = collect($island->chiefs);
             $exists = $chiefs->where('date', $request->date)->first();
             if ($exists) {
-                $exists['user_id'] = $request->chief_id;
-            } else {
-                $chiefs->push((object) ['date' => $request->date, 'user_id' => $request->chief_id]) ;
+                $chiefs = $chiefs->reject(function ($value) use ($request) {
+                    return $value['date'] == $request->date;
+                });
             }
+            $chiefs->push((object) ['date' => $request->date, 'user_id' => $request->chief_id]) ;
         } else {
             $chiefs = collect([(object) ['date' => $request->date, 'user_id' => $request->chief_id]]);
         }

@@ -50,7 +50,7 @@ class SalaryController extends Controller
             $dealsBuilder = $dealsBuilder->where('island_id', $island_id);
         }
         $allDeals = $dealsBuilder->get();
-        $queryBuilder = User::with('deals', 'workdays', 'controlledIslands', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
+        $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
             ->where('is_superadmin', false)
             ->whereNull('fired_at');
         if ($island_id) {

@@ -645,6 +645,7 @@ export const store = new Vuex.Store({
                     .then(res => {
                         if (res.data.result) {
                             commit('DELETE_USER', id)
+                            commit('APPEND_USER_ISLANDS')
                             resolve(res)
                         }
                     })
@@ -659,6 +660,7 @@ export const store = new Vuex.Store({
                             reject(res.data)
                         }
                         commit('UPDATE_USER', res.data)
+                        commit('APPEND_USER_ISLANDS')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -672,6 +674,7 @@ export const store = new Vuex.Store({
                             reject(res.data)
                         }
                         commit('ADD_USER', res.data.success.user)
+                        commit('APPEND_USER_ISLANDS')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -679,7 +682,10 @@ export const store = new Vuex.Store({
         },
         setUsers ({commit}) {
              Vue.axios.post('/api/get_users')
-                 .then(res => commit('SET_USERS', res.data))
+                 .then(res => {
+                     commit('SET_USERS', res.data)
+                     commit('APPEND_USER_ISLANDS')
+                 })
         },
         logOut ({commit}) {
             commit('AUTH_LOGOUT')
@@ -862,6 +868,16 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
+        APPEND_USER_ISLANDS (state) {
+            state.islands = state.islands.map(island => ({
+                ...island,
+                chief_id: island.chiefs && island.chiefs
+                    .sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : 0)
+                    .find(chief => chief.date === state.accountingDate || chief.date < state.accountingDate).user_id || null
+            }))
+                .map(island => ({... island, chief: state.users.find(user => user.id === island.chief_id)}))
+            state.users = state.users.map(user => ({...user, controlled_islands: state.islands.filter(island => island.chief_id === user.id)}))
+        },
         UPDATE_ACCESS_REQUEST (state, accessRequest) {
             state.accessRequests = state.accessRequests.map(item => +item.id === +accessRequest.id ? accessRequest : item)
         },
