@@ -7,6 +7,12 @@ export default {
         statData: null
     },
     actions: {
+        appendSalaryCharges ({state, rootState}) {
+            state.monthData.users = state.monthData.users.map(user => ({
+                ... user,
+                controlled_islands: rootState.islands.filter(island => island.chief_id === user.id)
+            }))
+        },
         updateUserRates ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_user_rates', {... data})
@@ -142,7 +148,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setMonthData ({commit, rootState}) {
+        setMonthData ({commit, rootState, dispatch}) {
             commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_month_data', {
@@ -151,6 +157,7 @@ export default {
                 })
                     .then(res => {
                         commit('SET_MONTH_DATA', JSON.parse(JSON.stringify(res.data)))
+                        dispatch('appendSalaryCharges')
                         if (!rootState.workingIslandId) {
                             commit('SET_STAT_DATA', res.data)
                         }

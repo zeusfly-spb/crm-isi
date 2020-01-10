@@ -154,7 +154,7 @@
                 return this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount + this.totalSicksAmount + this.totalVacationsAmount
             },
             isChief () {
-                return this.user && this.user.controlled_islands.length
+                return this.user && this.user.controlled_islands && this.user.controlled_islands.length
             },
             currentMonth () {
                 return this.$store.state.accountingDate && this.$store.state.accountingDate.split('-').slice(0, 2).join('-') || null
