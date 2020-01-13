@@ -202,7 +202,7 @@
             },
             controlledIslandsIncome () {
                 return this.$store.state.salary.monthData.allDeals
-                    .filter(deal => this.controlledIslandIds.includes(deal.island_id))
+                    .filter(deal => this.controlledIslandIds.includes(deal.island_id) && +deal.user_id !== +this.user.id)
                     .reduce((a, b) => a + +b.income, 0)
             },
             controlledIslandsAmount () {

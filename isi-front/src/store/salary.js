@@ -10,7 +10,7 @@ export default {
         appendSalaryCharges ({state, rootState}) {
             state.monthData.users = state.monthData.users.map(user => ({
                 ... user,
-                controlled_islands: rootState.islands.filter(island => island.chief_id === user.id)
+                controlled_islands: rootState.islands.filter(island => +island.chief_id === +user.id)
             }))
         },
         updateUserRates ({commit, dispatch}, data) {

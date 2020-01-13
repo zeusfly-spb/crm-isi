@@ -54,6 +54,7 @@ export default {
                             commit('SET_SETTING', res.data.setting)
                         }
                         commit('SET_ISLANDS', res.data.islands)
+                        commit('APPEND_USER_ISLANDS')
                         resolve(res)
                     })
                     .catch(e => reject(e))

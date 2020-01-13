@@ -752,12 +752,14 @@ export const store = new Vuex.Store({
                 if (savedDate) {
                     commit('SET_ACCOUNTING_DATE', savedDate)
                     dispatch('setStartBalance')
+                        .finally(() => commit('APPEND_USER_ISLANDS'))
                     resolve(savedDate)
                 } else {
                     Vue.axios.post('/api/get_accounting_date')
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
                             dispatch('setStartBalance')
+                                .finally(() => commit('APPEND_USER_ISLANDS'))
                             resolve(res)
                         })
                         .catch(e => reject(e))
@@ -865,6 +867,7 @@ export const store = new Vuex.Store({
                             break
                     }
                 })
+                .finally(() => commit('APPEND_USER_ISLANDS'))
         }
     },
     mutations: {

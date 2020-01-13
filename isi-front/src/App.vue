@@ -105,6 +105,9 @@ export default {
         ]
     }),
     computed: {
+        monthData () {
+            return this.$store.state.salary.monthData
+        },
         users () {
             return this.$store.state.users
         },

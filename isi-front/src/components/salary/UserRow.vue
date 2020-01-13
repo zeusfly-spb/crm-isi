@@ -287,11 +287,16 @@
             },
             subDeals () {
                 if (!this.isChief) return []
-                let monthDeals = this.$store.state.salary.monthData.allDeals
+                let userControlledIslandIdsList = this.user && this.user.controlled_islands && this.user.controlled_islands.length
+                    && this.user.controlled_islands.map(island => +island.id)
+                let monthDeals = this.$store.state.salary.monthData.allDeals.filter(deal => userControlledIslandIdsList.includes(+deal.island_id) && deal.user_id !== this.user.id)
                 return monthDeals.filter(item => +item.user_id !== +this.user.id)
             },
             isChief () {
-                return this.user && this.user.controlled_islands && this.user.controlled_islands.length && this.user.controlled_islands.map(item => item.id).includes(this.workingIslandId)
+                if (!this.workingIslandId) {
+                    return this.user.controlled_islands && this.user.controlled_islands.length
+                }
+                return this.user && this.user.controlled_islands && this.user.controlled_islands.length  && !this.workingIslandId || this.user && this.user.controlled_islands && this.user.controlled_islands.length && this.user.controlled_islands.map(item => item.id).includes(this.workingIslandId)
             },
             grandTotal () {
                 return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations
