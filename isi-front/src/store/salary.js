@@ -13,11 +13,12 @@ export default {
                 controlled_islands: rootState.islands.filter(island => island.chief_id === user.id)
             }))
         },
-        updateUserRates ({commit}, data) {
+        updateUserRates ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_user_rates', {... data})
                     .then(res => {
                         commit('UPDATE_MONTH_USER', res.data)
+                        dispatch('appendSalaryCharges')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -138,11 +139,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        updateUserRate ({commit}, data) {
+        updateUserRate ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_user_rate', {...data})
                     .then(res => {
                         commit('UPDATE_USER_RATE', res.data)
+                        dispatch('appendSalaryCharges')
                         resolve(res)
                     })
                     .catch(e => reject(e))
