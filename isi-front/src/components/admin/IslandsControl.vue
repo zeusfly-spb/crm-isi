@@ -26,9 +26,7 @@
                <td>
                    <island-users-column :island="props.item" @success="showSuccess"/>
                </td>
-               <td>
-                   <chief-updater :island="props.item" @updated="showSuccess"/>
-               </td>
+               <chief-updater :island="props.item" @updated="showSuccess"/>
                <td align="center" style="text-align: center">
                    <div>
                        <v-btn icon

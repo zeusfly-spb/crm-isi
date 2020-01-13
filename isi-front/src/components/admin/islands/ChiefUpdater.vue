@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <td nowrap>
         <v-select
             v-model="selectedChiefId"
             :items="users"
@@ -10,24 +10,36 @@
             autofocus
             @blur="deactivate"
         />
-        <span class="clickable"
-              v-else
-              @click="activate"
-              :title="`Назначить руководителя на островок ${island && island.name || ''}`"
+        <div
+            v-if="!active"
         >
-            <v-avatar
-                size="30px"
-                style="margin-bottom: .2em"
-                v-if="chiefName !== 'Нет'"
-            >
-                <img :src="`${basePath}${chiefAvatar}`"
-                     alt="Фото"
-                     :title="chiefName"
-                />
-            </v-avatar>
-            {{ chiefName }}
-        </span>
-    </v-flex>
+          <span class="clickable"
+                @click="activate"
+                :title="`Назначить руководителя на островок ${island && island.name || ''}`"
+          >
+              <v-avatar
+                  size="30px"
+                  style="margin-bottom: .2em"
+                  v-if="chiefName !== 'Нет'"
+              >
+                  <img :src="`${basePath}${chiefAvatar}`"
+                       alt="Фото"
+                       :title="chiefName"
+                  />
+              </v-avatar>
+              {{ chiefName }}
+          </span>
+            <span class="text-xs-right">
+                <v-icon
+                   class="clickable"
+                   v-if="island.chiefs"
+                   :title="`Посмотреть историю назначения руководителей на островок ${island.name}`"
+                >
+                    list
+                </v-icon>
+            </span>
+        </div>
+    </td>
 </template>
 <script>
     export default {
