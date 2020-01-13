@@ -52,7 +52,7 @@
         watch: {
             nowLeads (val) {
                 if (val && val.length && this.mustScroll) {
-                    this.toTop()
+                    // this.toTop()
                 }
             }
         },
