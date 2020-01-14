@@ -1,5 +1,5 @@
 <template>
-    <td nowrap>
+    <td nowrap align="center">
         <v-select
             v-model="selectedChiefId"
             :items="users"
@@ -10,10 +10,8 @@
             autofocus
             @blur="deactivate"
         />
-        <div
-            v-if="!active"
-        >
           <span class="clickable"
+                v-if="!active"
                 @click="activate"
                 :title="`Назначить руководителя на островок ${island && island.name || ''}`"
           >
@@ -29,16 +27,59 @@
               </v-avatar>
               {{ chiefName }}
           </span>
-            <span class="text-xs-right">
-                <v-icon
-                   class="clickable"
-                   v-if="island.chiefs"
-                   :title="`Посмотреть историю назначения руководителей на островок ${island.name}`"
-                >
-                    list
-                </v-icon>
-            </span>
-        </div>
+        <v-icon
+           class="clickable"
+           v-if="!active && island.chiefs"
+           :title="`Посмотреть историю назначения руководителей на островок ${island.name}`"
+           @click="showHistory"
+        >
+            list
+        </v-icon>
+        <v-dialog
+            v-model="history"
+            max-width="800px"
+        >
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">История назначений руководителя на островок {{ island.name }}</span>
+                    <v-spacer/>
+                    <v-icon
+                        color="white"
+                        class="clickable mr-3"
+                        title="Закрыть"
+                        @click="hideHistory"
+                    >
+                        close
+                    </v-icon>
+                </v-card-title>
+                <v-card-text>
+                    <v-data-table
+                        v-if="island.chiefs"
+                        :items="island.chiefs"
+                        hide-headers
+                        hide-actions
+                    >
+                        <template v-slot:items="props">
+                            <tr>
+                                <td>{{ props.item.date | moment('DD MMMM YYYY г.') }}</td>
+                                <td>{{ userNameById(props.item.user_id)  }}</td>
+                            </tr>
+                        </template>
+
+                    </v-data-table>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        flat="flat"
+                        @click="hideHistory"
+                    >
+                        Закрыть
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </td>
 </template>
 <script>
@@ -46,7 +87,8 @@
         name: 'ChiefUpdater',
         props: ['island'],
         data: () => ({
-            active: false
+            active: false,
+            history: false
         }),
         computed: {
             accountingDate () {
@@ -98,6 +140,16 @@
             }
         },
         methods: {
+            userNameById (id) {
+                let target = this.$store.state.users.find(user => +user.id === +id)
+                return target && target.full_name || 'Нет'
+            },
+            hideHistory () {
+                this.history = false
+            },
+            showHistory () {
+                this.history = true
+            },
             activate () {
                 this.active = true
             },
