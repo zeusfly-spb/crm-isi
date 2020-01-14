@@ -29,7 +29,7 @@
           </span>
         <v-icon
            class="clickable"
-           v-if="!active && island.chiefs"
+           v-if="!active && island.chiefs && island.chiefs.length"
            :title="`Посмотреть историю назначения руководителей на островок ${island.name}`"
            @click="showHistory"
         >
@@ -61,7 +61,13 @@
                     >
                         <template v-slot:items="props">
                             <tr>
-                                <td>{{ props.item.date | moment('DD MMMM YYYY г.') }}</td>
+                                <td>
+                                    <chief-appointment-date-changer
+                                        :island="island"
+                                        :chiefIndex="props.index"
+                                        @updated="showSuccess"
+                                    />
+                                </td>
                                 <td>{{ userNameById(props.item.user_id)  }}</td>
                             </tr>
                         </template>
@@ -83,6 +89,7 @@
     </td>
 </template>
 <script>
+    import ChiefAppointmentDateChanger from './ChiefAppointmentDateChanger'
     export default {
         name: 'ChiefUpdater',
         props: ['island'],
@@ -140,6 +147,10 @@
             }
         },
         methods: {
+            showSuccess (data) {
+                let text = `На островке ${this.island.name} изменена дата назначения сотрудника ${this.userNameById(data.user_id)} на ${this.$moment(data.date).format('DD MMMM YYYY г.')}`
+                this.$emit('updated', text)
+            },
             userNameById (id) {
                 let target = this.$store.state.users.find(user => +user.id === +id)
                 return target && target.full_name || 'Нет'
@@ -156,6 +167,9 @@
             deactivate () {
                 this.active = false
             }
+        },
+        components: {
+            ChiefAppointmentDateChanger
         }
     }
 </script>

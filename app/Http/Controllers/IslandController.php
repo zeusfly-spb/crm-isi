@@ -9,6 +9,13 @@ use Illuminate\Support\Arr;
 
 class IslandController extends Controller
 {
+    public function updateChiefs(Request $request)
+    {
+        $island = Island::with('users')->find($request->island_id);
+        $island->update(['chiefs' => $request->chiefs]);
+        return response()->json($island->toArray());
+    }
+
     public function create(Request $request)
     {
         $island = Island::create([

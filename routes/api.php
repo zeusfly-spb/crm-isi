@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_user_islands', 'IslandController@updateUserIslands');
     Route::post('update_island_users', 'IslandController@updateIslandUsers');
     Route::post('update_island', 'IslandController@update');
+    Route::post('update_island_chiefs', 'IslandController@updateChiefs');
 
     // CUSTOMERS
     Route::post('get_customers', 'CustomerController@index');
