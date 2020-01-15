@@ -148,4 +148,16 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('get_setting', 'LoaderController@loadSetting');
     Route::post('update_setting', 'SettingsController@updateSetting');
 
+    //CATALOGS
+    Route::post('get_catalogs', 'LoaderController@getCatalogs');
+    Route::post('create_service', 'CatalogController@createService');
+    Route::post('update_service', 'CatalogController@updateService');
+    Route::post('delete_service', 'CatalogController@deleteService');
+
+    //APPOINTMENTS
+    Route::post('get_appointments', 'AppointmentController@index');
+    Route::post('create_appointment', 'AppointmentController@create');
+    Route::post('update_appointment', 'AppointmentController@update');
+    Route::post('delete_appointment', 'AppointmentController@delete');
+
 });

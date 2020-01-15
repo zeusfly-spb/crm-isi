@@ -21,13 +21,13 @@ class CacheData extends Command
      */
     protected $description = 'Put all data into cache';
 
-    protected $controller;
-
     /**
      * Create a new command instance.
      *
      * @return void
      */
+    protected $controller;
+
     public function __construct()
     {
         parent::__construct();
@@ -41,7 +41,7 @@ class CacheData extends Command
      */
     public function handle()
     {
-        $this->controller->cacheAll();
-        $this->info('All app data cached');
+        $elapsed = $this->controller->cacheAll();
+        $this->info("All app data cached in $elapsed sec.");
     }
 }

@@ -19,7 +19,8 @@
                     <groups-control v-if="item.id === 2"></groups-control>
                     <islands-control v-if="item.id === 3"></islands-control>
                     <accesses-control v-if="item.id === 4"></accesses-control>
-                    <settings-control v-if="item.id === 5"></settings-control>
+                    <catalog-control v-if="item.id === 5"></catalog-control>
+                    <settings-control v-if="item.id === 6"></settings-control>
                 </v-tab-item>
             </v-tabs-items>
         </v-tabs>
@@ -33,6 +34,7 @@
     import AccessesControl from './AccessesControl'
     import IslandsControl from './IslandsControl'
     import SettingsControl from './SettingsControl'
+    import CatalogControl from './CatalogControl'
 
     export default {
         name: 'AdminPanel',
@@ -42,7 +44,8 @@
                 {id: 2, label: 'Группы'},
                 {id: 3, label: 'Островки'},
                 {id: 4, label: 'Доступы'},
-                {id: 5, label: 'Настройки'}
+                {id: 5, label: 'Каталог'},
+                {id: 6, label: 'Настройки'}
             ],
             activeSection: 1
         }),
@@ -70,7 +73,8 @@
             GroupsControl,
             AccessesControl,
             IslandsControl,
-            SettingsControl
+            SettingsControl,
+            CatalogControl
         }
     }
 </script>

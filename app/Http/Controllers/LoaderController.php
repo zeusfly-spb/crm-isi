@@ -6,6 +6,7 @@ use App\Deal;
 use App\DealAction;
 use App\Expense;
 use App\HandOver;
+use App\Service;
 use App\Stock\Product;
 use App\Stock\Reserve;
 use App\Stock\Size;
@@ -16,9 +17,18 @@ use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use App\Island;
+use Illuminate\Support\Facades\Cache;
 
 class LoaderController extends Controller
 {
+    public function getCatalogs()
+    {
+        $services = Cache::rememberForever('services', function () {
+            return Service::all();
+        });
+        return response()->json(['services' => $services->toArray()]);
+    }
+
     public function loadStockPage(Request $request)
     {
         $reserveBuilder = Reserve::with('product', 'type', 'size')->whereDate('created_at', $request->date);

@@ -11,6 +11,8 @@ import spinner from './spinner'
 import loader from './loader'
 import settings from './settings'
 import island from './island'
+import catalog from './catalog'
+import appointment from './appointment'
 
 Vue.use(Vuex)
 
@@ -21,7 +23,9 @@ export const store = new Vuex.Store({
         spinner,
         loader,
         settings,
-        island
+        island,
+        catalog,
+        appointment
     },
     state: {
         loading: 0,
@@ -381,6 +385,7 @@ export const store = new Vuex.Store({
                         dispatch('setGroups')
                         dispatch('setCustomers')
                         dispatch('loadStockPage')
+                        dispatch('setAppointments')
                         dispatch('setMonthData')
                     })
             }
@@ -393,6 +398,7 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('loadStockPage')
+                        dispatch('setAppointments')
                         dispatch('setMonthData')
                     })
             }
@@ -403,6 +409,7 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('setCustomers')
+                        dispatch('setAppointments')
                         dispatch('setMonthData')
                     })
             }
@@ -416,6 +423,7 @@ export const store = new Vuex.Store({
                         dispatch('setGroups')
                         dispatch('setCustomers')
                         dispatch('loadStockPage')
+                        dispatch('setAppointments')
                     })
 
             }
@@ -427,9 +435,24 @@ export const store = new Vuex.Store({
                             commit('REMOVE_TASK', 'admin')
                             dispatch('loadDailyPage')
                             dispatch('loadStockPage')
+                            dispatch('setAppointments')
                         })
                     )
             }
+            const loadAppointmentsPage = () => {
+                commit('ADD_TASK', 'appointments')
+                dispatch('setAppointments')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'appointments')
+                        dispatch('loadDailyPage')
+                        dispatch('setCustomers')
+                        dispatch('loadStockPage')
+                        dispatch('setMonthData')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                    })
+            }
+
             dispatch('priorPrepare')
                 .then(() => {
                     dispatch('startScanTimer')
@@ -448,6 +471,9 @@ export const store = new Vuex.Store({
                             break
                         case 'admin':
                             loadAdminPage()
+                            break
+                        case 'appointments':
+                            loadAppointmentsPage()
                             break
                     }
                 })
@@ -474,6 +500,7 @@ export const store = new Vuex.Store({
                             dispatch('setStartBalance')
                             dispatch('loadStockPage')
                             dispatch('setMonthData')
+                            dispatch('setAppointments')
                         })
                 })
         },
@@ -778,6 +805,7 @@ export const store = new Vuex.Store({
                             dispatch('setGroups')
                             dispatch('setCustomers')
                             dispatch('loadStockPage')
+                            dispatch('setAppointments')
                         })
                 } else {
                     dispatch('loadDailyPage')
@@ -785,6 +813,7 @@ export const store = new Vuex.Store({
                     dispatch('setGroups')
                     dispatch('setCustomers')
                     dispatch('loadStockPage')
+                    dispatch('setAppointments')
                 }
             }
             const loadDailyPage = () => {
@@ -796,7 +825,7 @@ export const store = new Vuex.Store({
                         dispatch('setGroups')
                         dispatch('setCustomers')
                         dispatch('loadStockPage')
-
+                        dispatch('setAppointments')
                         if (anotherMonth) {
                             dispatch('setMonthData')
                         }
@@ -814,6 +843,7 @@ export const store = new Vuex.Store({
                                 dispatch('setGroups')
                                 dispatch('setCustomers')
                                 dispatch('loadStockPage')
+                                dispatch('setAppointments')
                                 if (anotherMonth) {
                                     dispatch('setMonthData')
                                 }
@@ -829,6 +859,7 @@ export const store = new Vuex.Store({
                         dispatch('setUsers')
                         dispatch('setGroups')
                         dispatch('loadStockPage')
+                        dispatch('setAppointments')
                         if (anotherMonth) {
                             dispatch('setMonthData')
                         }
@@ -842,11 +873,28 @@ export const store = new Vuex.Store({
                             commit('REMOVE_TASK', 'admin')
                             dispatch('loadDailyPage')
                             dispatch('loadStockPage')
+                            dispatch('setAppointments')
                             if (anotherMonth) {
                                 dispatch('setMonthData')
                             }
                         })
                     )
+            }
+            const loadAppointmentsPage = () => {
+                commit('ADD_TASK', 'appointments')
+                dispatch('setAppointments')
+                    .then(() => {
+                        commit('REMOVE_TASK', 'appointments')
+                        commit('REMOVE_TASK', 'stock')
+                        dispatch('loadDailyPage')
+                        dispatch('setUsers')
+                        dispatch('setGroups')
+                        dispatch('setCustomers')
+                        dispatch('loadStockPage')
+                        if (anotherMonth) {
+                            dispatch('setMonthData')
+                        }
+                    })
             }
 
             let anotherMonth = new Date(state.accountingDate).getMonth() !== new Date(date).getMonth()
@@ -864,6 +912,8 @@ export const store = new Vuex.Store({
                         case 'customers': loadCustomersPage()
                             break
                         case 'admin': loadAdminPage()
+                            break
+                        case 'appointments': loadAppointmentsPage()
                             break
                     }
                 })

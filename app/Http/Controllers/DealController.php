@@ -10,6 +10,7 @@ use App\Stock\StockAction;
 use App\Stock\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class DealController extends Controller
 {
@@ -39,6 +40,17 @@ class DealController extends Controller
             $queryBuilder = $queryBuilder->where('user_id', $user_id);
         }
         return response()->json($queryBuilder->get()->toArray());
+//        $deals = Cache::get('deals')->where('created_at', 'LIKE', $date . '%');
+//        if ($island_id) {
+//            $deals = $deals->where('island_id', $island_id);
+//        }
+//        $deals->transform(function ($item) {
+//            $item['user'] = Cache::get('users')->where('id', $item->user_id)->first();
+//            $item['customer'] = Cache::get('customers')->where('id', $item->customer_id)->first();
+//            $item['action'] = Cache::get('deal_actions')->where('id', $item->deal_action_id)->first();
+//            return $item;
+//        });
+//        return response()->json($deals->toArray());
     }
 
     public function create(Request $request)

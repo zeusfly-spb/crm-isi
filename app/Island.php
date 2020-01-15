@@ -9,6 +9,7 @@ use App\Stock\StockAction;
 use App\Stock\Type;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Island extends Model
 {
@@ -18,6 +19,8 @@ class Island extends Model
         'options' => 'array',
         'chiefs' => 'array'
     ];
+
+    protected $appends = ['services'];
 
     public function workDays()
     {
@@ -178,5 +181,15 @@ class Island extends Model
         $chiefs = collect($this->chiefs);
         $user_id = $chiefs->where('date', '<=', $date)->first();
         return User::find($user_id) ?? null;
+    }
+
+    public function getServicesAttribute()
+    {
+        $services = $this->options['service_ids'] ?? [];
+        if (Cache::has('services')) {
+            return Cache::get('services')->whereIn('id', $services)->values();
+        } else {
+            return Service::whereIn('id', $services)->get();
+        }
     }
 }

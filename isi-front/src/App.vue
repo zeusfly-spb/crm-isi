@@ -100,11 +100,18 @@ export default {
             {title: 'База клиентов', href: '/customers' },
             {title: 'Склад', href: '/stock'},
             {title: 'Заявки', href: '/leads'},
+            {title: 'Запись', href: '/appointments'},
             {title: 'Зарплата', href: '/salary'},
             {title: 'Администрация', href: '/admin'}
         ]
     }),
     computed: {
+        workingIslandId () {
+            return this.$store.state.workingIslandId
+        },
+        workingIsland () {
+            return this.$store.getters.workingIsland
+        },
         monthData () {
             return this.$store.state.salary.monthData
         },

@@ -4,7 +4,6 @@ import {store} from '../store'
 
 const RegisterView = require('../components/RegisterView.vue').default
 const LoginView = require('../components/LoginView.vue').default
-const HomeView = require('../components/HomeView.vue').default
 const AccessView = require('../components/AccessView.vue').default
 
 const DailyAccounting = require('../components/daily/DailyAccounting.vue').default
@@ -13,6 +12,7 @@ const StockPanel = require('../components/stock/StockPanel.vue').default
 const LeadsPanel = require('../components/leads/LeadPanel.vue').default
 const SalaryPanel = require('../components/salary/SalaryPanel.vue').default
 const AdminPanel = require('../components/admin/AdminPanel.vue').default
+const AppointmentPanel = require('../components/appointments/AppointmentPanel.vue').default
 
 Vue.use(VueRouter)
 
@@ -52,6 +52,12 @@ const routes = [
         component: LeadsPanel,
         meta: {title: 'Заявки', auth: true}
     },
+    {
+        path: '/appointments',
+        component: AppointmentPanel,
+        meta: {title: 'Запись', auth: true}
+    },
+
     {
         path: '/salary',
         component: SalaryPanel,

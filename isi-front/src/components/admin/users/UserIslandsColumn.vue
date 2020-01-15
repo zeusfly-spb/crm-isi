@@ -17,7 +17,7 @@
             <v-card class="round-corner">
                 <v-card-title
                     class="light-blue darken-3"
-                    style="height: 2em; padding: 0 1em"
+                    style="height: 3em; padding: 0 1em"
                 >
                     <span class="subheading white--text">
                         Доступные островки для пользователя <strong>{{ user.full_name }}</strong>

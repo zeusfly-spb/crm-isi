@@ -32,6 +32,26 @@
                 </div>
 
             </v-flex>
+            <v-flex
+                v-if="extended"
+            >
+                <span
+                    class="text-center body-2"
+                >
+                    Настройки сервисов
+                </span>
+                <div>
+                    <v-checkbox
+                        height=".5em"
+                        v-for="service in servicesCatalog"
+                        :key="service.id"
+                        :label="service.description"
+                        v-model="service.accepted"
+                        hide-details
+                        @change="submitServiceList"
+                    />
+                </div>
+            </v-flex>
         </v-layout>
         <v-layout justify-center>
             <span
@@ -57,9 +77,22 @@
             ]
         }),
         computed: {
+            servicesCatalog () {
+                let base =  this.$store.state.catalog.services
+                return base.map(item => ({... item, accepted: this.islandServiceIds.includes(item.id)}))
+            },
             users () {
                 let base = this.island && this.island.users
                 return base.map(item => ({... item, accepted: this.selectedUserIds.length && this.selectedUserIds.includes(item.id) || false}))
+            },
+            islandServiceIds: {
+                get () {
+                    return this.options && this.options.service_ids || []
+                },
+                set (val) {
+                    let result = {... this.options, service_ids: val}
+                    this.$emit('change', result)
+                }
             },
             options () {
                 return this.island && this.island.options
@@ -84,12 +117,20 @@
             }
         },
         methods: {
+            submitServiceList () {
+                this.islandServiceIds = this.servicesCatalog
+                    .filter(item => item.accepted)
+                    .map(service => service.id)
+            },
             submitUsersList () {
                 this.selectedUserIds = this.users.filter(item => item.accepted).map(item => item.id)
             },
             expand () {
                 this.$emit('expand')
             }
+        },
+        mounted () {
+            this.$store.dispatch('setCatalogs')
         }
     }
 </script>
