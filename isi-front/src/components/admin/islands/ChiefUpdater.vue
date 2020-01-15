@@ -30,7 +30,7 @@
         <v-icon
            class="clickable"
            v-if="!active && island.chiefs && island.chiefs.length"
-           :title="`Посмотреть историю назначения руководителей на островок ${island.name}`"
+           :title="`Показать историю назначения руководителей на островок ${island.name}`"
            @click="showHistory"
         >
             list
