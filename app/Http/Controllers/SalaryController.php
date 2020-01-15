@@ -51,8 +51,7 @@ class SalaryController extends Controller
         }
         $allDeals = $dealsBuilder->get();
         $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
-            ->where('is_superadmin', false)
-            ->whereNull('fired_at');
+            ->where('is_superadmin', false);
         if ($island_id) {
             $island = Island::with('users')->find($island_id);
             $salaryDisplay = $island->options['salary_display'] ?? 'attach';
@@ -79,6 +78,8 @@ class SalaryController extends Controller
         } else {
             $queryBuilder = $queryBuilder->whereHas('islands');
         }
+        $queryBuilder = $queryBuilder->whereNull('fired_at')
+        ->orWhereBetween('fired_at', [$startDate, $endDate]);
         $users = $queryBuilder->get();
         return ['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()];
     }
