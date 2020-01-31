@@ -10,7 +10,22 @@
             <span>{{ snackText }}</span>
         </v-snackbar>
         <island-switcher/>
-        <appointment-calendar @message="showSnack"/>
+        <v-flex>
+            <v-select
+                class="ml-2"
+                title="Режим просмотра"
+                style="width: 7em"
+                :items="viewModes"
+                v-model="currentViewMode"
+                item-text="description"
+                item-value="name"
+                single-line
+            />
+        </v-flex>
+        <appointment-calendar
+            :mode="currentViewMode"
+            @message="showSnack"
+        />
     </v-flex>
 </template>
 <script>
@@ -19,9 +34,15 @@
     export default {
         name: 'AppointmentPanel',
         data: () => ({
+            currentViewMode: 'month',
             snackbar: false,
             snackText: '',
-            snackColor: 'green'
+            snackColor: 'green',
+            viewModes: [
+                {name: 'month', description: 'Месяц'},
+                {name: 'week', description: 'Неделя'},
+                {name: 'day', description: 'День'}
+            ]
         }),
         computed: {
             workingIsland () {
@@ -29,6 +50,9 @@
             }
         },
         methods: {
+            setViewMode (mode) {
+                this.currentViewMode = mode
+            },
             showSnack ({color, text}) {
                 this.snackColor = color
                 this.snackText = text

@@ -38,7 +38,6 @@
                     </span>
                 </template>
                 <v-date-picker
-                    type="month"
                     v-model="currentMonth" no-title scrollable
                     @change="monthPicked"
                     locale="ru"
@@ -69,7 +68,7 @@
                 elevation="2"
             >
                 <v-calendar
-                    type="month"
+                    :type="mode"
                     locale="ru"
                     :weekdays="[1,2,3,4,5,6,0]"
                     ref="calendar"
@@ -102,6 +101,7 @@
     import CalendarRecordAdder from './CalendarRecordAdder'
     export default {
         name: 'AppointmentCalendar',
+        props: ['mode'],
         data: () => ({
             currentMonth: null,
             newDate: null,
