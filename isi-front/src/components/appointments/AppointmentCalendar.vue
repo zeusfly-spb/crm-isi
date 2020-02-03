@@ -43,7 +43,7 @@
                             title="Изменить день"
                             v-else
                     >
-                        {{ currentMonth | moment('DD MMMM YYYY') | upFirst }}
+                       {{ dayCaption }}
                     </span>
 
                 </template>
@@ -90,6 +90,7 @@
                 >
                     <template v-slot:day="{ date }">
                         <v-menu
+                            v-if="date === openDate && workingIslandId"
                             :value="date === openDate && workingIslandId"
                             :close-on-content-click="false"
                             :close-on-click="false"
@@ -123,6 +124,9 @@
             openDate: null
         }),
         computed: {
+            dayCaption () {
+                return `${this.currentMonth.split('-')[2]} ${this.$options.filters.upFirst(this.$moment(this.currentMonth).format('MMMM YYYY г.'))}`
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
@@ -149,10 +153,11 @@
                     this.$emit('message', {text: 'Чтобы добавить запись, выберите островок', color: 'blue'})
                     return
                 }
+                this.currentMonth = data.date
                 this.openDate = data.date
             },
             monthPicked (val) {
-                console.log(val)
+
                 let withDay = val.split('-').length > 2
                 if (withDay) {
                     this.currentMonth = val
@@ -174,8 +179,10 @@
             this.currentMonth = this.accountingDate
         },
         watch: {
-            accountingDate (val) {
-                this.currentMonth = val
+            accountingDate (val, oldVal) {
+                if (!oldVal) {
+                    this.currentMonth = val
+                }
             },
             currentMonth (val) {
                 this.$store.dispatch('changeAppointmentDate', val)

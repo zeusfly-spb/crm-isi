@@ -7,9 +7,12 @@ export default {
         appointments: []
     },
     actions: {
-        changeAppointmentDate ({dispatch, commit}, date) {
+        changeAppointmentDate ({dispatch, commit, state}, date) {
+            let mustUpdate = state.date.split('-')[1] !== date.split('-')[1]
             commit('SET_APPOINTMENT_DATE', date)
-            dispatch('setAppointments')
+            if (mustUpdate) {
+                dispatch('setAppointments')
+            }
         },
         deleteAppointment ({commit}, data) {
             return new Promise((resolve, reject) => {
