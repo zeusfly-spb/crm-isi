@@ -778,6 +778,7 @@ export const store = new Vuex.Store({
                 let savedDate = Cookies.get('accounting_date')
                 if (savedDate) {
                     commit('SET_ACCOUNTING_DATE', savedDate)
+                    commit('SET_APPOINTMENT_DATE', savedDate)
                     dispatch('setStartBalance')
                         .finally(() => commit('APPEND_USER_ISLANDS'))
                     resolve(savedDate)
@@ -785,6 +786,7 @@ export const store = new Vuex.Store({
                     Vue.axios.post('/api/get_accounting_date')
                         .then(res => {
                             commit('SET_ACCOUNTING_DATE', res.data.date)
+                            commit('SET_APPOINTMENT_DATE', res.data.date)
                             dispatch('setStartBalance')
                                 .finally(() => commit('APPEND_USER_ISLANDS'))
                             resolve(res)

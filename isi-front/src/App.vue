@@ -106,6 +106,9 @@ export default {
         ]
     }),
     computed: {
+        appointments () {
+            return this.$store.state.appointment.appointments
+        },
         workingIslandId () {
             return this.$store.state.workingIslandId
         },

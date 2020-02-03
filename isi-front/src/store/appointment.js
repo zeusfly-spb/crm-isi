@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        date: null,
+        mode: 'month',
         appointments: []
     },
     actions: {
@@ -36,11 +38,11 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setAppointments ({commit, rootState}) {
+        setAppointments ({commit, rootState, state}) {
             return new Promise((resolve, reject) => {
                 commit('ADD_TASK', 'appointments')
                 Vue.axios.post('/api/get_appointments', {
-                    date: rootState.accountingDate,
+                    date: state.date,
                     island_id: rootState.workingIslandId
                 })
                     .then(res => {
@@ -53,6 +55,12 @@ export default {
         }
     },
     mutations: {
+        SET_APPOINTMENT_DATE (state, date) {
+            state.date = date
+        },
+        SET_APPOINTMENT_MODE (state, mode) {
+            state.mode = mode
+        },
         DELETE_APPOINTMENT (state, id) {
             state.appointments = state.appointments.filter(item => +item.id !== +id)
         },
