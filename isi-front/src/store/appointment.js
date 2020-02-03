@@ -7,6 +7,10 @@ export default {
         appointments: []
     },
     actions: {
+        changeAppointmentDate ({dispatch, commit}, date) {
+            commit('SET_APPOINTMENT_DATE', date)
+            dispatch('setAppointments')
+        },
         deleteAppointment ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_appointment', {... data})

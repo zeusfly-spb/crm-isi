@@ -38,6 +38,7 @@
                     </span>
                 </template>
                 <v-date-picker
+                    type="month"
                     v-model="currentMonth" no-title scrollable
                     @change="monthPicked"
                     locale="ru"
@@ -157,6 +158,9 @@
         watch: {
             accountingDate (val) {
                 this.currentMonth = val
+            },
+            currentMonth (val) {
+                this.$store.dispatch('changeAppointmentDate', val)
             }
         },
         components: {
