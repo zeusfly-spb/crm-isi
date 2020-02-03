@@ -89,6 +89,7 @@
                                 v-if="date === openDate"
                                 :date="openDate"
                                 @reset="resetOpenDate"
+                                @message="forwardMessage"
                             />
                         </v-menu>
                     </template>
@@ -120,12 +121,19 @@
             }
         },
         methods: {
+            forwardMessage (message) {
+                this.$emit('message', {... message})
+            },
             resetOpenDate () {
                 this.openDate = null
             },
             selectDate (data) {
                 if (data.past) {
                     this.$emit('message', {text: 'Невозможно добавить запись на дату в прошлом!', color: 'red'})
+                    return
+                }
+                if (!this.workingIslandId) {
+                    this.$emit('message', {text: 'Чтобы добавить запись, выберите островок', color: 'blue'})
                     return
                 }
                 this.openDate = data.date

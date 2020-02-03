@@ -192,7 +192,12 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        console.dir(this.editedAppointment)
+                        this.$store.dispatch('createAppointment', this.editedAppointment)
+                            .then(res => {
+                                let text = `Запись на ${res.data.created_at} добавлена`
+                                this.$emit('message', {text: text, color: 'green'})
+                                this.reset()
+                            })
                     })
             },
             reset () {
