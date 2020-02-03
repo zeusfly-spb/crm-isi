@@ -203,7 +203,9 @@
             if (this.singleService) {
                 this.editedAppointment.service_id = this.services[0].id
             }
-
+            this.editedAppointment.user_id = this.$store.state.authUser.id
+            this.editedAppointment.island_id = this.workingIslandId
+            this.editedAppointment.date = this.date
         },
         watch: {
             services (val) {
