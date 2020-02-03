@@ -106,6 +106,9 @@ export default {
         ]
     }),
     computed: {
+        appointmentDate () {
+            return this.$store.state.appointment.date
+        },
         appointments () {
             return this.$store.state.appointment.appointments
         },

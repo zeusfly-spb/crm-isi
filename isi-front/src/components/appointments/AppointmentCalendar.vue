@@ -33,13 +33,25 @@
                         v-on="on"
                         class="clickable title blue--text"
                         title="Изменить месяц"
+                        v-if="mode === 'month'"
                     >
                         {{ currentMonth | moment('MMMM YYYY') | upFirst }}
                     </span>
+                    <span
+                            v-on="on"
+                            class="clickable title blue--text"
+                            title="Изменить день"
+                            v-else
+                    >
+                        {{ currentMonth | moment('DD MMMM YYYY') | upFirst }}
+                    </span>
+
                 </template>
                 <v-date-picker
-                    type="month"
-                    v-model="currentMonth" no-title scrollable
+                    :type="mode === 'month' ? 'month' : 'date'"
+                    :value="currentMonth"
+                    no-title
+                    scrollable
                     @change="monthPicked"
                     locale="ru"
                     first-day-of-week="1"
@@ -140,7 +152,13 @@
                 this.openDate = data.date
             },
             monthPicked (val) {
-                this.currentMonth = val + '-01'
+                console.log(val)
+                let withDay = val.split('-').length > 2
+                if (withDay) {
+                    this.currentMonth = val
+                } else {
+                    this.currentMonth = `${val}-01`
+                }
                 this.menu = false
             },
             goNext () {
