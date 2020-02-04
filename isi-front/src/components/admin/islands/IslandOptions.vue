@@ -54,7 +54,7 @@
             </v-flex>
             <cabinet-control
                 v-if="extended"
-                :island="island"
+                :islandId="island.id"
             />
         </v-layout>
         <v-layout justify-center>

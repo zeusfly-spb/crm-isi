@@ -159,7 +159,7 @@
 <script>
     export default {
         name: 'CabinetControl',
-        props: ['island'],
+        props: ['islandId'],
         data: () => ({
             cabinetToDelete: null,
             confirm: false,
@@ -171,12 +171,15 @@
             }
         }),
         computed: {
+            island () {
+                return this.$store.state.islands.find(island => +island.id === +this.islandId)
+            },
             options () {
                 return this.island && this.island.options
             },
             cabinets: {
                 get () {
-                    return this.options && this.options['cabinets'] || []
+                    return this.island && this.island.cabinets || []
                 },
                 set (val) {
                     let updatedOptions = {... this.options, cabinets: val}
