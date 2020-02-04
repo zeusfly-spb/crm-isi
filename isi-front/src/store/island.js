@@ -14,7 +14,6 @@ export default {
             })
         },
         updateIsland ({commit}, data) {
-            console.dir(data)
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_island', {...data})
                     .then(res => {

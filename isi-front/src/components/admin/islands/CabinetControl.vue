@@ -31,16 +31,20 @@
                         align="right"
                         style="margin: 0; padding: 0"
                     >
-                        <v-btn flat small icon>
+                        <v-btn flat small icon
+                               title="Редактировать"
+                        >
                             <v-icon
                                 small
                                 color="green"
+                                @click="openEditDialog(props.item)"
                             >
                                 edit
                             </v-icon>
                         </v-btn>
                         <v-btn flat small icon
                                @click="showDeleteConfirm(props.item)"
+                               title="Удалить"
                         >
                             <v-icon
                                 small
@@ -60,12 +64,12 @@
         </v-data-table>
         <v-dialog
             :value="!!dialog"
-            max-width="600px"
+            max-width="800px"
         >
             <v-card class="round-corner">
                 <v-card-title class="light-blue darken-3">
                     <span class="title white--text">
-                        {{ `${ {add: 'Добавить', edit: 'Редактировать'}[dialog]} кабинет на островок "${island.name}"` }}
+                        {{ `${ {add: 'Добавить', edit: 'Редактировать'}[dialog]} кабинет на остров${{add: 'ок', edit: 'ке'}[dialog]} "${island.name}"` }}
                     </span>
                     <v-spacer/>
                      <v-icon
@@ -186,15 +190,16 @@
                     let updatedOptions = {... this.options, cabinets: val}
                     this.$store.dispatch('updateIsland', {...this.island, options: updatedOptions})
                         .then(() => {
-                            console.log('Все нормально!')
                             let targetCabinet
                             switch (this.currentAction) {
                                 case 'add': targetCabinet = this.editedCabinet
                                     break
+                                case 'edit': targetCabinet = this.editedCabinet
+                                    break
                                 case 'delete': targetCabinet = this.cabinetToDelete
                                     break
                             }
-                            let successText = `Кабинет ${targetCabinet.name} ${{add: 'добавлен', delete: 'удален'}[this.currentAction]} в островке ${this.island.name}`
+                            let successText = `Кабинет "${targetCabinet.name}" ${{add: 'добавлен', delete: 'удален', edit: 'изменен'}[this.currentAction]} в островке "${this.island.name}"`
                             this.$emit('success', successText)
                             this.closeDialog()
                         })
@@ -202,6 +207,11 @@
             }
         },
         methods: {
+            openEditDialog (cabinet) {
+                this.editedCabinet = JSON.parse(JSON.stringify(cabinet))
+                this.currentAction = 'edit'
+                this.openDialog('edit')
+            },
             deleteCabinet () {
                 this.currentAction = 'delete'
                 let cabinets = this.cabinets
@@ -217,17 +227,24 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        this.currentAction = 'add'
                         let cabinets = this.cabinets
-                        cabinets.push({
-                            id: this.$store.state.appointment.uniqID('cab'),
-                            ... this.editedCabinet
-                        })
+                        switch (this.currentAction) {
+                            case 'add':
+                                cabinets.push({
+                                    id: this.$store.state.appointment.uniqID('cab'),
+                                    ... this.editedCabinet
+                                })
+                                break
+                            case 'edit':
+                                cabinets = cabinets.map(cabinet => cabinet.id === this.editedCabinet.id ? this.editedCabinet : cabinet)
+                                break
+                        }
                         this.cabinets = cabinets
                     })
             },
             openAddDialog () {
                 this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
+                this.currentAction = 'add'
                 this.openDialog('add')
             },
             openDialog (mode) {
