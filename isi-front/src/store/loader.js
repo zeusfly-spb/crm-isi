@@ -45,7 +45,9 @@ export default {
                         let savedDate = Cookies.get('accounting_date')
                         if (savedDate) {
                             commit('SET_ACCOUNTING_DATE', savedDate)
+                            commit('SET_APPOINTMENT_DATE', savedDate)
                         } else {
+                            commit('SET_APPOINTMENT_DATE', res.data.date)
                             commit('SET_ACCOUNTING_DATE', res.data.date)
                         }
                         dispatch('setStartBalance')
