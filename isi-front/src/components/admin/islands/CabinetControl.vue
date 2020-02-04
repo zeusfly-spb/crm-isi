@@ -39,7 +39,9 @@
                                 edit
                             </v-icon>
                         </v-btn>
-                        <v-btn flat small icon>
+                        <v-btn flat small icon
+                               @click="showDeleteConfirm(props.item)"
+                        >
                             <v-icon
                                 small
                                 color="red"
@@ -120,6 +122,38 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog
+            v-model="confirm"
+            max-width="500px"
+        >
+            <v-card class="round-corner">
+                <v-card-title class="light-blue darken-3">
+                    <span class="title white--text">Подтвержение</span>
+                </v-card-title>
+                <v-card-text>
+                    <span class="subheading">
+                        Удалить кабинет <strong>"{{ cabinetToDelete && cabinetToDelete.name }}"</strong>
+                        островка <strong>"{{ island && island.name }}"</strong>?
+                    </span>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn
+                        flat
+                        @click="confirm=false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat
+                        @click="deleteCabinet"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -127,6 +161,8 @@
         name: 'CabinetControl',
         props: ['island'],
         data: () => ({
+            cabinetToDelete: null,
+            confirm: false,
             dialog: null,
             editedCabinet: null,
             blankCabinet: {
@@ -153,6 +189,16 @@
             }
         },
         methods: {
+            deleteCabinet () {
+                let cabinets = this.cabinets
+                cabinets = cabinets.filter(item => item.id !== this.cabinetToDelete.id)
+                this.cabinets = cabinets
+                this.confirm = false
+            },
+            showDeleteConfirm (cabinet) {
+                this.cabinetToDelete = cabinet
+                this.confirm = true
+            },
             saveCabinet () {
                 this.$validator.validate()
                     .then(res => {
