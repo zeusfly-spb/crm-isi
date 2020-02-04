@@ -4,6 +4,15 @@
             <span class="subheading white--text" style="font-weight: bold">
                 Добавить запись на {{ date | moment('DD MMM YYYY г.')}}
             </span>
+            <v-spacer/>
+            <v-icon
+                class="clickable"
+                @click="reset"
+                color="white"
+                title="Закрыть"
+            >
+                close
+            </v-icon>
         </v-card-title>
         <v-card-text>
             <v-container grid-list-md>

@@ -24,7 +24,7 @@ class AppointmentController extends Controller
         $island_id = $request->island_id;
 
         if (Cache::has('appointments') && Cache::has('users') && Cache::has('services') && Cache::has('leads') && Cache::has('islands')) {
-            Log::info('Get from cache');
+            Log::info('Appointments index get from cache');
             $appointments = Cache::get('appointments')->filter(function ($value) use ($start_date, $end_date, $island_id) {
                 $clearDate = explode(' ', $value->date)[0];
                 if ($island_id) {
@@ -41,7 +41,7 @@ class AppointmentController extends Controller
             });
             $appointments = $appointments->values();
         } else {
-            Log::info('Querying from mysql at setting appointments!');
+            Log::info('Appointments index querying from mysql!');
             $queryBuilder = Appointment::with('user', 'performer', 'service', 'lead', 'island')
                 ->whereYear('date', $year)
                 ->whereMonth('date', $month);
