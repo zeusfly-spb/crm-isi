@@ -38,7 +38,7 @@
                 <span
                     class="text-center body-2"
                 >
-                    Настройки сервисов
+                    Сервисы
                 </span>
                 <div>
                     <v-checkbox
@@ -52,6 +52,10 @@
                     />
                 </div>
             </v-flex>
+            <cabinet-control
+                v-if="extended"
+                :island="island"
+            />
         </v-layout>
         <v-layout justify-center>
             <span
@@ -65,6 +69,7 @@
     </v-layout>
 </template>
 <script>
+    import CabinetControl from './CabinetControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -131,6 +136,9 @@
         },
         mounted () {
             this.$store.dispatch('setCatalogs')
+        },
+        components: {
+            CabinetControl
         }
     }
 </script>

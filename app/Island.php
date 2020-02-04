@@ -17,10 +17,11 @@ class Island extends Model
 
     protected $casts = [
         'options' => 'array',
-        'chiefs' => 'array'
+        'chiefs' => 'array',
+        'cabinets' => 'array'
     ];
 
-    protected $appends = ['services'];
+    protected $appends = ['services', 'cabinets'];
 
     public function workDays()
     {
@@ -191,5 +192,11 @@ class Island extends Model
         } else {
             return Service::whereIn('id', $services)->get();
         }
+    }
+
+    public function getCabinetsAttribute()
+    {
+        $cabinets = $this->options['cabinets'] ?? [];
+        return $cabinets;
     }
 }

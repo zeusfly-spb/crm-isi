@@ -4,15 +4,22 @@ export default {
     state: {
         date: null,
         mode: 'month',
-        appointments: []
+        appointments: [],
+        uniqID: (base) => base + '_' + Math.random().toString(36).substr(2, 9)
     },
     actions: {
         changeAppointmentDate ({dispatch, commit, state}, date) {
-            let mustUpdate = state.date.split('-')[1] !== date.split('-')[1]
-            commit('SET_APPOINTMENT_DATE', date)
-            if (mustUpdate) {
-                dispatch('setAppointments')
-            }
+            return new Promise((resolve, reject) => {
+                try {
+                    let mustUpdate = state.date.split('-')[1] !== date.split('-')[1]
+                    commit('SET_APPOINTMENT_DATE', date)
+                    if (mustUpdate) {
+                        dispatch('setAppointments')
+                    }
+                } catch (e) {
+                    reject (e)
+                }
+            })
         },
         deleteAppointment ({commit}, data) {
             return new Promise((resolve, reject) => {

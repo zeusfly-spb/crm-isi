@@ -29,7 +29,7 @@ class IslandController extends Controller
     public function update(Request $request)
     {
         $island = Island::find($request->id);
-        $inputs = Arr::except($request->all(), ['users', 'chief', 'services']);
+        $inputs = Arr::except($request->all(), ['users', 'chief', 'services', 'cabinets']);
         $island->update($inputs);
         $island->load('users');
         return response()->json($island->toArray());
