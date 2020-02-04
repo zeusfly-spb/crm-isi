@@ -76,6 +76,21 @@
                 <v-card-title
                     class="light-blue darken-3"
                 >
+                    <v-icon
+                            color="white"
+                            class="mr-2"
+                            v-if="extendMode"
+                    >
+                        settings_applications
+                    </v-icon>
+                    <v-icon
+                            color="white"
+                            class="mr-2"
+                            v-else
+                    >
+                        settings
+                    </v-icon>
+
                     <span
                         v-if="!extendMode"
                         class="title white--text"
@@ -88,8 +103,16 @@
                     >
                         Расширенные настройки островка {{ editedIsland.name }}
                     </span>
+                    <v-spacer/>
+                    <v-icon
+                            class="clickable"
+                            @click="dialog = false"
+                            color="white"
+                            title="Закрыть"
+                    >
+                        close
+                    </v-icon>
                 </v-card-title>
-
                 <v-card-text>
                     <v-container grid-list-md
                                  class="p-0 m-0"
@@ -132,11 +155,11 @@
                                 :extended="editedIsland.id === extended"
                                 @expand="expandOptions"
                                 @change="setOptions"
+                                @message="showSuccess"
                             />
                         </v-layout>
                     </v-container>
                 </v-card-text>
-
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>

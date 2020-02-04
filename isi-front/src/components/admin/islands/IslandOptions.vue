@@ -55,6 +55,7 @@
             <cabinet-control
                 v-if="extended"
                 :islandId="island.id"
+                @success="deliverSuccess"
             />
         </v-layout>
         <v-layout justify-center>
@@ -122,6 +123,9 @@
             }
         },
         methods: {
+            deliverSuccess (text) {
+                this.$emit('message', text)
+            },
             submitServiceList () {
                 this.islandServiceIds = this.servicesCatalog
                     .filter(item => item.accepted)

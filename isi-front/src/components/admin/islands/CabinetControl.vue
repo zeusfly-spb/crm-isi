@@ -161,6 +161,7 @@
         name: 'CabinetControl',
         props: ['islandId'],
         data: () => ({
+            currentAction: null,
             cabinetToDelete: null,
             confirm: false,
             dialog: null,
@@ -186,6 +187,15 @@
                     this.$store.dispatch('updateIsland', {...this.island, options: updatedOptions})
                         .then(() => {
                             console.log('Все нормально!')
+                            let targetCabinet
+                            switch (this.currentAction) {
+                                case 'add': targetCabinet = this.editedCabinet
+                                    break
+                                case 'delete': targetCabinet = this.cabinetToDelete
+                                    break
+                            }
+                            let successText = `Кабинет ${targetCabinet.name} ${{add: 'добавлен', delete: 'удален'}[this.currentAction]} в островке ${this.island.name}`
+                            this.$emit('success', successText)
                             this.closeDialog()
                         })
                 }
@@ -193,6 +203,7 @@
         },
         methods: {
             deleteCabinet () {
+                this.currentAction = 'delete'
                 let cabinets = this.cabinets
                 cabinets = cabinets.filter(item => item.id !== this.cabinetToDelete.id)
                 this.cabinets = cabinets
@@ -206,6 +217,7 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.currentAction = 'add'
                         let cabinets = this.cabinets
                         cabinets.push({
                             id: this.$store.state.appointment.uniqID('cab'),
@@ -222,6 +234,7 @@
                 this.dialog = mode
             },
             closeDialog () {
+                this.currentAction = null
                 this.dialog = null
             }
         },
