@@ -86,6 +86,8 @@
                     :weekdays="[1,2,3,4,5,6,0]"
                     ref="calendar"
                     v-model="currentMonth"
+                    first-interval="10"
+                    interval-count="12"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -113,6 +115,9 @@
                             @reset="resetOpenDate"
                             @message="forwardMessage"
                         />
+                    </template>
+                    <template v-slot:interval="{ hour }">
+                        {{ hour }}
                     </template>
                 </v-calendar>
             </v-sheet>
@@ -200,3 +205,9 @@
         }
     }
 </script>
+<style scoped>
+    .v-calendar-daily__interval-text {
+        color: #00bfa5 !important;
+    }
+
+</style>
