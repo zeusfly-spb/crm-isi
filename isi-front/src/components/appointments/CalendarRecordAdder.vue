@@ -214,7 +214,7 @@
                         if (!res) return
                         this.$store.dispatch('createAppointment', this.editedAppointment)
                             .then(res => {
-                                let text = `Запись на ${res.data.created_at} добавлена`
+                                let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
                                 this.$emit('message', {text: text, color: 'green'})
                                 this.reset()
                             })
