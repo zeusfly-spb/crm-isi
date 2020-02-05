@@ -2,6 +2,7 @@
     <v-dialog
         value="true"
         max-width="1000"
+        @update:returnValue="deliverClose"
     >
     <v-card class="round-corner" width="1000px">
         <v-card-title class="light-blue darken-3">
@@ -202,6 +203,11 @@
             }
         },
         methods: {
+            deliverClose (data) {
+                if (!data) {
+                    this.reset()
+                }
+            },
             saveAppointment () {
                 this.$validator.validate()
                     .then(res => {

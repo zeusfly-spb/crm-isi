@@ -108,7 +108,7 @@
                     </template>
                     <template v-slot:dayHeader="{ date }">
                         <calendar-record-adder
-                            v-if="date === openDate && mode === 'week'"
+                            v-if="date === openDate && ['week', 'day'].includes(mode)"
                             :date="openDate"
                             @reset="resetOpenDate"
                             @message="forwardMessage"
