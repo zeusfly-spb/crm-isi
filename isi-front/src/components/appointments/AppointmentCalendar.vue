@@ -90,7 +90,6 @@
                 >
                     <template v-slot:day="{ date }">
                         <v-menu
-                            v-if="date === openDate && workingIslandId"
                             :value="date === openDate && workingIslandId"
                             :close-on-content-click="false"
                             :close-on-click="false"
@@ -100,12 +99,20 @@
                                 <div v-on="on"></div>
                             </template>
                             <calendar-record-adder
-                                v-if="date === openDate"
+                                v-if="date === openDate && mode === 'month'"
                                 :date="openDate"
                                 @reset="resetOpenDate"
                                 @message="forwardMessage"
                             />
                         </v-menu>
+                    </template>
+                    <template v-slot:dayHeader="{ date }">
+                        <calendar-record-adder
+                            v-if="date === openDate && mode === 'week'"
+                            :date="openDate"
+                            @reset="resetOpenDate"
+                            @message="forwardMessage"
+                        />
                     </template>
                 </v-calendar>
             </v-sheet>

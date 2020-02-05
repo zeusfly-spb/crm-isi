@@ -1,4 +1,8 @@
 <template>
+    <v-dialog
+        value="true"
+        max-width="1000"
+    >
     <v-card class="round-corner" width="1000px">
         <v-card-title class="light-blue darken-3">
             <span class="subheading white--text" style="font-weight: bold">
@@ -143,6 +147,7 @@
             </v-btn>
         </v-card-actions>
     </v-card>
+    </v-dialog>
 </template>
 <script>
     export default {
