@@ -28,6 +28,7 @@ class CreateAppointmentsTable extends Migration
             $table->dateTime('date');
             $table->string('client_name');
             $table->string('comment')->nullable()->default(null);
+            $table->string('cabinet_id')->nullable()->default(null);
             $table->timestamps();
         });
     }

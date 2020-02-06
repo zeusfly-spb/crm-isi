@@ -33,7 +33,7 @@
                         v-on="on"
                         class="clickable title blue--text"
                         title="Изменить месяц"
-                        v-if="mode === 'month'"
+                        v-if="['month', 'week'].includes(mode)"
                     >
                         {{ currentMonth | moment('MMMM YYYY') | upFirst }}
                     </span>
@@ -43,7 +43,7 @@
                             title="Изменить день"
                             v-else
                     >
-                       {{ dayCaption }}
+                        {{ currentMonth | moment('DD MMMM YYYY') | upFirst }}
                     </span>
 
                 </template>
@@ -86,8 +86,9 @@
                     :weekdays="[1,2,3,4,5,6,0]"
                     ref="calendar"
                     v-model="currentMonth"
-                    first-interval="10"
-                    interval-count="12"
+                    first-interval="9"
+                    interval-count="14"
+                    :interval-format="intervalFormat"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -107,6 +108,11 @@
                                 @message="forwardMessage"
                             />
                         </v-menu>
+                        <div style="width: 100%; height: 100%"
+                             @click="dayClick"
+                        >
+
+                        </div>
                     </template>
                     <template v-slot:dayHeader="{ date }">
                         <calendar-record-adder
@@ -117,7 +123,6 @@
                         />
                     </template>
                     <template v-slot:interval="{ hour }">
-                        {{ hour }}
                     </template>
                 </v-calendar>
             </v-sheet>
@@ -136,8 +141,8 @@
             openDate: null
         }),
         computed: {
-            dayCaption () {
-                return `${this.currentMonth.split('-')[2]} ${this.$options.filters.upFirst(this.$moment(this.currentMonth).format('MMMM YYYY г.'))}`
+            appointments () {
+                return this.$store.state.appointment.appointments
             },
             workingIslandId () {
                 return this.$store.state.workingIslandId
@@ -150,6 +155,12 @@
             }
         },
         methods: {
+            dayClick () {
+                console.log('day clicked')
+            },
+            intervalFormat (interval) {
+                return interval.time
+            },
             forwardMessage (message) {
                 this.$emit('message', {... message})
             },
@@ -205,9 +216,3 @@
         }
     }
 </script>
-<style scoped>
-    .v-calendar-daily__interval-text {
-        color: #00bfa5 !important;
-    }
-
-</style>
