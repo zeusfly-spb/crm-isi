@@ -121,6 +121,10 @@
                             @reset="resetOpenDate"
                             @message="forwardMessage"
                         />
+                        <cabinets-mode-header
+                            v-if="displayMode === 'cabinets'"
+                            :cabinets="cabinets"
+                        />
                     </template>
                     <template v-slot:interval="{ hour }">
                     </template>
@@ -131,6 +135,7 @@
 </template>
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
+    import CabinetsModeHeader from './CabinetsModeHeader'
     export default {
         name: 'AppointmentCalendar',
         props: ['mode'],
@@ -141,6 +146,23 @@
             openDate: null
         }),
         computed: {
+            cabinets () {
+                return this.workingIsland && this.workingIsland.cabinets
+            },
+            displayMode () {
+                if (this.mode === 'day') {
+                    if (this.workingIsland) {
+                        return this.workingIsland.cabinets.length ? 'cabinets' : 'single'
+                    } else {
+                        return 'islands'
+                    }
+                } else {
+                    return null
+                }
+            },
+            workingIsland () {
+                return this.$store.getters.workingIsland
+            },
             appointments () {
                 return this.$store.state.appointment.appointments
             },
@@ -212,7 +234,8 @@
             }
         },
         components: {
-            CalendarRecordAdder
+            CalendarRecordAdder,
+            CabinetsModeHeader
         }
     }
 </script>
