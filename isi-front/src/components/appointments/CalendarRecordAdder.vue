@@ -37,6 +37,23 @@
                             v-validate="'required'"
                         />
                     </v-flex>
+                    <v-flex xs12 sm6 md4
+                            v-if="hasCabinets"
+                    >
+                        <sub>Кабинет</sub>
+                        <v-select
+                            v-model="editedAppointment.cabinet_id"
+                            :items="cabinets"
+                            item-text="name"
+                            item-value="id"
+                            single-line
+                            data-vv-name="cabinet"
+                            data-vv-as="Кабинет"
+                            :readonly="singleCabinet"
+                            :error-messages="errors.collect('cabinet')"
+                            v-validate="hasCabinets ? 'required' : null"
+                        />
+                    </v-flex>
                     <v-flex xs12 sm6 md4>
                         <sub>Исполнитель</sub>
                         <v-select
@@ -166,10 +183,20 @@
                 client_phone: null,
                 date: null,
                 client_name: null,
-                comment: null
+                comment: null,
+                cabinet_id: null
             }
         }),
         computed: {
+            cabinets () {
+                return this.workingIsland && this.workingIsland.cabinets || []
+            },
+            singleCabinet () {
+                return this.hasCabinets && this.cabinets.length === 1
+            },
+            hasCabinets () {
+                return this.workingIsland && this.workingIsland.cabinets.length
+            },
             users () {
                 return this.workingIsland && this.workingIsland.users || []
             },
@@ -227,6 +254,9 @@
         mounted () {
             if (this.singleService) {
                 this.editedAppointment.service_id = this.services[0].id
+            }
+            if (this.singleCabinet) {
+                this.editedAppointment.cabinet_id = this.cabinets[0].id
             }
             this.editedAppointment.user_id = this.$store.state.authUser.id
             this.editedAppointment.island_id = this.workingIslandId
