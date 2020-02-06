@@ -25,7 +25,7 @@
                         <v-btn
                             flat
                             color="primary"
-                            @click="setMode('add')"
+                            @click="add"
                         >
                             Добавить услугу
                         </v-btn>
@@ -39,7 +39,6 @@
                             <tr>
                                 <td>{{ props.index + 1 }}</td>
                                 <td>{{ props.item.description }}</td>
-                                <td>{{ props.item.name }}</td>
                                 <td>{{ props.item.price }}</td>
                                 <td align="center">
                                     <v-icon
@@ -98,17 +97,7 @@
                                     data-vv-as="Наименование"
                                     data-vv-name="description"
                                     :error-messages="errors.collect('description')"
-                                    v-validate="'required|max:20'"
-                                />
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field
-                                    v-model="editedService.name"
-                                    label="Код"
-                                    data-vv-as="Код"
-                                    data-vv-name="name"
-                                    :error-messages="errors.collect('name')"
-                                    v-validate="'alpha_dash|max:20'"
+                                    v-validate="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -195,8 +184,7 @@
             mode: null,
             headers: [
                 {text: '#', value: null},
-                {text: 'Наименование', value: 'description'},
-                {text: 'Код', value: 'name'},
+                {text: 'Услуга', value: 'description'},
                 {text: 'Цена', value: 'price'},
                 {text: 'Изменяемая цена', sortable: false, value: 'changeable_price'},
                 {text: 'Действия', sortable: false, align: 'right', value: null}
@@ -253,7 +241,7 @@
             updateService () {
                 this.$store.dispatch('updateService', {... this.editedService})
                     .then((res) => {
-                        let text = `Сервис ${res.data.description}, с кодом ${res.data.name} изменен`
+                        let text = `Сервис ${res.data.description} изменен`
                         this.showSnack({color: 'green', text: text})
                         this.setMode(null)
                     })
@@ -261,7 +249,7 @@
             createService () {
                 this.$store.dispatch('createService', {... this.editedService})
                     .then((res) => {
-                        let text = `Сервис ${res.data.description}, с кодом ${res.data.name} добавлен`
+                        let text = `Сервис ${res.data.description} добавлен`
                         this.showSnack({color: 'green', text: text})
                         this.setMode(null)
                     })
@@ -269,6 +257,9 @@
             edit (service) {
                 this.editedService = service
                 this.setMode('edit')
+            },
+            add () {
+                this.setMode('add')
             },
             setMode (mode) {
                 this.mode = mode
@@ -284,6 +275,9 @@
             mode (val) {
                 if (val === 'add' || val === null) {
                     this.editedService = JSON.parse(JSON.stringify(this.blankService))
+                }
+                if (val === 'add') {
+                    this.editedService.name = this.$store.state.appointment.uniqID('serv')
                 }
                 this.dialog = !!val
             }

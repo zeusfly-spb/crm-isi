@@ -162,7 +162,13 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
+                    <v-btn
+                        color="darken-1"
+                        flat
+                        @click="dialog = false"
+                    >
+                        Закрыть
+                    </v-btn>
                     <v-btn
                         color="green darken-1"
                         flat
