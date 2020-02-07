@@ -34,7 +34,7 @@
     export default {
         name: 'AppointmentPanel',
         data: () => ({
-            currentViewMode: 'month',
+            currentViewMode: 'day',
             snackbar: false,
             snackText: '',
             snackColor: 'green',

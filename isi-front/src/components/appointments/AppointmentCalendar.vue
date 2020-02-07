@@ -124,9 +124,15 @@
                         <cabinets-mode-header
                             v-if="displayMode === 'cabinets'"
                             :cabinets="cabinets"
+                            @computed="setCabinetsWidth"
                         />
                     </template>
                     <template v-slot:interval="{ hour }">
+                        <cabinets-mode-period
+                            v-if="displayMode === 'cabinets'"
+                            :cabinets="cabinets"
+                            :columnWidth="cabinetsWidth"
+                        />
                     </template>
                 </v-calendar>
             </v-sheet>
@@ -136,10 +142,12 @@
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetsModeHeader from './CabinetsModeHeader'
+    import CabinetsModePeriod from './CabinetsModePeriod'
     export default {
         name: 'AppointmentCalendar',
         props: ['mode'],
         data: () => ({
+            cabinetsWidth: null,
             currentMonth: null,
             newDate: null,
             menu: false,
@@ -177,6 +185,9 @@
             }
         },
         methods: {
+            setCabinetsWidth (width) {
+                this.cabinetsWidth = width
+            },
             dayClick () {
                 console.log('day clicked')
             },
@@ -235,7 +246,8 @@
         },
         components: {
             CalendarRecordAdder,
-            CabinetsModeHeader
+            CabinetsModeHeader,
+            CabinetsModePeriod
         }
     }
 </script>
