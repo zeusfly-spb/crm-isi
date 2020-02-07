@@ -132,6 +132,7 @@
                             v-if="displayMode === 'cabinets'"
                             :cabinets="cabinets"
                             :columnWidth="cabinetsWidth"
+                            :hour="hour"
                         />
                     </template>
                 </v-calendar>

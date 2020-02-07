@@ -8,13 +8,13 @@
             <template v-slot:items="props">
                 <tr>
                     <td
-                        v-for="(name, index) in names"
+                        v-for="(cabinet, index) in cabinets"
                         :key="index"
                         align="center"
                         style="padding: 0!important; margin: 0!important; border: 1px solid grey"
                         :width="columnWidth"
+                        @click="fieldClicked({cabinet: cabinet, hour: hour})"
                     >
-
                     </td>
                 </tr>
             </template>
@@ -24,10 +24,15 @@
 <script>
     export default {
         name: 'CabinetsModePeriod',
-        props: ['cabinets', 'columnWidth'],
+        props: ['cabinets', 'columnWidth', 'hour'],
         computed: {
             names () {
                 return this.cabinets.map(item => item.name)
+            }
+        },
+        methods: {
+            fieldClicked ({cabinet, hour}) {
+               
             }
         }
     }
