@@ -27,4 +27,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function island()
+    {
+        return $this->belongsTo(Island::class);
+    }
 }

@@ -56,6 +56,7 @@ class AppointmentController extends Controller
     public function create(Request $request)
     {
         $appointment = Appointment::create($request->all());
+        $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
     }
 
