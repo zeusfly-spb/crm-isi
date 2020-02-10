@@ -135,11 +135,45 @@
                             :columnWidth="cabinetsWidth"
                             :hour="hour"
                             :date="date"
+                            @delete="showDeleteConfirm"
                         />
                     </template>
                 </v-calendar>
             </v-sheet>
         </v-flex>
+        <v-dialog
+            :value="!!eventToDelete"
+            max-width="500px"
+            v-if="eventToDelete"
+        >
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title class="light-blue darken-3">
+                    <span class="subheading white--text">Подтверждение</span>
+                </v-card-title>
+                <v-card-text>
+                    Удалить запись <strong>{{ eventToDelete.service.description }}</strong> на <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в h:mm')}}</strong>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn
+                        flat
+                        @click="confirm = false"
+                    >
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        flat
+                        @click="deleteEvent"
+                    >
+                        Удалить
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+        </v-dialog>
     </v-layout>
 </template>
 <script>
@@ -150,6 +184,7 @@
         name: 'AppointmentCalendar',
         props: ['mode'],
         data: () => ({
+            eventToDelete: null,
             cabinetsWidth: null,
             currentMonth: null,
             newDate: null,
@@ -188,6 +223,12 @@
             }
         },
         methods: {
+            showDeleteConfirm (event) {
+                this.eventToDelete = event
+            },
+            deleteEvent () {
+                console.log('toDelete')
+            },
             setCabinetsWidth (width) {
                 this.cabinetsWidth = width
             },

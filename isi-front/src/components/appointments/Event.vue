@@ -18,6 +18,16 @@
             <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
             <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
         </v-avatar>
+        &nbsp;
+        <v-icon
+            color="red"
+            class="clickable"
+            title="Удалить запись"
+            v-if="isSuperadmin"
+            @click="$emit('delete')"
+        >
+            close
+        </v-icon>
     </v-flex>
 </template>
 <script>
@@ -25,7 +35,13 @@
     export default {
         name: 'Event',
         props: ['event'],
+        data: () => ({
+            eventToDelete: null
+        }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             basePath () {
                 return this.$store.state.basePath
             }
