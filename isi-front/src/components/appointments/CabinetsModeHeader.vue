@@ -7,8 +7,6 @@
         >
             <template v-slot:items="props">
                 <tr
-                    class="light-green white--text"
-                    style="border-color: white"
                     ref="mainTr"
                 >
                     <td

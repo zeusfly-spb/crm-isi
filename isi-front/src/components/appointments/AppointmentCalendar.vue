@@ -89,6 +89,7 @@
                     first-interval="9"
                     interval-count="14"
                     :interval-format="intervalFormat"
+                    interval-height="70"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -127,12 +128,13 @@
                             @computed="setCabinetsWidth"
                         />
                     </template>
-                    <template v-slot:interval="{ hour }">
+                    <template v-slot:interval="{ hour, date }">
                         <cabinets-mode-period
                             v-if="displayMode === 'cabinets'"
                             :cabinets="cabinets"
                             :columnWidth="cabinetsWidth"
                             :hour="hour"
+                            :date="date"
                         />
                     </template>
                 </v-calendar>
