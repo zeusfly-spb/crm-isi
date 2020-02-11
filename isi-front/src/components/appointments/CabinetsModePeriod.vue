@@ -17,6 +17,7 @@
                     @delete="emitDelete"
                     :date="date"
                     :hour="hour"
+                    :cabinet="cabinet"
                 />
             </v-flex>
         </v-layout>
