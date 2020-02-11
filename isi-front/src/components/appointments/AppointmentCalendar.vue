@@ -89,7 +89,7 @@
                     first-interval="9"
                     interval-count="14"
                     :interval-format="intervalFormat"
-                    interval-height="80"
+                    interval-height="75"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -155,7 +155,7 @@
                 <v-card-text class="subheading">
                     Удалить запись <strong>{{ eventToDelete.service.description }}</strong>
                     островка <strong><em>{{ eventToDelete.island.name }}</em></strong> на
-                    <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в h:mm')}}</strong>,
+                    <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в hh:mm')}}</strong>,
                     клиента <strong>{{ eventToDelete.client_name }}</strong>?
                 </v-card-text>
                 <v-card-actions>
@@ -246,7 +246,6 @@
                 this.cabinetsWidth = width
             },
             dayClick () {
-                console.log('day clicked')
             },
             intervalFormat (interval) {
                 return interval.time
@@ -290,9 +289,6 @@
         },
         created () {
             this.currentMonth = this.accountingDate
-        },
-        mounted () {
-            console.dir(this.$children)
         },
         watch: {
             accountingDate (val, oldVal) {

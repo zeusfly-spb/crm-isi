@@ -43,8 +43,15 @@
                             c <em>{{ hour }}:00</em> до <em>{{ hour }}:59</em>
                         </span>
                     </v-card-title>
+                    <v-card-text>
+                        <event
+                            v-for="event in events"
+                            :key="event.id"
+                            :event="event"
+                            @delete="emitDelete(event)"
+                        />
+                    </v-card-text>
                 </v-card>
-
             </v-menu>
         </div>
     </v-flex>
