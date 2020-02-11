@@ -89,7 +89,7 @@
                     first-interval="9"
                     interval-count="14"
                     :interval-format="intervalFormat"
-                    interval-height="70"
+                    interval-height="80"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -195,6 +195,9 @@
             openDate: null
         }),
         computed: {
+            intervalHeight () {
+                return this.$refs.calendar && this.$refs.calendar.intervalHeight
+            },
             cabinets () {
                 return this.workingIsland && this.workingIsland.cabinets
             },
@@ -287,6 +290,9 @@
         },
         created () {
             this.currentMonth = this.accountingDate
+        },
+        mounted () {
+            console.dir(this.$children)
         },
         watch: {
             accountingDate (val, oldVal) {

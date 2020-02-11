@@ -11,6 +11,7 @@
         {{ event.client_phone | phone }}
         <caller :phone="event.client_phone"/>
         <strong>Исполнитель:</strong>
+        &nbsp;
         <v-avatar
             size="36px"
             :title="event.performer.full_name"

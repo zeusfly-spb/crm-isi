@@ -4,16 +4,18 @@
             <v-flex
                 v-for="(cabinet, index) in cabinets"
                 :key="index"
-                :style="{width: `${columnWidth}px`}"
-                style="border: 1px solid grey; vertical-align: top; display: flex; height: 70px"
+                :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
+                style="border: 1px solid grey; display: flex"
                 column
-                align-content-start
+                :align-center="cabinetEvents(cabinet.id).length < 2"
             >
                 &nbsp;
                 <cabinet-entry
                     v-if="cabinetEvents(cabinet.id).length"
                     :events="cabinetEvents(cabinet.id)"
                     @delete="emitDelete"
+                    :date="date"
+                    :hour="hour"
                 />
             </v-flex>
         </v-layout>
