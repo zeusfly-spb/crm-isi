@@ -149,17 +149,20 @@
             <v-card
                 class="round-corner"
             >
-                <v-card-title class="light-blue darken-3">
-                    <span class="subheading white--text">Подтверждение</span>
+                <v-card-title class="red lighten-1">
+                    <span class="title white--text">Подтверждение</span>
                 </v-card-title>
-                <v-card-text>
-                    Удалить запись <strong>{{ eventToDelete.service.description }}</strong> на <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в h:mm')}}</strong>
+                <v-card-text class="subheading">
+                    Удалить запись <strong>{{ eventToDelete.service.description }}</strong>
+                    островка <strong><em>{{ eventToDelete.island.name }}</em></strong> на
+                    <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в h:mm')}}</strong>,
+                    клиента <strong>{{ eventToDelete.client_name }}</strong>?
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn
                         flat
-                        @click="confirm = false"
+                        @click="resetDeleting"
                     >
                         Отмена
                     </v-btn>
@@ -223,11 +226,18 @@
             }
         },
         methods: {
+            resetDeleting () {
+                this.eventToDelete = null
+            },
             showDeleteConfirm (event) {
                 this.eventToDelete = event
             },
             deleteEvent () {
-                console.log('toDelete')
+                this.$store.dispatch('deleteAppointment', this.eventToDelete)
+                    .then(() => {
+                        this.forwardMessage({text: 'Запись удалена', color: 'green'})
+                        this.resetDeleting()
+                    })
             },
             setCabinetsWidth (width) {
                 this.cabinetsWidth = width

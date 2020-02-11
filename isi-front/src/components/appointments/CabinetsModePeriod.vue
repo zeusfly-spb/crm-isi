@@ -37,7 +37,6 @@
         },
         methods: {
             emitDelete (event) {
-                console.dir(event)
                 this.$emit('delete', event)
             },
             fieldClicked ({cabinet, hour}) {
