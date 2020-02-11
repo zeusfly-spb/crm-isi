@@ -2,6 +2,7 @@
     <v-flex>
         <v-layout>
             <v-flex
+                class="cab-mode-period"
                 v-for="(cabinet, index) in cabinets"
                 :key="index"
                 :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"

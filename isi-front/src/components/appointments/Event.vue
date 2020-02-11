@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <v-flex class="mb-0 pb-0">
         <v-icon
             color="blue"
         >
