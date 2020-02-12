@@ -86,10 +86,10 @@
                     :weekdays="[1,2,3,4,5,6,0]"
                     ref="calendar"
                     v-model="currentMonth"
-                    first-interval="9"
-                    interval-count="14"
+                    first-interval="8"
+                    interval-count="15"
                     :interval-format="intervalFormat"
-                    interval-height="75"
+                    interval-height="45"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">
@@ -257,10 +257,12 @@
                 this.openDate = null
             },
             selectDate (data) {
-                if (data.past) {
+                /** Commented out to add a appointment retroactively
+                 if (data.past) {
                     this.$emit('message', {text: 'Невозможно добавить запись на дату в прошлом!', color: 'red'})
                     return
                 }
+                 **/
                 if (!this.workingIslandId) {
                     this.$emit('message', {text: 'Чтобы добавить запись, выберите островок', color: 'blue'})
                     return

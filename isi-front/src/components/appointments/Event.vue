@@ -1,5 +1,7 @@
 <template>
-    <v-flex class="mb-0 pb-0">
+    <div
+        class="mb-0 pb-0"
+    >
         <v-icon
             color="blue"
         >
@@ -29,7 +31,7 @@
         >
             close
         </v-icon>
-    </v-flex>
+    </div>
 </template>
 <script>
     import Caller from '../leads/Caller'
