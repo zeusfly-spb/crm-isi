@@ -83,6 +83,8 @@
             :date="date"
             v-if="addMode"
             @reset="addMode = false"
+            :preset-cabinet="cabinet"
+            :preset-hour="hour"
         />
     </v-flex>
 </template>

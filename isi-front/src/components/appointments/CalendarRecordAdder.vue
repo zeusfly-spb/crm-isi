@@ -49,7 +49,7 @@
                             single-line
                             data-vv-name="cabinet"
                             data-vv-as="Кабинет"
-                            :readonly="singleCabinet"
+                            :readonly="singleCabinet || !!presetCabinet"
                             :error-messages="errors.collect('cabinet')"
                             v-validate="hasCabinets ? 'required' : null"
                         />
@@ -88,11 +88,16 @@
                             <v-card>
                                 <v-card-title class="light-blue darken-3">
                                     <span class="subheading white--text" style="font-weight: bold">
-                                        Время записи на {{ editedAppointment.date | moment('DD MMM YYYY г.')}}
+                                        Время записи на {{ editedAppointment.date | moment('DD MMM YYYY г.') }}
                                     </span>
                                 </v-card-title>
                                 <v-card-text>
-                                    <v-time-picker v-model="time" format="24hr"/>
+                                    <v-time-picker
+                                        v-model="time"
+                                        format="24hr"
+                                        :max="presetHour ? `${presetHour}:59` : null"
+                                        :min="presetHour ? `${presetHour}:00` : null"
+                                    />
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer/>
@@ -148,7 +153,7 @@
             </v-container>
         </v-card-text>
         <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-btn
                 flat="flat"
                 @click="reset"
@@ -170,7 +175,7 @@
 <script>
     export default {
         name: 'CalendarRecordAdder',
-        props: ['date'],
+        props: ['date', 'presetHour', 'presetCabinet'],
         data: () => ({
             timeMenu: false,
             time: null,
@@ -258,6 +263,9 @@
             if (this.singleCabinet) {
                 this.editedAppointment.cabinet_id = this.cabinets[0].id
             }
+            if (this.presetCabinet) {
+                this.editedAppointment.cabinet_id = this.presetCabinet.id
+            }
             this.editedAppointment.user_id = this.$store.state.authUser.id
             this.editedAppointment.island_id = this.workingIslandId
             this.editedAppointment.date = this.date
@@ -277,7 +285,7 @@
                 if (!val || !this.editedAppointment.date) {
                     return
                 }
-                this.editedAppointment.date += ` ${val}`
+                this.editedAppointment.date = this.editedAppointment.date.split(' ')[0] + ` ${val}`
             },
             date (val) {
                 if (!val) {
