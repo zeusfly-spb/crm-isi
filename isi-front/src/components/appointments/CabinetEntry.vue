@@ -1,7 +1,7 @@
 <template>
-    <v-flex class="cab-entry"
-            :center="events < 2"
-            style="display: flex"
+    <v-flex
+        style="display: flex"
+        @click.self="bodyClicked"
     >
         <event
             :event="firstEvent"
@@ -104,6 +104,9 @@
             }
         },
         methods: {
+            bodyClicked () {
+                this.$emit('addAttempt', this.cabinet)
+            },
             emitDelete (event) {
                 this.$emit('delete', event)
             }
