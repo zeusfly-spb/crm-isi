@@ -141,6 +141,7 @@
                             v-if="displayMode === 'single'"
                             :hour="hour"
                             :date="date"
+                            @delete="showDeleteConfirm"
                         />
                     </template>
                 </v-calendar>

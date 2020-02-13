@@ -18,6 +18,7 @@
             :date="date"
             :hour="hour"
             @addAttempt="periodClicked"
+            @delete="emitDelete"
         />
     </div>
 </template>
@@ -47,6 +48,9 @@
         methods: {
             periodClicked () {
                 this.addMode = true
+            },
+            emitDelete (event) {
+                this.$emit('delete', event)
             }
         },
         components: {

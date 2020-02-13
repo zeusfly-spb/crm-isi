@@ -5,6 +5,7 @@
     >
         <event
             :event="firstEvent"
+            @delete="emitDelete(firstEvent)"
         />
         <div
             class="text-md-center mt-0 pt-0 mr-2"
