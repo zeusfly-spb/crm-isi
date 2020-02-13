@@ -20,7 +20,6 @@
                 transition="scale-transition"
                 offset-y
                 full-width
-                :min-width="`${$parent.columnWidth}`"
                 v-model="extended"
             >
                 <template v-slot:activator="{ on }">
