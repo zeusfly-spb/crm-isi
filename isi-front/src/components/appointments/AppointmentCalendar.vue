@@ -137,6 +137,11 @@
                             :date="date"
                             @delete="showDeleteConfirm"
                         />
+                        <single-mode-period
+                            v-if="displayMode === 'single'"
+                            :hour="hour"
+                            :date="date"
+                        />
                     </template>
                 </v-calendar>
             </v-sheet>
@@ -183,6 +188,7 @@
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetsModeHeader from './CabinetsModeHeader'
     import CabinetsModePeriod from './CabinetsModePeriod'
+    import SingleModePeriod from './SingleModePeriod'
     export default {
         name: 'AppointmentCalendar',
         props: ['mode'],
@@ -305,7 +311,8 @@
         components: {
             CalendarRecordAdder,
             CabinetsModeHeader,
-            CabinetsModePeriod
+            CabinetsModePeriod,
+            SingleModePeriod
         }
     }
 </script>

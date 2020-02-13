@@ -12,7 +12,6 @@
             v-if="events.length > 1"
         >
 
-
             <v-menu
                 :close-on-click="!addMode"
                 :close-on-content-click="false"
