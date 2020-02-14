@@ -14,7 +14,7 @@
                 <v-icon
                     class="clickable"
                     color="white"
-                    @click="cancel"
+                    @click="close"
                     title="Отмена"
                 >
                     close
@@ -57,10 +57,6 @@
                                         readonly
                                         prepend-icon="event"
                                         v-on="on"
-                                        data-vv-name="date"
-                                        data-vv-as="Дата"
-                                        :error-messages="errors.collect('date')"
-                                        v-validate="'required'"
                                     />
                                 </template>
                                 <v-date-picker
@@ -167,7 +163,6 @@
                             <sub>Телефон</sub>
                             <v-text-field
                                 v-model="editedEvent.client_phone"
-                                label="Номер телефона"
                                 data-vv-as="Номер телефона клиента"
                                 data-vv-name="client_phone"
                                 :error-messages="errors.collect('client_phone')"
@@ -182,14 +177,14 @@
                 <v-spacer/>
                 <v-btn
                     flat="flat"
-                    @click="cancel"
+                    @click="close"
                 >
                     Отмена
                 </v-btn>
                 <v-btn
                     color="green darken-1"
                     flat="flat"
-                    @click=""
+                    @click="updateEvent"
                     :disabled="!changed"
                 >
                     Сохранить
@@ -234,16 +229,29 @@
             }
         },
         methods: {
+            updateEvent () {
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) {
+                            return
+                        }
+                        this.$store.dispatch('updateAppointment', this.editedEvent)
+                            .then(() => {
+                                console.log('saved')
+                                this.close()
+                            })
+                    })
+            },
             datePicked () {
                 this.menu = false
             },
             deliverClose (data) {
                 if (!data) {
-                    this.cancel()
+                    this.close()
                 }
             },
-            cancel () {
-                this.$emit('cancel')
+            close () {
+                this.$emit('close')
             }
         },
         watch: {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Appointment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -63,7 +64,9 @@ class AppointmentController extends Controller
     public function update(Request $request)
     {
         $appointment = Appointment::find($request->id);
-        $appointment->update($request->all());
+        $inputs = Arr::except($request->all(), ['user', 'performer', 'island', 'service', 'lead']);
+        $appointment->update($inputs);
+        $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
     }
 

@@ -89,7 +89,7 @@
                     first-interval="8"
                     interval-count="15"
                     :interval-format="intervalFormat"
-                    interval-height="45"
+                    interval-height="48"
                     @click:date="selectDate"
                 >
                     <template v-slot:day="{ date }">

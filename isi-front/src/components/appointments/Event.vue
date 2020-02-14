@@ -47,7 +47,7 @@
         <event-editor
             :event="event"
             v-if="editMode"
-            @cancel="editMode = false"
+            @close="editMode = false"
         />
     </div>
 </template>
