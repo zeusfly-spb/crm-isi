@@ -53,14 +53,14 @@
                                     <sub>Дата</sub>
                                     <v-text-field
                                         style="width: 13em"
-                                        :label="editedEvent.date | moment('DD MMMM YYYY г.')"
+                                        :label="date | moment('DD MMMM YYYY г.')"
                                         readonly
                                         prepend-icon="event"
                                         v-on="on"
                                     />
                                 </template>
                                 <v-date-picker
-                                    v-model="editedEvent.date" no-title scrollable
+                                    v-model="date" no-title scrollable
                                     @change="datePicked"
                                     locale="ru"
                                     first-day-of-week="1"
@@ -199,6 +199,7 @@
         name: 'EventEditor',
         props: ['event'],
         data: () => ({
+            date: null,
             time: null,
             timeMenu: false,
             editedEvent: null,
@@ -237,7 +238,6 @@
                         }
                         this.$store.dispatch('updateAppointment', this.editedEvent)
                             .then(() => {
-                                console.log('saved')
                                 this.close()
                             })
                     })
@@ -260,11 +260,19 @@
                     return
                 }
                 this.editedEvent.date = this.editedEvent.date.split(' ')[0] + ` ${val}`
+            },
+            date (val) {
+                if (!val) {
+                    this.time = null
+                    return
+                }
+                this.editedEvent.date = `${val} ${this.time}`
             }
         },
         mounted () {
             this.editedEvent = JSON.parse(JSON.stringify(this.event))
             this.backupEvent = JSON.parse(JSON.stringify(this.event))
+            this.date = this.event.date.split(' ')[0]
             this.time = this.event.date.split(' ')[1]
         }
     }

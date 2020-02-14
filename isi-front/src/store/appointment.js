@@ -33,8 +33,6 @@ export default {
             })
         },
         updateAppointment ({commit}, data) {
-            console.dir(data)
-
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_appointment', {... data})
                     .then(res => {
