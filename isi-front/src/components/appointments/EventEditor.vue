@@ -24,6 +24,21 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                         <v-flex xs12 sm6 md4>
+                            <sub>Услуга</sub>
+                            <v-select
+                                v-model="editedEvent.service_id"
+                                :items="services"
+                                item-text="description"
+                                item-value="id"
+                                single-line
+                                data-vv-name="service"
+                                data-vv-as="Услуга"
+                                :readonly="singleService"
+                                :error-messages="errors.collect('service')"
+                                v-validate="'required'"
+                            />
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
                             <v-menu
                                 v-model="menu"
                                 :close-on-content-click="false"
@@ -42,6 +57,10 @@
                                         readonly
                                         prepend-icon="event"
                                         v-on="on"
+                                        data-vv-name="date"
+                                        data-vv-as="Дата"
+                                        :error-messages="errors.collect('date')"
+                                        v-validate="'required'"
                                     />
                                 </template>
                                 <v-date-picker
@@ -50,6 +69,56 @@
                                     locale="ru"
                                     first-day-of-week="1"
                                 />
+                            </v-menu>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <sub>Время</sub>
+                            <v-menu
+                                v-model="timeMenu"
+                                :close-on-content-click="false"
+                            >
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field
+                                        v-on="on"
+                                        v-model="time"
+                                        readonly
+                                        prepend-icon="schedule"
+                                        data-vv-name="time"
+                                        data-vv-as="Время"
+                                        :error-messages="errors.collect('time')"
+                                        v-validate="'required'"
+                                    />
+                                </template>
+                                <v-card>
+                                    <v-card-title class="light-blue darken-3">
+                                    <span class="subheading white--text" style="font-weight: bold">
+                                        Время записи на {{ editedEvent.date | moment('DD MMM YYYY г.') }}
+                                    </span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-time-picker
+                                            v-model="time"
+                                            format="24hr"
+                                        />
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer/>
+                                        <v-btn
+                                            flat="flat"
+                                            @click="time = null; timeMenu = false"
+                                        >
+                                            Отмена
+                                        </v-btn>
+                                        <v-btn
+                                            color="green darken-1"
+                                            flat="flat"
+                                            @click="timeMenu = false"
+                                            :disabled="!time"
+                                        >
+                                            Назначить
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
                             </v-menu>
                         </v-flex>
                         <v-flex xs12 sm6 md4
@@ -67,6 +136,43 @@
                                 :readonly="singleCabinet"
                                 :error-messages="errors.collect('cabinet')"
                                 v-validate="cabinets.length ? 'required' : null"
+                            />
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <sub>Исполнитель</sub>
+                            <v-select
+                                v-model="editedEvent.performer_id"
+                                :items="users"
+                                item-text="full_name"
+                                item-value="id"
+                                single-line
+                                data-vv-name="performer"
+                                data-vv-as="Исполнитель"
+                                :error-messages="errors.collect('performer')"
+                                v-validate="'required'"
+                            />
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <sub>Клиент</sub>
+                            <v-text-field
+                                v-model="editedEvent.client_name"
+                                label="Имя"
+                                data-vv-as="Имя клиента"
+                                data-vv-name="client_name"
+                                :error-messages="errors.collect('client_name')"
+                                v-validate="'required'"
+                            />
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <sub>Телефон</sub>
+                            <v-text-field
+                                v-model="editedEvent.client_phone"
+                                label="Номер телефона"
+                                data-vv-as="Номер телефона клиента"
+                                data-vv-name="client_phone"
+                                :error-messages="errors.collect('client_phone')"
+                                v-validate="'required|digits:10'"
+                                mask="(###) ### - ####"
                             />
                         </v-flex>
                     </v-layout>
@@ -98,11 +204,22 @@
         name: 'EventEditor',
         props: ['event'],
         data: () => ({
+            time: null,
+            timeMenu: false,
             editedEvent: null,
             backupEvent: null,
             menu: false
         }),
         computed: {
+            users () {
+                return this.workingIsland && this.workingIsland.users || []
+            },
+            singleService () {
+                return this.services.length === 1
+            },
+            services () {
+                return this.workingIsland && this.workingIsland.services || []
+            },
             singleCabinet () {
                 return this.cabinets.length === 1
             },
@@ -129,9 +246,18 @@
                 this.$emit('cancel')
             }
         },
+        watch: {
+            time (val, oldVal) {
+                if (!val || !this.editedEvent.date || !oldVal) {
+                    return
+                }
+                this.editedEvent.date = this.editedEvent.date.split(' ')[0] + ` ${val}`
+            }
+        },
         mounted () {
             this.editedEvent = JSON.parse(JSON.stringify(this.event))
             this.backupEvent = JSON.parse(JSON.stringify(this.event))
+            this.time = this.event.date.split(' ')[1]
         }
     }
 </script>
