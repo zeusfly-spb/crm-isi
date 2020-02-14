@@ -1,6 +1,7 @@
 <template>
     <div
         class="mb-0 pb-0"
+        :title="caption"
     >
         <v-icon
             color="blue"
@@ -22,26 +23,48 @@
             <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
         </v-avatar>
         &nbsp;
-        <v-icon
-            color="red"
-            class="clickable"
-            title="Удалить запись"
-            v-if="isSuperadmin"
-            @click="$emit('delete')"
-        >
-            close
-        </v-icon>
+        <v-chip>
+            <v-icon
+                size="20"
+                color="green"
+                class="clickable"
+                title="Редактировать запись"
+                @click="editMode = true"
+            >
+                edit
+            </v-icon>
+            <v-icon
+                size="20"
+                color="red"
+                class="clickable"
+                title="Удалить запись"
+                v-if="isSuperadmin"
+                @click="$emit('delete')"
+            >
+                delete
+            </v-icon>
+        </v-chip>
+        <event-editor
+            :event="event"
+            v-if="editMode"
+            @cancel="editMode = false"
+        />
     </div>
 </template>
 <script>
+    import EventEditor from './EventEditor'
     import Caller from '../leads/Caller'
     export default {
         name: 'Event',
         props: ['event'],
         data: () => ({
-            eventToDelete: null
+            eventToDelete: null,
+            editMode: false
         }),
         computed: {
+            caption () {
+                return `Запись на ${this.$moment(this.event.date).format('DD MMMM YYYY г. hh:mm')}`
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
@@ -50,7 +73,8 @@
             }
         },
         components: {
-            Caller
+            Caller,
+            EventEditor
         }
     }
 </script>
