@@ -23,9 +23,13 @@
             />
         </v-flex>
         <appointment-calendar
+            v-if="workingIsland"
             :mode="currentViewMode"
             @message="showSnack"
         />
+        <div v-else class="display-1 orange--text text--darken-3 text-md-center">
+            <strong>Для просмотра записей, выберите островок</strong>
+        </div>
     </v-flex>
 </template>
 <script>
