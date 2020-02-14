@@ -73,6 +73,7 @@
             </v-menu>
         </div>
         <cabinet-record-adder
+            :date="date"
             v-if="addMode"
             @reset="addMode = false"
             :preset-hour="hour"
