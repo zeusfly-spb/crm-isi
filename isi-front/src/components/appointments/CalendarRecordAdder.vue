@@ -142,13 +142,6 @@
                             mask="(###) ### - ####"
                         />
                     </v-flex>
-                    <v-flex xs12 sm6 md4>
-                        <sub>Комментарий</sub>
-                        <v-text-field
-                            v-model="editedAppointment.comment"
-                            label="Комментарий"
-                        />
-                    </v-flex>
                 </v-layout>
             </v-container>
         </v-card-text>
