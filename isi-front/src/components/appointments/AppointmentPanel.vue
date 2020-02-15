@@ -49,6 +49,9 @@
             ]
         }),
         computed: {
+            eventMessage () {
+                return this.$store.state.appointment.message
+            },
             workingIsland () {
                 return this.$store.getters.workingIsland
             }
@@ -61,6 +64,13 @@
                 this.snackColor = color
                 this.snackText = text
                 this.snackbar = true
+            }
+        },
+        watch: {
+            eventMessage (val) {
+                if (val) {
+                    this.showSnack({...val})
+                }
             }
         },
         components: {

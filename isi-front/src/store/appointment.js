@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        message: null,
         date: null,
         mode: 'month',
         appointments: [],
@@ -69,6 +70,10 @@ export default {
         }
     },
     mutations: {
+        SEND_EVENT_MESSAGE (state, message) {
+            state.message = message
+            setTimeout(() => state.message = null, 100)
+        },
         SET_APPOINTMENT_DATE (state, date) {
             state.date = date
         },

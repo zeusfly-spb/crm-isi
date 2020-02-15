@@ -247,7 +247,7 @@
                         this.$store.dispatch('createAppointment', this.editedAppointment)
                             .then(res => {
                                 let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
-                                this.$emit('message', {text: text, color: 'green'})
+                                this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                                 this.reset()
                             })
                     })
@@ -305,7 +305,7 @@
                 if (!val) {
                     return
                 }
-                this.editedAppointment.island_id === val
+                this.editedAppointment.island_id = val
             }
         }
     }

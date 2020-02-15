@@ -238,6 +238,7 @@
                         }
                         this.$store.dispatch('updateAppointment', this.editedEvent)
                             .then(() => {
+                                this.$store.commit('SEND_EVENT_MESSAGE', {text: 'Запись изменена', color: 'green'})
                                 this.close()
                             })
                     })
