@@ -4,7 +4,7 @@
     >
         <span
             v-if="appointments.length"
-            class="title text-md-center blue--text"
+            class="subheading text-md-center"
         >
             Записей: <span class="green--text">{{ appointments.length }}</span>
         </span>
