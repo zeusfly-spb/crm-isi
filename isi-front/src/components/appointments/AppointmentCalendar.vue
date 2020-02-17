@@ -171,6 +171,7 @@
                                 v-if="displayMode === 'week'"
                                 :hour="hour"
                                 :date="date"
+                                @date="dayClick"
                             />
                         </template>
                     </v-calendar>
@@ -288,8 +289,7 @@
             },
             dayClick (date) {
                 this.currentMonth = date
-                this.$emit('mode', 'day')
-                console.log(date)
+                this.mode = 'day'
             },
             intervalFormat (interval) {
                 return interval.time
