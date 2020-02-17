@@ -1,7 +1,6 @@
 <template>
     <div
-        style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; cursor: pointer"
-        @click="dayClicked"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%"
     >
         <span
             v-if="appointments.length"
@@ -33,11 +32,6 @@
                 } else {
                     return base.filter(item => item.cabinet_id !== null)
                 }
-            }
-        },
-        methods: {
-            dayClicked () {
-                this.$emit('date', this.date)
             }
         }
     }
