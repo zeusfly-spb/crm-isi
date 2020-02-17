@@ -6,7 +6,7 @@
             v-if="appointments.length"
             class="subheading text-md-center"
         >
-            Записей: <span class="green--text">{{ appointments.length }}</span>
+            Записей: <span class="title blue--text">{{ appointments.length }}</span>
         </span>
     </div>
 </template>
@@ -25,8 +25,13 @@
                 return this.workingIsland && this.workingIsland.cabinets || []
             },
             appointments () {
-                return this.$store.state.appointment.appointments
+                let base = this.$store.state.appointment.appointments
                     .filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour)
+                if (this.single) {
+                    return base.filter(item => item.cabinet_id === null)
+                } else {
+                    return base.filter(item => item.cabinet_id !== null)
+                }
             }
         }
     }
