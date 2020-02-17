@@ -3,7 +3,7 @@
         style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%"
     >
         <span
-            v-if="single && appointments.length"
+            v-if="appointments.length"
             class="title text-md-center blue--text"
         >
             Записей: <span class="green--text">{{ appointments.length }}</span>

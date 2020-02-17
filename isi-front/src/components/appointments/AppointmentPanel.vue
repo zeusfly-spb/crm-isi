@@ -10,22 +10,11 @@
             <span>{{ snackText }}</span>
         </v-snackbar>
         <island-switcher/>
-        <v-flex>
-            <v-select
-                class="ml-2"
-                title="Режим просмотра"
-                style="width: 7em"
-                :items="viewModes"
-                v-model="currentViewMode"
-                item-text="description"
-                item-value="name"
-                single-line
-            />
-        </v-flex>
         <appointment-calendar
             v-if="workingIsland"
             :mode="currentViewMode"
             @message="showSnack"
+            @mode="setViewMode"
         />
         <div v-else class="display-1 orange--text text--darken-3 text-md-center">
             <strong>Для просмотра записей, выберите островок</strong>

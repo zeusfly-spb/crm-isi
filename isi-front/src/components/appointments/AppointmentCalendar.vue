@@ -1,34 +1,48 @@
 <template>
-    <v-layout wrap>
-        <v-flex
-            sm4
-            xs12
-            class="text-sm-left text-xs-center"
-        >
-            <v-btn
-                icon
-                @click="goPrev"
+    <v-flex>
+        <v-layout class="mb-2">
+            <v-flex xs12 sm6 md4>
+                <v-select
+                    class="mb-2 ml-2"
+                    :items="viewModes"
+                    v-model="mode"
+                    title="Режим просмотра"
+                    style="width: 7em!important; height: 1em"
+                    item-text="description"
+                    item-value="name"
+                    single-line
+                />
+            </v-flex>
+            <v-flex
+                class="text-sm-right"
             >
-                <v-icon>
-                    keyboard_arrow_left
-                </v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex
-            class="text-xs-center"
-            style="display: flex; justify-content: center; align-items: center"
-        >
-            <v-menu
-                :close-on-content-click="false"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-                v-model="menu"
+                <v-btn
+                    small
+                    icon
+                    @click="goPrev"
+                >
+                    <v-icon
+                        small
+                    >
+                        keyboard_arrow_left
+                    </v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex
+                class="text-xs-center"
+                style="display: flex; justify-content: center; align-items: center"
             >
-                <template v-slot:activator="{ on }">
+                <v-menu
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                    v-model="menu"
+                >
+                    <template v-slot:activator="{ on }">
                     <span
                         v-on="on"
                         class="clickable title blue--text"
@@ -37,48 +51,50 @@
                     >
                         {{ currentMonth | moment('MMMM YYYY') | upFirst }}
                     </span>
-                    <span
+                        <span
                             v-on="on"
                             class="clickable title blue--text"
                             title="Изменить день"
                             v-else
-                    >
+                        >
                         {{ currentMonth | moment('DD MMMM YYYY') | upFirst }}
                     </span>
 
-                </template>
-                <v-date-picker
-                    :type="mode === 'month' ? 'month' : 'date'"
-                    :value="currentMonth"
-                    no-title
-                    scrollable
-                    @change="monthPicked"
-                    locale="ru"
-                    first-day-of-week="1"
-                />
-            </v-menu>
-        </v-flex>
-        <v-flex
-            sm4
-            xs12
-            class="text-sm-right text-xs-center"
-        >
-            <v-btn
-                icon
-                @click="goNext"
+                    </template>
+                    <v-date-picker
+                        :type="mode === 'month' ? 'month' : 'date'"
+                        :value="currentMonth"
+                        no-title
+                        scrollable
+                        @change="monthPicked"
+                        locale="ru"
+                        first-day-of-week="1"
+                    />
+                </v-menu>
+            </v-flex>
+            <v-flex
+                class="text-sm-left"
             >
-                <v-icon>
-                    keyboard_arrow_right
-                </v-icon>
-            </v-btn>
-        </v-flex>
-        <v-flex
-            xs12
-            class="mb-3"
-        >
-            <v-sheet
-                :height="windowHeight"
-                elevation="2"
+                <v-btn
+                    small
+                    icon
+                    @click="goNext"
+                >
+                    <v-icon
+                        small
+                    >
+                        keyboard_arrow_right
+                    </v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs12 sm6 md4>
+                &nbsp;
+            </v-flex>
+        </v-layout>
+        <v-layout>
+            <v-flex
+                xs12
+                class="mb-3"
             >
                 <v-calendar
                     :type="mode"
@@ -109,10 +125,14 @@
                                 @message="forwardMessage"
                             />
                         </v-menu>
-                        <div style="width: 100%; height: 100%"
-                             @click="dayClick"
+                        <div style="width: 100%; height: 100%; cursor: pointer"
+                             @click="dayClick(date)"
+                             :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
                         >
-
+                            <month-mode-date
+                                v-if="appointments.filter(item => item.date.split(' ')[0] === date).length"
+                                :date="date"
+                            />
                         </div>
                     </template>
                     <template v-slot:dayHeader="{ date }">
@@ -150,8 +170,10 @@
                         />
                     </template>
                 </v-calendar>
-            </v-sheet>
-        </v-flex>
+            </v-flex>
+        </v-layout>
+
+
         <v-dialog
             :value="!!eventToDelete"
             max-width="500px"
@@ -188,7 +210,7 @@
             </v-card>
 
         </v-dialog>
-    </v-layout>
+    </v-flex>
 </template>
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
@@ -196,16 +218,22 @@
     import CabinetsModePeriod from './CabinetsModePeriod'
     import SingleModePeriod from './SingleModePeriod'
     import WeekModePeriod from './WeekModePeriod'
+    import MonthModeDate from './MonthModeDate'
     export default {
         name: 'AppointmentCalendar',
-        props: ['mode'],
         data: () => ({
+            mode: 'day',
             eventToDelete: null,
             cabinetsWidth: null,
             currentMonth: null,
             newDate: null,
             menu: false,
-            openDate: null
+            openDate: null,
+            viewModes: [
+                {name: 'month', description: 'Месяц'},
+                {name: 'week', description: 'Неделя'},
+                {name: 'day', description: 'День'}
+            ]
         }),
         computed: {
             intervalHeight () {
@@ -254,7 +282,10 @@
             setCabinetsWidth (width) {
                 this.cabinetsWidth = width
             },
-            dayClick () {
+            dayClick (date) {
+                this.currentMonth = date
+                this.$emit('mode', 'day')
+                console.log(date)
             },
             intervalFormat (interval) {
                 return interval.time
@@ -280,7 +311,6 @@
                 this.openDate = data.date
             },
             monthPicked (val) {
-
                 let withDay = val.split('-').length > 2
                 if (withDay) {
                     this.currentMonth = val
@@ -316,7 +346,8 @@
             CabinetsModeHeader,
             CabinetsModePeriod,
             SingleModePeriod,
-            WeekModePeriod
+            WeekModePeriod,
+            MonthModeDate
         }
     }
 </script>
