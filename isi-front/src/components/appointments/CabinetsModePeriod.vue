@@ -1,13 +1,15 @@
 <template>
     <v-layout>
-        <v-flex
+        <div
             class="cab-mode-period"
             v-for="(cabinet, index) in cabinets"
             :key="index"
             :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
-            style="border: 1px solid grey; display: flex"
+            style="border: 1px solid grey; display: flex; cursor: pointer"
             column
             align-center
+            @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
+            :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
             <v-menu
                 :close-on-content-click="false"
@@ -46,6 +48,7 @@
                     </v-btn>
                 </template>
                 <div
+                    class="round-corner"
                     style="width: 100%; height: 100%; cursor: pointer; background-color: white"
                     @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
                     :title="cabinetEvents(cabinet.id).length < 2 ? `Добавить запись на ${textDate} в ${hour}:** в кабинет ${cabinet.name}` : ''"
@@ -125,7 +128,7 @@
                     </v-card-text>
                 </v-card>
             </v-menu>
-        </v-flex>
+        </div>
         <calendar-record-adder
             v-if="activeCabinet"
             :date="date"
