@@ -19,7 +19,9 @@
                 min-width="290px"
             >
                 <template v-slot:activator="{ on }">
-                    <span
+                    <v-btn
+                        flat
+                        round
                         class="ml-2"
                         style="cursor: pointer"
                         title="Просмотр записи"
@@ -41,7 +43,7 @@
                         >
                             {{ cabinetEvents(cabinet.id)[0].client_name }}
                         </span>
-                    </span>
+                    </v-btn>
                 </template>
                 <div
                     style="width: 100%; height: 100%; cursor: pointer; background-color: white"
@@ -59,7 +61,70 @@
                     />
                 </div>
             </v-menu>
+            <v-menu
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                        small
+                        icon
+                        v-on="on"
+                        color="blue"
+                        :title="`Показать все записи часа (${cabinetEvents(cabinet.id).length})`"
+                        v-if="cabinetEvents(cabinet.id).length > 1"
+                    >
+                        <span class="subheading white--text">
+                            <strong>
+                                + {{ `${cabinetEvents(cabinet.id).length - 1}` }}
+                            </strong>
+                        </span>
+                    </v-btn>
+                </template>
+                <v-card
+                    class="round-corner"
+                >
+                    <v-card-title
+                        class="light-blue darken-3 pt-0 pb-0"
+                    >
+                        <span class="subheading white--text">
+                            Все записи в кабинет "{{ cabinet.name }}" на {{ date | moment('DD MMMM YYYY г.') }}
+                            c <em>{{ hour }}:00</em> до <em>{{ hour }}:59</em>
+                        </span>
+                        <v-spacer/>
+                        <v-btn
+                            outline
+                            small
+                            icon
+                            flat
+                            color="white"
+                            @click="addMode = true"
+                            :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"
+                        >
+                            <v-icon
+                                small
+                                color="white"
+                            >
+                                queue
+                            </v-icon>
+                        </v-btn>
 
+                    </v-card-title>
+                    <v-card-text>
+                        <event
+                            v-for="event in cabinetEvents(cabinet.id)"
+                            :key="event.id"
+                            :event="event"
+                            @delete="emitDelete(event)"
+                        />
+                    </v-card-text>
+                </v-card>
+            </v-menu>
         </v-flex>
         <calendar-record-adder
             v-if="activeCabinet"
@@ -73,6 +138,7 @@
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetEntry from './CabinetEntry'
+    import Event from './Event'
     export default {
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'columnWidth', 'hour', 'date'],
@@ -113,7 +179,8 @@
         },
         components: {
             CabinetEntry,
-            CalendarRecordAdder
+            CalendarRecordAdder,
+            Event
         }
     }
 </script>
