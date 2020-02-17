@@ -2,8 +2,8 @@
     <v-layout>
         <div
             class="cab-mode-period"
-            v-for="(cabinet, index) in cabinets"
-            :key="index"
+            v-for="cabinet in cabinets"
+            :key="cabinet.id"
             :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
             style="border: 1px solid grey; display: flex; cursor: pointer"
             column
@@ -120,8 +120,8 @@
                     </v-card-title>
                     <v-card-text>
                         <event
-                            v-for="event in cabinetEvents(cabinet.id)"
-                            :key="event.id"
+                            v-for="(event,  index) in cabinetEvents(cabinet.id)"
+                            :key="`e${event.id}${index}`"
                             :event="event"
                             @delete="emitDelete(event)"
                         />
@@ -130,7 +130,7 @@
             </v-menu>
         </div>
         <calendar-record-adder
-            v-if="activeCabinet"
+            v-if="activeCabinet !== null || addMode === true"
             :date="date"
             :preset-cabinet="activeCabinet"
             :preset-hour="hour"
@@ -146,6 +146,7 @@
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'columnWidth', 'hour', 'date'],
         data: () => ({
+            addMode: false,
             display: false,
             activeCabinet: null
         }),
@@ -164,6 +165,9 @@
             }
         },
         methods: {
+            resetAdding () {
+                this.addMode = false
+            },
             addAttempt (cabinet) {
                 this.activeCabinet = cabinet
             },
