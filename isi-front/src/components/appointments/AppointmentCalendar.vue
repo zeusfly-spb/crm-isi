@@ -143,6 +143,11 @@
                             :date="date"
                             @delete="showDeleteConfirm"
                         />
+                        <week-mode-period
+                            v-if="displayMode === 'week'"
+                            :hour="hour"
+                            :date="date"
+                        />
                     </template>
                 </v-calendar>
             </v-sheet>
@@ -190,6 +195,7 @@
     import CabinetsModeHeader from './CabinetsModeHeader'
     import CabinetsModePeriod from './CabinetsModePeriod'
     import SingleModePeriod from './SingleModePeriod'
+    import WeekModePeriod from './WeekModePeriod'
     export default {
         name: 'AppointmentCalendar',
         props: ['mode'],
@@ -210,13 +216,9 @@
             },
             displayMode () {
                 if (this.mode === 'day') {
-                    if (this.workingIsland) {
-                        return this.workingIsland.cabinets.length ? 'cabinets' : 'single'
-                    } else {
-                        return 'islands'
-                    }
+                    return this.workingIsland.cabinets.length ? 'cabinets' : 'single'
                 } else {
-                    return null
+                    return this.mode
                 }
             },
             workingIsland () {
@@ -313,7 +315,8 @@
             CalendarRecordAdder,
             CabinetsModeHeader,
             CabinetsModePeriod,
-            SingleModePeriod
+            SingleModePeriod,
+            WeekModePeriod
         }
     }
 </script>
