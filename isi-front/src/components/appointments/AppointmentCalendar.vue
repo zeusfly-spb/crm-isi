@@ -112,47 +112,56 @@
                         interval-height="48"
                         @click:date="selectDate"
                     >
-                        <template v-slot:day="{ date }">
-                            <v-menu
-                                :value="date === openDate && workingIslandId"
-                                :close-on-content-click="false"
-                                :close-on-click="false"
-                                max-width="1000px"
+                        <template v-slot:day="{ date, weekday }">
+                            <v-flex
+                                    style="width: 100%; height: 100%"
+                                    :class="{'red lighten-5': [0, 6].includes(weekday)}"
                             >
-                                <template v-slot:activator="{ on }">
-                                    <div v-on="on"></div>
-                                </template>
+                                <v-menu
+                                        :value="date === openDate && workingIslandId"
+                                        :close-on-content-click="false"
+                                        :close-on-click="false"
+                                        max-width="1000px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <div v-on="on"></div>
+                                    </template>
+                                    <calendar-record-adder
+                                            v-if="date === openDate && mode === 'month'"
+                                            :date="openDate"
+                                            @reset="resetOpenDate"
+                                            @message="forwardMessage"
+                                    />
+                                </v-menu>
+                                <div style="width: 100%; height: 100%; cursor: pointer"
+                                     @click="dayClick(date)"
+                                     :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
+                                >
+                                    <month-mode-date
+                                            v-if="appointments.filter(item => item.date.split(' ')[0] === date).length"
+                                            :date="date"
+                                    />
+                                </div>
+                            </v-flex>
+                         </template>
+                        <template v-slot:dayHeader="{ date, weekday }">
+                            <v-flex
+                                    style="width: 100%; height: 100%"
+                            >
                                 <calendar-record-adder
-                                    v-if="date === openDate && mode === 'month'"
-                                    :date="openDate"
-                                    @reset="resetOpenDate"
-                                    @message="forwardMessage"
+                                        v-if="date === openDate && ['week', 'day'].includes(mode)"
+                                        :date="openDate"
+                                        @reset="resetOpenDate"
+                                        @message="forwardMessage"
                                 />
-                            </v-menu>
-                            <div style="width: 100%; height: 100%; cursor: pointer"
-                                 @click="dayClick(date)"
-                                 :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
-                            >
-                                <month-mode-date
-                                    v-if="appointments.filter(item => item.date.split(' ')[0] === date).length"
-                                    :date="date"
+                                <cabinets-mode-header
+                                        v-if="displayMode === 'cabinets'"
+                                        :cabinets="cabinets"
+                                        @computed="setCabinetsWidth"
                                 />
-                            </div>
+                            </v-flex>
                         </template>
-                        <template v-slot:dayHeader="{ date }">
-                            <calendar-record-adder
-                                v-if="date === openDate && ['week', 'day'].includes(mode)"
-                                :date="openDate"
-                                @reset="resetOpenDate"
-                                @message="forwardMessage"
-                            />
-                            <cabinets-mode-header
-                                v-if="displayMode === 'cabinets'"
-                                :cabinets="cabinets"
-                                @computed="setCabinetsWidth"
-                            />
-                        </template>
-                        <template v-slot:interval="{ hour, date }">
+                        <template v-slot:interval="{ hour, date, weekday }">
                             <cabinets-mode-period
                                 v-if="displayMode === 'cabinets'"
                                 :cabinets="cabinets"
@@ -171,6 +180,7 @@
                                 v-if="displayMode === 'week'"
                                 :hour="hour"
                                 :date="date"
+                                :weekday="weekday"
                                 @date="dayClick"
                             />
                         </template>

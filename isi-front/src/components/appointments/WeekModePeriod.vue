@@ -1,6 +1,7 @@
 <template>
     <div
         style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%"
+        :class="{'red lighten-5': [0, 6].includes(weekday)}"
     >
         <span
             v-if="appointments.length"
@@ -13,7 +14,7 @@
 <script>
     export default {
         name: 'WeekModePeriod',
-        props: ['date', 'hour'],
+        props: ['date', 'hour', 'weekday'],
         computed: {
             single () {
                 return this.cabinets.length === 0
