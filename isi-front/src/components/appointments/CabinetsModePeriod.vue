@@ -1,17 +1,16 @@
 <template>
     <v-layout>
         <div
-            class="cab-mode-period"
+            class="cab-mode-period p-0 m-0"
             v-for="cabinet in cabinets"
             :key="cabinet.id"
             :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
-            style="border: 1px solid grey; display: flex; cursor: pointer"
-            column
-            align-center
+            style="border: 1px solid lightgray; display: flex; cursor: pointer; justify-content: flex-start; align-items: center"
             @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
             <v-menu
+                v-if="cabinetEvents(cabinet.id).length"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 lazy
@@ -23,11 +22,9 @@
                 <template v-slot:activator="{ on }">
                     <v-btn
                         flat
-                        round
-                        class="ml-2"
-                        style="cursor: pointer"
+                        small
+                        style="margin: 3px; padding: 0"
                         title="Просмотр записи"
-                        v-if="!display && cabinetEvents(cabinet.id).length"
                         v-on="on"
                     >
                         <v-icon
@@ -65,7 +62,9 @@
                 </div>
             </v-menu>
             <v-menu
+                v-if="cabinetEvents(cabinet.id).length > 1"
                 :close-on-content-click="false"
+                :close-on-click="!addMode"
                 :nudge-right="40"
                 lazy
                 transition="scale-transition"
@@ -75,12 +74,12 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-btn
+                        style="margin: 0; padding: 0"
                         small
                         icon
                         v-on="on"
                         color="blue"
                         :title="`Показать все записи часа (${cabinetEvents(cabinet.id).length})`"
-                        v-if="cabinetEvents(cabinet.id).length > 1"
                     >
                         <span class="subheading white--text">
                             <strong>
@@ -116,7 +115,6 @@
                                 queue
                             </v-icon>
                         </v-btn>
-
                     </v-card-title>
                     <v-card-text>
                         <event
@@ -130,7 +128,7 @@
             </v-menu>
         </div>
         <calendar-record-adder
-            v-if="activeCabinet !== null || addMode === true"
+            v-if="addMode"
             :date="date"
             :preset-cabinet="activeCabinet"
             :preset-hour="hour"
@@ -172,13 +170,14 @@
                 this.activeCabinet = cabinet
             },
             resetAdding () {
-                this.activeCabinet = null
+                this.addMode = false
             },
             emitDelete (event) {
                 this.$emit('delete', event)
             },
-            fieldClicked ({cabinet, hour}) {
+            fieldClicked ({cabinet}) {
                 this.activeCabinet = cabinet
+                this.addMode = true
             },
             cabinetEvents (id) {
                 return this.periodAppointments.filter(event => event.cabinet_id === id)
