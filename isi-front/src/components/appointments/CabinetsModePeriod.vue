@@ -7,24 +7,59 @@
             :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
             style="border: 1px solid grey; display: flex"
             column
-            :align-center="cabinetEvents(cabinet.id).length < 2"
+            align-center
         >
-            &nbsp;
-            <div
-                style="width: 100%; height: 100%; cursor: pointer"
-                @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
-                :title="cabinetEvents(cabinet.id).length < 2 ? `Добавить запись на ${textDate} в ${hour}:** в кабинет ${cabinet.name}` : ''"
+            <v-menu
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
             >
-                <cabinet-entry
-                    v-if="cabinetEvents(cabinet.id).length"
-                    :events="cabinetEvents(cabinet.id)"
-                    @delete="emitDelete"
-                    @addAttempt="addAttempt"
-                    :date="date"
-                    :hour="hour"
-                    :cabinet="cabinet"
-                />
-            </div>
+                <template v-slot:activator="{ on }">
+                    <span
+                        class="ml-2"
+                        style="cursor: pointer"
+                        title="Просмотр записи"
+                        v-if="!display && cabinetEvents(cabinet.id).length"
+                        v-on="on"
+                    >
+                        <v-icon
+                            color="blue"
+                        >
+                            event
+                        </v-icon>
+                        <span
+                            class="green--text"
+                        >
+                            {{ cabinetEvents(cabinet.id)[0].date.split(' ')[1] }}
+                        </span>
+                        <span
+                            class="blue--text ml-1"
+                        >
+                            {{ cabinetEvents(cabinet.id)[0].client_name }}
+                        </span>
+                    </span>
+                </template>
+                <div
+                    style="width: 100%; height: 100%; cursor: pointer; background-color: white"
+                    @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
+                    :title="cabinetEvents(cabinet.id).length < 2 ? `Добавить запись на ${textDate} в ${hour}:** в кабинет ${cabinet.name}` : ''"
+                >
+                    <cabinet-entry
+                        v-if="cabinetEvents(cabinet.id).length"
+                        :events="cabinetEvents(cabinet.id)"
+                        @delete="emitDelete"
+                        @addAttempt="addAttempt"
+                        :date="date"
+                        :hour="hour"
+                        :cabinet="cabinet"
+                    />
+                </div>
+            </v-menu>
+
         </v-flex>
         <calendar-record-adder
             v-if="activeCabinet"
@@ -42,6 +77,7 @@
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'columnWidth', 'hour', 'date'],
         data: () => ({
+            display: false,
             activeCabinet: null
         }),
         computed: {
