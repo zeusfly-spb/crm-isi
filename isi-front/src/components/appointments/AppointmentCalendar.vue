@@ -143,7 +143,15 @@
                                     />
                                 </div>
                             </v-flex>
-                         </template>
+                        </template>
+                        <template v-slot:dayLabel="{ day, weekday }">
+                            <span
+                                class="title"
+                                :class="{'red--text': [0, 6].includes(weekday)}"
+                            >
+                                {{ day }}
+                            </span>
+                        </template>
                         <template v-slot:dayHeader="{ date, weekday }">
                             <v-flex
                                     style="width: 100%; height: 100%"
