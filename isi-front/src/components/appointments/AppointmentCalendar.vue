@@ -17,13 +17,10 @@
                 class="text-sm-right"
             >
                 <v-btn
-                    small
                     icon
                     @click="goPrev"
                 >
-                    <v-icon
-                        small
-                    >
+                    <v-icon>
                         keyboard_arrow_left
                     </v-icon>
                 </v-btn>
@@ -76,13 +73,10 @@
                 class="text-sm-left"
             >
                 <v-btn
-                    small
                     icon
                     @click="goNext"
                 >
-                    <v-icon
-                        small
-                    >
+                    <v-icon>
                         keyboard_arrow_right
                     </v-icon>
                 </v-btn>
@@ -146,7 +140,7 @@
                         </template>
                         <template v-slot:dayLabel="{ day, weekday }">
                             <span
-                                class="title"
+                                class="subheading"
                                 :class="{'red--text': [0, 6].includes(weekday)}"
                             >
                                 {{ day }}
