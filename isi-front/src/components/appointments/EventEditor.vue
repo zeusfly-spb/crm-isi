@@ -238,7 +238,17 @@
                         }
                         this.$store.dispatch('updateAppointment', this.editedEvent)
                             .then(() => {
-                                this.$store.commit('SEND_EVENT_MESSAGE', {text: 'Запись изменена', color: 'green'})
+                                let editedToCompare = JSON.parse(JSON.stringify(this.editedEvent))
+                                let backupToCompare = JSON.parse(JSON.stringify(this.backupEvent))
+                                delete(editedToCompare.date)
+                                delete (backupToCompare.date)
+                                let text
+                                if (JSON.stringify(editedToCompare) === JSON.stringify(backupToCompare)) {
+                                    text = `Запись пересена на ${this.$moment(this.editedEvent.date).format('DD MMMM YYYY г. HH:mm')}`
+                                } else {
+                                    text = `Запись изменена`
+                                }
+                                this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                                 this.close()
                             })
                     })
