@@ -280,7 +280,7 @@
                 return this.$store.state.accountingDate
             },
             windowHeight () {
-                return window.innerHeight
+                return window.innerHeight * .8
             }
         },
         methods: {
