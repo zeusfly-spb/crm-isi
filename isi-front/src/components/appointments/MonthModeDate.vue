@@ -22,6 +22,12 @@
                 </v-flex>
             </v-layout>
         </div>
+        <v-flex
+            v-else
+            class="text-md-center"
+        >
+            Записей: <span class="title blue--text">{{ events.length }}</span>
+        </v-flex>
     </v-flex>
 </template>
 <script>
