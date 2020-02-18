@@ -47,9 +47,6 @@
                 </template>
                 <div
                     class="teal lighten-5"
-                    style="width: 100%; height: 100%; cursor: pointer"
-                    @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
-                    :title="cabinetEvents(cabinet.id).length < 2 ? `Добавить запись на ${textDate} в ${hour}:** в кабинет ${cabinet.name}` : ''"
                 >
                     <cabinet-entry
                         v-if="cabinetEvents(cabinet.id).length"
@@ -146,7 +143,6 @@
         props: ['cabinets', 'columnWidth', 'hour', 'date'],
         data: () => ({
             addMode: false,
-            display: false,
             activeCabinet: null
         }),
         computed: {
