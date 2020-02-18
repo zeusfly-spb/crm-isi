@@ -193,6 +193,7 @@
             :value="!!eventToDelete"
             max-width="500px"
             v-if="eventToDelete"
+            @update:returnValue="resetDeleting"
         >
             <v-card
                 class="round-corner"

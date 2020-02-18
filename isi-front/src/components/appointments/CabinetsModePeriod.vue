@@ -21,9 +21,10 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-btn
+                        round
                         flat
                         small
-                        style="margin: 3px; padding: 0"
+                        style="margin: 3px; padding: 3px"
                         title="Просмотр записи"
                         v-on="on"
                     >
@@ -45,8 +46,8 @@
                     </v-btn>
                 </template>
                 <div
-                    class="round-corner"
-                    style="width: 100%; height: 100%; cursor: pointer; background-color: white"
+                    class="teal lighten-5"
+                    style="width: 100%; height: 100%; cursor: pointer"
                     @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
                     :title="cabinetEvents(cabinet.id).length < 2 ? `Добавить запись на ${textDate} в ${hour}:** в кабинет ${cabinet.name}` : ''"
                 >
@@ -89,7 +90,7 @@
                     </v-btn>
                 </template>
                 <v-card
-                    class="round-corner"
+                    class="round-corner teal lighten-5"
                 >
                     <v-card-title
                         class="light-blue darken-3 pt-0 pb-0"
@@ -163,9 +164,6 @@
             }
         },
         methods: {
-            resetAdding () {
-                this.addMode = false
-            },
             addAttempt (cabinet) {
                 this.activeCabinet = cabinet
             },
