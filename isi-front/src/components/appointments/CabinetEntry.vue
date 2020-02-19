@@ -7,13 +7,7 @@
             :event="firstEvent"
             @delete="emitDelete(firstEvent)"
         />
-        <calendar-record-adder
-            :date="date"
-            v-if="addMode"
-            @reset="addMode = false"
-            :preset-cabinet="cabinet"
-            :preset-hour="hour"
-        />
+
     </v-flex>
 </template>
 <script>

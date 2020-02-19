@@ -16,7 +16,7 @@
             @message="showSnack"
             @mode="setViewMode"
         />
-        <div v-else class="display-1 orange--text text--darken-3 text-md-center">
+        <div v-else class="title orange--text text--darken-3 text-md-center mt-2">
             <strong>Для просмотра записей, выберите островок</strong>
         </div>
     </v-flex>

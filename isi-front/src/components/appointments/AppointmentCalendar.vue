@@ -206,7 +206,7 @@
                 <v-card-text class="subheading">
                     Удалить запись <strong>{{ eventToDelete.service.description }}</strong>
                     островка <strong><em>{{ eventToDelete.island.name }}</em></strong> на
-                    <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в hh:mm')}}</strong>,
+                    <strong>{{ eventToDelete.date | moment('DD MMMM YYYY г. в HH:mm')}}</strong>,
                     клиента <strong>{{ eventToDelete.client_name }}</strong>?
                 </v-card-text>
                 <v-card-actions>
@@ -349,6 +349,9 @@
             this.currentMonth = this.accountingDate
         },
         watch: {
+            eventToDelete (event) {
+                !!event ? this.$store.commit('DELETE_MODE_ON') : this.$store.commit('DELETE_MODE_OFF')
+            },
             accountingDate (val, oldVal) {
                 if (!oldVal) {
                     this.currentMonth = val

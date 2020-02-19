@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        dialogLocked: false,
+        deleteMode: false,
         message: null,
         date: null,
         mode: 'month',
@@ -70,6 +72,18 @@ export default {
         }
     },
     mutations: {
+        UNLOCK_DIALOG (state) {
+            state.dialogLocked = false
+        },
+        LOCK_DIALOG (state) {
+            state.dialogLocked = true
+        },
+        DELETE_MODE_OFF (state) {
+            state.deleteMode = false
+        },
+        DELETE_MODE_ON (state) {
+            state.deleteMode = true
+        },
         SEND_EVENT_MESSAGE (state, message) {
             state.message = message
             setTimeout(() => state.message = null, 100)
