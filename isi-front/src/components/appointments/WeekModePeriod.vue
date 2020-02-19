@@ -3,12 +3,21 @@
         style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%"
         :class="{'red lighten-5': [0, 6].includes(weekday)}"
     >
-        <span
+        <div
             v-if="appointments.length"
             class="subheading text-md-center"
         >
-            Записей: <span class="title blue--text">{{ appointments.length }}</span>
-        </span>
+            <v-icon
+                    v-if="$vuetify.breakpoint.name === 'xs'"
+                    small
+            >
+                event
+            </v-icon>
+            <span v-else>
+                Записей:
+            </span>
+            <span class="title blue--text">{{ appointments.length }}</span>
+        </div>
     </div>
 </template>
 <script>
