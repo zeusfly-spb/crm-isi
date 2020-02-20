@@ -209,7 +209,7 @@
         },
         watch: {
             menuOpen (val) {
-                !!val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             }
         },
         components: {
