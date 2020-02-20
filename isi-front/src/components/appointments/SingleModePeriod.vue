@@ -156,7 +156,7 @@
         },
         methods: {
             periodClicked () {
-                if (this.deleteMode || this.display || this.periodDisplay || this.dialogLocked) {
+                if (this.dialogLocked) {
                     return
                 }
                 this.addMode = true

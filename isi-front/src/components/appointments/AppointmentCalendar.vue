@@ -239,7 +239,6 @@
         name: 'AppointmentCalendar',
         data: () => ({
             mode: 'day',
-            eventToDelete: null,
             currentMonth: null,
             newDate: null,
             menu: false,
@@ -251,6 +250,9 @@
             ]
         }),
         computed: {
+            eventToDelete () {
+                return this.$store.state.appointment.eventToDelete
+            },
             intervalHeight () {
                 return this.$refs.calendar && this.$refs.calendar.intervalHeight
             },
@@ -284,7 +286,8 @@
             onResize () {
             },
             resetDeleting () {
-                this.eventToDelete = null
+                // this.eventToDelete = null
+                this.$store.commit('CANCEL_DELETE_EVENT')
             },
             showDeleteConfirm (event) {
                 this.eventToDelete = event

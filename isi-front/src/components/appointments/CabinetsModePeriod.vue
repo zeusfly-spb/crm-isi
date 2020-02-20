@@ -54,7 +54,6 @@
                     <cabinet-entry
                         v-if="cabinetEvents(cabinet.id).length"
                         :events="cabinetEvents(cabinet.id)"
-                        @delete="emitDelete"
                         @addAttempt="addAttempt"
                         :date="date"
                         :hour="hour"
@@ -123,7 +122,6 @@
                             v-for="(event,  index) in cabinetEvents(cabinet.id)"
                             :key="`e${event.id}${index}`"
                             :event="event"
-                            @delete="emitDelete(event)"
                         />
                     </v-card-text>
                 </v-card>
@@ -178,9 +176,6 @@
             },
             resetAdding () {
                 this.addMode = false
-            },
-            emitDelete (event) {
-                this.$emit('delete', event)
             },
             fieldClicked ({cabinet}) {
                 if (this.$store.state.appointment.dialogLocked) {

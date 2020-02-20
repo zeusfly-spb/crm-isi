@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        eventToDelete: null,
         dialogLocked: false,
         deleteMode: false,
         message: null,
@@ -81,6 +82,12 @@ export default {
         }
     },
     mutations: {
+        CANCEL_DELETE_EVENT (state) {
+            state.eventToDelete = null
+        },
+        ATTEMPT_TO_DELETE_EVENT (state, event) {
+            state.eventToDelete = event
+        },
         UNLOCK_DIALOG (state) {
             state.dialogLocked = false
         },

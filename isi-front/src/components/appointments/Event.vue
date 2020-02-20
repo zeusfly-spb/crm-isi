@@ -39,7 +39,7 @@
                 class="clickable"
                 title="Удалить запись"
                 v-if="isSuperadmin"
-                @click="$emit('delete')"
+                @click="$store.commit('ATTEMPT_TO_DELETE_EVENT', event)"
             >
                 delete
             </v-icon>
