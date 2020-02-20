@@ -371,3 +371,10 @@
         }
     }
 </script>
+<style>
+    @media (max-width: 600px) {
+        .v-calendar-daily_head-day-label {
+            font-size: 16px!important;
+        }
+    }
+</style>
