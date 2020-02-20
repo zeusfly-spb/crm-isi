@@ -9,6 +9,7 @@
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
             <v-menu
+                v-model="itemDisplay"
                 v-if="cabinetEvents(cabinet.id).length"
                 :close-on-content-click="false"
                 :nudge-right="40"
@@ -59,6 +60,7 @@
                 </div>
             </v-menu>
             <v-menu
+                v-model="listDisplay"
                 v-if="cabinetEvents(cabinet.id).length > 1"
                 :close-on-content-click="false"
                 :close-on-click="!addMode"
@@ -141,10 +143,15 @@
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'columnWidth', 'hour', 'date'],
         data: () => ({
+            itemDisplay: false,
+            listDisplay: false,
             addMode: false,
             activeCabinet: null
         }),
         computed: {
+            breakpoint () {
+                return this.$vuetify.breakpoint
+            },
             textDate () {
                 return this.$moment(this.date).format('DD MMMM YYYY г.')
             },
@@ -169,11 +176,25 @@
                 this.$emit('delete', event)
             },
             fieldClicked ({cabinet}) {
+                if (this.$store.state.appointment.dialogLocked) {
+                    return
+                }
                 this.activeCabinet = cabinet
                 this.addMode = true
             },
             cabinetEvents (id) {
                 return this.periodAppointments.filter(event => event.cabinet_id === id)
+            }
+        },
+        watch: {
+            'breakpoint.name': function () {
+                this.$forceUpdate()
+            },
+            itemDisplay (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+            },
+            listDisplay (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             }
         },
         components: {

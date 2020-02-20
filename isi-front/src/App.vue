@@ -106,6 +106,9 @@ export default {
         ]
     }),
     computed: {
+        breakpoint () {
+            return this.$vuetify.breakpoint
+        },
         appointmentDate () {
             return this.$store.state.appointment.date
         },

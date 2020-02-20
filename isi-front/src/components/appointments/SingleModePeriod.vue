@@ -33,7 +33,7 @@
                     <span
                         class="green--text"
                     >
-                            {{ events[0].date.split(' ')[1] }}
+                            {{ $store.state.appointment.displayTime(events[0].date.split(' ')[1]) }}
                         </span>
                     <span
                         class="blue--text ml-1"

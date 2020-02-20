@@ -11,8 +11,12 @@ export default {
         uniqID: (base) => base + '_' + Math.random().toString(36).substr(2, 9),
         displayTime: (fullTime) => {
             let timeArr = fullTime.split(':')
-            timeArr.pop()
-            return timeArr.join(':')
+            if (timeArr.length === 3) {
+                timeArr.pop()
+                return timeArr.join(':')
+            } else {
+                return fullTime
+            }
         }
     },
     actions: {

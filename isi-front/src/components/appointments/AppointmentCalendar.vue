@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <v-flex v-resize="onResize">
         <v-layout class="mb-2">
             <v-flex xs12 sm6 md4>
                 <v-select
@@ -284,6 +284,9 @@
             }
         },
         methods: {
+            onResize () {
+                this.setCabinetsWidth(this.$vuetify.breakpoint.width / this.cabinets.length)
+            },
             resetDeleting () {
                 this.eventToDelete = null
             },
