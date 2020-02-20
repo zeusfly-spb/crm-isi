@@ -159,7 +159,6 @@
                                 <cabinets-mode-header
                                         v-if="displayMode === 'cabinets'"
                                         :cabinets="cabinets"
-                                        @computed="setCabinetsWidth"
                                 />
                             </v-flex>
                         </template>
@@ -167,7 +166,6 @@
                             <cabinets-mode-period
                                 v-if="displayMode === 'cabinets'"
                                 :cabinets="cabinets"
-                                :columnWidth="cabinetsWidth"
                                 :hour="hour"
                                 :date="date"
                                 @delete="showDeleteConfirm"
@@ -242,7 +240,6 @@
         data: () => ({
             mode: 'day',
             eventToDelete: null,
-            cabinetsWidth: null,
             currentMonth: null,
             newDate: null,
             menu: false,
@@ -285,7 +282,6 @@
         },
         methods: {
             onResize () {
-                this.setCabinetsWidth(this.$vuetify.breakpoint.width / this.cabinets.length)
             },
             resetDeleting () {
                 this.eventToDelete = null
@@ -299,9 +295,6 @@
                         this.forwardMessage({text: 'Запись удалена', color: 'green'})
                         this.resetDeleting()
                     })
-            },
-            setCabinetsWidth (width) {
-                this.cabinetsWidth = width
             },
             dayClick (date) {
                 this.currentMonth = date

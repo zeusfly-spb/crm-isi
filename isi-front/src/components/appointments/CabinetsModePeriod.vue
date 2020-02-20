@@ -1,10 +1,13 @@
 <template>
-    <v-layout>
+    <v-layout
+        ref="mainLayout"
+        style="width: 100%"
+    >
         <div
             class="cab-mode-period p-0 m-0"
             v-for="cabinet in cabinets"
             :key="cabinet.id"
-            :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
+            :style="{width: `${fieldWidth}px`, height: `${$parent.intervalHeight}px`}"
             @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
@@ -141,14 +144,18 @@
     import Event from './Event'
     export default {
         name: 'CabinetsModePeriod',
-        props: ['cabinets', 'columnWidth', 'hour', 'date'],
+        props: ['cabinets', 'hour', 'date'],
         data: () => ({
+            fullWidth: null,
             itemDisplay: false,
             listDisplay: false,
             addMode: false,
             activeCabinet: null
         }),
         computed: {
+            fieldWidth () {
+                return this.fullWidth / this.cabinets.length
+            },
             breakpoint () {
                 return this.$vuetify.breakpoint
             },
@@ -185,6 +192,9 @@
             cabinetEvents (id) {
                 return this.periodAppointments.filter(event => event.cabinet_id === id)
             }
+        },
+        mounted () {
+            this.fullWidth = this.$refs.mainLayout.offsetWidth
         },
         watch: {
             'breakpoint.name': function () {

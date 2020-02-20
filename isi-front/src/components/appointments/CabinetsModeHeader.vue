@@ -1,26 +1,17 @@
 <template>
-    <v-flex>
-        <v-data-table
-            :items="[names]"
-            hide-headers
-            hide-actions
-        >
-            <template v-slot:items="props">
-                <tr
-                    ref="mainTr"
-                >
-                    <td
-                        v-for="(name, index) in names"
-                        :key="index"
-                        align="center"
-                        style="padding: 0!important; margin: 0!important; height: 1.5em; border: 1px solid grey"
-                        :width="columnWidth"
-                    >
-                        <strong>{{ name }}</strong>
-                    </td>
-                </tr>
-            </template>
-        </v-data-table>
+    <v-flex
+        style="width: 100%; display: flex;"
+        ref="mainTr"
+    >
+    <div
+        v-for="(name, index) in names"
+        :style="{'width': `${columnWidth}px`}"
+        class="cabinets-header"
+        :key="index"
+    >
+        <strong>{{ name }}</strong>
+    </div>
+
     </v-flex>
 </template>
 <script>
@@ -31,6 +22,7 @@
             fullWidth: null
         }),
         computed: {
+
             columnWidth () {
                 return this.fullWidth && this.fullWidth / this.cabinets.length || null
             },
@@ -44,3 +36,13 @@
         }
     }
 </script>
+<style>
+    .cabinets-header {
+        text-align: center;
+        padding: 0!important;
+        margin: 0!important;
+        height: 1.5em!important;
+        border: 1px solid grey;
+        overflow: hidden;
+    }
+</style>
