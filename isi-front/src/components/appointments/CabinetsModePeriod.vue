@@ -12,7 +12,7 @@
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
             <v-menu
-                v-model="itemDisplay"
+                @update:returnValue="menuAction"
                 v-if="cabinetEvents(cabinet.id).length"
                 :close-on-content-click="false"
                 :nudge-right="40"
@@ -30,6 +30,8 @@
                         style="margin: 3px; padding: 3px"
                         title="Просмотр записи"
                         v-on="on"
+                        @click="menuOpen = true"
+                        :disabled="menuOpen"
                     >
                         <v-icon
                             color="blue"
@@ -62,7 +64,7 @@
                 </div>
             </v-menu>
             <v-menu
-                v-model="listDisplay"
+                @update:returnValue="menuAction"
                 v-if="cabinetEvents(cabinet.id).length > 1"
                 :close-on-content-click="false"
                 :close-on-click="!addMode"
@@ -81,6 +83,8 @@
                         v-on="on"
                         color="blue"
                         :title="`Показать все записи часа (${cabinetEvents(cabinet.id).length})`"
+                        @click="menuOpen = true"
+                        :disabled="menuOpen"
                     >
                         <span class="subheading white--text">
                             <strong>
@@ -144,13 +148,17 @@
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'hour', 'date'],
         data: () => ({
+            menuOpen: false,
             fullWidth: null,
             itemDisplay: false,
             listDisplay: false,
             addMode: false,
-            activeCabinet: null
+            activeCabinetId: null
         }),
         computed: {
+            dialogLocked () {
+                return this.$store.state.appointment.dialogLocked
+            },
             fieldWidth () {
                 return this.fullWidth / this.cabinets.length
             },
@@ -171,6 +179,14 @@
             }
         },
         methods: {
+            activatorClick () {
+                if (this.menuOpen) {
+                    this.menuOpen = false
+                }
+            },
+            menuAction () {
+                this.menuOpen = false
+            },
             addAttempt (cabinet) {
                 this.activeCabinet = cabinet
             },
@@ -178,7 +194,7 @@
                 this.addMode = false
             },
             fieldClicked ({cabinet}) {
-                if (this.$store.state.appointment.dialogLocked) {
+                if (this.dialogLocked) {
                     return
                 }
                 this.activeCabinet = cabinet
@@ -192,14 +208,8 @@
             this.fullWidth = this.$refs.mainLayout.offsetWidth
         },
         watch: {
-            'breakpoint.name': function () {
-                this.$forceUpdate()
-            },
-            itemDisplay (val) {
-                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
-            },
-            listDisplay (val) {
-                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+            menuOpen (val) {
+                !!val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             }
         },
         components: {
