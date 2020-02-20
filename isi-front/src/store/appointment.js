@@ -8,7 +8,12 @@ export default {
         date: null,
         mode: 'month',
         appointments: [],
-        uniqID: (base) => base + '_' + Math.random().toString(36).substr(2, 9)
+        uniqID: (base) => base + '_' + Math.random().toString(36).substr(2, 9),
+        displayTime: (fullTime) => {
+            let timeArr = fullTime.split(':')
+            timeArr.pop()
+            return timeArr.join(':')
+        }
     },
     actions: {
         changeAppointmentDate ({dispatch, commit, state}, date) {

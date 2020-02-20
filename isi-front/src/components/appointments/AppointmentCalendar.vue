@@ -350,7 +350,7 @@
         },
         watch: {
             eventToDelete (event) {
-                !!event ? this.$store.commit('DELETE_MODE_ON') : this.$store.commit('DELETE_MODE_OFF')
+                event ? this.$store.commit('DELETE_MODE_ON') : this.$store.commit('DELETE_MODE_OFF')
             },
             accountingDate (val, oldVal) {
                 if (!oldVal) {

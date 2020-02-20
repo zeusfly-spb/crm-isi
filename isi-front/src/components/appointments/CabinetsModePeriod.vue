@@ -5,7 +5,6 @@
             v-for="cabinet in cabinets"
             :key="cabinet.id"
             :style="{width: `${columnWidth}px`, height: `${$parent.intervalHeight}px`}"
-            style="border: 1px solid lightgray; display: flex; cursor: pointer; justify-content: flex-start; align-items: center"
             @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
@@ -36,7 +35,7 @@
                         <span
                             class="green--text"
                         >
-                            {{ cabinetEvents(cabinet.id)[0].date.split(' ')[1] }}
+                            {{ $store.state.appointment.displayTime(cabinetEvents(cabinet.id)[0].date.split(' ')[1])  }}
                         </span>
                         <span
                             class="blue--text ml-1"
@@ -184,3 +183,13 @@
         }
     }
 </script>
+<style>
+    .cab-mode-period {
+        border: 1px solid lightgray;
+        display: flex;
+        cursor: pointer;
+        justify-content: flex-start;
+        align-items: center;
+        overflow: hidden;
+    }
+</style>

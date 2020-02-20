@@ -8,7 +8,7 @@
         >
             event
         </v-icon>
-        <span class="blue--text title">{{ event.date.split(' ')[1] }}</span>
+        <span class="blue--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
         {{ event.service && event.service.description }}
         <strong>Клиент:</strong> {{ event.client_name }}
         {{ event.client_phone | phone }}
@@ -63,7 +63,7 @@
         }),
         computed: {
             caption () {
-                return `Запись на ${this.$moment(this.event.date).format('DD MMMM YYYY г. hh:mm')}`
+                return `Запись на ${this.$moment(this.event.date).format('DD MMMM YYYY г. HH:mm')}`
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
