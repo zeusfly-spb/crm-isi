@@ -286,7 +286,6 @@
             onResize () {
             },
             resetDeleting () {
-                // this.eventToDelete = null
                 this.$store.commit('CANCEL_DELETE_EVENT')
             },
             showDeleteConfirm (event) {

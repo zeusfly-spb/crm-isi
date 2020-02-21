@@ -1,14 +1,25 @@
 <template>
-    <v-layout align-center justify-center row fill-height>
+    <v-layout
+        align-center
+        justify-center
+        row
+        fill-height
+        class="p-0 m-0"
+        style="margin: 0!important; padding: 0!important;"
+    >
         <v-btn
             icon
             title="Переключить на предыдущий день"
             @click="toPrev"
+            :small="isMobile"
         >
-            <v-icon>navigate_before</v-icon>
+            <v-icon
+                :small="isMobile"
+            >
+                navigate_before
+            </v-icon>
         </v-btn>
         <div>
-
             <v-menu
                 :close-on-content-click="false"
                 :nudge-right="40"
@@ -22,7 +33,7 @@
                 <template v-slot:activator="{ on }">
                     <v-text-field
                         :label="accountingDate | moment('DD MMMM YYYY г.')"
-                        prepend-icon="event"
+                        prepend-inner-icon="event"
                         readonly
                         v-on="on"
                     />
@@ -37,10 +48,15 @@
         </div>
         <v-btn
             icon
+            :small="isMobile"
             title="Переключить на следующий день"
             @click="toNext"
         >
-            <v-icon>navigate_next</v-icon>
+            <v-icon
+                :small="isMobile"
+            >
+                navigate_next
+            </v-icon>
         </v-btn>
     </v-layout>
 
@@ -53,6 +69,9 @@
             menu: false
         }),
         computed: {
+            isMobile () {
+                return ['xs', 'sm'].includes(this.$vuetify.breakpoint.name)
+            },
             accountingDate () {
                 return this.$store.state.accountingDate
             },
