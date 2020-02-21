@@ -179,11 +179,6 @@
             }
         },
         methods: {
-            activatorClick () {
-                if (this.menuOpen) {
-                    this.menuOpen = false
-                }
-            },
             menuAction () {
                 this.menuOpen = false
             },
