@@ -11,7 +11,7 @@
         </v-snackbar>
         <island-switcher/>
         <appointment-calendar
-            v-if="workingIsland"
+            v-if="workingIslandId && workingIsland"
             :mode="currentViewMode"
             @message="showSnack"
             @mode="setViewMode"
@@ -38,6 +38,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            },
             eventMessage () {
                 return this.$store.state.appointment.message
             },

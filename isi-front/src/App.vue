@@ -1,33 +1,48 @@
 <template>
   <v-app>
-      <v-toolbar app>
-      <v-toolbar-title class="headline">
-        <v-layout>
+      <v-toolbar
+          app
+          :class="{'p-0': isMobile, 'm-0': isMobile}"
+      >
+      <v-toolbar-title
+          :class="{'headline': !isMobile, 'caption': isMobile}"
+      >
+        <v-layout
+            align-center
+        >
             <v-avatar
-                      color="white"
-                      style="box-shadow: black"
-                      v-if="isAuth"
+                color="white"
+                style="box-shadow: black"
+                v-if="isAuth"
+                :size="isMobile ? 24 : 48"
             >
                 <img
                     v-if="isAuth && !authUser.is_superadmin && authUser.avatar"
                     :src="`${basePath}${authUser.avatar}`"
                     :lazy-src="`${basePath}${authUser.avatar}`"
                     alt="Лого"
-                    height="45px"
+                    :height="isMobile ? '22px' : '45px'"
                 />
                 <img
                     v-else
                     :src="`${basePath}/img/logo.png`"
                     :lazy-src="`${basePath}/img/logo.png`"
                     alt="Лого"
-                    height="45px"
+                    :height="isMobile ? '22px' : '45px'"
                 />
             </v-avatar>
           &nbsp;
           <div>
             <div v-if="isAuth">
-              <span>Островки</span>
-              <div class="title font-weight-bold">
+              <span
+                  :class="{'headline': !isMobile, 'caption': isMobile}"
+              >
+                  Островки
+              </span>
+              <div
+                  class="font-weight-bold"
+                  :class="{'caption': isMobile, 'headline': !isMobile}"
+              >
                   {{ authUser && authUser.full_name }}
                   <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
               </div>
@@ -39,12 +54,21 @@
         <date-selector v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"/>
         <v-spacer v-else></v-spacer>
 
-    <v-btn v-if="isAuth" flat
-           @click="logOut"
-           title="Выход"
+    <v-btn
+        v-if="isAuth"
+        flat
+        @click="logOut"
+        title="Выход"
+        :small="isMobile"
     >
         Выход &nbsp;
-        <v-icon large color="orange darken-2">exit_to_app</v-icon>
+        <v-icon
+            :small="isMobile"
+            :large="!isMobile"
+            color="orange darken-2"
+        >
+            exit_to_app
+        </v-icon>
     </v-btn>
     </v-toolbar>
 
@@ -106,6 +130,9 @@ export default {
         ]
     }),
     computed: {
+        isMobile () {
+            return ['xs', 'sm'].includes(this.breakpoint.name)
+        },
         breakpoint () {
             return this.$vuetify.breakpoint
         },
