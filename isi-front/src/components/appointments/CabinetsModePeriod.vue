@@ -11,125 +11,133 @@
             @click.self="fieldClicked({cabinet: cabinet, hour: hour})"
             :title="`Добавить запись на ${hour} в кабинет ${cabinet.name}`"
         >
-            <v-menu
-                @update:returnValue="menuAction"
-                v-if="cabinetEvents(cabinet.id).length"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-            >
-                <template v-slot:activator="{ on }">
-                    <v-btn
-                        round
-                        flat
-                        small
-                        style="margin: 3px; padding: 3px"
-                        title="Просмотр записи"
-                        v-on="on"
-                        @click="menuOpen = true"
-                        :disabled="menuOpen"
-                    >
-                        <v-icon
-                            color="blue"
-                        >
-                            event
-                        </v-icon>
-                        <span
-                            class="green--text"
-                        >
-                            {{ $store.state.appointment.displayTime(cabinetEvents(cabinet.id)[0].date.split(' ')[1])  }}
-                        </span>
-                        <span
-                            class="blue--text ml-1"
-                        >
-                            {{ cabinetEvents(cabinet.id)[0].client_name }}
-                        </span>
-                    </v-btn>
-                </template>
-                <div
-                    class="teal lighten-5"
-                >
-                    <cabinet-entry
+<!--            <draggable-->
+<!--                @start="dragBegin"-->
+<!--                @end="dragEnd"-->
+<!--            >-->
+<!--                <v-layout>-->
+                    <v-menu
+                        @update:returnValue="menuAction"
                         v-if="cabinetEvents(cabinet.id).length"
-                        :events="cabinetEvents(cabinet.id)"
-                        @addAttempt="addAttempt"
-                        :date="date"
-                        :hour="hour"
-                        :cabinet="cabinet"
-                    />
-                </div>
-            </v-menu>
-            <v-menu
-                @update:returnValue="menuAction"
-                v-if="cabinetEvents(cabinet.id).length > 1"
-                :close-on-content-click="false"
-                :close-on-click="!addMode"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-            >
-                <template v-slot:activator="{ on }">
-                    <v-btn
-                        style="margin: 0; padding: 0"
-                        small
-                        icon
-                        v-on="on"
-                        color="blue"
-                        :title="`Показать все записи часа (${cabinetEvents(cabinet.id).length})`"
-                        @click="menuOpen = true"
-                        :disabled="menuOpen"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
                     >
-                        <span class="subheading white--text">
-                            <strong>
-                                + {{ `${cabinetEvents(cabinet.id).length - 1}` }}
-                            </strong>
-                        </span>
-                    </v-btn>
-                </template>
-                <v-card
-                    class="round-corner teal lighten-5"
-                >
-                    <v-card-title
-                        class="light-blue darken-3 pt-0 pb-0"
-                    >
-                        <span class="subheading white--text">
-                            Все записи в кабинет "{{ cabinet.name }}" на {{ date | moment('DD MMMM YYYY г.') }}
-                            c <em>{{ hour }}:00</em> до <em>{{ hour }}:59</em>
-                        </span>
-                        <v-spacer/>
-                        <v-btn
-                            outline
-                            small
-                            icon
-                            flat
-                            color="white"
-                            @click="addMode = true"
-                            :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"
-                        >
-                            <v-icon
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                round
+                                flat
                                 small
-                                color="white"
+                                style="margin: 3px; padding: 3px"
+                                title="Просмотр записи"
+                                v-on="on"
+                                @click="menuOpen = true"
+                                :disabled="menuOpen"
                             >
-                                queue
-                            </v-icon>
-                        </v-btn>
-                    </v-card-title>
-                    <v-card-text>
-                        <event
-                            v-for="(event,  index) in cabinetEvents(cabinet.id)"
-                            :key="`e${event.id}${index}`"
-                            :event="event"
-                        />
-                    </v-card-text>
-                </v-card>
-            </v-menu>
+                                <v-icon
+                                    color="blue"
+                                >
+                                    event
+                                </v-icon>
+                                <span
+                                    class="green--text"
+                                >
+                                {{ $store.state.appointment.displayTime(cabinetEvents(cabinet.id)[0].date.split(' ')[1])  }}
+                            </span>
+                                <span
+                                    class="blue--text ml-1"
+                                >
+                                {{ cabinetEvents(cabinet.id)[0].client_name }}
+                            </span>
+                            </v-btn>
+                        </template>
+                        <div
+                            class="teal lighten-5"
+                        >
+                            <cabinet-entry
+                                v-if="cabinetEvents(cabinet.id).length"
+                                :events="cabinetEvents(cabinet.id)"
+                                @addAttempt="addAttempt"
+                                :date="date"
+                                :hour="hour"
+                                :cabinet="cabinet"
+                            />
+                        </div>
+                    </v-menu>
+                    <v-menu
+                        @update:returnValue="menuAction"
+                        v-if="cabinetEvents(cabinet.id).length > 1"
+                        :close-on-content-click="false"
+                        :close-on-click="!addMode"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                    >
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                style="margin: 0; padding: 0"
+                                small
+                                icon
+                                v-on="on"
+                                color="blue"
+                                :title="`Показать все записи часа (${cabinetEvents(cabinet.id).length})`"
+                                @click="menuOpen = true"
+                                :disabled="menuOpen"
+                            >
+                            <span class="subheading white--text">
+                                <strong>
+                                    + {{ `${cabinetEvents(cabinet.id).length - 1}` }}
+                                </strong>
+                            </span>
+                            </v-btn>
+                        </template>
+                        <v-card
+                            class="round-corner teal lighten-5"
+                        >
+                            <v-card-title
+                                class="light-blue darken-3 pt-0 pb-0"
+                            >
+                            <span class="subheading white--text">
+                                Все записи в кабинет "{{ cabinet.name }}" на {{ date | moment('DD MMMM YYYY г.') }}
+                                c <em>{{ hour }}:00</em> до <em>{{ hour }}:59</em>
+                            </span>
+                                <v-spacer/>
+                                <v-btn
+                                    outline
+                                    small
+                                    icon
+                                    flat
+                                    color="white"
+                                    @click="addMode = true"
+                                    :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"
+                                >
+                                    <v-icon
+                                        small
+                                        color="white"
+                                    >
+                                        queue
+                                    </v-icon>
+                                </v-btn>
+                            </v-card-title>
+                            <v-card-text>
+                                <event
+                                    v-for="(event,  index) in cabinetEvents(cabinet.id)"
+                                    :key="`e${event.id}${index}`"
+                                    :event="event"
+                                />
+                            </v-card-text>
+                        </v-card>
+                    </v-menu>
+<!--                </v-layout>-->
+
+<!--            </draggable>-->
         </div>
         <calendar-record-adder
             v-if="addMode"
@@ -141,6 +149,7 @@
     </v-layout>
 </template>
 <script>
+    import draggable from 'vuedraggable'
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetEntry from './CabinetEntry'
     import Event from './Event'
@@ -179,6 +188,14 @@
             }
         },
         methods: {
+            dragBegin (data) {
+                console.log('Drag begin')
+                console.dir(data)
+            },
+            dragEnd (data) {
+                console.log('Drag end')
+                console.dir(data)
+            },
             menuAction () {
                 this.menuOpen = false
             },
@@ -210,7 +227,8 @@
         components: {
             CabinetEntry,
             CalendarRecordAdder,
-            Event
+            Event,
+            draggable
         }
     }
 </script>
