@@ -1,5 +1,7 @@
 <template>
-    <v-flex>
+    <v-flex
+        class="month-mode-date"
+    >
         <div v-if="cabinets.length">
             <div class="text-md-center"
                  v-if="events.length && breakpoint.name !== 'xs'"
@@ -81,3 +83,9 @@
         }
     }
 </script>
+<style>
+    .month-mode-date {
+        width: 100%;
+        height: 100%;
+    }
+</style>

@@ -251,6 +251,9 @@
             ]
         }),
         computed: {
+            breakpoint () {
+                return this.$vuetify.breakpoint
+            },
             eventToDelete () {
                 return this.$store.state.appointment.eventToDelete
             },
@@ -374,6 +377,11 @@
     @media (max-width: 600px) {
         .v-calendar-daily_head-day-label {
             font-size: 16px!important;
+        }
+    }
+    @media (max-width: 960px) {
+        .v-calendar-daily_head-day-label {
+            font-size: 24px!important;
         }
     }
 </style>
