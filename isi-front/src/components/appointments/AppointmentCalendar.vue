@@ -129,6 +129,7 @@
                                 </v-menu>
                                 <div style="width: 100%; height: 100%; cursor: pointer"
                                      @click="dayClick(date)"
+                                     @touchend="dayClick(date)"
                                      :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
                                 >
                                     <month-mode-date

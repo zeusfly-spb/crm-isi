@@ -38,10 +38,14 @@
                         </span>
                     </v-avatar>
 
-                    <v-card-actions class="m-0 p-0" style="padding: 5px!important;"
-                                    :class="{'mt-2': (tab.users && !tab.users.length) && tab.id !== 0}"
+                    <v-card-actions
+                        class="m-0 p-0"
+                        style="padding: 5px!important;"
+                        :class="{'mt-2': (tab.users && !tab.users.length) && tab.id !== 0}"
                     >
-                        <div class="text-center">{{ tab.name }}</div>
+                        <div class="text-center">
+                            {{ tab.name }}
+                        </div>
                     </v-card-actions>
 
                 </v-card-text>

@@ -1,7 +1,11 @@
 <template>
     <div
-        style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%"
+        class="week-mode-period"
         :class="{'red lighten-5': [0, 6].includes(weekday)}"
+        style="border: lightgrey 1px solid!important;"
+        @click="dayClick(date)"
+        @touchend="dayClick(date)"
+        :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
     >
         <div
             v-if="appointments.length"
@@ -43,6 +47,21 @@
                     return base.filter(item => item.cabinet_id !== null)
                 }
             }
+        },
+        methods: {
+            dayClick (date) {
+                this.$emit('date', date)
+            }
         }
     }
 </script>
+<style>
+    .week-mode-period {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%; height: 100%;
+    }
+</style>
