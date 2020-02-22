@@ -296,9 +296,11 @@
                 this.eventToDelete = event
             },
             deleteEvent () {
+                let text = `Запись ${this.eventToDelete.service.description} на ${this.$moment(this.eventToDelete.date).format('DD MMMM YYYY г. в HH:mm')},
+                    клиента ${this.eventToDelete.client_name} удалена`
                 this.$store.dispatch('deleteAppointment', this.eventToDelete)
                     .then(() => {
-                        this.forwardMessage({text: 'Запись удалена', color: 'green'})
+                        this.forwardMessage({text: text, color: 'green'})
                         this.resetDeleting()
                     })
             },

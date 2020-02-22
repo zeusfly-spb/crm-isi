@@ -1,41 +1,181 @@
 <template>
-    <v-flex
-        style="display: flex"
+    <div
+        class="cabinet-entry"
+        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`}"
+        :title="`Добавить запись на ${hour}:__ в кабинет ${cabinet.name}`"
         @click.self="bodyClicked"
     >
-        <event
-            :event="firstEvent"
-            @delete="emitDelete(firstEvent)"
-        />
-
-    </v-flex>
+        <v-menu
+            v-if="hasEvents"
+            v-model="firstDisplayed"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+        >
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    round
+                    flat
+                    small
+                    style="margin: 3px; padding: 3px"
+                    title="Просмотр записи"
+                    :disabled="listDisplayed"
+                    v-on="on"
+                >
+                    <v-icon
+                        color="blue"
+                    >
+                        event
+                    </v-icon>
+                    <span
+                        class="green--text"
+                    >
+                        {{ displayTime(firstEvent.date.split(' ')[1]) }}
+                    </span>
+                    <span
+                        class="blue--text ml-1"
+                    >
+                        {{ firstEvent.client_name }}
+                    </span>
+                </v-btn>
+            </template>
+            <div
+                class="teal lighten-5"
+            >
+                <event
+                    :event="firstEvent"
+                />
+            </div>
+        </v-menu>
+        <v-menu
+            v-if="hasMultiplyEvents"
+            v-model="listDisplayed"
+            :close-on-content-click="false"
+            :close-on-click="!$parent.addMode && !eventToDelete"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+        >
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    small
+                    icon
+                    color="blue"
+                    style="margin: 0; padding: 0;"
+                    :title="`Показать все записи часа (${events.length})`"
+                    :disabled="firstDisplayed"
+                    v-on="on"
+                >
+                    <span
+                        class="subheading white--text"
+                    >
+                        <strong>+{{ events.length - 1 }}</strong>
+                    </span>
+                </v-btn>
+            </template>
+            <v-card
+                class="round-corner teal lighten-5"
+            >
+                <v-card-title
+                    class="light-blue darken-3 pt-0 pb-0"
+                >
+                    <span
+                        class="subheading white--text"
+                    >
+                        Все записи в кабинет {{ cabinet.name }} на {{ date | moment('DD MMMM YYYY г.') }} c <em>{{ hour }}:00</em> до <em>{{ hour }}:59</em>
+                    </span>
+                    <v-spacer/>
+                    <v-btn
+                        outline
+                        small
+                        icon
+                        flat
+                        color="white"
+                        :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"
+                        @click="emitAddAttempt"
+                    >
+                        <v-icon
+                            small
+                            color="white"
+                        >
+                            queue
+                        </v-icon>
+                    </v-btn>
+                </v-card-title>
+                <v-card-text>
+                    <event
+                        v-for="(event, index) in events"
+                        :key="`e${event.id}${index}`"
+                        :event="event"
+                    />
+                </v-card-text>
+            </v-card>
+        </v-menu>
+    </div>
 </template>
 <script>
-    import CalendarRecordAdder from './CalendarRecordAdder'
     import Event from './Event'
     export default {
         name: 'CabinetEntry',
-        props: ['events', 'date', 'hour', 'cabinet'],
+        props: ['cabinet', 'events', 'date', 'hour', 'fieldWidth', 'fieldHeight'],
         data: () => ({
-            extended: false,
-            addMode: false
+            firstDisplayed: false,
+            listDisplayed: false
         }),
         computed: {
+            eventToDelete () {
+                return this.$store.state.appointment.eventToDelete
+            },
+            displayTime () {
+                return this.$store.state.appointment.displayTime
+            },
+            hasMultiplyEvents () {
+                return this.hasEvents && this.events.length > 1
+            },
+            hasEvents () {
+                return this.events.length
+            },
             firstEvent () {
                 return this.events[0]
             }
         },
         methods: {
-            bodyClicked () {
+            emitAddAttempt () {
                 this.$emit('addAttempt', this.cabinet)
             },
-            emitDelete (event) {
-                this.$emit('delete', event)
+            bodyClicked () {
+                this.$emit('fieldClicked', this.cabinet)
+            }
+        },
+        watch: {
+            firstDisplayed (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+            },
+            listDisplayed (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             }
         },
         components: {
-            Event,
-            CalendarRecordAdder
+            Event
         }
     }
 </script>
+<style>
+    .cabinet-entry {
+        padding: 0;
+        margin: 0;
+        border: 1px solid lightgray;
+        display: flex;
+        cursor: pointer;
+        justify-content: flex-start;
+        align-items: center;
+        overflow: hidden;
+    }
+</style>
