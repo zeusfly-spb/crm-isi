@@ -6,6 +6,7 @@
         @click.self="bodyClicked"
         @dragenter="dragEnter"
         @dragleave="dragLeave"
+        @dragOver="dragOver"
     >
         <v-menu
             v-if="hasEvents"
@@ -27,6 +28,7 @@
                     style="margin: 3px; padding: 3px"
                     :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     title="Просмотр записи"
+                    ref="firstButton"
                     :disabled="listDisplayed"
                     :ripple="false"
                     v-on="on"
@@ -34,6 +36,7 @@
                     @mouseup="firstDragging = false"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
+                    @drop="dragDrop"
                 >
                     <v-icon
                         color="blue"
@@ -136,6 +139,7 @@
         name: 'CabinetEntry',
         props: ['cabinet', 'events', 'date', 'hour', 'fieldWidth', 'fieldHeight'],
         data: () => ({
+            dropped: false,
             canDrop: false,
             firstDragging: false,
             firstDisplayed: false,
@@ -165,9 +169,19 @@
             }
         },
         methods: {
-            dragEnter () {
+            dragOver (evt) {
+                console.log(evt.screenX)
+                console.log(evt.screenY)
+            },
+            dragDrop (evt) {
+
+                evt.dataTransfer.dropEffect = "move"
+            },
+            dragEnter (evt) {
                 this.canDrop = true
                 this.$store.commit('SET_DRAG_TARGET', {cabinet: this.cabinet, date: this.date, hour: this.hour})
+                evt.dataTransfer.effectAllowed = "move"
+
             },
             dragLeave () {
                 this.canDrop = false
@@ -175,9 +189,11 @@
             firstDragStart () {
                 this.firstDragging = true
                 this.$store.commit('START_DRAG_EVENT', this.firstEvent)
+                return false
             },
             firstDragEnd (evt) {
-                evt.preventDefault()
+                this.dropped = true
+
                 this.firstDragging = false
                 if (this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
                     this.$store.dispatch('moveEvent', {
