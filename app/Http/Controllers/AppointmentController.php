@@ -12,16 +12,23 @@ use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
+    public function move(Request $request)
+    {
+        $event = Appointment::find($request->event_id);
+        $eventTimeArr = explode(':', explode(' ', $event->date)[1]);
+        $newDate = $request->date . ' ' . $request->hour . ':' . $eventTimeArr[1] . ':' . $eventTimeArr[2];
+        $event->update(['date' => $newDate, 'cabinet_id' => $request->cabinet_id]);
+        $event->load('user', 'performer', 'service', 'lead', 'island');
+        return response()->json($event->toArray());
+    }
+
     public function index(Request $request)
     {
-        $date = $request->date;
         $base_date = new Carbon($request->date);
         $start_date = $base_date->startOfMonth()->toDateString();
         $end_date = $base_date->endOfMonth()->toDateString();
         $year = $base_date->year;
         $month = $base_date->month;
-
-
         $island_id = $request->island_id;
 
         if (Cache::has('appointments') && Cache::has('users') && Cache::has('services') && Cache::has('leads') && Cache::has('islands')) {

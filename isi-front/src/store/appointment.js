@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        dragTarget: null,
+        draggedEvent: null,
         eventToDelete: null,
         dialogLocked: false,
         deleteMode: false,
@@ -21,6 +23,16 @@ export default {
         }
     },
     actions: {
+        moveEvent ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/move_appointment', {... data})
+                    .then(res => {
+                        commit('UPDATE_APPOINTMENT', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         changeAppointmentDate ({dispatch, commit, state}, date) {
             return new Promise((resolve, reject) => {
                 try {
@@ -82,6 +94,15 @@ export default {
         }
     },
     mutations: {
+        SET_DRAG_TARGET (state, target) {
+            state.dragTarget = target
+        },
+        START_DRAG_EVENT (state, event) {
+            state.draggedEvent = event
+        },
+        END_DRAG_EVENT (state) {
+            state.draggedEvent = null
+        },
         CANCEL_DELETE_EVENT (state) {
             state.eventToDelete = null
         },

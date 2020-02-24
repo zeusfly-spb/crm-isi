@@ -4,6 +4,7 @@
         :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`}"
         :title="`Добавить запись на ${hour}:__ в кабинет ${cabinet.name}`"
         @click.self="bodyClicked"
+        @dragenter="dragEnter"
     >
         <v-menu
             v-if="hasEvents"
@@ -21,26 +22,34 @@
                     round
                     flat
                     small
+                    draggable="true"
                     style="margin: 3px; padding: 3px"
+                    :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     title="Просмотр записи"
                     :disabled="listDisplayed"
+                    :ripple="false"
                     v-on="on"
+                    @mousedown="firstDragging = true"
+                    @mouseup="firstDragging = false"
+                    @dragstart="firstDragStart"
+                    @dragend="firstDragEnd"
                 >
                     <v-icon
                         color="blue"
+                        ref="firstIcon"
                     >
                         event
                     </v-icon>
                     <span
                         class="green--text"
                     >
-                        {{ displayTime(firstEvent.date.split(' ')[1]) }}
-                    </span>
+                    {{ displayTime(firstEvent.date.split(' ')[1]) }}
+                </span>
                     <span
                         class="blue--text ml-1"
                     >
-                        {{ firstEvent.client_name }}
-                    </span>
+                    {{ firstEvent.client_name }}
+                </span>
                 </v-btn>
             </template>
             <div
@@ -126,10 +135,17 @@
         name: 'CabinetEntry',
         props: ['cabinet', 'events', 'date', 'hour', 'fieldWidth', 'fieldHeight'],
         data: () => ({
+            firstDragging: false,
             firstDisplayed: false,
             listDisplayed: false
         }),
         computed: {
+            dragTarget () {
+                return this.$store.state.appointment.dragTarget
+            },
+            draggedEvent () {
+                return this.$store.state.appointment.draggedEvent
+            },
             eventToDelete () {
                 return this.$store.state.appointment.eventToDelete
             },
@@ -147,6 +163,28 @@
             }
         },
         methods: {
+            dragEnter () {
+                this.$store.commit('SET_DRAG_TARGET', {cabinet: this.cabinet, date: this.date, hour: this.hour})
+            },
+            firstDragStart () {
+                this.firstDragging = true
+                this.$store.commit('START_DRAG_EVENT', this.firstEvent)
+            },
+            firstDragEnd (evt) {
+                evt.preventDefault()
+                this.firstDragging = false
+                if (this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
+                    this.$store.dispatch('moveEvent', {
+                        event_id: this.firstEvent.id,
+                        cabinet_id: this.dragTarget.cabinet.id,
+                        date: this.dragTarget.date,
+                        hour: this.dragTarget.hour
+                    })
+                        .then(() => {
+                            console.log('Event moved')
+                        })
+                }
+            },
             emitAddAttempt () {
                 this.$emit('addAttempt', this.cabinet)
             },
