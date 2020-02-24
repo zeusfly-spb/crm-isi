@@ -1,10 +1,11 @@
 <template>
     <div
         class="cabinet-entry"
-        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`}"
+        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`, border: canDrop ? '2px solid lightgreen' : '1px solid lightgray'}"
         :title="`Добавить запись на ${hour}:__ в кабинет ${cabinet.name}`"
         @click.self="bodyClicked"
         @dragenter="dragEnter"
+        @dragleave="dragLeave"
     >
         <v-menu
             v-if="hasEvents"
@@ -135,6 +136,7 @@
         name: 'CabinetEntry',
         props: ['cabinet', 'events', 'date', 'hour', 'fieldWidth', 'fieldHeight'],
         data: () => ({
+            canDrop: false,
             firstDragging: false,
             firstDisplayed: false,
             listDisplayed: false
@@ -164,7 +166,11 @@
         },
         methods: {
             dragEnter () {
+                this.canDrop = true
                 this.$store.commit('SET_DRAG_TARGET', {cabinet: this.cabinet, date: this.date, hour: this.hour})
+            },
+            dragLeave () {
+                this.canDrop = false
             },
             firstDragStart () {
                 this.firstDragging = true
