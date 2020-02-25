@@ -7,7 +7,7 @@
     >
         <v-menu
             v-model="display"
-            v-if="events.length"
+            v-if="hasEvents"
             :close-on-content-click="false"
             :nudge-right="40"
             lazy
@@ -21,9 +21,11 @@
                     round
                     flat
                     small
+                    draggable="true"
                     style="margin: 3px; padding: 3px"
                     title="Просмотр записи"
                     v-on="on"
+                    @dragstart="dragStart"
                 >
                     <v-icon
                         color="blue"
@@ -135,6 +137,12 @@
             periodDisplay: false
         }),
         computed: {
+            firstEvent () {
+                return this.hasEvents && this.events[0]
+            },
+            hasEvents () {
+                return this.events.length
+            },
             dialogLocked () {
                 return this.$store.state.appointment.dialogLocked
             },
@@ -155,6 +163,9 @@
             }
         },
         methods: {
+            dragStart () {
+
+            },
             periodClicked () {
                 if (this.dialogLocked) {
                     return
