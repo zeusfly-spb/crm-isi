@@ -55,7 +55,7 @@
                                         style="width: 13em"
                                         :label="date | moment('DD MMMM YYYY г.')"
                                         readonly
-                                        prepend-icon="event"
+                                        prepend-inner-icon="event"
                                         v-on="on"
                                     />
                                 </template>
@@ -78,7 +78,7 @@
                                         v-on="on"
                                         v-model="time"
                                         readonly
-                                        prepend-icon="schedule"
+                                        prepend-inner-icon="schedule"
                                         data-vv-name="time"
                                         data-vv-as="Время"
                                         :error-messages="errors.collect('time')"
@@ -122,6 +122,7 @@
                         >
                             <sub>Кабинет</sub>
                             <v-select
+                                prepend-inner-icon="meeting_room"
                                 v-model="editedEvent.cabinet_id"
                                 :items="cabinets"
                                 item-text="name"
@@ -163,6 +164,7 @@
                             <sub>Телефон</sub>
                             <v-text-field
                                 v-model="editedEvent.client_phone"
+                                prepend-inner-icon="phone"
                                 data-vv-as="Номер телефона клиента"
                                 data-vv-name="client_phone"
                                 :error-messages="errors.collect('client_phone')"
