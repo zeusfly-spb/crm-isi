@@ -200,14 +200,7 @@
                 this.dropped = true
                 this.firstDragging = false
                 if (this.moveReady) {
-                    let minutes = this.draggedEvent.date.split(' ')[1].split(':')[1]
                     this.$store.dispatch('moveEvent')
-                        .then(() => {
-                            let text = `Запись перенесена в кабинет ${this.dragTarget.cabinet.name} на ${this.$moment(this.dragTarget.date + ' ' + this.dragTarget.hour + ':' + minutes)
-                                .format('DD MMMM YYYY г. HH:mm')}`
-                            this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
-                        })
-                        .finally(() => this.$store.dispatch('clearDragData'))
                 }
             },
             emitAddAttempt () {

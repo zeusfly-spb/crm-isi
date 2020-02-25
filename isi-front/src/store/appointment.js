@@ -23,10 +23,6 @@ export default {
         }
     },
     actions: {
-        clearDragData ({commit}) {
-            commit('END_DRAG_EVENT')
-            commit('UNSET_DRAG_TARGET')
-        },
         moveEvent ({commit, state}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
@@ -36,7 +32,14 @@ export default {
                     hour: state.dragTarget.hour
                 })
                     .then(res => {
+                        let minutes = state.draggedEvent.date.split(' ')[1].split(':')[1]
+                        let text = `Запись перенесена в кабинет ${state.dragTarget.cabinet.name} на 
+                        ${Vue.moment(state.dragTarget.date + ' ' + state.dragTarget.hour + ':' + minutes)
+                            .format('DD MMMM YYYY г. HH:mm')}`
                         commit('UPDATE_APPOINTMENT', res.data)
+                        commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
+                        commit('UNSET_DRAG_EVENT')
+                        commit('UNSET_DRAG_TARGET')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -106,7 +109,7 @@ export default {
         START_DRAG_EVENT (state, event) {
             state.draggedEvent = event
         },
-        END_DRAG_EVENT (state) {
+        UNSET_DRAG_EVENT (state) {
             state.draggedEvent = null
         },
         SET_DRAG_TARGET (state, target) {
