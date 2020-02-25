@@ -147,6 +147,9 @@
             listDisplayed: false
         }),
         computed: {
+            moveReady () {
+                return this.$store.getters.moveReady
+            },
             dragTarget () {
                 return this.$store.state.appointment.dragTarget
             },
@@ -196,7 +199,7 @@
             firstDragEnd () {
                 this.dropped = true
                 this.firstDragging = false
-                if (this.draggedEvent && this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
+                if (this.moveReady) {
                     let minutes = this.draggedEvent.date.split(' ')[1].split(':')[1]
                     this.$store.dispatch('moveEvent')
                         .then(() => {

@@ -149,5 +149,8 @@ export default {
         SET_APPOINTMENTS (state, appointments) {
             state.appointments = appointments
         }
+    },
+    getters: {
+        moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet !== state.draggedEvent.cabinet)
     }
 }
