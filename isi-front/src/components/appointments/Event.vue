@@ -1,6 +1,6 @@
 <template>
         <div
-            class="mb-0 pb-0"
+            class="mb-0 pb-0 event"
             draggable="true"
             style="cursor: grab"
             :class="{'teal lighten-4': mouseOver}"
@@ -16,8 +16,9 @@
                 event
             </v-icon>
             <span class="blue--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
-            {{ event.service && event.service.description }}
-            <strong>Клиент:</strong> {{ event.client_name }}
+            <span class="pl-1 pr-1">{{ event.service && event.service.description }}</span>
+            <strong>Клиент:</strong>
+            <span class="pl-1">{{ event.client_name }}</span>
             {{ event.client_phone | phone }}
             <caller :phone="event.client_phone"/>
             <strong>Исполнитель:</strong>
@@ -88,19 +89,15 @@
         },
         methods: {
             dragEnd () {
-                if (this.draggedEvent && this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
+                if (this.$store.getters.moveReady) {
                     let minutes = this.draggedEvent.date.split(' ')[1].split(':')[1]
-                    this.$store.dispatch('moveEvent', {
-                        event_id: this.draggedEvent.id,
-                        cabinet_id: this.dragTarget.cabinet.id,
-                        date: this.dragTarget.date,
-                        hour: this.dragTarget.hour
-                    })
+                    this.$store.dispatch('moveEvent')
                         .then(() => {
                             let text = `Запись перенесена в кабинет ${this.dragTarget.cabinet.name} на ${this.$moment(this.dragTarget.date + ' ' + this.dragTarget.hour + ':' + minutes)
                                 .format('DD MMMM YYYY г. HH:mm')}`
                             this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                         })
+                        .finally(() => this.$store.dispatch('clearDragData'))
                 }
             },
             dragStart (evt) {
@@ -115,3 +112,9 @@
         }
     }
 </script>
+<style>
+    .event {
+        display: flex;
+        align-items: center;
+    }
+</style>

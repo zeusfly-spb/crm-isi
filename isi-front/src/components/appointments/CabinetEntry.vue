@@ -207,6 +207,7 @@
                                 .format('DD MMMM YYYY г. HH:mm')}`
                             this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                         })
+                        .finally(() => this.$store.dispatch('clearDragData'))
                 }
             },
             emitAddAttempt () {

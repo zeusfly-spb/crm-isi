@@ -23,6 +23,10 @@ export default {
         }
     },
     actions: {
+        clearDragData ({commit}) {
+            commit('END_DRAG_EVENT')
+            commit('UNSET_DRAG_TARGET')
+        },
         moveEvent ({commit, state}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
@@ -33,7 +37,6 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
-                        commit('END_DRAG_EVENT')
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -108,6 +111,9 @@ export default {
         },
         SET_DRAG_TARGET (state, target) {
             state.dragTarget = target
+        },
+        UNSET_DRAG_TARGET (state) {
+            state.dragTarget = null
         },
         CANCEL_DELETE_EVENT (state) {
             state.eventToDelete = null
