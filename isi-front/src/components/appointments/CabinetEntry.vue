@@ -198,12 +198,7 @@
                 this.firstDragging = false
                 if (this.draggedEvent && this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
                     let minutes = this.draggedEvent.date.split(' ')[1].split(':')[1]
-                    this.$store.dispatch('moveEvent', {
-                        event_id: this.draggedEvent.id,
-                        cabinet_id: this.dragTarget.cabinet.id,
-                        date: this.dragTarget.date,
-                        hour: this.dragTarget.hour
-                    })
+                    this.$store.dispatch('moveEvent')
                         .then(() => {
                             let text = `Запись перенесена в кабинет ${this.dragTarget.cabinet.name} на ${this.$moment(this.dragTarget.date + ' ' + this.dragTarget.hour + ':' + minutes)
                                 .format('DD MMMM YYYY г. HH:mm')}`

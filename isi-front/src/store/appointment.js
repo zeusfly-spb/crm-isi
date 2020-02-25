@@ -23,9 +23,14 @@ export default {
         }
     },
     actions: {
-        moveEvent ({commit}, data) {
+        moveEvent ({commit, state}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/move_appointment', {... data})
+                Vue.axios.post('/api/move_appointment', {
+                    event_id: state.draggedEvent.id,
+                    cabinet_id: state.dragTarget.cabinet.id,
+                    date: state.dragTarget.date,
+                    hour: state.dragTarget.hour
+                })
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
                         commit('END_DRAG_EVENT')
