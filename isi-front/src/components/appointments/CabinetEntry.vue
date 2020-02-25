@@ -196,10 +196,10 @@
             firstDragEnd () {
                 this.dropped = true
                 this.firstDragging = false
-                let minutes = this.firstEvent.date.split(' ')[1].split(':')[1]
-                if (this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
+                if (this.draggedEvent && this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
+                    let minutes = this.draggedEvent.date.split(' ')[1].split(':')[1]
                     this.$store.dispatch('moveEvent', {
-                        event_id: this.firstEvent.id,
+                        event_id: this.draggedEvent.id,
                         cabinet_id: this.dragTarget.cabinet.id,
                         date: this.dragTarget.date,
                         hour: this.dragTarget.hour
@@ -219,6 +219,11 @@
             }
         },
         watch: {
+            hasMultiplyEvents (val) {
+                if (!val) {
+                    this.listDisplayed = false
+                }
+            },
             firstDisplayed (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
