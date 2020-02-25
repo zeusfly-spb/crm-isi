@@ -1,12 +1,13 @@
 <template>
     <div
         class="cabinet-entry"
-        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`, border: canDrop ? '2px solid lightgreen' : '1px solid lightgray'}"
+        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`, border: canDrop ? '3px solid green' : '1px solid lightgray'}"
         :title="`Добавить запись на ${hour}:__ в кабинет ${cabinet.name}`"
         @click.self="bodyClicked"
         @dragenter="dragEnter"
         @dragleave="dragLeave"
-        @dragOver="dragOver"
+        @dragover="dragOver"
+        v-on:drop="dragDrop"
     >
         <v-menu
             v-if="hasEvents"
@@ -32,11 +33,8 @@
                     :disabled="listDisplayed"
                     :ripple="false"
                     v-on="on"
-                    @mousedown="firstDragging = true"
-                    @mouseup="firstDragging = false"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
-                    @drop="dragDrop"
                 >
                     <v-icon
                         color="blue"
@@ -170,30 +168,30 @@
         },
         methods: {
             dragOver (evt) {
-                console.log(evt.screenX)
-                console.log(evt.screenY)
+                evt.preventDefault()
             },
             dragDrop (evt) {
-
+                evt.preventDefault()
                 evt.dataTransfer.dropEffect = "move"
+                this.canDrop = false
             },
             dragEnter (evt) {
                 this.canDrop = true
                 this.$store.commit('SET_DRAG_TARGET', {cabinet: this.cabinet, date: this.date, hour: this.hour})
                 evt.dataTransfer.effectAllowed = "move"
-
             },
-            dragLeave () {
+            dragLeave (evt) {
+                evt.preventDefault()
                 this.canDrop = false
             },
-            firstDragStart () {
+            firstDragStart (evt) {
+                evt.dataTransfer.setData("Text", this.firstEvent.id)
                 this.firstDragging = true
                 this.$store.commit('START_DRAG_EVENT', this.firstEvent)
                 return false
             },
-            firstDragEnd (evt) {
+            firstDragEnd () {
                 this.dropped = true
-
                 this.firstDragging = false
                 if (this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
                     this.$store.dispatch('moveEvent', {
