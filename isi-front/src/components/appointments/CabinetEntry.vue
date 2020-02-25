@@ -35,6 +35,9 @@
                     v-on="on"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
+                    @dragenter="dragEnter"
+                    @dragover="dragEnter"
+                    @dragleave="dragEnter"
                 >
                     <v-icon
                         color="blue"
@@ -193,6 +196,7 @@
             firstDragEnd () {
                 this.dropped = true
                 this.firstDragging = false
+                let minutes = this.firstEvent.date.split(' ')[1].split(':')[1]
                 if (this.dragTarget && (this.dragTarget.hour !== this.hour || this.dragTarget.cabinet !== this.cabinet)) {
                     this.$store.dispatch('moveEvent', {
                         event_id: this.firstEvent.id,
@@ -201,7 +205,9 @@
                         hour: this.dragTarget.hour
                     })
                         .then(() => {
-                            console.log('Event moved')
+                            let text = `Запись перенесена в кабинет ${this.dragTarget.cabinet.name} на ${this.$moment(this.dragTarget.date + ' ' + this.dragTarget.hour + ':' + minutes)
+                                .format('DD MMMM YYYY г. HH:mm')}`
+                            this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                         })
                 }
             },

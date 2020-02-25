@@ -94,14 +94,14 @@ export default {
         }
     },
     mutations: {
-        SET_DRAG_TARGET (state, target) {
-            state.dragTarget = target
-        },
         START_DRAG_EVENT (state, event) {
             state.draggedEvent = event
         },
         END_DRAG_EVENT (state) {
             state.draggedEvent = null
+        },
+        SET_DRAG_TARGET (state, target) {
+            state.dragTarget = target
         },
         CANCEL_DELETE_EVENT (state) {
             state.eventToDelete = null

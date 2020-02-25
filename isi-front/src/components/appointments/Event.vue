@@ -1,7 +1,9 @@
 <template>
-    <div
+    <v-item-group
         class="mb-0 pb-0"
+        draggable="true"
         :title="caption"
+
     >
         <v-icon
             color="blue"
@@ -49,7 +51,7 @@
             v-if="editMode"
             @close="editMode = false"
         />
-    </div>
+    </v-item-group>
 </template>
 <script>
     import EventEditor from './EventEditor'
