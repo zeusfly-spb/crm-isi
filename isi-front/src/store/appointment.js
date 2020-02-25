@@ -28,6 +28,7 @@ export default {
                 Vue.axios.post('/api/move_appointment', {... data})
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
+                        commit('END_DRAG_EVENT')
                         resolve(res)
                     })
                     .catch(e => reject(e))

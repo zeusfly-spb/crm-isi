@@ -3,7 +3,10 @@
             class="mb-0 pb-0"
             draggable="true"
             style="cursor: grab"
+            :class="{'teal lighten-4': mouseOver}"
             :title="caption"
+            @mouseover="mouseOver = true"
+            @mouseleave="mouseOver = false"
             @dragstart="dragStart"
             @dragend="dragEnd"
         >
@@ -62,6 +65,7 @@
         name: 'Event',
         props: ['event'],
         data: () => ({
+            mouseOver: false,
             eventToDelete: null,
             editMode: false
         }),

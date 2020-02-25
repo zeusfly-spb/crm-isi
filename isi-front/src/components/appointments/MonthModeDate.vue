@@ -34,8 +34,8 @@
             </v-layout>
         </div>
         <v-flex
-            v-else
             class="text-md-center"
+            v-if="events.length && !cabinets.length"
         >
             <v-icon
                 small
