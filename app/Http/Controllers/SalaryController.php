@@ -142,7 +142,7 @@ class SalaryController extends Controller
     public function addUserVacation(Request $request)
     {
         $user = User::find($request->user_id);
-        return response()->json($user->addVacation($request->amount, $request->date, $request->comment ?? '')->toArray());
+        return response()->json($user->addVacation($request->amount, $request->island_id, $request->date, $request->comment ?? '')->toArray());
     }
 
     public function deleteUserVacation(Request $request)

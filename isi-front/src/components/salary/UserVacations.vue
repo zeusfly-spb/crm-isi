@@ -32,7 +32,7 @@
                     >
                         <v-flex>
                             <v-data-table
-                                :items="allVacations"
+                                :items="vacations"
                                 :headers="headers"
                                 hide-actions
                             >
@@ -186,7 +186,8 @@
                 this.$store.dispatch('addUserVacation', {
                     user_id: this.user.id,
                     amount: this.amount,
-                    comment: this.comment
+                    comment: this.comment,
+                    island_id: this.workingIslandId
                 })
                     .then(() => this.adding = false)
             },
