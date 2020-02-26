@@ -21,7 +21,12 @@ export default {
                 return fullTime
             }
         },
-        sortByDateTime: (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+        sortByDateTime: (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0,
+        splitEventTime: (event) => ({
+            ...event,
+            hour: event.date.split(' ')[1].split(':')[0],
+            minutes: event.date.split(' ')[1].split(':')[1]
+        })
     },
     actions: {
         moveEvent ({commit, state}) {

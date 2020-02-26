@@ -1,9 +1,14 @@
 <template>
     <div
-        @click.self="periodClicked"
-        style="width: 100%; height: 100%; cursor: pointer; display: flex; justify-content: flex-start; align-items: center"
+        class="single-mode-period"
+        :class="{'target': canDrop}"
         :style="{height: `${$parent.intervalHeight}px`}"
         :title="`Добавить запись на ${textDate} в ${hour}:**`"
+        @click.self="periodClicked"
+        @dragenter="dragEnter"
+        @dragover="dragOver"
+        @dragleave="dragLeave"
+        @drop="dragDrop"
     >
         <v-menu
             v-model="display"
@@ -24,8 +29,16 @@
                     draggable="true"
                     style="margin: 3px; padding: 3px"
                     title="Просмотр записи"
+                    :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
+                    :ripple="false"
                     v-on="on"
-                    @dragstart="dragStart"
+                    @dragstart="firstDragStart"
+                    @dragend="firstDragEnd"
+                    @dragenter="dragEnter"
+                    @dragover="dragEnter"
+                    @dragleave="dragEnter"
+                    @mousedown="firstDragging = true"
+                    @mouseup="firstDragging = false"
                 >
                     <v-icon
                         color="blue"
@@ -35,12 +48,12 @@
                     <span
                         class="green--text"
                     >
-                            {{ $store.state.appointment.displayTime(events[0].date.split(' ')[1]) }}
+                            {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
                         </span>
                     <span
                         class="blue--text ml-1"
                     >
-                            {{ events[0].client_name }}
+                            {{ firstEvent.client_name }}
                         </span>
                 </v-btn>
             </template>
@@ -48,7 +61,7 @@
                 class="teal lighten-5"
             >
                 <event
-                    :event="events[0]"
+                    :event="firstEvent"
                 />
             </div>
         </v-menu>
@@ -132,11 +145,19 @@
         name: 'SingleModePeriod',
         props: ['date', 'hour'],
         data: () => ({
+            firstDragging: false,
+            draggingOver: false,
             addMode: false,
             display: false,
             periodDisplay: false
         }),
         computed: {
+            canDrop () {
+                return this.draggingOver && +this.draggedEvent.hour !== +this.hour
+            },
+            draggedEvent () {
+                return this.$store.state.appointment.splitEventTime(this.$store.state.appointment.draggedEvent)
+            },
             firstEvent () {
                 return this.hasEvents && this.events[0]
             },
@@ -164,8 +185,34 @@
             }
         },
         methods: {
-            dragStart () {
-
+            dragDrop (evt) {
+                evt.preventDefault()
+                evt.dataTransfer.dropEffect = "move"
+                this.draggingOver = false
+            },
+            firstDragEnd () {
+                this.firstDragging = false
+            },
+            dragLeave (evt) {
+                evt.preventDefault()
+                this.draggingOver = false
+            },
+            dragOver (evt) {
+                evt.preventDefault()
+            },
+            dragEnter (evt) {
+                this.draggingOver = true
+                this.$store.commit('SET_DRAG_TARGET', {
+                    cabinet: null,
+                    date: this.date,
+                    hour: this.hour
+                })
+                evt.dataTransfer.effectAllowed = "move"
+            },
+            firstDragStart (evt) {
+                evt.dataTransfer.setData("Text", this.firstEvent.id)
+                this.$store.commit('SET_DRAG_EVENT', this.firstEvent)
+                return false
             },
             periodClicked () {
                 if (this.dialogLocked) {
@@ -191,3 +238,16 @@
         }
     }
 </script>
+<style>
+    .target {
+        border: 2px solid green
+    }
+    .single-mode-period {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+</style>

@@ -27,9 +27,8 @@
                     small
                     draggable="true"
                     style="margin: 3px; padding: 3px"
-                    :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     title="Просмотр записи"
-                    ref="firstButton"
+                    :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     :disabled="listDisplayed"
                     :ripple="false"
                     v-on="on"
