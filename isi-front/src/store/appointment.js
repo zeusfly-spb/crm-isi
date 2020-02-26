@@ -24,22 +24,24 @@ export default {
         sortByDateTime: (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0,
         splitEventTime: (event) => ({
             ...event,
-            hour: event.date.split(' ')[1].split(':')[0],
-            minutes: event.date.split(' ')[1].split(':')[1]
+            hour: +event.date.split(' ')[1].split(':')[0],
+            minutes: +event.date.split(' ')[1].split(':')[1]
         })
     },
     actions: {
         moveEvent ({commit, state}) {
+            console.dir(state.draggedEvent)
+            console.dir(state.dragTarget)
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
                     event_id: state.draggedEvent.id,
-                    cabinet_id: state.dragTarget.cabinet.id,
+                    cabinet_id: state.dragTarget.cabinet && state.dragTarget.cabinet.id || null,
                     date: state.dragTarget.date,
                     hour: state.dragTarget.hour
                 })
                     .then(res => {
                         let minutes = state.draggedEvent.date.split(' ')[1].split(':')[1]
-                        let text = `Запись перенесена в кабинет ${state.dragTarget.cabinet.name} на 
+                        let text = `Запись перенесена ${state.dragTarget.cabinet ? 'в кабинет' : ''} ${state.dragTarget.cabinet && state.dragTarget.cabinet.name || ''} на 
                         ${Vue.moment(state.dragTarget.date + ' ' + state.dragTarget.hour + ':' + minutes)
                             .format('DD MMMM YYYY г. HH:mm')}`
                         commit('UPDATE_APPOINTMENT', res.data)
@@ -113,7 +115,7 @@ export default {
     },
     mutations: {
         SET_DRAG_EVENT (state, event) {
-            state.draggedEvent = event
+            state.draggedEvent = state.splitEventTime(event)
         },
         UNSET_DRAG_EVENT (state) {
             state.draggedEvent = null
@@ -166,6 +168,6 @@ export default {
         }
     },
     getters: {
-        moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet !== state.draggedEvent.cabinet)
+        moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id)
     }
 }

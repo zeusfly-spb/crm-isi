@@ -95,7 +95,7 @@
             },
             dragStart (evt) {
                 evt.dataTransfer.setData("Text", this.event.id)
-                this.$store.commit('START_DRAG_EVENT', this.event)
+                this.$store.commit('SET_DRAG_EVENT', this.event)
                 return false
             }
         },

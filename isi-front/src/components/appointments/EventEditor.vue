@@ -286,7 +286,7 @@
             this.editedEvent = JSON.parse(JSON.stringify(this.event))
             this.backupEvent = JSON.parse(JSON.stringify(this.event))
             this.date = this.event.date.split(' ')[0]
-            this.time = this.event.date.split(' ')[1]
+            this.time = this.$store.state.appointment.displayTime(this.event.date.split(' ')[1])
         }
     }
 </script>

@@ -182,7 +182,11 @@
             },
             dragEnter (evt) {
                 this.canDrop = true
-                this.$store.commit('SET_DRAG_TARGET', {cabinet: this.cabinet, date: this.date, hour: this.hour})
+                this.$store.commit('SET_DRAG_TARGET', {
+                    cabinet_id: this.cabinet && this.cabinet.id || null,
+                    date: this.date,
+                    hour: this.hour
+                })
                 evt.dataTransfer.effectAllowed = "move"
             },
             dragLeave (evt) {

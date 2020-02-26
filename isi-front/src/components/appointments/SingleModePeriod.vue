@@ -152,6 +152,9 @@
             periodDisplay: false
         }),
         computed: {
+            moveReady () {
+                return this.$store.getters.moveReady
+            },
             canDrop () {
                 return this.draggingOver && +this.draggedEvent.hour !== +this.hour
             },
@@ -192,6 +195,9 @@
             },
             firstDragEnd () {
                 this.firstDragging = false
+                if (this.moveReady) {
+                    this.$store.dispatch('moveEvent')
+                }
             },
             dragLeave (evt) {
                 evt.preventDefault()
@@ -203,7 +209,7 @@
             dragEnter (evt) {
                 this.draggingOver = true
                 this.$store.commit('SET_DRAG_TARGET', {
-                    cabinet: null,
+                    cabinet_id: null,
                     date: this.date,
                     hour: this.hour
                 })
