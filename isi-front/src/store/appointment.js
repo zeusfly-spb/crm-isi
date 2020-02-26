@@ -30,12 +30,10 @@ export default {
     },
     actions: {
         moveEvent ({commit, state}) {
-            console.dir(state.draggedEvent)
-            console.dir(state.dragTarget)
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
                     event_id: state.draggedEvent.id,
-                    cabinet_id: state.dragTarget.cabinet && state.dragTarget.cabinet.id || null,
+                    cabinet_id: state.dragTarget.cabinet_id || null,
                     date: state.dragTarget.date,
                     hour: state.dragTarget.hour
                 })

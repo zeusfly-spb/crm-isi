@@ -209,6 +209,7 @@
             dragEnter (evt) {
                 this.draggingOver = true
                 this.$store.commit('SET_DRAG_TARGET', {
+                    cabinet: null,
                     cabinet_id: null,
                     date: this.date,
                     hour: this.hour
@@ -244,9 +245,9 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .target {
-        border: 2px solid green
+        border: 3px solid green;
     }
     .single-mode-period {
         width: 100%;

@@ -1,7 +1,8 @@
 <template>
     <div
         class="cabinet-entry"
-        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`, border: canDrop ? '3px solid green' : '1px solid lightgray'}"
+        :class="{'target': draggingOver && moveReady}"
+        :style="{width: `${fieldWidth}px`, height: `${fieldHeight}px`}"
         :title="`Добавить запись на ${hour}:__ в кабинет ${cabinet.name}`"
         @click.self="bodyClicked"
         @dragenter="dragEnter"
@@ -139,6 +140,7 @@
         name: 'CabinetEntry',
         props: ['cabinet', 'events', 'date', 'hour', 'fieldWidth', 'fieldHeight'],
         data: () => ({
+            draggingOver: false,
             dropped: false,
             canDrop: false,
             firstDragging: false,
@@ -178,11 +180,12 @@
             dragDrop (evt) {
                 evt.preventDefault()
                 evt.dataTransfer.dropEffect = "move"
-                this.canDrop = false
+                this.draggingOver = false
             },
             dragEnter (evt) {
-                this.canDrop = true
+                this.draggingOver = true
                 this.$store.commit('SET_DRAG_TARGET', {
+                    cabinet: this.cabinet,
                     cabinet_id: this.cabinet && this.cabinet.id || null,
                     date: this.date,
                     hour: this.hour
@@ -191,7 +194,7 @@
             },
             dragLeave (evt) {
                 evt.preventDefault()
-                this.canDrop = false
+                this.draggingOver = false
             },
             firstDragStart (evt) {
                 evt.dataTransfer.setData("Text", this.firstEvent.id)
@@ -231,7 +234,10 @@
         }
     }
 </script>
-<style>
+<style scoped>
+    .target {
+        border: 3px solid green!important;
+    }
     .cabinet-entry {
         padding: 0;
         margin: 0;
