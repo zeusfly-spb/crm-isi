@@ -30,7 +30,7 @@
                 <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
-            &nbsp;
+            <v-spacer/>
             <v-chip>
                 <v-icon
                     size="20"

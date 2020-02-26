@@ -107,7 +107,7 @@ export default {
         }
     },
     mutations: {
-        START_DRAG_EVENT (state, event) {
+        SET_DRAG_EVENT (state, event) {
             state.draggedEvent = event
         },
         UNSET_DRAG_EVENT (state) {

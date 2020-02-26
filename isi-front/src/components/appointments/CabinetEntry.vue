@@ -193,7 +193,7 @@
             firstDragStart (evt) {
                 evt.dataTransfer.setData("Text", this.firstEvent.id)
                 this.firstDragging = true
-                this.$store.commit('START_DRAG_EVENT', this.firstEvent)
+                this.$store.commit('SET_DRAG_EVENT', this.firstEvent)
                 return false
             },
             firstDragEnd () {
