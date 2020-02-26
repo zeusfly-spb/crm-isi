@@ -39,6 +39,7 @@
                     @dragleave="dragEnter"
                     @mousedown="firstDragging = true"
                     @mouseup="firstDragging = false"
+                    @contextmenu.prevent="firstRightClick"
                 >
                     <v-icon
                         color="blue"
@@ -145,6 +146,7 @@
         name: 'SingleModePeriod',
         props: ['date', 'hour'],
         data: () => ({
+            contextMenu: false,
             firstDragging: false,
             draggingOver: false,
             addMode: false,
@@ -188,6 +190,9 @@
             }
         },
         methods: {
+            firstRightClick () {
+                console.log('Right mouse click')
+            },
             dragDrop (evt) {
                 evt.preventDefault()
                 evt.dataTransfer.dropEffect = "move"
