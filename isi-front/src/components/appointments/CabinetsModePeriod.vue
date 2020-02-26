@@ -57,18 +57,11 @@
                 return this.$store.state.appointment.appointments
             },
             periodAppointments () {
-                return this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                let base =  this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                return base.sort(this.$store.state.appointment.sortByDateTime)
             }
         },
         methods: {
-            dragBegin (data) {
-                console.log('Drag begin')
-                console.dir(data)
-            },
-            dragEnd (data) {
-                console.log('Drag end')
-                console.dir(data)
-            },
             addAttempt (cabinet) {
                 this.activeCabinet = cabinet
                 this.addMode = true

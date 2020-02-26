@@ -20,7 +20,8 @@ export default {
             } else {
                 return fullTime
             }
-        }
+        },
+        sortByDateTime: (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0
     },
     actions: {
         moveEvent ({commit, state}) {

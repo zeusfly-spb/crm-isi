@@ -159,7 +159,8 @@
                 return this.$store.getters.workingIsland
             },
             events () {
-                return this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                let base = this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                return base.sort(this.$store.state.appointment.sortByDateTime)
             }
         },
         methods: {
