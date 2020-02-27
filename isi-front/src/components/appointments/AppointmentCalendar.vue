@@ -1,17 +1,44 @@
 <template>
     <v-flex v-resize="onResize">
-        <v-layout class="mb-2">
+        <v-layout
+            class="mb-2"
+        >
+<!--            <v-flex xs12 sm6 md4-->
+<!--                    hidden-lg-and-up-->
+<!--            >-->
+<!--                <v-select-->
+<!--                    class="mb-2 ml-2"-->
+<!--                    :items="viewModes"-->
+<!--                    v-model="mode"-->
+<!--                    title="Режим просмотра"-->
+<!--                    style="width: 7em!important; height: 1em"-->
+<!--                    item-text="description"-->
+<!--                    item-value="name"-->
+<!--                    single-line-->
+<!--                />-->
+<!--            </v-flex>-->
             <v-flex xs12 sm6 md4>
-                <v-select
-                    class="mb-2 ml-2"
-                    :items="viewModes"
+                <v-btn-toggle
+                    mandatory
                     v-model="mode"
-                    title="Режим просмотра"
-                    style="width: 7em!important; height: 1em"
-                    item-text="description"
-                    item-value="name"
-                    single-line
-                />
+                    class="ml-2 mt-2"
+                >
+                    <v-btn
+                        flat
+                        v-for="icon in icons"
+                        color="blue-grey darken-2"
+                        :value="icon.mode"
+                        :title="icon.mode !== mode ? `Переключить на режим ${icon.caption}` : ''"
+                    >
+                        <v-icon
+                            large
+                            class="pl-0 pr-0"
+                        >
+                            {{ icon.type }}
+                        </v-icon>
+                    </v-btn>
+                </v-btn-toggle>
+
             </v-flex>
             <v-flex
                 class="text-sm-right"
@@ -248,6 +275,11 @@
                 {name: 'month', description: 'Месяц'},
                 {name: 'week', description: 'Неделя'},
                 {name: 'day', description: 'День'}
+            ],
+            icons: [
+                {caption: 'месяц', type: 'view_comfy', mode: 'month'},
+                {caption: 'неделя', type: 'view_week', mode: 'week'},
+                {caption: 'день', type: 'view_headline', mode: 'day'}
             ]
         }),
         computed: {
@@ -386,4 +418,8 @@
             font-size: 24px!important;
         }
     }
+    .v-btn {
+        padding: 0!important;
+    }
+
 </style>
