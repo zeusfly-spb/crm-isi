@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     protected $guarded = [];
+    protected $statusCatalog = [
+        null => 'active',
+        0 => 'canceled',
+        1 => 'completed'
+    ];
 
     public function user()
     {
