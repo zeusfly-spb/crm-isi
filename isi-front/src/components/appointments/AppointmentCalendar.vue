@@ -297,7 +297,7 @@
             },
             displayMode () {
                 if (this.mode === 'day') {
-                    return this.workingIsland.cabinets.length ? 'cabinets' : 'single'
+                    return this.workingIsland && this.workingIsland.cabinets.length ? 'cabinets' : 'single'
                 } else {
                     return this.mode
                 }

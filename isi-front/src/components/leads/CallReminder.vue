@@ -38,12 +38,18 @@
                     >
                         {{ event.client_name }}
                     </span>
-                    <v-icon
-                        color="green"
-                        class="ml-1 mr-1"
+                    <v-btn
+                        icon
+                        title="Перейти в раздел 'Запись'"
+                        :to="{path: '/appointments', query: {... $route.query, island: event.island_id}}"
                     >
-                        event
-                    </v-icon>
+                        <v-icon
+                            color="green"
+                            class="ml-1 mr-1"
+                        >
+                            event
+                        </v-icon>
+                    </v-btn>
                     <span
                         class="blue--text headline"
                     >

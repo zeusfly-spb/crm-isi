@@ -69,6 +69,11 @@
             },
             '$route.query': function (val) {
                 this.inspectQuery(val)
+            },
+            '$route.query.island': function (val) {
+                if (!this.workingIslandId !== +val) {
+                    this.$store.dispatch('setWorkingIslandId', +val)
+                }
             }
         }
     }
