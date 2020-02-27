@@ -2,6 +2,7 @@
     <v-flex v-resize="onResize">
         <v-layout
             class="mb-2"
+            align-center
         >
 <!--            <v-flex xs12 sm6 md4-->
 <!--                    hidden-lg-and-up-->
@@ -38,7 +39,6 @@
                         </v-icon>
                     </v-btn>
                 </v-btn-toggle>
-
             </v-flex>
             <v-flex
                 class="text-sm-right"

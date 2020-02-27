@@ -3,11 +3,17 @@
         <v-alert
             :value="true"
             color="warning"
-            v-if="nowLeads.length && !!authUser"
+            v-if="(nowLeads.length || nowEvents.length) && !!authUser"
         >
-            <span class="title">Ожидают связи:</span>
-            &nbsp;
-            <span v-for="(lead, index) in nowLeads" :key="index">
+            <div
+                v-if="nowLeads.length"
+            >
+                <span class="title">Ожидают связи:</span>
+                &nbsp;
+                <span
+                    v-for="(lead, index) in nowLeads"
+                    :key="index"
+                >
                 <span
                     class="headline"
                 >
@@ -15,6 +21,41 @@
                 </span>
                 <caller :phone="lead.phone" :lead="lead" blinked/>
             </span>
+            </div>
+            <div
+                v-if="nowEvents.length"
+            >
+                <span class="title">Активные записи:</span>
+                &nbsp;
+                <v-chip
+                    v-for="event in nowEvents"
+                    :key="`evt-${event.id}`"
+                    style="height: 50px"
+                    class="orange--text"
+                >
+                    <span
+                        class="headline"
+                    >
+                        {{ event.client_name }}
+                    </span>
+                    <v-icon
+                        color="green"
+                        class="ml-1 mr-1"
+                    >
+                        event
+                    </v-icon>
+                    <span
+                        class="blue--text headline"
+                    >
+                        {{ event.service.description }}
+                    </span>
+                    <caller
+                        :phone="event.client_phone"
+                        :lead="event.lead ? event.lead : null"
+                        blinked
+                    />
+                </v-chip>
+            </div>
         </v-alert>
     </div>
 </template>
@@ -23,6 +64,13 @@
     export default {
         name: 'CallReminder',
         computed: {
+            nowEvents () {
+                const limit = 0.01
+                return this.todayEvents.filter(event => (new Date(event.date) - new Date()) / 6000 < limit)
+            },
+            todayEvents () {
+                return this.$store.getters.todayEvents || []
+            },
             authUser () {
                 return this.$store.state.authUser
             },

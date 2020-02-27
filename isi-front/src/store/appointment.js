@@ -166,6 +166,7 @@ export default {
         }
     },
     getters: {
-        moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id)
+        moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id),
+        todayEvents: (state, getters, rootState) => state.appointments.filter(event => event.date.split(' ')[0] === rootState.realDate)
     }
 }
