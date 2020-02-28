@@ -31,6 +31,7 @@
                     title="Просмотр записи"
                     :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     :ripple="false"
+                    :id="`first-${firstEvent.id}`"
                     v-on="on"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
@@ -101,7 +102,7 @@
                     class="light-blue darken-3 pt-0 pb-0"
                 >
                     <span class="subheading white--text">
-                        Все записи островка {{ workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }}
+                        Все записи островка {{ workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59
                     </span>
                     <v-spacer/>
                     <v-btn
@@ -137,6 +138,44 @@
             :preset-hour="hour"
             @reset="addMode = false"
         />
+
+        <v-menu
+            v-model="contextMenu"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            :attach="`#first-${firstEvent.id}`"
+            :nudge-right="40"
+            :nudge-bottom="20"
+            lazy
+            offset-y
+            full-width
+            min-width="290px"
+        >
+            <div class="context-menu">
+                <v-list
+                    dense
+                >
+                    <v-list-tile
+                        v-for="(item, index) in contextMenuItems"
+                        :key="index"
+                        :class="{disabled: !firstCan(item.action) }"
+                        @click="firstCan(item.action) ? performAction(item.action) : null"
+                    >
+                        <v-list-tile-title>
+                            <v-icon
+                                :color="item.action === 'done' ? 'green' : 'red'"
+                            >
+                                {{ item.action }}
+                            </v-icon>
+                            <span class="body-2 right">
+                                {{ item.title }}
+                            </span>
+                        </v-list-tile-title>
+                    </v-list-tile>
+
+                </v-list>
+            </div>
+        </v-menu>
     </div>
 </template>
 <script>
@@ -151,7 +190,11 @@
             draggingOver: false,
             addMode: false,
             display: false,
-            periodDisplay: false
+            periodDisplay: false,
+            contextMenuItems: [
+                {title: 'Сменить статус на "Выполнено"', action: 'done'},
+                {title: 'Сменить статус на "Отменено"', action: 'cancel'},
+            ]
         }),
         computed: {
             moveReady () {
@@ -190,8 +233,25 @@
             }
         },
         methods: {
+            firstCan (action) {
+                switch (action) {
+                    case 'done':
+                        return this.firstEvent && this.firstEvent.status !== 'completed' || false
+                    case 'cancel':
+                        return this.firstEvent && this.firstEvent.status !== 'cancelled' || false
+                }
+            },
+            performAction (action) {
+                this.contextMenu = false
+                console.log(`Performing ${action}`)
+            },
+            dialogLockControl (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+            },
             firstRightClick () {
-                console.log('Right mouse click')
+                if (!this.dialogLocked) {
+                    this.contextMenu = true
+                }
             },
             dragDrop (evt) {
                 evt.preventDefault()
@@ -237,11 +297,19 @@
             }
         },
         watch: {
+            dialogLocked (val) {
+                // if (val) {
+                //     this.contextMenu = false
+                // }
+            },
+            contextMenu (val) {
+                this.dialogLockControl(val)
+            },
             display (val) {
-                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+                this.dialogLockControl(val)
             },
             periodDisplay (val) {
-                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+                this.dialogLockControl(val)
             }
         },
         components: {
@@ -251,6 +319,16 @@
     }
 </script>
 <style scoped>
+    .disabled {
+        color: darkgray;
+        cursor: default;
+    }
+    .v-btn{
+        text-transform: none!important;
+    }
+    .context-menu {
+        cursor: default;
+    }
     .target {
         border: 3px solid green;
     }
