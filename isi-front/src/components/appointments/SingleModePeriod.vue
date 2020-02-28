@@ -41,10 +41,10 @@
                     @contextmenu.prevent="firstRightClick"
                 >
                     <v-icon
-                        color="blue"
+                        :color="{active: 'blue', completed: 'green', cancelled: 'red'}[firstEvent.status]"
                         class="ml-1"
                     >
-                        event
+                        {{`${{active: 'event', cancelled: 'event_busy', completed: 'event_available'}[firstEvent.status]}`}}
                     </v-icon>
                     <span
                         class="green--text"
@@ -163,9 +163,9 @@
                         <v-list-tile-title>
                             <v-icon
                                 class="mr-2"
-                                color="blue"
+                                :color="{active: 'blue', cancelled: 'red', completed: 'green'}[firstEvent.status]"
                             >
-                                event
+                                {{ {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[firstEvent.status] }}
                             </v-icon>
                             <span
                                 class="green--text body-2 mr-1"
@@ -196,9 +196,9 @@
                             </span>
                             <v-icon
                                 :class="{disabled: !firstCan(item.action) }"
-                                :color="item.action === 'done' ? 'green' : 'red'"
+                                :color="{active: 'blue', 'done': 'green', cancel: 'red'}[item.action]"
                             >
-                                {{ item.action }}
+                                {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
                             </v-icon>
 
                         </v-list-tile-title>
@@ -222,12 +222,17 @@
             addMode: false,
             display: false,
             periodDisplay: false,
-            contextMenuItems: [
+            contextMenuRaw: [
                 {title: 'Сменить статус на "Выполнено"', action: 'done'},
                 {title: 'Сменить статус на "Отменено"', action: 'cancel'},
+                {title: 'Сменить статус на "Активно"', action: 'active'},
             ]
         }),
         computed: {
+            contextMenuItems () {
+                let toExcept = {active: 'active', cancelled: 'cancel', completed: 'done'}[this.firstEvent.status]
+                return this.contextMenuRaw.filter(item => item.action !== toExcept)
+            },
             moveReady () {
                 return this.$store.getters.moveReady
             },
@@ -270,15 +275,19 @@
                         return this.firstEvent && this.firstEvent.status !== 'completed' || false
                     case 'cancel':
                         return this.firstEvent && this.firstEvent.status !== 'cancelled' || false
+                    case 'active':
+                        return this.firstEvent && this.firstEvent.status !== 'active' || false
                 }
             },
             performAction (action) {
                 this.$store.dispatch('changeEventStatus', {
                     event_id: this.firstEvent.id,
-                    status: action === 'done' ? 'completed' : 'cancelled'
+                    status: `${{done: 'completed', cancel: 'cancelled', active: 'active'}[action]}`
                 })
                     .then(() => {
                         this.contextMenu = false
+                        let text = `Статус записи изменен на ${{done: 'Выполнено', cancel: 'Отменено', active: 'Активно'}[action]}`
+                        this.$store.commit('SEND_EVENT_MESSAGE', {color: 'green', text: text})
                     })
             },
             dialogLockControl (val) {
