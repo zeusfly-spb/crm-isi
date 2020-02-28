@@ -139,6 +139,7 @@
         />
 
         <v-menu
+            v-if="events.length"
             v-model="contextMenu"
             :close-on-content-click="false"
             transition="scale-transition"
@@ -272,8 +273,13 @@
                 }
             },
             performAction (action) {
-                this.contextMenu = false
-                console.log(`Performing ${action}`)
+                this.$store.dispatch('changeEventStatus', {
+                    event_id: this.firstEvent.id,
+                    status: action === 'done' ? 'completed' : 'cancelled'
+                })
+                    .then(() => {
+                        this.contextMenu = false
+                    })
             },
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')

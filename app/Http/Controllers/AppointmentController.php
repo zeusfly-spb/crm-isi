@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
+    public function change_status(Request $request)
+    {
+        $event = Appointment::find($request->event_id);
+        $event->update(['status' => $request->status]);
+        $event->load('user', 'performer', 'service', 'lead', 'island');
+        return response()->json($event->toArray());
+    }
+
     public function move(Request $request)
     {
         $event = Appointment::find($request->event_id);
