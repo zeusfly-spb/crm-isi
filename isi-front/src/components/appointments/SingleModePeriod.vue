@@ -24,8 +24,8 @@
             <template v-slot:activator="{ on }">
                 <v-btn
                     flat
+                    round
                     draggable="true"
-                    style="margin: 3px; padding: 3px"
                     title="Просмотр записи"
                     :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
                     :ripple="false"
@@ -42,6 +42,7 @@
                 >
                     <v-icon
                         color="blue"
+                        class="ml-1"
                     >
                         event
                     </v-icon>
@@ -51,10 +52,10 @@
                             {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
                         </span>
                     <span
-                        class="blue--text ml-1"
+                        class="blue--text ml-1 mr-1"
                     >
                             {{ firstEvent.client_name }}
-                        </span>
+                    </span>
                 </v-btn>
             </template>
             <div
@@ -325,10 +326,6 @@
     }
     .v-btn{
         text-transform: none!important;
-    }
-    .v-btn__content {
-        padding: .5em!important;
-        margin: .5em!important;
     }
     .context-menu {
         cursor: default;
