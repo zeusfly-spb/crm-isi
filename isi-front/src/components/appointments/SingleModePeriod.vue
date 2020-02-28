@@ -23,9 +23,7 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn
-                    round
                     flat
-                    small
                     draggable="true"
                     style="margin: 3px; padding: 3px"
                     title="Просмотр записи"
@@ -158,11 +156,13 @@
                     <v-list-tile
                         v-for="(item, index) in contextMenuItems"
                         :key="index"
-                        :class="{disabled: !firstCan(item.action) }"
                         @click="firstCan(item.action) ? performAction(item.action) : null"
                     >
-                        <v-list-tile-title>
+                        <v-list-tile-title
+                            :class="{disabled: !firstCan(item.action) }"
+                        >
                             <v-icon
+                                :class="{disabled: !firstCan(item.action) }"
                                 :color="item.action === 'done' ? 'green' : 'red'"
                             >
                                 {{ item.action }}
@@ -320,11 +320,15 @@
 </script>
 <style scoped>
     .disabled {
-        color: darkgray;
-        cursor: default;
+        color: darkgray!important;
+        cursor: not-allowed;
     }
     .v-btn{
         text-transform: none!important;
+    }
+    .v-btn__content {
+        padding: .5em!important;
+        margin: .5em!important;
     }
     .context-menu {
         cursor: default;
