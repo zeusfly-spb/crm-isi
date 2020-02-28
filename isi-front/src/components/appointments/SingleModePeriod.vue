@@ -153,24 +153,53 @@
             <div class="context-menu">
                 <v-list
                     dense
+                    style="margin: 0!important; padding: 0!important;"
                 >
+                    <v-list-tile
+                        class="teal lighten-5"
+                        style="margin: 0!important; padding: 0!important;"
+                    >
+                        <v-list-tile-title>
+                            <v-icon
+                                class="mr-2"
+                                color="blue"
+                            >
+                                event
+                            </v-icon>
+                            <span
+                                class="green--text body-2 mr-1"
+                            >
+                                <strong>{{ firstEvent.date | moment('DD MMM YYYY г. HH:mm')}}</strong>
+                            </span>
+                            <span
+                                class="body-2"
+                            >
+                                <strong>
+                                    {{ firstEvent.client_name }}
+                                </strong>
+                            </span>
+                        </v-list-tile-title>
+                    </v-list-tile>
+                    <v-divider/>
                     <v-list-tile
                         v-for="(item, index) in contextMenuItems"
                         :key="index"
+                        :title="firstCan(item.action) ? '' : 'Невозможно выполнить операцию'"
                         @click="firstCan(item.action) ? performAction(item.action) : null"
                     >
                         <v-list-tile-title
                             :class="{disabled: !firstCan(item.action) }"
                         >
+                           <span class="body-2 right">
+                                {{ item.title }}
+                            </span>
                             <v-icon
                                 :class="{disabled: !firstCan(item.action) }"
                                 :color="item.action === 'done' ? 'green' : 'red'"
                             >
                                 {{ item.action }}
                             </v-icon>
-                            <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
+
                         </v-list-tile-title>
                     </v-list-tile>
 
@@ -326,6 +355,10 @@
     }
     .v-btn{
         text-transform: none!important;
+    }
+    .v-btn__content {
+           padding: .5em!important;
+           margin: .5em!important;
     }
     .context-menu {
         cursor: default;

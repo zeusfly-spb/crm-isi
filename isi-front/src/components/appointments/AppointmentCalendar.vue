@@ -1,23 +1,9 @@
 <template>
     <v-flex v-resize="onResize">
         <v-layout
-            class="mb-2"
+            class="mb-2 ml-2 mr-2"
             align-center
         >
-<!--            <v-flex xs12 sm6 md4-->
-<!--                    hidden-lg-and-up-->
-<!--            >-->
-<!--                <v-select-->
-<!--                    class="mb-2 ml-2"-->
-<!--                    :items="viewModes"-->
-<!--                    v-model="mode"-->
-<!--                    title="Режим просмотра"-->
-<!--                    style="width: 7em!important; height: 1em"-->
-<!--                    item-text="description"-->
-<!--                    item-value="name"-->
-<!--                    single-line-->
-<!--                />-->
-<!--            </v-flex>-->
             <v-flex xs12 sm6 md4>
                 <v-btn-toggle
                     mandatory
@@ -115,7 +101,7 @@
         <v-layout>
             <v-flex
                 xs12
-                class="mb-3"
+                class="mb-3 ml-1 mr-1"
             >
                 <v-sheet
                     :height="windowHeight"
