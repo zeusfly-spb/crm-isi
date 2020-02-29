@@ -95,7 +95,7 @@
                 </v-btn>
             </v-flex>
             <v-flex xs12 sm6 md4>
-                &nbsp;
+                                &nbsp;
             </v-flex>
         </v-layout>
         <v-layout>

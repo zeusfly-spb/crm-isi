@@ -137,79 +137,17 @@
             :preset-hour="hour"
             @reset="addMode = false"
         />
-
-        <v-menu
-            v-if="events.length"
-            v-model="contextMenu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            :attach="`#first-${firstEvent.id}`"
-            :nudge-right="40"
-            :nudge-bottom="20"
-            lazy
-            offset-y
-            full-width
-            min-width="290px"
-        >
-            <div class="context-menu">
-                <v-list
-                    dense
-                    style="margin: 0!important; padding: 0!important;"
-                >
-                    <v-list-tile
-                        class="teal lighten-5"
-                        style="margin: 0!important; padding: 0!important;"
-                    >
-                        <v-list-tile-title>
-                            <v-icon
-                                class="mr-2"
-                                :color="{active: 'blue', cancelled: 'red', completed: 'green'}[firstEvent.status]"
-                            >
-                                {{ {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[firstEvent.status] }}
-                            </v-icon>
-                            <span
-                                class="green--text body-2 mr-1"
-                            >
-                                <strong>{{ firstEvent.date | moment('DD MMM YYYY г. HH:mm')}}</strong>
-                            </span>
-                            <span
-                                class="body-2"
-                            >
-                                <strong>
-                                    {{ firstEvent.client_name }}
-                                </strong>
-                            </span>
-                        </v-list-tile-title>
-                    </v-list-tile>
-                    <v-divider/>
-                    <v-list-tile
-                        v-for="(item, index) in contextMenuItems"
-                        :key="index"
-                        :title="firstCan(item.action) ? '' : 'Невозможно выполнить операцию'"
-                        @click="firstCan(item.action) ? performAction(item.action) : null"
-                    >
-                        <v-list-tile-title
-                            :class="{disabled: !firstCan(item.action) }"
-                        >
-                           <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
-                            <v-icon
-                                :class="{disabled: !firstCan(item.action) }"
-                                :color="{active: 'blue', 'done': 'green', cancel: 'red'}[item.action]"
-                            >
-                                {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
-                            </v-icon>
-
-                        </v-list-tile-title>
-                    </v-list-tile>
-
-                </v-list>
-            </div>
-        </v-menu>
+        <event-context-menu
+                v-if="hasEvents"
+                :event="firstEvent"
+                :activator="contextMenu"
+                @hide="contextMenu = false"
+                @show="contextMenu = true"
+        />
     </div>
 </template>
 <script>
+    import EventContextMenu from './EventContextMenu.vue'
     import Event from './Event'
     import CalendarRecordAdder from './CalendarRecordAdder'
     export default {
@@ -221,18 +159,9 @@
             draggingOver: false,
             addMode: false,
             display: false,
-            periodDisplay: false,
-            contextMenuRaw: [
-                {title: 'Сменить статус на "Выполнено"', action: 'done'},
-                {title: 'Сменить статус на "Отменено"', action: 'cancel'},
-                {title: 'Сменить статус на "Активно"', action: 'active'},
-            ]
+            periodDisplay: false
         }),
         computed: {
-            contextMenuItems () {
-                let toExcept = {active: 'active', cancelled: 'cancel', completed: 'done'}[this.firstEvent.status]
-                return this.contextMenuRaw.filter(item => item.action !== toExcept)
-            },
             moveReady () {
                 return this.$store.getters.moveReady
             },
@@ -269,27 +198,6 @@
             }
         },
         methods: {
-            firstCan (action) {
-                switch (action) {
-                    case 'done':
-                        return this.firstEvent && this.firstEvent.status !== 'completed' || false
-                    case 'cancel':
-                        return this.firstEvent && this.firstEvent.status !== 'cancelled' || false
-                    case 'active':
-                        return this.firstEvent && this.firstEvent.status !== 'active' || false
-                }
-            },
-            performAction (action) {
-                this.$store.dispatch('changeEventStatus', {
-                    event_id: this.firstEvent.id,
-                    status: `${{done: 'completed', cancel: 'cancelled', active: 'active'}[action]}`
-                })
-                    .then(() => {
-                        this.contextMenu = false
-                        let text = `Статус записи изменен на ${{done: 'Выполнено', cancel: 'Отменено', active: 'Активно'}[action]}`
-                        this.$store.commit('SEND_EVENT_MESSAGE', {color: 'green', text: text})
-                    })
-            },
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
@@ -359,7 +267,8 @@
         },
         components: {
             CalendarRecordAdder,
-            Event
+            Event,
+            EventContextMenu
         }
     }
 </script>
