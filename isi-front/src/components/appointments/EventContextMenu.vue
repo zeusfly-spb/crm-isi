@@ -69,7 +69,7 @@
 <script>
     export default {
         name: 'EventContextMenu',
-        props: ['event', 'activator'],
+        props: ['event', 'activator', 'selector'],
         data: () => ({
             contextMenuRaw: [
                 {title: 'Сменить статус на "Выполнено"', action: 'done'},
@@ -81,9 +81,6 @@
             contextMenuItems () {
                 let toExcept = {active: 'active', cancelled: 'cancel', completed: 'done'}[this.event.status]
                 return this.contextMenuRaw.filter(item => item.action !== toExcept)
-            },
-            selector () {
-                return `#first-${this.event.id}`
             },
             visible: {
                 get () {

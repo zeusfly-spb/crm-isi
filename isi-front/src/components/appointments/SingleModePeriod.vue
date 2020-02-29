@@ -140,6 +140,7 @@
         <event-context-menu
                 v-if="hasEvents"
                 :event="firstEvent"
+                :selector="`#first-${firstEvent.id}`"
                 :activator="contextMenu"
                 @hide="contextMenu = false"
                 @show="contextMenu = true"
