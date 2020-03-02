@@ -44,7 +44,7 @@
                         :color="{active: 'blue', completed: 'green', cancelled: 'red'}[firstEvent.status]"
                         class="ml-1"
                     >
-                        {{`${{active: 'event', cancelled: 'event_busy', completed: 'event_available'}[firstEvent.status]}`}}
+                        {{ firstEvent.icon }}
                     </v-icon>
                     <span
                         class="green--text"
@@ -171,7 +171,9 @@
                 return this.$store.state.appointment.splitEventTime(this.$store.state.appointment.draggedEvent)
             },
             firstEvent () {
-                return this.hasEvents && this.events[0]
+                let base = this.hasEvents && this.events[0]
+                base.icon = {active: 'event', cancelled: 'event_busy', completed: 'event_available'}[base.status]
+                return base
             },
             hasEvents () {
                 return this.events.length
