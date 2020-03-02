@@ -1,11 +1,12 @@
 <template>
     <v-flex v-resize="onResize">
         <v-layout
-            class="mb-2 ml-2 mr-2"
+            class="ml-2 mr-2"
             align-center
         >
             <v-flex xs12 sm6 md4>
                 <v-btn-toggle
+                    v-if="!archiveView"
                     mandatory
                     v-model="mode"
                     class="ml-2 mt-2"
@@ -67,9 +68,8 @@
                             title="Изменить день"
                             v-else
                         >
-                        {{ currentMonth | moment('DD MMMM YYYY') | upFirst }}
+                        {{ currentMonth | moment('D MMMM YYYY') | upFirst }}
                     </span>
-
                     </template>
                     <v-date-picker
                         :type="mode === 'month' ? 'month' : 'date'"
@@ -94,8 +94,17 @@
                     </v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex xs12 sm6 md4>
-                                &nbsp;
+            <v-flex xs12 sm6 md4
+                    class="text-sm-right"
+            >
+                <v-btn
+                    flat
+                    color="primary"
+                    :title="archiveView ? 'календарь' : 'завершенные / отмененные записи'"
+                    @click="archiveView = !archiveView"
+                >
+                    {{ archiveView ? 'Календарь' : 'Архив' }}
+                </v-btn>                                &nbsp;
             </v-flex>
         </v-layout>
         <v-layout>
@@ -108,6 +117,7 @@
                     elevation="2"
                 >
                     <v-calendar
+                        v-if="!archiveView"
                         :type="mode"
                         locale="ru"
                         :weekdays="[1,2,3,4,5,6,0]"
@@ -199,6 +209,9 @@
                             />
                         </template>
                     </v-calendar>
+                    <div v-else>
+                        Архив записей
+                    </div>
                 </v-sheet>
             </v-flex>
         </v-layout>
@@ -253,6 +266,8 @@
         name: 'AppointmentCalendar',
         data: () => ({
             mode: 'day',
+            backupMode: null,
+            archiveView: false,
             currentMonth: null,
             newDate: null,
             menu: false,
@@ -371,6 +386,14 @@
             this.currentMonth = this.accountingDate
         },
         watch: {
+            archiveView (val) {
+                if (val) {
+                    this.backupMode = this.mode
+                    this.mode = 'month'
+                } else {
+                    this.mode = this.backupMode
+                }
+            },
             eventToDelete (event) {
                 event ? this.$store.commit('DELETE_MODE_ON') : this.$store.commit('DELETE_MODE_OFF')
             },
