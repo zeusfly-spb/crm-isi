@@ -11,7 +11,19 @@
                 v-for="(tab, index) in tabs"
                 :key="index"
             >
+                <v-icon
+                    :color="tab.color"
+                    class="mr-1"
+                >
+                    {{ tab.icon }}
+                </v-icon>
                 {{ tab.title }}
+                <span
+                    class="ml-1"
+                    :class="`${tab.color}--text`"
+                >
+                    ({{ statusEvents(tab.status).length }})
+                </span>
             </v-tab>
             <v-tabs-items touchless>
                 <v-tab-item
@@ -65,8 +77,8 @@
         data: () => ({
             currentIndex: 0,
             tabs: [
-                {title: 'Отмененные', status: 'cancelled'},
-                {title: 'Выполненные', status: 'completed'}
+                {title: 'Отмененные', status: 'cancelled', color: 'red', icon: 'event_busy'},
+                {title: 'Завершенные', status: 'completed', color: 'green', icon: 'event_available'}
             ],
             headers: [
                 {text: '#', value: null},
