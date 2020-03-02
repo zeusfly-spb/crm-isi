@@ -6,7 +6,7 @@
         >
             <v-flex xs12 sm6 md4>
                 <v-btn-toggle
-                    v-if="!archiveView"
+                    v-show="!archiveView"
                     mandatory
                     v-model="mode"
                     class="ml-2 mt-2"
@@ -117,7 +117,7 @@
                     elevation="2"
                 >
                     <v-calendar
-                        v-if="!archiveView"
+                        v-show="!archiveView"
                         :type="mode"
                         locale="ru"
                         :weekdays="[1,2,3,4,5,6,0]"
@@ -209,13 +209,12 @@
                             />
                         </template>
                     </v-calendar>
-                    <div v-else>
-                        Архив записей
-                    </div>
+                    <events-archive
+                        v-if="archiveView"
+                    />
                 </v-sheet>
             </v-flex>
         </v-layout>
-
         <v-dialog
             :value="!!eventToDelete"
             max-width="500px"
@@ -256,6 +255,7 @@
     </v-flex>
 </template>
 <script>
+    import EventsArchive from './EventsArchive'
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetsModeHeader from './CabinetsModeHeader'
     import CabinetsModePeriod from './CabinetsModePeriod'
@@ -412,7 +412,8 @@
             CabinetsModePeriod,
             SingleModePeriod,
             WeekModePeriod,
-            MonthModeDate
+            MonthModeDate,
+            EventsArchive
         }
     }
 </script>
@@ -430,5 +431,4 @@
     .v-btn {
         padding: 0!important;
     }
-
 </style>
