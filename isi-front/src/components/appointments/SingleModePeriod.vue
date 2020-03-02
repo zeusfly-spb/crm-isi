@@ -25,9 +25,9 @@
                 <v-btn
                     flat
                     round
-                    draggable="true"
+                    :draggable="firstEvent.draggable"
                     title="Просмотр записи"
-                    :style="{'cursor': firstDragging ? 'grabbing' : 'grab'}"
+                    :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
                     :ripple="false"
                     :id="`first-${firstEvent.id}`"
                     v-on="on"
@@ -41,10 +41,10 @@
                     @contextmenu.prevent="firstRightClick"
                 >
                     <v-icon
-                        :color="{active: 'blue', completed: 'green', cancelled: 'red'}[firstEvent.status]"
+                        :color="firstEvent.icon.color"
                         class="ml-1"
                     >
-                        {{ firstEvent.icon }}
+                        {{ firstEvent.icon.type }}
                     </v-icon>
                     <span
                         class="green--text"
@@ -171,9 +171,15 @@
                 return this.$store.state.appointment.splitEventTime(this.$store.state.appointment.draggedEvent)
             },
             firstEvent () {
-                let base = this.hasEvents && this.events[0]
-                base.icon = {active: 'event', cancelled: 'event_busy', completed: 'event_available'}[base.status]
-                return base
+                const extend = (base) => {
+                    base.draggable = base.status !== 'completed'
+                    base.icon = {
+                        type: {active: 'event', cancelled: 'event_busy', completed: 'event_available'}[base.status],
+                        color: {active: 'blue', cancelled: 'red', completed: 'green'}[base.status]
+                    }
+                    return base
+                }
+                return this.hasEvents && extend(this.events[0])
             },
             hasEvents () {
                 return this.events.length
@@ -236,6 +242,7 @@
                 evt.dataTransfer.effectAllowed = "move"
             },
             firstDragStart (evt) {
+                this.firstDragging = true
                 evt.dataTransfer.setData("Text", this.firstEvent.id)
                 this.$store.commit('SET_DRAG_EVENT', this.firstEvent)
                 return false

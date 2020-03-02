@@ -32,7 +32,7 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-text-field
-                        :label="accountingDate | moment('DD MMMM YYYY г.')"
+                        :label="accountingDate | moment('D MMMM YYYY г.')"
                         prepend-inner-icon="event"
                         readonly
                         v-on="on"
