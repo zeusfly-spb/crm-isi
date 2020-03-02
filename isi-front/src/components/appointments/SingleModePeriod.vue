@@ -139,11 +139,9 @@
         />
         <event-context-menu
                 v-if="hasEvents"
+                v-model="contextMenu"
                 :event="firstEvent"
                 :selector="`#first-${firstEvent.id}`"
-                :activator="contextMenu"
-                @hide="contextMenu = false"
-                @show="contextMenu = true"
         />
     </div>
 </template>

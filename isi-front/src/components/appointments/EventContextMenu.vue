@@ -69,7 +69,7 @@
 <script>
     export default {
         name: 'EventContextMenu',
-        props: ['event', 'activator', 'selector'],
+        props: ['value', 'event', 'selector'],
         data: () => ({
             contextMenuRaw: [
                 {title: 'Сменить статус на "Выполнено"', action: 'done'},
@@ -84,10 +84,10 @@
             },
             visible: {
                 get () {
-                    return this.activator
+                    return this.value
                 },
                 set (val) {
-                    this.$emit(val ? 'show' : 'hide')
+                    this.$emit('input', val)
                 }
             }
         },
@@ -115,14 +115,6 @@
                     case 'active':
                         return this.event.status !== 'active' || false
                 }
-            }
-        },
-        mounted () {
-            this.visible = this.activator
-        },
-        watch: {
-            visible (val) {
-                this.dialogLockControl(val)
             }
         }
     }
