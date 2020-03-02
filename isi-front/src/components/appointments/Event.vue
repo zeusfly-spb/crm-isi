@@ -18,7 +18,9 @@
             <span class="blue--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
             <span class="pl-1 pr-1">{{ event.service && event.service.description }}</span>
             <strong>Клиент:</strong>
-            <span class="pl-1">{{ event.client_name }}</span>
+            <span class="pl-1 pr-1">
+                {{ event.client_name }}
+            </span>
             {{ event.client_phone | phone }}
             <caller :phone="event.client_phone"/>
             <strong>Исполнитель:</strong>

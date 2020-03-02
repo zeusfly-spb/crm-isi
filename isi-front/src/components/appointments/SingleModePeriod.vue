@@ -249,11 +249,6 @@
             }
         },
         watch: {
-            dialogLocked (val) {
-                // if (val) {
-                //     this.contextMenu = false
-                // }
-            },
             contextMenu (val) {
                 this.dialogLockControl(val)
             },
