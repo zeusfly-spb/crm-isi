@@ -37,6 +37,6 @@ class Appointment extends Model
 
     public function getStatusAttribute($value)
     {
-        return !!$value ? $value : 'active';
+        return $value ?? 'active';
     }
 }
