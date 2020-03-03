@@ -79,7 +79,7 @@ class AppointmentController extends Controller
     public function update(Request $request)
     {
         $appointment = Appointment::find($request->id);
-        $inputs = Arr::except($request->all(), ['user', 'performer', 'island', 'service', 'lead']);
+        $inputs = Arr::except($request->all(), ['user', 'performer', 'island', 'service', 'lead', 'icon']);
         $appointment->update($inputs);
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
