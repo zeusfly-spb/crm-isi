@@ -181,7 +181,6 @@
                 client_phone: null,
                 date: null,
                 client_name: null,
-                comment: null,
                 cabinet_id: null
             }
         }),
@@ -222,8 +221,7 @@
                     client_phone: null,
                     date: null,
                     time: null,
-                    client_name: null,
-                    comment: null
+                    client_name: null
                 }
             }
         },
