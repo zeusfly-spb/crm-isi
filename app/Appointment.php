@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     protected $guarded = [];
-    protected $statusCatalog = [
-        null => 'active',
-        0 => 'canceled',
-        1 => 'completed'
-    ];
+    protected $appends = ['status'];
+
 
     public function user()
     {
@@ -36,5 +33,10 @@ class Appointment extends Model
     public function island()
     {
         return $this->belongsTo(Island::class);
+    }
+
+    public function getStatusAttribute($value)
+    {
+        return !!$value ? $value : 'active';
     }
 }
