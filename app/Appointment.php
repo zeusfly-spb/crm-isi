@@ -35,8 +35,8 @@ class Appointment extends Model
         return $this->belongsTo(Island::class);
     }
 
-    public function getStatusAttribute($value)
+    public function getStatusAttribute()
     {
-        return $value ?? 'active';
+        return $this->attributes['status'] ?? 'active';
     }
 }
