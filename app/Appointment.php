@@ -3,12 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Appointment extends Model
 {
     protected $guarded = [];
     protected $appends = ['status'];
-
+    protected $casts = [
+        'comments' => 'array'
+    ];
 
     public function user()
     {
@@ -38,5 +41,18 @@ class Appointment extends Model
     public function getStatusAttribute()
     {
         return $this->attributes['status'] ?? 'active';
+    }
+
+    public function addComment(string $text, int $user_id = null)
+    {
+        $newComment = (object) [
+            'id' => Str::random(25),
+            'user_id' => $user_id ?? 0,
+            'text' => $text,
+            'created_at' => now()->toDateTimeString()
+        ];
+        $comments = $this->comments ?? [];
+        array_push($comments, $newComment);
+        return $this->update(['comments' => $comments]);
     }
 }
