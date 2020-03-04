@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+
 
 
 class AppointmentController extends Controller
@@ -79,7 +81,7 @@ class AppointmentController extends Controller
     public function update(Request $request)
     {
         $appointment = Appointment::find($request->id);
-        $inputs = Arr::except($request->all(), ['user', 'performer', 'island', 'service', 'lead', 'icon']);
+        $inputs = Arr::only($request->all(), array_values(Schema::getColumnListing($appointment->getTable())));
         $appointment->update($inputs);
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());

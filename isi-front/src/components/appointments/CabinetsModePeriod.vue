@@ -25,7 +25,6 @@
     </v-layout>
 </template>
 <script>
-    import draggable from 'vuedraggable'
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetEntry from './CabinetEntry'
     import Event from './Event'
@@ -86,8 +85,7 @@
         components: {
             CabinetEntry,
             CalendarRecordAdder,
-            Event,
-            draggable
+            Event
         }
     }
 </script>
