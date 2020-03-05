@@ -168,7 +168,7 @@
                 return this.draggingOver && +this.draggedEvent.hour !== +this.hour
             },
             draggedEvent () {
-                return this.$store.state.appointment.splitEventTime(this.$store.state.appointment.draggedEvent)
+                return this.$store.state.appointment.draggedEvent
             },
             firstEvent () {
                 const extend = (base) => {

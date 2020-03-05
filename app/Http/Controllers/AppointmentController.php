@@ -34,7 +34,13 @@ class AppointmentController extends Controller
 
     public function move(Request $request)
     {
-        $actionUser = User::find($request->user_id);
+
+        if (Cache::has('users')) {
+            $actionUser = Cache::get('users')->where('id', $request->user_id)->first();
+        } else {
+            Log::info('Querying from mysql user entry for fill system comment');
+            $actionUser = User::find($request->user_id);
+        }
         $event = Appointment::find($request->event_id);
         $eventTimeArr = explode(':', explode(' ', $event->date)[1]);
         $changedDate = $request->hour . ':' . $eventTimeArr[1];

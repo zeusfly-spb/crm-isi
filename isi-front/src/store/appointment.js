@@ -55,7 +55,7 @@ export default {
                         let minutes = state.draggedEvent.date.split(' ')[1].split(':')[1]
                         let text = `Запись перенесена ${state.dragTarget.cabinet ? 'в кабинет' : ''} ${state.dragTarget.cabinet && state.dragTarget.cabinet.name || ''} на 
                         ${Vue.moment(state.dragTarget.date + ' ' + state.dragTarget.hour + ':' + minutes)
-                            .format('DD MMMM YYYY г. HH:mm')}`
+                            .format('D MMMM YYYY г. HH:mm')}`
                         commit('UPDATE_APPOINTMENT', res.data)
                         commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                         commit('UNSET_DRAG_EVENT')
