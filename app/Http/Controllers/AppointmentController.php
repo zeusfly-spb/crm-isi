@@ -34,8 +34,13 @@ class AppointmentController extends Controller
 
     public function move(Request $request)
     {
+        $actionUser = User::find($request->user_id);
         $event = Appointment::find($request->event_id);
         $eventTimeArr = explode(':', explode(' ', $event->date)[1]);
+        $changedDate = $request->hour . ':' . $eventTimeArr[1];
+        $textDate = Carbon::create($changedDate)->formatLocalized('%e %B %Y');
+        $actionComment = $actionUser->full_name . ' перенес запись на ' . $textDate . ' ' . $changedDate;
+        $event->addComment($actionComment);
         $newDate = $request->date . ' ' . $request->hour . ':' . $eventTimeArr[1] . ':' . $eventTimeArr[2];
         $event->update(['date' => $newDate, 'cabinet_id' => $request->cabinet_id]);
         $event->load('user', 'performer', 'service', 'lead', 'island');

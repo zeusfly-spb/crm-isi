@@ -42,9 +42,10 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        moveEvent ({commit, state}) {
+        moveEvent ({commit, state, rootState}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
+                    user_id: rootState.authUser.id,
                     event_id: state.draggedEvent.id,
                     cabinet_id: state.dragTarget.cabinet_id || null,
                     date: state.dragTarget.date,

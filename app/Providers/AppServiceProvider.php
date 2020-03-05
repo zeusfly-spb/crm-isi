@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\DocumentPack;
 use App\Observers\UserObserver;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\DocPackObserver;
 use App\Deal;
@@ -39,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        setlocale(LC_TIME, 'ru_RU.UTF-8');
+        Carbon::setLocale(config('app.locale'));
         DocumentPack::observe(DocPackObserver::class);
         User::observe(UserObserver::class);
         Deal::observe (DealObserver::class);
