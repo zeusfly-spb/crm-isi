@@ -70,9 +70,11 @@
             accountingDate () {
                 return this.$store.state.accountingDate
             },
+            fixedUserIds () {
+                return this.workdays && this.workdays.map(workday => +workday.user_id)
+            },
             users () {
-                let fixedUsers = this.workdays.map(item => +item.user_id)
-                return this.$store.state.users.filter(item => !item.fired_at && !item.is_superadmin && item.island_id && !fixedUsers.includes(+item.id))
+                return this.$store.state.users.filter(item => !item.fired_at && !item.is_superadmin && !this.fixedUserIds.includes(+item.id))
             },
             workdays () {
                 return this.$store.state.workdays
