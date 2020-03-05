@@ -75,7 +75,8 @@
                 return this.todayEvents.filter(event => (new Date(event.date) - new Date()) / 6000 < limit)
             },
             todayEvents () {
-                return this.$store.getters.todayEvents && this.$store.getters.todayEvents.filter(event => event.status === 'active') || []
+                return this.$store.getters.todayEvents && this.$store.getters.todayEvents
+                    .filter(event => event.status === 'active' && event.island_id === this.$store.state.workingIslandId) || []
             },
             authUser () {
                 return this.$store.state.authUser
