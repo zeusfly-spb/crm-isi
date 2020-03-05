@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -14,10 +15,19 @@ use Illuminate\Support\Facades\Schema;
 
 class AppointmentController extends Controller
 {
+    public $statusList = [
+        'active' => '"активна"',
+        'completed' => '"завершена"',
+        'cancelled' => '"отменена"'
+    ];
+
     public function change_status(Request $request)
     {
+        $actionUser = User::find($request->user_id);
+        $actionComment = $actionUser->full_name . ' изменил статус записи на ' . $this->statusList[$request->status];
         $event = Appointment::find($request->event_id);
         $event->update(['status' => $request->status]);
+        $event->addComment($actionComment);
         $event->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($event->toArray());
     }

@@ -29,9 +29,12 @@ export default {
         })
     },
     actions: {
-        changeEventStatus ({commit}, data) {
+        changeEventStatus ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/appointment_change_status', {...data})
+                Vue.axios.post('/api/appointment_change_status', {
+                    ...data,
+                    user_id: rootState.authUser.id
+                })
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
                         resolve(res)
