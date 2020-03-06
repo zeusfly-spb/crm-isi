@@ -30,7 +30,7 @@
                 <v-chip
                     v-for="event in nowEvents"
                     :key="`evt-${event.id}`"
-                    style="height: 50px"
+                    style="height: 40px"
                     class="orange--text"
                 >
                     <span
@@ -41,7 +41,7 @@
                     <v-btn
                         icon
                         title="Перейти в раздел 'Запись'"
-                        :to="{path: '/appointments', query: {... $route.query, island: event.island_id}}"
+                        :to="`/appointments?island=${event.island_id}`"
                     >
                         <v-icon
                             color="green"

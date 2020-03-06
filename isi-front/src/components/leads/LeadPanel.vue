@@ -37,49 +37,50 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <td>
-                    <v-icon
-                        class="red--text delete"
-                        title="Удалить заявку?"
-                        @click="confirmToDelete(props.item)"
-                        v-if="isSuperadmin"
-                    >
-                        clear
-                    </v-icon>
-                </td>
-                <td>{{ props.index + 1 }}</td>
-                <td>
-                    <v-icon
-                        class="clickable"
-                        :color="props.item.customer ? 'green' : 'yellow darken-3'"
-                        @click="showInteractions(props.item.id)"
-                        title="Показать историю взаимодействия"
-                    >
-                        contacts
-                    </v-icon>
-                    {{ props.item.name | upFirst }}
-                    <interactions-card
-                        v-if="+interactionsOpenId === +props.item.id"
-                        :lead="props.item"
-                        :customer="props.item.customer"
-                        @close="interactionsOpenId = null"
-                    />
-                </td>
-                <td nowrap>
-                    <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
-                    <span v-else>{{ props.item.phone | phone }}</span>
-                    <caller :phone="props.item.phone" :lead="props.item"/>
-                </td>
-                <td>
-                    <template v-if="props.item.id === openLeadId">
-                        <lead-postpones
+                <tr>
+                    <td>
+                        <v-icon
+                            class="red--text delete"
+                            title="Удалить заявку?"
+                            @click="confirmToDelete(props.item)"
+                            v-if="isSuperadmin"
+                        >
+                            clear
+                        </v-icon>
+                    </td>
+                    <td>{{ props.index + 1 }}</td>
+                    <td>
+                        <v-icon
+                            class="clickable"
+                            :color="props.item.customer ? 'green' : 'yellow darken-3'"
+                            @click="showInteractions(props.item.id)"
+                            title="Показать историю взаимодействия"
+                        >
+                            contacts
+                        </v-icon>
+                        {{ props.item.name | upFirst }}
+                        <interactions-card
+                            v-if="+interactionsOpenId === +props.item.id"
                             :lead="props.item"
-                            @message="showSuccess"
-                            :open="props.item.id === openLeadId"
-                            @closed="openLeadId = null"
+                            :customer="props.item.customer"
+                            @close="interactionsOpenId = null"
                         />
-                    </template>
-                    <template v-else>
+                    </td>
+                    <td nowrap>
+                        <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
+                        <span v-else>{{ props.item.phone | phone }}</span>
+                        <caller :phone="props.item.phone" :lead="props.item"/>
+                    </td>
+                    <td>
+                        <template v-if="props.item.id === openLeadId">
+                            <lead-postpones
+                                :lead="props.item"
+                                @message="showSuccess"
+                                :open="props.item.id === openLeadId"
+                                @closed="openLeadId = null"
+                            />
+                        </template>
+                        <template v-else>
                             <span
                                 v-if="props.item.last_postpone"
                                 class="clickable"
@@ -88,36 +89,36 @@
                             >
                                 {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                             </span>
-                        <v-icon
+                            <v-icon
+                                v-else
+                                class="clickable"
+                                title="Добавить дату перезвона по заявке"
+                                @click="showLead(props.item.id)"
+                            >
+                                phone_forwarded
+                            </v-icon>
+                        </template>
+                    </td>
+                    <td>
+                        <span v-if="props.item.site">{{ props.item.site }}</span>
+                        <v-avatar
                             v-else
-                            class="clickable"
-                            title="Добавить дату перезвона по заявке"
-                            @click="showLead(props.item.id)"
+                            size="36px"
+                            :title="props.item.user && props.item.user.full_name || ''"
                         >
-                            phone_forwarded
-                        </v-icon>
-                    </template>
-                </td>
-                <td>
-                    <span v-if="props.item.site">{{ props.item.site }}</span>
-                    <v-avatar
-                        v-else
-                        size="36px"
-                        :title="props.item.user && props.item.user.full_name || ''"
-                    >
-                        <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
-                    </v-avatar>
-                </td>
-                <td>
-                    <template v-if="leadCommentsId === props.item.id">
-                        <lead-comments
-                            :lead="props.item"
-                            @updated="showSuccess"
-                            @close="leadCommentsId = null"
-                        />
-                    </template>
-                    <template v-else>
+                            <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
+                            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                        </v-avatar>
+                    </td>
+                    <td>
+                        <template v-if="leadCommentsId === props.item.id">
+                            <lead-comments
+                                :lead="props.item"
+                                @updated="showSuccess"
+                                @close="leadCommentsId = null"
+                            />
+                        </template>
+                        <template v-else>
                         <span v-if="props.item.last_comment"
                               @click="leadCommentsId = props.item.id"
                               class="clickable"
@@ -129,21 +130,22 @@
                                 <strong>({{ props.item.comments.length }})</strong>
                             </span>
                         </span>
-                        <v-icon
-                            v-else
-                            color="green"
-                            title="Добавить комментарий к заявке"
-                            class="clickable"
-                            @click="leadCommentsId = props.item.id"
-                        >
-                            add_circle
-                        </v-icon>
-                    </template>
-                </td>
-                <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
-                <td>
-                    <lead-status :lead="props.item"/>
-                </td>
+                            <v-icon
+                                v-else
+                                color="green"
+                                title="Добавить комментарий к заявке"
+                                class="clickable"
+                                @click="leadCommentsId = props.item.id"
+                            >
+                                add_circle
+                            </v-icon>
+                        </template>
+                    </td>
+                    <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
+                    <td>
+                        <lead-status :lead="props.item"/>
+                    </td>
+                </tr>
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет заявок</span>
@@ -177,7 +179,6 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-
         </v-dialog>
     </v-flex>
 </template>
@@ -188,6 +189,7 @@
     import NewLeadDialog from './NewLeadDialog'
     import LeadPostpones from './LeadPostpones'
     import InteractionsCard from '../customers/InteractionsCard'
+    import LeadContextMenu from './LeadContextMenu'
 
     export default {
         name: 'LeadsPanel',
@@ -216,6 +218,16 @@
             ]
         }),
         computed: {
+            contextMenu: {
+                get () {
+                    return !!this.activeLeadContext
+                },
+                set (val) {
+                    if (!val) {
+                        this.activeLeadContext = null
+                    }
+                }
+            },
             doneMode () {
                 return this.$store.state.loader.withDone
             },
@@ -286,7 +298,6 @@
                 base.sort(sortByPostpones)
                 base.sort(sortByTimeInDay)
                 base.sort(moveFutureDown)
-
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
@@ -337,7 +348,8 @@
             LeadStatus,
             NewLeadDialog,
             LeadPostpones,
-            InteractionsCard
+            InteractionsCard,
+            LeadContextMenu
         }
     }
 </script>
