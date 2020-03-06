@@ -49,12 +49,15 @@
                         </v-icon>
                     </td>
                     <td>{{ props.index + 1 }}</td>
-                    <td>
+                    <td
+                        :id="`lead${props.item.id}`"
+                    >
                         <v-icon
                             class="clickable"
+                            title="Показать историю взаимодействия"
                             :color="props.item.customer ? 'green' : 'yellow darken-3'"
                             @click="showInteractions(props.item.id)"
-                            title="Показать историю взаимодействия"
+                            @contextmenu.prevent="openMenu(props.item)"
                         >
                             contacts
                         </v-icon>
@@ -64,6 +67,12 @@
                             :lead="props.item"
                             :customer="props.item.customer"
                             @close="interactionsOpenId = null"
+                        />
+                        <lead-context-menu
+                            v-if="+menuOpenId === +props.item.id"
+                            :lead="props.item"
+                            v-model="contextMenu"
+                            :selector="`#lead${props.item.id}`"
                         />
                     </td>
                     <td nowrap>
@@ -194,6 +203,7 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            menuOpenId: null,
             interactionsOpenId: null,
             leadCommentsId: null,
             openLeadId: null,
@@ -220,11 +230,11 @@
         computed: {
             contextMenu: {
                 get () {
-                    return !!this.activeLeadContext
+                    return !!this.menuOpenId
                 },
                 set (val) {
                     if (!val) {
-                        this.activeLeadContext = null
+                        this.menuOpenId = null
                     }
                 }
             },
@@ -308,6 +318,9 @@
             }
         },
         methods: {
+            openMenu (lead) {
+                this.menuOpenId = lead.id
+            },
             showInteractions (id) {
                 this.interactionsOpenId = id
             },

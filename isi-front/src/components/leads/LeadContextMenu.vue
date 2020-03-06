@@ -1,6 +1,5 @@
 <template>
     <v-menu
-        v-if="lead"
         v-model="visible"
         :close-on-content-click="false"
         transition="scale-transition"
@@ -22,11 +21,8 @@
 <script>
     export default {
         name: 'LeadContextMenu',
-        props: ['value', 'lead'],
+        props: ['value', 'lead', 'selector'],
         computed: {
-            selector () {
-                return `#lead${this.lead.id}`
-            },
             visible: {
                 get () {
                     return this.value
