@@ -477,6 +477,9 @@ export const store = new Vuex.Store({
                         case 'appointments':
                             loadAppointmentsPage()
                             break
+                        default:
+                            dispatch('setUsers')
+                            break
                     }
                 })
         },
@@ -916,6 +919,8 @@ export const store = new Vuex.Store({
                         case 'admin': loadAdminPage()
                             break
                         case 'appointments': loadAppointmentsPage()
+                            break
+                        default: dispatch('setUsers')
                             break
                     }
                 })

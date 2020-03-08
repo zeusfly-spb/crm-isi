@@ -151,9 +151,6 @@
         props: [
             'lead',
             'props',
-            'interactionsOpenIdProp',
-            'menuOpenIdProp',
-            'openLeadIdProp',
             'leadCommentsIdProp'
         ],
         data: () => ({
@@ -162,18 +159,26 @@
         computed: {
             openLeadId: {
                 get () {
-                    return this.openLeadIdProp
+                    return this.$store.state.lead.openLeadId
                 },
                 set (val) {
-                    this.$emit('set-open-lead-id', val)
+                    this.$store.commit('SET_OPEN_LEAD_ID', val)
+                }
+            },
+            interactionsOpenId: {
+                get () {
+                    return this.$store.state.lead.interactionsOpenId
+                },
+                set (val) {
+                    this.$store.commit('SET_INTERACTIONS_OPEN_ID', val)
                 }
             },
             menuOpenId: {
                 get () {
-                    return this.menuOpenIdProp
+                    return this.$store.state.lead.menuOpenId
                 },
                 set (val) {
-                    this.$emit('set-menu-open-id', val)
+                    this.$store.commit('SET_LEAD_MENU_OPEN_ID', val)
                 }
             },
             contextMenu: {
@@ -182,14 +187,6 @@
                 },
                 set (val) {
                     this.$emit('set-menu-open-id', val)
-                }
-            },
-            interactionsOpenId: {
-                get () {
-                    return this.interactionsOpenIdProp
-                },
-                set (val) {
-                    this.$emit('set-interactions-open-id', val)
                 }
             },
             leadCommentsId: {

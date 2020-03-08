@@ -21,9 +21,6 @@
             <template v-slot:items="props">
                 <lead
                         :props="props"
-                        :interactionsOpenIdProp="interactionsOpenId"
-                        :menuOpenIdProp="menuOpenId"
-                        :openLeadIdProp="openLeadId"
                         :leadCommentsIdProp="leadCommentsId"
                         @set-lead-comments-id="setLeadCommentsId"
                         @open-menu="openMenu"
@@ -31,8 +28,6 @@
                         @show-iterations="showInteractions"
                         @set-interactions-open-id="setInteractionsOpenId"
                         @confirm-to-delete="confirmToDelete"
-                        @set-menu-open-id="setMenuOpenId"
-                        @set-open-lead-id="setOpenLeadId"
                 />
             </template>
             <template v-slot:no-data>
@@ -83,10 +78,7 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
-            menuOpenId: null,
-            interactionsOpenId: null,
             leadCommentsId: null,
-            openLeadId: null,
             currentViewMode: 'wait',
             snackbar: false,
             snackText: '',
@@ -107,6 +99,30 @@
             ]
         }),
         computed: {
+            openLeadId: {
+                get () {
+                    return this.$store.state.lead.openLeadId
+                },
+                set (val) {
+                    this.$store.commit('SET_OPEN_LEAD_ID', val)
+                }
+            },
+            interactionsOpenId: {
+                get () {
+                    return this.$store.state.lead.interactionsOpenId
+                },
+                set (val) {
+                    this.$store.commit('SET_INTERACTIONS_OPEN_ID', val)
+                }
+            },
+            menuOpenId: {
+                get () {
+                    return this.$store.state.lead.menuOpenId
+                },
+                set (val) {
+                    this.$store.commit('SET_LEAD_MENU_OPEN_ID', val)
+                }
+            },
             leadMessage () {
                 return this.$store.state.lead.message
             },
@@ -184,16 +200,6 @@
             }
         },
         methods: {
-            setOpenLeadId (val) {
-                this.openLeadId = val
-            },
-            setMenuOpenId (id) {
-                if (!id) {
-                    this.menuOpenId = null
-                } else {
-                    this.menuOpenId = id
-                }
-            },
             setInteractionsOpenId (val) {
                 this.interactionsOpenId = val
             },
