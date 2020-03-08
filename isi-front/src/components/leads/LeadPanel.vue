@@ -114,8 +114,8 @@
             confirm: false,
             leadToDelete: null,
             headers: [
-                {text: '', value: null, sortable: false},
-                {text: '#', value: 'id', sortable: false},
+                {text: '', value: null, sortable: false, width: '5px'},
+                {text: '#', value: 'id', sortable: false, width: '5px'},
                 {text: 'Имя', value: 'name', sortable: false},
                 {text: 'Телефон', value: 'phone', sortable: false},
                 {text: 'Дата перезвона', value: 'phone', sortable: false},

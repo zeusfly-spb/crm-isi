@@ -1,6 +1,9 @@
 <template>
     <tr>
-        <td>
+        <td
+                align="center"
+                class="clear-td"
+        >
             <v-icon
                     class="red--text delete"
                     title="Удалить заявку?"
@@ -10,10 +13,14 @@
                 clear
             </v-icon>
         </td>
-        <td>{{ props.index + 1 }}</td>
         <td
+                align="center"
         >
+            {{ props.index + 1 }}
+        </td>
+        <td nowrap>
             <v-menu
+                    style="display: inline"
                     v-model="contextMenu"
                     :close-on-content-click="false"
                     transition="scale-transition"
@@ -81,11 +88,14 @@
                 </v-icon>
             </template>
         </td>
-        <td>
+        <td
+                align="center"
+                class="clear-td"
+        >
             <span v-if="props.item.site">{{ props.item.site }}</span>
             <v-avatar
                     v-else
-                    size="36px"
+                    size="36"
                     :title="props.item.user && props.item.user.full_name || ''"
             >
                 <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
@@ -228,6 +238,15 @@
     }
 </script>
 <style scoped>
+    .phone-td {
+        padding: 0!important;
+        margin: 0!important;
+        width: 12em!important;
+    }
+    .clear-td {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
     .clickable {
         cursor: pointer;
         opacity: .8;
