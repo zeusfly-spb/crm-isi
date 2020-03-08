@@ -54,7 +54,6 @@
             <template v-if="props.item.id === openLeadId">
                 <lead-postpones
                         :lead="props.item"
-                        @message="message"
                         :open="props.item.id === openLeadId"
                         @closed="openLeadId = null"
                 />
@@ -140,13 +139,21 @@
             'props',
             'interactionsOpenIdProp',
             'menuOpenIdProp',
-            'openLeadId',
+            'openLeadIdProp',
             'leadCommentsIdProp'
         ],
         data: () => ({
 
         }),
         computed: {
+            openLeadId: {
+                get () {
+                    return this.openLeadIdProp
+                },
+                set (val) {
+                    this.$emit('set-open-lead-id', val)
+                }
+            },
             menuOpenId: {
                 get () {
                     return this.menuOpenIdProp

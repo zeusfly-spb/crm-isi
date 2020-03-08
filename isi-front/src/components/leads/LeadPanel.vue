@@ -41,7 +41,7 @@
                         :props="props"
                         :interactionsOpenIdProp="interactionsOpenId"
                         :menuOpenIdProp="menuOpenId"
-                        :openLeadId="openLeadId"
+                        :openLeadIdProp="openLeadId"
                         :leadCommentsIdProp="leadCommentsId"
                         @set-lead-comments-id="setLeadCommentsId"
                         @open-menu="openMenu"
@@ -51,6 +51,7 @@
                         @set-interactions-open-id="setInteractionsOpenId"
                         @confirm-to-delete="confirmToDelete"
                         @set-menu-open-id="setMenuOpenId"
+                        @set-open-lead-id="setOpenLeadId"
                 />
             </template>
             <template v-slot:no-data>
@@ -218,6 +219,9 @@
             }
         },
         methods: {
+            setOpenLeadId (val) {
+                this.openLeadId = val
+            },
             setMenuOpenId (id) {
                 if (!id) {
                     this.menuOpenId = null
