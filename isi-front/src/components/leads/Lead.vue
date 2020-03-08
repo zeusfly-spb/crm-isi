@@ -46,7 +46,7 @@
             <template v-if="props.item.id === openLeadId">
                 <lead-postpones
                         :lead="props.item"
-                        @message="showSuccess"
+                        @message="message"
                         :open="props.item.id === openLeadId"
                         @closed="openLeadId = null"
                 />
@@ -123,6 +123,7 @@
     import Caller from './Caller'
     import LeadComments from './LeadComments'
     import LeadStatus from './LeadStatus'
+    import LeadPostpones from './LeadPostpones'
     export default {
         name: 'Lead',
         props: [
@@ -156,7 +157,15 @@
             }
         },
         methods: {
+            message (a, b) {
+                console.log('getting message')
+                console.log(a, b)
+            },
+            showLead (id) {
+                this.$emit('show-lead', id)
+            },
             showSuccess (text, color) {
+                console.log('emitting show success')
                 this.$emit('show-success', text, color)
             },
             openMenu (val) {
@@ -166,7 +175,8 @@
         components: {
             Caller,
             LeadComments,
-            LeadStatus
+            LeadStatus,
+            LeadPostpones
         }
     }
 </script>

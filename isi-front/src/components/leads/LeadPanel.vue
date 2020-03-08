@@ -47,6 +47,7 @@
                         @set-lead-comments-id="setLeadCommentsId"
                         @open-menu="openMenu"
                         @show-success="showSuccess"
+                        @show-lead="showLead"
                 />
                 <!--<tr>-->
                     <!--<td>-->
@@ -240,6 +241,9 @@
             ]
         }),
         computed: {
+            leadMessage () {
+                return this.$store.state.lead.message
+            },
             contextMenu: {
                 get () {
                     return !!this.menuOpenId
@@ -330,6 +334,11 @@
             }
         },
         methods: {
+            showSnack ({color, text}) {
+                this.snackColor = color
+                this.snackText = text
+                this.snackbar = true
+            },
             setLeadCommentsId (val) {
                 this.leadCommentsId = val
             },
@@ -368,6 +377,13 @@
                 this.leadToDelete = lead
                 this.confirmText = `${lead.phone}`
                 this.confirm = true
+            }
+        },
+        watch: {
+            leadMessage (val) {
+                if (val) {
+                    this.showSnack({...val})
+                }
             }
         },
         components: {
