@@ -82,7 +82,10 @@
                         })
                             .then(() => {
                                 this.dialog = false
-                                this.$emit('updated', 'Добавлена новая заявка', 'green')
+                                this.$store.commit('SEND_LEAD_MESSAGE', {
+                                    text: 'Добавлена новая заявка',
+                                    color: 'green'
+                                })
                             })
                     })
             }

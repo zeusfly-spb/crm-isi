@@ -28,7 +28,7 @@
                 <span v-if="mode === 'done'">{{ doneMode && counts && counts.done || '*' }}</span>
                 )
             </v-btn>
-            <new-lead-dialog @updated="showSuccess" style="display: inline"/>
+            <new-lead-dialog style="display: inline"/>
         </v-flex>
         <v-data-table
             :headers="headers"

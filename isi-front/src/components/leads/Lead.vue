@@ -48,7 +48,11 @@
         <td nowrap>
             <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
             <span v-else>{{ props.item.phone | phone }}</span>
-            <caller :phone="props.item.phone" :lead="props.item"/>
+            <caller
+                    :phone="props.item.phone"
+                    :lead="props.item"
+                    :blinked="false"
+            />
         </td>
         <td>
             <template v-if="props.item.id === openLeadId">
