@@ -285,27 +285,4 @@
         }
     }
 </script>
-<style scoped>
-    .clickable {
-        cursor: pointer;
-        opacity: .8;
-    }
-    .clickable:hover {
-        opacity: 1;
-    }
-    .delete {
-        cursor: pointer;
-        opacity: .6;
-    }
-    .delete:hover {
-        opacity: 1;
-    }
-    .today {
-        color: #2a9055;
-        font-weight: bold;
-    }
-    .lost {
-        color: red;
-        font-weight: bold;
-    }
-</style>
+
