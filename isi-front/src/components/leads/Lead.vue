@@ -124,12 +124,13 @@
     import LeadComments from './LeadComments'
     import LeadStatus from './LeadStatus'
     import LeadPostpones from './LeadPostpones'
+    import InteractionsCard from '../customers/InteractionsCard'
     export default {
         name: 'Lead',
         props: [
             'lead',
             'props',
-            'interactionsOpenId',
+            'interactionsOpenIdProp',
             'menuOpenId',
             'openLeadId',
             'leadCommentsIdProp'
@@ -138,6 +139,14 @@
 
         }),
         computed: {
+            interactionsOpenId: {
+                get () {
+                    return this.interactionsOpenIdProp
+                },
+                set (val) {
+                    this.$emit('set-interactions-open-id', val)
+                }
+            },
             leadCommentsId: {
                 get () {
                     return this.leadCommentsIdProp
@@ -157,6 +166,12 @@
             }
         },
         methods: {
+            confirmToDelete (lead) {
+                this.$emit('confirm-to-delete', lead)
+            },
+            showInteractions (id) {
+                this.$emit('show-iterations', id)
+            },
             message (a, b) {
                 console.log('getting message')
                 console.log(a, b)
@@ -176,7 +191,8 @@
             Caller,
             LeadComments,
             LeadStatus,
-            LeadPostpones
+            LeadPostpones,
+            InteractionsCard
         }
     }
 </script>
