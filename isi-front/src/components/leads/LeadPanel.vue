@@ -43,7 +43,10 @@
                         :interactionsOpenId="interactionsOpenId"
                         :menuOpenId="menuOpenId"
                         :openLeadId="openLeadId"
-                        :leadCommentsId="leadCommentsId"
+                        :leadCommentsIdProp="leadCommentsId"
+                        @set-lead-comments-id="setLeadCommentsId"
+                        @open-menu="openMenu"
+                        @show-success="showSuccess"
                 />
                 <!--<tr>-->
                     <!--<td>-->
@@ -327,6 +330,9 @@
             }
         },
         methods: {
+            setLeadCommentsId (val) {
+                this.leadCommentsId = val
+            },
             openMenu (lead) {
                 this.menuOpenId = lead.id
             },

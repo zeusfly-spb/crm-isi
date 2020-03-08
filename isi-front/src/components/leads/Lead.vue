@@ -131,12 +131,20 @@
             'interactionsOpenId',
             'menuOpenId',
             'openLeadId',
-            'leadCommentsId'
+            'leadCommentsIdProp'
         ],
         data: () => ({
 
         }),
         computed: {
+            leadCommentsId: {
+                get () {
+                    return this.leadCommentsIdProp
+                },
+                set (val) {
+                    this.$emit('set-lead-comments-id', val)
+                }
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -145,6 +153,14 @@
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
+            }
+        },
+        methods: {
+            showSuccess (text, color) {
+                this.$emit('show-success', text, color)
+            },
+            openMenu (val) {
+                this.$emit('open-menu', val)
             }
         },
         components: {
