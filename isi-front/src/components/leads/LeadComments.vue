@@ -126,7 +126,7 @@
             <v-card
                 class="round-corner"
             >
-                <v-card-title class="light-blue darken-3">
+                <v-card-title class="red darken-3">
                     <span class="title white--text">Подтверждение</span>
                 </v-card-title>
                 <v-card-text>
@@ -190,7 +190,10 @@
             deleteComment () {
                 this.$store.dispatch('deleteLeadComment', this.commentToDelete.id)
                     .then(() => {
-                        this.$emit('updated', `Комментарий '${this.commentToDelete.text}' удален`, 'green')
+                        this.$store.commit('SEND_LEAD_MESSAGE', {
+                            text: `Комментарий '${this.commentToDelete.text}' удален`,
+                            color: 'green'
+                        })
                         this.confirm = false
                     })
             },
@@ -208,7 +211,11 @@
                         })
                             .then(() => {
                                 this.adding = false
-                                this.$emit('updated', `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`, 'green')
+                                this.$store.commit('SEND_LEAD_MESSAGE', {
+                                    text: `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`,
+                                    color: 'green'
+                                })
+
                             })
                     })
             },

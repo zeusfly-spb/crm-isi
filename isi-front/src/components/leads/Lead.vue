@@ -93,7 +93,6 @@
             <template v-if="leadCommentsId === props.item.id">
                 <lead-comments
                         :lead="props.item"
-                        @updated="showSuccess"
                         @close="leadCommentsId = null"
                 />
             </template>
@@ -197,15 +196,10 @@
             showInteractions (id) {
                 this.$emit('show-iterations', id)
             },
-            message (a, b) {
-                console.log('getting message')
-                console.log(a, b)
-            },
             showLead (id) {
                 this.$emit('show-lead', id)
             },
             showSuccess (text, color) {
-                console.log('emitting show success')
                 this.$emit('show-success', text, color)
             },
             openMenu (val) {
