@@ -154,13 +154,7 @@
                     .sort(this.$store.state.lead.sortByPostpones)
                     .sort(this.$store.state.lead.sortByTimeInDay)
                     .sort(this.$store.state.lead.moveFutureDown)
-                switch (this.currentViewMode) {
-                    case 'all': return base
-                    case 'wait': return base.filter(item => item.status === 'wait')
-                    case 'process': return base.filter(item => item.status === 'process')
-                    case 'moderate': return base.filter(item => item.status === 'moderate')
-                    case 'done': return base.filter(item => item.status === 'done')
-                }
+                return this.currentViewMode === 'all' ? base : base.filter(item => item.status === this.currentViewMode)
             }
         },
         methods: {
