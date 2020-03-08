@@ -35,7 +35,7 @@
                             title="Показать историю взаимодействия"
                             :color="props.item.customer ? 'green' : 'yellow darken-3'"
                             @click="showInteractions(props.item.id)"
-                            @contextmenu.prevent="openMenu(props.item)"
+                            @contextmenu.prevent="openMenu"
                     >
                         contacts
                     </v-icon>
@@ -148,15 +148,16 @@
     import LeadContextMenuEntry from './LeadContextMenuEntry'
     export default {
         name: 'Lead',
-        props: [
-            'lead',
-            'props',
-            'leadCommentsIdProp'
-        ],
-        data: () => ({
-
-        }),
+        props: ['props'],
         computed: {
+            leadCommentsId: {
+                get () {
+                    return this.$store.state.lead.leadCommentsId
+                },
+                set (val) {
+                    this.$store.commit('SET_LEAD_COMMENTS_ID', val)
+                }
+            },
             openLeadId: {
                 get () {
                     return this.$store.state.lead.openLeadId
@@ -186,15 +187,9 @@
                     return this.props.item.id === this.menuOpenId
                 },
                 set (val) {
-                    this.$emit('set-menu-open-id', val)
-                }
-            },
-            leadCommentsId: {
-                get () {
-                    return this.leadCommentsIdProp
-                },
-                set (val) {
-                    this.$emit('set-lead-comments-id', val)
+                    if (!val) {
+                        this.$store.commit('SET_LEAD_MENU_OPEN_ID', val)
+                    }
                 }
             },
             basePath () {
@@ -208,20 +203,20 @@
             }
         },
         methods: {
-            confirmToDelete (lead) {
-                this.$emit('confirm-to-delete', lead)
+            confirmToDelete () {
+                this.$store.commit('SET_LEAD_TO_DELETE', this.props.item)
             },
-            showInteractions (id) {
-                this.$emit('show-iterations', id)
+            showInteractions () {
+                this.interactionsOpenId = this.props.item.id
             },
-            showLead (id) {
-                this.$emit('show-lead', id)
+            showLead () {
+                this.openLeadId = this.props.item.id
             },
-            showSuccess (text, color) {
-                this.$emit('show-success', text, color)
-            },
-            openMenu (val) {
-                this.$emit('open-menu', val)
+//            showSuccess (text, color) {
+//                this.$emit('show-success', text, color)
+//            },
+            openMenu () {
+                this.menuOpenId = this.props.item.id
             }
         },
         components: {
@@ -235,11 +230,6 @@
     }
 </script>
 <style scoped>
-    .phone-td {
-        padding: 0!important;
-        margin: 0!important;
-        width: 12em!important;
-    }
     .clear-td {
         padding: 0 !important;
         margin: 0 !important;

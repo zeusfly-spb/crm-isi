@@ -2,12 +2,60 @@ import Vue from 'vue'
 
 export default {
     state: {
+        leadToDelete: null,
+        leadCommentsId: null,
         openLeadId: null,
         interactionsOpenId: null,
         message: null,
-        menuOpenId: null
+        menuOpenId: null,
+        sortByPostpones: (a, b) => {
+            if (!!a.last_postpone && !!b.last_postpone) {
+                let timeA = parseFloat(new Date(a.last_postpone.date))
+                let timeB = parseFloat(new Date(b.last_postpone.date))
+                return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
+            }
+            if (!a.last_postpone) {
+                if (!b.last_postpone) {
+                    return 0
+                } else {
+                    return -1
+                }
+            }
+            if (!b.last_postpone) {
+                if (!a.last_postpone) {
+                    return 0
+                } else {
+                    return 1
+                }
+            }
+        },
+        moveFutureDown: (a, b) => {
+            if (!a.last_postpone || !b.last_postpone) {
+                return 0
+            }
+            let timeA = a.last_postpone.date.split(' ')[0]
+            let timeB = b.last_postpone.date.split(' ')[0]
+            return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
+        },
+        sortByTimeInDay: (a, b) => {
+            if (!a.last_postpone || !b.last_postpone) {
+                return 0
+            }
+            if (!a.last_postpone.date.split(' ')[0] !== !b.last_postpone.date.split(' ')[0]) {
+                return 0
+            }
+            let timeA = a.last_postpone.date.split(' ')[1]
+            let timeB = b.last_postpone.date.split(' ')[1]
+            return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
+        }
     },
     mutations: {
+        SET_LEAD_TO_DELETE (state, lead) {
+            state.leadToDelete = lead
+        },
+        SET_LEAD_COMMENTS_ID (state, id) {
+            state.leadCommentsId = id
+        },
         SET_OPEN_LEAD_ID (state, id) {
             state.openLeadId = id
         },

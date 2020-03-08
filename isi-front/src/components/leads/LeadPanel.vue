@@ -19,16 +19,7 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <lead
-                        :props="props"
-                        :leadCommentsIdProp="leadCommentsId"
-                        @set-lead-comments-id="setLeadCommentsId"
-                        @open-menu="openMenu"
-                        @show-lead="showLead"
-                        @show-iterations="showInteractions"
-                        @set-interactions-open-id="setInteractionsOpenId"
-                        @confirm-to-delete="confirmToDelete"
-                />
+                <lead :props="props" />
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет заявок</span>
@@ -66,26 +57,16 @@
     </v-flex>
 </template>
 <script>
-    import Caller from './Caller'
-    import LeadComments from './LeadComments'
-    import LeadStatus from './LeadStatus'
-    import NewLeadDialog from './NewLeadDialog'
-    import LeadPostpones from './LeadPostpones'
-    import InteractionsCard from '../customers/InteractionsCard'
     import Lead from './Lead'
     import ViewModeSwitcher from './ViewModeSwitcher'
-
     export default {
         name: 'LeadsPanel',
         data: () => ({
-            leadCommentsId: null,
             currentViewMode: 'wait',
             snackbar: false,
             snackText: '',
             snackColor: 'green',
             confirmText: '',
-            confirm: false,
-            leadToDelete: null,
             headers: [
                 {text: '', value: null, sortable: false, width: '5px'},
                 {text: '#', value: 'id', sortable: false, width: '5px'},
@@ -99,6 +80,32 @@
             ]
         }),
         computed: {
+            confirm: {
+                get () {
+                    return !!this.leadToDelete
+                },
+                set (val) {
+                    if (!val) {
+                        this.leadToDelete = null
+                    }
+                }
+            },
+            leadToDelete: {
+                get () {
+                    return this.$store.state.lead.leadToDelete
+                },
+                set (val) {
+                    this.$store.commit('SET_LEAD_TO_DELETE', val)
+                }
+            },
+            leadCommentsId: {
+                get () {
+                    return this.$store.state.lead.leadCommentsId
+                },
+                set (val) {
+                    this.$store.commit('SET_LEAD_COMMENTS_ID', val)
+                }
+            },
             openLeadId: {
                 get () {
                     return this.$store.state.lead.openLeadId
@@ -123,9 +130,6 @@
                     this.$store.commit('SET_LEAD_MENU_OPEN_ID', val)
                 }
             },
-            leadMessage () {
-                return this.$store.state.lead.message
-            },
             contextMenu: {
                 get () {
                     return !!this.menuOpenId
@@ -147,49 +151,9 @@
             },
             leads () {
                 let base = this.$store.state.loader.leads
-                const sortByPostpones = (a, b) => {
-                    if (!!a.last_postpone && !!b.last_postpone) {
-                        let timeA = parseFloat(new Date(a.last_postpone.date))
-                        let timeB = parseFloat(new Date(b.last_postpone.date))
-                        return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
-                    }
-                    if (!a.last_postpone) {
-                        if (!b.last_postpone) {
-                            return 0
-                        } else {
-                            return -1
-                        }
-                    }
-                    if (!b.last_postpone) {
-                        if (!a.last_postpone) {
-                            return 0
-                        } else {
-                            return 1
-                        }
-                    }
-                }
-                const moveFutureDown = (a, b) => {
-                    if (!a.last_postpone || !b.last_postpone) {
-                        return 0
-                    }
-                    let timeA = a.last_postpone.date.split(' ')[0]
-                    let timeB = b.last_postpone.date.split(' ')[0]
-                    return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
-                }
-                const sortByTimeInDay = (a, b) => {
-                    if (!a.last_postpone || !b.last_postpone) {
-                        return 0
-                    }
-                    if (!a.last_postpone.date.split(' ')[0] !== !b.last_postpone.date.split(' ')[0]) {
-                        return 0
-                    }
-                    let timeA = a.last_postpone.date.split(' ')[1]
-                    let timeB = b.last_postpone.date.split(' ')[1]
-                    return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
-                }
-                base.sort(sortByPostpones)
-                base.sort(sortByTimeInDay)
-                base.sort(moveFutureDown)
+                    .sort(this.$store.state.lead.sortByPostpones)
+                    .sort(this.$store.state.lead.sortByTimeInDay)
+                    .sort(this.$store.state.lead.moveFutureDown)
                 switch (this.currentViewMode) {
                     case 'all': return base
                     case 'wait': return base.filter(item => item.status === 'wait')
@@ -200,34 +164,9 @@
             }
         },
         methods: {
-            setInteractionsOpenId (val) {
-                this.interactionsOpenId = val
-            },
             showSnack ({color, text}) {
                 this.snackColor = color
                 this.snackText = text
-                this.snackbar = true
-            },
-            setLeadCommentsId (val) {
-                this.leadCommentsId = val
-            },
-            openMenu (lead) {
-                this.menuOpenId = lead.id
-            },
-            showInteractions (id) {
-                this.interactionsOpenId = id
-            },
-            isLost (dateTime) {
-                let rawDate = parseFloat(new Date(dateTime))
-                let nowDate = parseFloat(new Date(this.accountingDate))
-                return rawDate < nowDate
-            },
-            showLead (id) {
-                this.openLeadId = id
-            },
-            showSuccess (text, color) {
-                this.snackText = text
-                this.snackColor = color
                 this.snackbar = true
             },
             deleteLead () {
@@ -237,32 +176,26 @@
                             text: `Заявка с номера ${this.$options.filters.phone(this.leadToDelete.phone)} удалена`,
                             color: 'green'
                         })
-                        this.confirm = false
+                        this.leadToDelete = null
                     })
-            },
-            confirmToDelete (lead) {
-                this.leadToDelete = lead
-                this.confirmText = `${lead.phone}`
-                this.confirm = true
             }
         },
         watch: {
-            currentViewMode () {
-                this.openLeadId = null
+            leadToDelete (val) {
+                if (val) {
+                    this.confirmText = `${val.phone}`
+                }
             },
-            leadMessage (val) {
+            '$store.state.lead.message': function (val) {
                 if (val) {
                     this.showSnack({...val})
                 }
+            },
+            currentViewMode () {
+                this.openLeadId = null
             }
         },
         components: {
-            Caller,
-            LeadComments,
-            LeadStatus,
-            NewLeadDialog,
-            LeadPostpones,
-            InteractionsCard,
             Lead,
             ViewModeSwitcher
         }
