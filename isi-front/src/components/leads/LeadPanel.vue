@@ -40,7 +40,7 @@
                 <lead
                         :props="props"
                         :interactionsOpenIdProp="interactionsOpenId"
-                        :menuOpenId="menuOpenId"
+                        :menuOpenIdProp="menuOpenId"
                         :openLeadId="openLeadId"
                         :leadCommentsIdProp="leadCommentsId"
                         @set-lead-comments-id="setLeadCommentsId"
@@ -50,6 +50,7 @@
                         @show-iterations="showInteractions"
                         @set-interactions-open-id="setInteractionsOpenId"
                         @confirm-to-delete="confirmToDelete"
+                        @set-menu-open-id="setMenuOpenId"
                 />
             </template>
             <template v-slot:no-data>
@@ -94,7 +95,6 @@
     import NewLeadDialog from './NewLeadDialog'
     import LeadPostpones from './LeadPostpones'
     import InteractionsCard from '../customers/InteractionsCard'
-    import LeadContextMenu from './LeadContextMenu'
     import Lead from './Lead'
 
     export default {
@@ -218,6 +218,13 @@
             }
         },
         methods: {
+            setMenuOpenId (id) {
+                if (!id) {
+                    this.menuOpenId = null
+                } else {
+                    this.menuOpenId = id
+                }
+            },
             setInteractionsOpenId (val) {
                 this.interactionsOpenId = val
             },
@@ -280,7 +287,6 @@
             NewLeadDialog,
             LeadPostpones,
             InteractionsCard,
-            LeadContextMenu,
             Lead
         }
     }

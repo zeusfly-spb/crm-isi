@@ -12,30 +12,37 @@
         </td>
         <td>{{ props.index + 1 }}</td>
         <td
-                :id="`lead${props.item.id}`"
         >
-            <v-icon
-                    class="clickable"
-                    title="Показать историю взаимодействия"
-                    :color="props.item.customer ? 'green' : 'yellow darken-3'"
-                    @click="showInteractions(props.item.id)"
-                    @contextmenu.prevent="openMenu(props.item)"
+            <v-menu
+                    v-model="contextMenu"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    lazy
+                    offset-y
+                    full-width
+                    min-width="290px"
             >
-                contacts
-            </v-icon>
-
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                            class="clickable"
+                            title="Показать историю взаимодействия"
+                            :color="props.item.customer ? 'green' : 'yellow darken-3'"
+                            @click="showInteractions(props.item.id)"
+                            @contextmenu.prevent="openMenu(props.item)"
+                    >
+                        contacts
+                    </v-icon>
+                </template>
+                <lead-context-menu-entry
+                        :lead="props.item"
+                />
+            </v-menu>
             {{ props.item.name | upFirst }}
             <interactions-card
                     v-if="+interactionsOpenId === +props.item.id"
                     :lead="props.item"
                     :customer="props.item.customer"
                     @close="interactionsOpenId = null"
-            />
-            <lead-context-menu
-                    v-if="+menuOpenId === +props.item.id"
-                    :lead="props.item"
-                    v-model="contextMenu"
-                    :selector="`#lead${props.item.id}`"
             />
         </td>
         <td nowrap>
@@ -126,13 +133,14 @@
     import LeadStatus from './LeadStatus'
     import LeadPostpones from './LeadPostpones'
     import InteractionsCard from '../customers/InteractionsCard'
+    import LeadContextMenuEntry from './LeadContextMenuEntry'
     export default {
         name: 'Lead',
         props: [
             'lead',
             'props',
             'interactionsOpenIdProp',
-            'menuOpenId',
+            'menuOpenIdProp',
             'openLeadId',
             'leadCommentsIdProp'
         ],
@@ -140,6 +148,22 @@
 
         }),
         computed: {
+            menuOpenId: {
+                get () {
+                    return this.menuOpenIdProp
+                },
+                set (val) {
+                    this.$emit('set-menu-open-id', val)
+                }
+            },
+            contextMenu: {
+                get () {
+                    return this.props.item.id === this.menuOpenId
+                },
+                set (val) {
+                    this.$emit('set-menu-open-id', val)
+                }
+            },
             interactionsOpenId: {
                 get () {
                     return this.interactionsOpenIdProp
@@ -193,7 +217,8 @@
             LeadComments,
             LeadStatus,
             LeadPostpones,
-            InteractionsCard
+            InteractionsCard,
+            LeadContextMenuEntry
         }
     }
 </script>
