@@ -2,6 +2,7 @@
     <v-flex>
         <calendar-record-adder
             v-if="attemptToEvent"
+            :lead="attemptToEvent"
             @reset="cancelAttempt"
         />
     </v-flex>

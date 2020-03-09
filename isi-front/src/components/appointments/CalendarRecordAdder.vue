@@ -69,6 +69,12 @@
                             v-validate="'required'"
                         />
                     </v-flex>
+                    <v-flex xs12 sm6 md4
+                            v-if="!dateProp"
+                    >
+                        <sub>Дата</sub>
+
+                    </v-flex>
                     <v-flex xs12 sm6 md4>
                         <sub>Время</sub>
                         <v-menu
@@ -169,8 +175,9 @@
 <script>
     export default {
         name: 'CalendarRecordAdder',
-        props: ['dateProp', 'presetHour', 'presetCabinet'],
+        props: ['dateProp', 'presetHour', 'presetCabinet', 'lead'],
         data: () => ({
+            inputDate: null,
             timeMenu: false,
             time: null,
             editedAppointment: {
@@ -252,6 +259,9 @@
             }
         },
         mounted () {
+            if (this.lead) {
+                this.inputDate = this.lead && this.lead.created_at.split(' ')[0] || null
+            }
             if (this.singleService) {
                 this.editedAppointment.service_id = this.services[0].id
             }
