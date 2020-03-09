@@ -25,40 +25,13 @@
                 <span class="red--text">Нет заявок</span>
             </template>
         </v-data-table>
-
-        <v-dialog v-model="confirm"
-                  max-width="600"
-        >
-            <v-card class="round-corner">
-                <v-card-title class="red darken-3">
-                    <span class="title white--text">Подтверждение</span>
-                </v-card-title>
-                <v-card-text>
-                    <span class="title">Удалить заявку с номера <span v-if="confirmText[0] !== '+'">{{ confirmText  | phone}}</span> <span v-else>{{ confirmText | externalPhone}}</span>?</span>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        flat="flat"
-                        @click="confirm = false"
-                    >
-                        Отмена
-                    </v-btn>
-                    <v-btn
-                        color="red darken-1"
-                        flat="flat"
-                        @click="deleteLead"
-                    >
-                        Удалить
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <lead-remover/>
     </v-flex>
 </template>
 <script>
     import Lead from './Lead'
     import ViewModeSwitcher from './ViewModeSwitcher'
+    import LeadRemover from './LeadRemover'
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -66,7 +39,6 @@
             snackbar: false,
             snackText: '',
             snackColor: 'green',
-            confirmText: '',
             headers: [
                 {text: '', value: null, sortable: false, width: '5px'},
                 {text: '#', value: 'id', sortable: false, width: '5px'},
@@ -80,33 +52,6 @@
             ]
         }),
         computed: {
-            confirm: {
-                get () {
-                    return !!this.leadToDelete
-                },
-                set (val) {
-                    if (!val) {
-                        this.leadToDelete = null
-                    }
-                }
-            },
-            leadToDelete: {
-                get () {
-                    return this.$store.state.lead.leadToDelete
-                },
-                set (val) {
-                    this.$store.commit('SET_LEAD_TO_DELETE', val)
-                }
-            },
-            accountingDate () {
-                return this.$store.state.accountingDate
-            },
-            canClose () {
-                return this.isSuperadmin
-            },
-            isSuperadmin () {
-                return this.$store.getters.isSuperadmin
-            },
             leads () {
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
                     .sort(this.$store.state.lead.sortByPostpones)
@@ -120,24 +65,9 @@
                 this.snackColor = color
                 this.snackText = text
                 this.snackbar = true
-            },
-            deleteLead () {
-                this.$store.dispatch('deleteLead', {lead_id: this.leadToDelete.id})
-                    .then(() => {
-                        this.$store.commit('SEND_LEAD_MESSAGE', {
-                            text: `Заявка с номера ${this.$options.filters.phone(this.leadToDelete.phone)} удалена`,
-                            color: 'green'
-                        })
-                        this.leadToDelete = null
-                    })
             }
         },
         watch: {
-            leadToDelete (val) {
-                if (val) {
-                    this.confirmText = `${val.phone}`
-                }
-            },
             '$store.state.lead.message': function (val) {
                 if (val) {
                     this.showSnack({...val})
@@ -149,7 +79,8 @@
         },
         components: {
             Lead,
-            ViewModeSwitcher
+            ViewModeSwitcher,
+            LeadRemover
         }
     }
 </script>
