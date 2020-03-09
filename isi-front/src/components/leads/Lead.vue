@@ -7,7 +7,7 @@
             <v-icon
                     class="red--text delete"
                     title="Удалить заявку?"
-                    @click="confirmToDelete(props.item)"
+                    @click="confirmToDelete"
                     v-if="isSuperadmin"
             >
                 clear
@@ -31,34 +31,35 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-icon
-                            class="clickable"
-                            title="Показать историю взаимодействия"
-                            :color="props.item.customer ? 'green' : 'yellow darken-3'"
-                            @click="showInteractions(props.item.id)"
-                            @contextmenu.prevent="openMenu"
+                        style="user-select: none"
+                        class="clickable"
+                        title="Показать историю взаимодействия"
+                        :color="props.item.customer ? 'green' : 'yellow darken-3'"
+                        @click="showInteractions"
+                        @contextmenu.prevent="openMenu"
                     >
                         contacts
                     </v-icon>
                 </template>
                 <lead-context-menu-entry
-                        :lead="props.item"
+                    :lead="props.item"
                 />
             </v-menu>
             {{ props.item.name | upFirst }}
             <interactions-card
-                    v-if="+interactionsOpenId === +props.item.id"
-                    :lead="props.item"
-                    :customer="props.item.customer"
-                    @close="interactionsOpenId = null"
+                v-if="+interactionsOpenId === +props.item.id"
+                :lead="props.item"
+                :customer="props.item.customer"
+                @close="interactionsOpenId = null"
             />
         </td>
         <td nowrap>
             <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
             <span v-else>{{ props.item.phone | phone }}</span>
             <caller
-                    :phone="props.item.phone"
-                    :lead="props.item"
-                    :blinked="false"
+                :phone="props.item.phone"
+                :lead="props.item"
+                :blinked="false"
             />
         </td>
         <td>
@@ -71,18 +72,18 @@
             </template>
             <template v-else>
                             <span
-                                    v-if="props.item.last_postpone"
-                                    class="clickable"
-                                    @click="showLead(props.item.id)"
-                                    :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
+                                v-if="props.item.last_postpone"
+                                class="clickable"
+                                @click="showLead"
+                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
                             >
                                 {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                             </span>
                 <v-icon
-                        v-else
-                        class="clickable"
-                        title="Добавить дату перезвона по заявке"
-                        @click="showLead(props.item.id)"
+                    v-else
+                    class="clickable"
+                    title="Добавить дату перезвона по заявке"
+                    @click="showLead    "
                 >
                     phone_forwarded
                 </v-icon>
@@ -212,9 +213,6 @@
             showLead () {
                 this.openLeadId = this.props.item.id
             },
-//            showSuccess (text, color) {
-//                this.$emit('show-success', text, color)
-//            },
             openMenu () {
                 this.menuOpenId = this.props.item.id
             }
