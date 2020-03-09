@@ -133,7 +133,7 @@
         </v-menu>
         <calendar-record-adder
             v-if="addMode"
-            :date="date"
+            :date-prop="date"
             :preset-hour="hour"
             @reset="addMode = false"
         />

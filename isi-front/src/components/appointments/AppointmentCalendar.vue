@@ -145,7 +145,7 @@
                                     </template>
                                     <calendar-record-adder
                                             v-if="date === openDate && mode === 'month'"
-                                            :date="openDate"
+                                            :date-prop="openDate"
                                             @reset="resetOpenDate"
                                             @message="forwardMessage"
                                     />
@@ -176,7 +176,7 @@
                             >
                                 <calendar-record-adder
                                         v-if="date === openDate && ['week', 'day'].includes(mode)"
-                                        :date="openDate"
+                                        :date-prop="openDate"
                                         @reset="resetOpenDate"
                                         @message="forwardMessage"
                                 />

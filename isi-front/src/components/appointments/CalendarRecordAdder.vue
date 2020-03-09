@@ -169,7 +169,7 @@
 <script>
     export default {
         name: 'CalendarRecordAdder',
-        props: ['date', 'presetHour', 'presetCabinet'],
+        props: ['dateProp', 'presetHour', 'presetCabinet'],
         data: () => ({
             timeMenu: false,
             time: null,
@@ -186,6 +186,9 @@
             }
         }),
         computed: {
+            date () {
+                return this.dateProp || null
+            },
             cabinets () {
                 return this.workingIsland && this.workingIsland.cabinets || []
             },

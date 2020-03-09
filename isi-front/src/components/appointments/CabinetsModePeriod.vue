@@ -17,7 +17,7 @@
         />
         <calendar-record-adder
             v-if="addMode"
-            :date="date"
+            :date-prop="date"
             :preset-cabinet="activeCabinet"
             :preset-hour="hour"
             @reset="resetAdding"
