@@ -61,12 +61,16 @@
         }),
         computed: {
             items () {
-                return this.itemsRaw
+                return this.lead.status !== 'done' ? this.itemsRaw : []
             }
         },
         methods: {
             performAction (action) {
-                console.log(`Performing action "${action}"`)
+                switch (action) {
+                    case 'add_record':
+                        this.$store.commit('SET_ATTEMPT_TO_EVENT', this.lead)
+                        break
+                }
                 this.$emit('done')
             }
         }

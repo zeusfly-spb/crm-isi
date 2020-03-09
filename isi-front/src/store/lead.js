@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        attemptToEvent: null,
         leadToDelete: null,
         leadCommentsId: null,
         openLeadId: null,
@@ -50,6 +51,12 @@ export default {
         }
     },
     mutations: {
+        REMOVE_ATTEMPT_TO_EVENT (state) {
+            state.attemptToEvent = null
+        },
+        SET_ATTEMPT_TO_EVENT (state, attempt) {
+            state.attemptToEvent = attempt
+        },
         SET_LEAD_TO_DELETE (state, lead) {
             state.leadToDelete = lead
         },

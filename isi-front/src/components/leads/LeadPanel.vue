@@ -26,12 +26,14 @@
             </template>
         </v-data-table>
         <lead-remover/>
+        <lead-event-adder/>
     </v-flex>
 </template>
 <script>
     import Lead from './Lead'
     import ViewModeSwitcher from './ViewModeSwitcher'
     import LeadRemover from './LeadRemover'
+    import LeadEventAdder from './LeadEventAdder'
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -80,7 +82,8 @@
         components: {
             Lead,
             ViewModeSwitcher,
-            LeadRemover
+            LeadRemover,
+            LeadEventAdder
         }
     }
 </script>

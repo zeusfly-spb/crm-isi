@@ -7,7 +7,8 @@
     <v-card class="round-corner" width="1000px">
         <v-card-title class="light-blue darken-3">
             <span class="subheading white--text" style="font-weight: bold">
-                Добавить запись на {{ date | moment('DD MMM YYYY г.')}}
+                Добавить запись {{ this.date ? 'на' : ''}}
+                {{ date | moment('DD MMM YYYY г.')}}
             </span>
             <v-spacer/>
             <v-icon
