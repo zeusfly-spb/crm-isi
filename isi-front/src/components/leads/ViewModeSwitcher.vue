@@ -4,6 +4,7 @@
                 small
                 v-for="(mode, index) in viewModes"
                 @click="currentViewMode = mode"
+                :disabled="['all', 'done'].includes(mode)"
                 :key="index"
                 :depressed="mode === currentViewMode"
                 :color="mode === currentViewMode ? 'grey lighten-1' : null"

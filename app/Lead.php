@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone', 'last_comment', 'last_call', 'customer'];
+    protected $appends = ['last_postpone', 'last_comment', 'last_call', 'customer', 'appointments'];
     protected $casts = [
         'calls' => 'array',
+        'appointments' => 'array'
     ];
 
     public function comments()
@@ -80,5 +81,17 @@ class Lead extends Model
     public function getCustomerAttribute()
     {
         return $this->number->customer ?? null;
+    }
+
+    public function addAppointment(Appointment $event)
+    {
+        $events = $this->appointments ?? [];
+        $events[] = $event->toArray();
+        $this->update(['appointments' => $events]);
+    }
+
+    public function getAppointmentsAttribute()
+    {
+        return $this->attributes['appointments'] ?? [];
     }
 }
