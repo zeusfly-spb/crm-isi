@@ -150,7 +150,7 @@
                 return this.$store.getters.isSuperadmin
             },
             leads () {
-                let base = this.$store.state.loader.leads
+                let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
                     .sort(this.$store.state.lead.sortByPostpones)
                     .sort(this.$store.state.lead.sortByTimeInDay)
                     .sort(this.$store.state.lead.moveFutureDown)
