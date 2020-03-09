@@ -59,7 +59,6 @@
                         >
                             {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
                         </v-icon>
-
                     </v-list-tile-title>
                 </v-list-tile>
             </v-list>

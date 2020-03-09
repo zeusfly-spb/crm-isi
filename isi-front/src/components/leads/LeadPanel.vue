@@ -98,48 +98,6 @@
                     this.$store.commit('SET_LEAD_TO_DELETE', val)
                 }
             },
-            leadCommentsId: {
-                get () {
-                    return this.$store.state.lead.leadCommentsId
-                },
-                set (val) {
-                    this.$store.commit('SET_LEAD_COMMENTS_ID', val)
-                }
-            },
-            openLeadId: {
-                get () {
-                    return this.$store.state.lead.openLeadId
-                },
-                set (val) {
-                    this.$store.commit('SET_OPEN_LEAD_ID', val)
-                }
-            },
-            interactionsOpenId: {
-                get () {
-                    return this.$store.state.lead.interactionsOpenId
-                },
-                set (val) {
-                    this.$store.commit('SET_INTERACTIONS_OPEN_ID', val)
-                }
-            },
-            menuOpenId: {
-                get () {
-                    return this.$store.state.lead.menuOpenId
-                },
-                set (val) {
-                    this.$store.commit('SET_LEAD_MENU_OPEN_ID', val)
-                }
-            },
-            contextMenu: {
-                get () {
-                    return !!this.menuOpenId
-                },
-                set (val) {
-                    if (!val) {
-                        this.menuOpenId = null
-                    }
-                }
-            },
             accountingDate () {
                 return this.$store.state.accountingDate
             },
@@ -186,7 +144,7 @@
                 }
             },
             currentViewMode () {
-                this.openLeadId = null
+                this.$store.commit('SET_OPEN_LEAD_ID', null)
             }
         },
         components: {

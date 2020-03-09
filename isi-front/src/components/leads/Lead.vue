@@ -43,6 +43,7 @@
                 </template>
                 <lead-context-menu-entry
                     :lead="props.item"
+                    @done="contextMenu = null"
                 />
             </v-menu>
             {{ props.item.name | upFirst }}
