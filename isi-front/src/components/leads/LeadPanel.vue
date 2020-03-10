@@ -9,6 +9,9 @@
         >
             <span>{{ snackText }}</span>
         </v-snackbar>
+        <island-switcher
+            v-if="isSuperadmin"
+        />
         <view-mode-switcher
                 v-model="currentViewMode"
         />
@@ -34,6 +37,7 @@
     import ViewModeSwitcher from './ViewModeSwitcher'
     import LeadRemover from './LeadRemover'
     import LeadEventAdder from './LeadEventAdder'
+    import IslandSwitcher from '../IslandSwitcher'
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -54,6 +58,9 @@
             ]
         }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             leads () {
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
                     .sort(this.$store.state.lead.sortByPostpones)
@@ -83,7 +90,8 @@
             Lead,
             ViewModeSwitcher,
             LeadRemover,
-            LeadEventAdder
+            LeadEventAdder,
+            IslandSwitcher
         }
     }
 </script>

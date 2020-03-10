@@ -52,7 +52,6 @@
             </v-card>
         </v-tab>
     </v-tabs>
-
 </template>
 <script>
     export default {

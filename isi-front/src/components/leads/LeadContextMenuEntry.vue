@@ -36,7 +36,7 @@
             >
                 <v-list-tile-title
                     :class="{'unavailable': !available(item.action)}"
-                    :title="!workingIsland ? 'Чтобы добавить запись, выберите островок назначения' : ''"
+                    :title="!workingIsland ? 'Чтобы добавить запись, выберите островок назначения' : `Добавить запись на островок ${workingIsland.name}`"
                 >
                      <span
                          class="body-2 right"
@@ -77,6 +77,7 @@
                         if (!this.workingIsland) {
                             return false
                         }
+                        return true
                         break
                     default:
                         return true
