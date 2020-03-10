@@ -98,7 +98,6 @@
 </template>
 <script>
     import DateSelector from '../DateSelector'
-
     export default {
         name: 'AppToolbar',
         computed: {
