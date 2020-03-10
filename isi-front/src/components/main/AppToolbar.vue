@@ -101,7 +101,6 @@
     export default {
         name: 'AppToolbar',
         computed: {
-
             access () {
                 return this.$store.state.access
             },
