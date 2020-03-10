@@ -134,7 +134,7 @@
         },
         watch: {
             user (val) {
-                if (!!val) {
+                if (val) {
                     this.restoreSavedPage()
                 }
             },

@@ -34,14 +34,17 @@
                 :key="index"
                 @click="performAction(item.action)"
             >
-                <v-list-tile-title>
+                <v-list-tile-title
+                    :class="{'unavailable': !available(item.action)}"
+                    :title="!workingIsland ? 'Чтобы добавить запись, выберите островок назначения' : ''"
+                >
                      <span
                          class="body-2 right"
                      >
                          {{ item.title }}
                      </span>
                     <v-icon
-                        :color="item.color"
+                        :color="available(item.action) ? item.color : 'grey'"
                     >
                         {{ item.icon }}
                     </v-icon>
@@ -60,12 +63,30 @@
             ]
         }),
         computed: {
+            workingIsland () {
+                return this.$store.getters.workingIsland
+            },
             items () {
                 return this.lead.status !== 'done' ? this.itemsRaw : []
             }
         },
         methods: {
+            available (action) {
+                switch (action) {
+                    case 'add_record':
+                        if (!this.workingIsland) {
+                            return false
+                        }
+                        break
+                    default:
+                        return true
+                }
+
+            },
             performAction (action) {
+                if (!this.available(action)) {
+                    return
+                }
                 switch (action) {
                     case 'add_record':
                         this.$store.commit('SET_ATTEMPT_TO_EVENT', this.lead)
@@ -77,6 +98,10 @@
     }
 </script>
 <style scoped>
+    .unavailable {
+        color: grey;
+        cursor: default;
+    }
     .main-list-tile {
         margin: 0!important;
         padding: 0!important;

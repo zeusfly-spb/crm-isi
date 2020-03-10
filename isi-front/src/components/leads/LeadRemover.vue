@@ -3,7 +3,7 @@
               max-width="600"
     >
         <v-card class="round-corner">
-            <v-card-title class="red darken-3">
+            <v-card-title class="red darken-1">
                 <span class="title white--text">Подтверждение</span>
             </v-card-title>
             <v-card-text>

@@ -27,7 +27,6 @@
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetEntry from './CabinetEntry'
-    import Event from './Event'
     export default {
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'hour', 'date'],
@@ -84,8 +83,7 @@
         },
         components: {
             CabinetEntry,
-            CalendarRecordAdder,
-            Event
+            CalendarRecordAdder
         }
     }
 </script>

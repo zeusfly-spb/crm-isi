@@ -6,7 +6,10 @@ use App\Lead;
 use App\LeadComment;
 use App\Postpone;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class LeadController extends Controller
 {
@@ -23,11 +26,24 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         if ($request->with_done) {
-            $leads = Lead::with('comments', 'user', 'postpones')->get()->reverse()->values();
+            try {
+                $withoutDone = Lead::with('comments', 'user', 'postpones')
+                    ->where('status', '<>', 'done')
+                    ->get()->reverse()->values()->toArray();
+                $doneLeads = Lead::where('status', 'done')
+                    ->get()->reverse()->values()->toArray();
+                $leads = $withoutDone;
+            } catch (Exception $e) {
+                Log::info('Problems:( ');
+                Log::info($e);
+            }
+
         } else {
-            $leads = Lead::with('comments', 'user', 'postpones')->where('status', '<>', 'done')->get()->reverse()->values();
+            $leads = Lead::with('comments', 'user', 'postpones')
+                ->where('status', '<>', 'done')
+                ->get()->reverse()->values()->toArray();
         }
-        return response()->json($leads->toArray());
+        return response()->json($leads);
     }
 
     public function delete(Request $request)

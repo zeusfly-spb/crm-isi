@@ -123,7 +123,7 @@
         },
         watch: {
             active (val) {
-                if (!!val) this.backup = JSON.stringify(this.users)
+                if (val) this.backup = JSON.stringify(this.users)
             }
         }
     }

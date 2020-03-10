@@ -101,7 +101,7 @@
         },
         watch: {
             active (val) {
-                if (!!val) this.backup = JSON.stringify(this.islands)
+                if (val) this.backup = JSON.stringify(this.islands)
             }
         }
     }
