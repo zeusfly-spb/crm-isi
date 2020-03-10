@@ -70,9 +70,36 @@
                         />
                     </v-flex>
                     <v-flex xs12 sm6 md4
-                            v-if="!dateProp"
+                            v-if="!dateProp && leadDate"
                     >
                         <sub>Дата</sub>
+                        <v-menu
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                            v-model="menu"
+                        >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                    :label="inputDate | moment('D MMMM YYYY г.')"
+                                    prepend-inner-icon="event"
+                                    readonly
+                                    v-on="on"
+                                />
+                            </template>
+                            <v-date-picker
+                                no-title
+                                scrollable
+                                v-model="inputDate"
+                                @change="datePicked"
+                                locale="ru"
+                                first-day-of-week="1"
+                            />
+                        </v-menu>
 
                     </v-flex>
                     <v-flex xs12 sm6 md4>
@@ -177,6 +204,7 @@
         name: 'CalendarRecordAdder',
         props: ['dateProp', 'presetHour', 'presetCabinet', 'lead'],
         data: () => ({
+            menu: false,
             inputDate: null,
             timeMenu: false,
             time: null,
@@ -193,6 +221,17 @@
             }
         }),
         computed: {
+            leadDate () {
+                if (!this.lead) {
+                    return null
+                }
+                let createdDate = this.lead.created_at.split(' ')[0] || null
+                let lastPostponeDate = this.lead && this.lead.last_postpone.date.split(' ')[0] || null
+                let lastCommentDate = this.lead && this.lead.last_postpone.created_at.split(' ')[0] || null
+                let realDate = this.$store.state.realDate || null
+                let dates = [createdDate, lastPostponeDate, lastCommentDate, realDate].filter(item => !!item)
+                return dates.sort((a, b) => a < b ? 1 : a > b ? -1 : 0)[0]
+            },
             date () {
                 return this.dateProp || null
             },
@@ -237,6 +276,9 @@
             }
         },
         methods: {
+            datePicked () {
+                this.menu = false
+            },
             deliverClose (data) {
                 if (!data) {
                     this.reset()
@@ -249,7 +291,11 @@
                         this.$store.dispatch('createAppointment', this.editedAppointment)
                             .then(res => {
                                 let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
-                                this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
+                                if (this.lead) {
+                                    this.$store.commit('SEND_LEAD_MESSAGE', {text: text, color: 'green'})
+                                } else {
+                                    this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
+                                }
                                 this.reset()
                             })
                     })
@@ -260,7 +306,9 @@
         },
         mounted () {
             if (this.lead) {
-                this.inputDate = this.lead && this.lead.created_at.split(' ')[0] || null
+                this.inputDate = this.leadDate
+                this.editedAppointment.client_name = this.lead.name
+                this.editedAppointment.client_phone = this.lead.phone
             }
             if (this.singleService) {
                 this.editedAppointment.service_id = this.services[0].id
@@ -276,6 +324,13 @@
             this.editedAppointment.date = this.date
         },
         watch: {
+            inputDate (val) {
+                if (!val) {
+                    this.time = null
+                    return
+                }
+                this.editedAppointment.date = val
+            },
             services (val) {
                 if (val && val.length === 1) {
                     this.editedAppointment.service_id = this.services[0].id
