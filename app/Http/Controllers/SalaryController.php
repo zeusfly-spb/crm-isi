@@ -28,7 +28,7 @@ class SalaryController extends Controller
         return response()->json($salary_data);
     }
 
-    static function retrieveMonthData(string $date, int $island_id)
+    static function retrieveMonthData(string $date, $island_id)
     {
         $date = new Carbon($date);
         $year = $date->year;

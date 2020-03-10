@@ -1,101 +1,102 @@
 <template>
   <v-app>
-      <v-toolbar
-          app
-          :class="{'p-0': isMobile, 'm-0': isMobile}"
-      >
-          <v-layout
-              align-center
-              class="p-0 m-0"
-              style="padding-left: 0!important; padding-right: 0!important; margin-left: 0!important; margin-right: 0!important;"
-          >
+<!--      <v-toolbar-->
+<!--          app-->
+<!--          :class="{'p-0': isMobile, 'm-0': isMobile}"-->
+<!--      >-->
+<!--          <v-layout-->
+<!--              align-center-->
+<!--              class="p-0 m-0"-->
+<!--              style="padding-left: 0!important; padding-right: 0!important; margin-left: 0!important; margin-right: 0!important;"-->
+<!--          >-->
 
-              <v-flex
-                  text-xs-left
-              >
-                  <v-toolbar-title
-                      :class="{'headline': !isMobile, 'caption': isMobile}"
-                  >
-                      <v-layout
-                          align-center
-                      >
-                          <v-avatar
-                              color="white"
-                              style="box-shadow: black"
-                              v-if="isAuth"
-                              :size="isMobile ? 24 : 48"
-                          >
-                              <img
-                                  v-if="isAuth && !authUser.is_superadmin && authUser.avatar"
-                                  :src="`${basePath}${authUser.avatar}`"
-                                  :lazy-src="`${basePath}${authUser.avatar}`"
-                                  alt="Лого"
-                                  :height="isMobile ? '22px' : '45px'"
-                              />
-                              <img
-                                  v-else
-                                  :src="`${basePath}/img/logo.png`"
-                                  :lazy-src="`${basePath}/img/logo.png`"
-                                  alt="Лого"
-                                  :height="isMobile ? '22px' : '45px'"
-                              />
-                          </v-avatar>
-                          &nbsp;
-                          <div>
-                              <div v-if="isAuth">
-              <span
-                  :class="{'headline': !isMobile, 'caption': isMobile}"
-              >
-                  Островки
-              </span>
-                                  <div
-                                      class="font-weight-bold"
-                                      :class="{'caption': isMobile, 'headline': !isMobile}"
-                                  >
-                                      {{ authUser && authUser.full_name }}
-                                      <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </v-layout>
-                  </v-toolbar-title>
-              </v-flex>
-              <v-flex
-                  text-xs-center
-              >
-                  <date-selector
-                      v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"
-                  />
-                  <v-spacer v-else/>
-              </v-flex>
-              <v-flex
-                  class="m-0 p-0"
-                  text-xs-right
-              >
-                  <v-btn
-                      left
-                      v-if="isAuth"
-                      flat
-                      @click="logOut"
-                      title="Выход"
-                      :small="isMobile"
-                  >
-                      <span
-                          class="mr-1"
-                      >
-                          Выход
-                      </span>
-                      <v-icon
-                          :small="isMobile"
-                          :large="!isMobile"
-                          color="orange darken-2"
-                      >
-                          exit_to_app
-                      </v-icon>
-                  </v-btn>
-              </v-flex>
-          </v-layout>
-      </v-toolbar>
+<!--              <v-flex-->
+<!--                  text-xs-left-->
+<!--              >-->
+<!--                  <v-toolbar-title-->
+<!--                      :class="{'headline': !isMobile, 'caption': isMobile}"-->
+<!--                  >-->
+<!--                      <v-layout-->
+<!--                          align-center-->
+<!--                      >-->
+<!--                          <v-avatar-->
+<!--                              color="white"-->
+<!--                              style="box-shadow: black"-->
+<!--                              v-if="isAuth"-->
+<!--                              :size="isMobile ? 24 : 48"-->
+<!--                          >-->
+<!--                              <img-->
+<!--                                  v-if="isAuth && !authUser.is_superadmin && authUser.avatar"-->
+<!--                                  :src="`${basePath}${authUser.avatar}`"-->
+<!--                                  :lazy-src="`${basePath}${authUser.avatar}`"-->
+<!--                                  alt="Лого"-->
+<!--                                  :height="isMobile ? '22px' : '45px'"-->
+<!--                              />-->
+<!--                              <img-->
+<!--                                  v-else-->
+<!--                                  :src="`${basePath}/img/logo.png`"-->
+<!--                                  :lazy-src="`${basePath}/img/logo.png`"-->
+<!--                                  alt="Лого"-->
+<!--                                  :height="isMobile ? '22px' : '45px'"-->
+<!--                              />-->
+<!--                          </v-avatar>-->
+<!--                          &nbsp;-->
+<!--                          <div>-->
+<!--                              <div v-if="isAuth">-->
+<!--                              <span-->
+<!--                                  :class="{'headline': !isMobile, 'caption': isMobile}"-->
+<!--                              >-->
+<!--                                  Островки-->
+<!--                              </span>-->
+<!--                                  <div-->
+<!--                                      class="font-weight-bold"-->
+<!--                                      :class="{'caption': isMobile, 'headline': !isMobile}"-->
+<!--                                  >-->
+<!--                                      {{ authUser && authUser.full_name }}-->
+<!--                                      <span v-if="access && access.island" class="blue&#45;&#45;text">({{ access && access.island && access.island.name }})</span>-->
+<!--                                  </div>-->
+<!--                              </div>-->
+<!--                          </div>-->
+<!--                      </v-layout>-->
+<!--                  </v-toolbar-title>-->
+<!--              </v-flex>-->
+<!--              <v-flex-->
+<!--                  text-xs-center-->
+<!--              >-->
+<!--                  <date-selector-->
+<!--                      v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"-->
+<!--                  />-->
+<!--                  <v-spacer v-else/>-->
+<!--              </v-flex>-->
+<!--              <v-flex-->
+<!--                  class="m-0 p-0"-->
+<!--                  text-xs-right-->
+<!--              >-->
+<!--                  <v-btn-->
+<!--                      left-->
+<!--                      v-if="isAuth"-->
+<!--                      flat-->
+<!--                      @click="logOut"-->
+<!--                      title="Выход"-->
+<!--                      :small="isMobile"-->
+<!--                  >-->
+<!--                      <span-->
+<!--                          class="mr-1"-->
+<!--                      >-->
+<!--                          Выход-->
+<!--                      </span>-->
+<!--                      <v-icon-->
+<!--                          :small="isMobile"-->
+<!--                          :large="!isMobile"-->
+<!--                          color="orange darken-2"-->
+<!--                      >-->
+<!--                          exit_to_app-->
+<!--                      </v-icon>-->
+<!--                  </v-btn>-->
+<!--              </v-flex>-->
+<!--          </v-layout>-->
+<!--      </v-toolbar>-->
+      <app-toolbar/>
 
     <v-content>
         <call-reminder/>
@@ -139,6 +140,7 @@
 import DateSelector from './components/DateSelector'
 import CallReminder from './components/leads/CallReminder'
 import QueryInspector from './components/QueryInspector'
+import AppToolbar from './components/main/AppToolbar'
 import $ from 'jquery'
 export default {
     name: 'App',
@@ -267,6 +269,10 @@ export default {
         });
     },
     watch: {
+        workingIslandId (val, oldVal) {
+            console.log(`Старое значение: ${oldVal}`)
+            console.log(`Новое значение: ${val}`)
+        },
         access (val) {
             let userIslandIds = this.authUser && this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
             if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
@@ -277,7 +283,8 @@ export default {
     components: {
         DateSelector,
         CallReminder,
-        QueryInspector
+        QueryInspector,
+        AppToolbar
     }
 }
 </script>
