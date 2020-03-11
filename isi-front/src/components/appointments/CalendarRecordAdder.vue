@@ -302,9 +302,18 @@
             },
             reset () {
                 this.$emit('reset')
+            },
+            sidePanelControl () {
+                if (this.$store.getters.currentPage !== 'appointments') {
+                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                        status: true,
+                        mode: 'events'
+                    })
+                }
             }
         },
         mounted () {
+            this.sidePanelControl()
             if (this.lead) {
                 this.inputDate = this.leadDate
                 this.editedAppointment.client_name = this.lead.name
@@ -323,6 +332,14 @@
             this.editedAppointment.island_id = this.workingIslandId
             this.editedAppointment.date = this.date
         },
+        destroyed () {
+            if (this.$store.getters.currentPage !== 'appointments') {
+                this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                    status: false,
+                    mode: null
+                })
+            }
+        },
         watch: {
             inputDate (val) {
                 if (!val) {
@@ -330,6 +347,7 @@
                     return
                 }
                 this.editedAppointment.date = val
+                this.$store.commit('SET_ADDING_DATE', val)
             },
             services (val) {
                 if (val && val.length === 1) {

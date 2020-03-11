@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        addingDate: null,
         dragTarget: null,
         draggedEvent: null,
         eventToDelete: null,
@@ -126,6 +127,9 @@ export default {
         }
     },
     mutations: {
+        SET_ADDING_DATE (state, date) {
+            state.addingDate = date
+        },
         SET_DRAG_EVENT (state, event) {
             state.draggedEvent = state.splitEventTime(event)
         },
