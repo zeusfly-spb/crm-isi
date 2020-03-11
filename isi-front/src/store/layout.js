@@ -1,7 +1,7 @@
 export default {
     state: {
-        sidePanel: true,
-        sidePanelMode: 'events'
+        sidePanel: false,
+        sidePanelMode: null
     },
     mutations: {
         SET_SIDE_PANEL_STATUS (state, data) {

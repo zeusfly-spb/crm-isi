@@ -101,7 +101,7 @@
                     class="light-blue darken-3 pt-0 pb-0"
                 >
                     <span class="subheading white--text">
-                        Все записи островка {{ workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59
+                        Все записи островка {{ workingIsland && workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59
                     </span>
                     <v-spacer/>
                     <v-btn
