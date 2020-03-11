@@ -1,6 +1,7 @@
 <template>
     <v-toolbar
         app
+        clipped-left
         :class="{'p-0': isMobile, 'm-0': isMobile}"
     >
         <v-layout

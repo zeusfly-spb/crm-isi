@@ -14,6 +14,7 @@ import island from './island'
 import catalog from './catalog'
 import appointment from './appointment'
 import lead from './lead'
+import layout from './layout'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,8 @@ export const store = new Vuex.Store({
         island,
         catalog,
         appointment,
-        lead
+        lead,
+        layout
     },
     state: {
         loading: 0,

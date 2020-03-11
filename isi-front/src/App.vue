@@ -1,5 +1,6 @@
 <template>
   <v-app>
+      <side-panel/>
       <app-toolbar/>
       <v-content>
           <call-reminder/>
@@ -16,6 +17,7 @@ import CallReminder from './components/leads/CallReminder'
 import QueryInspector from './components/QueryInspector'
 import AppToolbar from './components/main/AppToolbar'
 import AppMenu from './components/main/AppMenu'
+import SidePanel from './components/main/SidePanel'
 import $ from 'jquery'
 export default {
     name: 'App',
@@ -95,7 +97,8 @@ export default {
         CallReminder,
         QueryInspector,
         AppToolbar,
-        AppMenu
+        AppMenu,
+        SidePanel
     }
 }
 </script>
