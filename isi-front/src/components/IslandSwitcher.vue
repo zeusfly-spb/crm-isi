@@ -6,7 +6,6 @@
         slider-color="green"
         height="70"
         hide-slider
-        @change="switched"
     >
         <v-tab
             v-for="tab in tabs"

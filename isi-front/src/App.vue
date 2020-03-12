@@ -25,12 +25,6 @@ export default {
         timerId: null
     }),
     computed: {
-        waitingLeadsCount () {
-            return this.$store.getters.waitingLeadsCount
-        },
-        workingIslandId () {
-            return this.$store.state.workingIslandId
-        },
         access () {
             return this.$store.state.access
         },
@@ -82,10 +76,6 @@ export default {
         });
     },
     watch: {
-        workingIslandId (val, oldVal) {
-            console.log(`Старое значение: ${oldVal}`)
-            console.log(`Новое значение: ${val}`)
-        },
         access (val) {
             let userIslandIds = this.authUser && this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
             if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
