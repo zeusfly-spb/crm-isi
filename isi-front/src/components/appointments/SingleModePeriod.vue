@@ -287,6 +287,14 @@
            padding: .5em!important;
            margin: .5em!important;
     }
+    .v-btn:hover:before {
+        background-color: transparent!important;
+        border: 2px solid black;
+    }
+    .v-btn:focus:before {
+        background-color: transparent!important;
+        border: 2px solid black;
+    }
     .context-menu {
         cursor: default;
     }
