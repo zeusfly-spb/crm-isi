@@ -344,8 +344,12 @@
                 })
             }
             this.$store.commit('UNSET_ADDING_HOUR')
+            this.$store.commit('UNSET_ADDING_CABINET_ID')
         },
         watch: {
+            'editedAppointment.cabinet_id': function (val) {
+                val ? this.$store.commit('SET_ADDING_CABINET_ID', val) : null
+            },
             inputDate (val) {
                 if (!val) {
                     this.time = null

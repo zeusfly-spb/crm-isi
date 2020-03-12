@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        addingCabinetId: null,
         addingHour: null,
         addingDate: null,
         dragTarget: null,
@@ -128,6 +129,12 @@ export default {
         }
     },
     mutations: {
+        UNSET_ADDING_CABINET_ID (state) {
+            state.addingCabinetId = null
+        },
+        SET_ADDING_CABINET_ID (state, id) {
+            state.addingCabinetId = id
+        },
         UNSET_ADDING_HOUR (state) {
             state.addingHour = null
         },

@@ -1,11 +1,12 @@
 <template>
     <v-flex>
-        <panel-events-single
-            v-if="!hasCabinets"
+        <component
+            :is="hasCabinets ? 'PanelEventsCabinets' : 'PanelEventsSingle'"
         />
     </v-flex>
 </template>
 <script>
+    import PanelEventsCabinets from './PanelEventsCabinets'
     import PanelEventsSingle from './PanelEventsSingle'
     export default {
         name: 'SidePanelEvents',
@@ -16,7 +17,8 @@
             }
         },
         components: {
-            PanelEventsSingle
+            PanelEventsSingle,
+            PanelEventsCabinets
         }
     }
 </script>
