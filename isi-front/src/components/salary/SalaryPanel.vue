@@ -8,7 +8,7 @@
                 :items="['', ...users]"
                 :headers="headers"
                 hide-actions
-                class="elevation-1"
+                class="elevation-1 no-hover"
             >
                 <template v-slot:items="props">
                     <component
@@ -155,7 +155,13 @@
         }
     }
 </script>
-<style>
+<style scoped>
+    tr:hover {
+        background-color: transparent !important;
+    }
+    td:hover {
+         background-color: transparent !important;
+    }
     ::selection {
         background: transparent;
     }

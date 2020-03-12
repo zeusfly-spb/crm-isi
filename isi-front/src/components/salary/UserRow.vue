@@ -5,7 +5,10 @@
             v-show="workingIslandId"
             align="right"
         >
-            <v-card style="width: 30em">
+            <v-card
+                flat
+                style="width: 30em"
+            >
                 <v-card-title
                     class="pb-0"
                 >
@@ -189,6 +192,8 @@
         <td v-for="(date, index) in dates" :key="'main' + index"
             style="border: 1px solid black; padding: 0"
             width="5em"
+            class="day-field"
+            :class="{'red lighten-5': isHoliday(date)}"
             :title="`${user.full_name} за ${hDate(date)}`"
         >
             <v-list dense
@@ -458,6 +463,10 @@
     }
 </script>
 <style scoped>
+    .day-field {
+        border: 1px solid black!important;
+        padding: 0!important;
+    }
     .total-tab {
         height: 1em;
         padding: .1em 1em!important;
