@@ -12,6 +12,7 @@
             <template v-slot:interval="{ hour }">
                 <v-flex
                     class="interval"
+                    :class="{'effect': borderEffect && addingHour === hour}"
                 >
                     <v-badge
                         right
@@ -49,7 +50,14 @@
 <script>
     export default {
         name: 'PanelEventsSingle',
+        data: () => ({
+            timerId: null,
+            borderEffect: false
+        }),
         computed: {
+            addingHour () {
+                return this.$store.state.appointment.addingHour
+            },
             addingDate () {
                 return this.$store.state.appointment.addingDate || this.$store.state.realDate
             },
@@ -73,6 +81,15 @@
             }
         },
         methods: {
+            showHourBorder () {
+                if (this.timerId) {
+                    clearTimeout(this.timerId)
+                }
+                this.borderEffect = false
+                this.timerId = setTimeout(() => {
+                    this.borderEffect = true
+                }, 500)
+            },
             eventNames (events) {
                 let base = events.map(item => item.client_name)
                 return events.length === 1 ? base[0] : base.join(', ')
@@ -83,10 +100,27 @@
             intervalFormat (interval) {
                 return interval.time
             }
+        },
+        mounted () {
+            setInterval(() => {
+                if (this.addingHour) {
+                    this.showHourBorder()
+                }
+            }, 1000)
+        },
+        watch: {
+            addingHour (val) {
+                if (val) {
+                    this.showHourBorder()
+                }
+            }
         }
     }
 </script>
 <style scoped>
+    .effect {
+        border: 3px solid green;
+    }
     .interval {
         height: 100%!important;
         display: flex;

@@ -131,6 +131,7 @@
                                         format="24hr"
                                         :max="presetHour ? `${presetHour}:59` : null"
                                         :min="presetHour ? `${presetHour}:00` : null"
+                                        @click:hour="setHour"
                                     />
                                 </v-card-text>
                                 <v-card-actions>
@@ -276,6 +277,9 @@
             }
         },
         methods: {
+            setHour (hour) {
+                this.$store.commit('SET_ADDING_HOUR', hour)
+            },
             datePicked () {
                 this.menu = false
             },
@@ -339,6 +343,7 @@
                     mode: null
                 })
             }
+            this.$store.commit('UNSET_ADDING_HOUR')
         },
         watch: {
             inputDate (val) {

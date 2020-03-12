@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        addingHour: null,
         addingDate: null,
         dragTarget: null,
         draggedEvent: null,
@@ -127,6 +128,12 @@ export default {
         }
     },
     mutations: {
+        UNSET_ADDING_HOUR (state) {
+            state.addingHour = null
+        },
+        SET_ADDING_HOUR (state, hour) {
+            state.addingHour = hour
+        },
         SET_ADDING_DATE (state, date) {
             state.addingDate = date
         },
