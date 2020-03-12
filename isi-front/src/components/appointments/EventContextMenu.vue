@@ -3,9 +3,9 @@
             v-model="visible"
             :close-on-content-click="false"
             transition="scale-transition"
-            :attach="selector"
+            :activator="selector"
             :nudge-right="40"
-            :nudge-bottom="20"
+            :nudge-bottom="-10"
             lazy
             offset-y
             full-width

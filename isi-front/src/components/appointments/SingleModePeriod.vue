@@ -289,11 +289,11 @@
     }
     .v-btn:hover:before {
         background-color: transparent!important;
-        border: 2px solid black;
+        border: 3px solid black;
     }
     .v-btn:focus:before {
         background-color: transparent!important;
-        border: 2px solid black;
+        border: 3px solid black;
     }
     .context-menu {
         cursor: default;
