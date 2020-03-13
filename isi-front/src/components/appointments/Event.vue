@@ -39,7 +39,7 @@
                     color="green"
                     class="clickable"
                     title="Редактировать запись"
-                    @click="editMode = true"
+                    @click="$store.commit('SET_EDITED_EVENT', event)"
                 >
                     edit
                 </v-icon>
@@ -54,11 +54,6 @@
                     delete
                 </v-icon>
             </v-chip>
-            <event-editor
-                :event="event"
-                v-if="editMode"
-                @close="editMode = false"
-            />
         </div>
 </template>
 <script>

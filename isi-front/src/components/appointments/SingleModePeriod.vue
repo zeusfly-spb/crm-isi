@@ -14,6 +14,7 @@
             v-model="display"
             v-if="hasEvents"
             :close-on-content-click="false"
+            :close-on-click="!$store.state.appointment.editedEvent"
             :nudge-right="40"
             lazy
             transition="scale-transition"
@@ -70,7 +71,7 @@
             v-model="periodDisplay"
             v-if="events.length > 1"
             :close-on-content-click="false"
-            :close-on-click="!addMode && !deleteMode"
+            :close-on-click="!addMode && !deleteMode && !$store.state.appointment.editedEvent"
             :nudge-right="40"
             lazy
             transition="scale-transition"
@@ -138,7 +139,7 @@
             @reset="addMode = false"
         />
         <event-context-menu
-                v-if="hasEvents"
+                v-if="hasEvents && firstEvent"
                 v-model="contextMenu"
                 :event="firstEvent"
                 :selector="`#first-${firstEvent.id}`"
