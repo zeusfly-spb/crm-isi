@@ -250,8 +250,12 @@
                     </v-btn>
                 </v-card-actions>
             </v-card>
-
         </v-dialog>
+        <event-editor
+            v-if="editedEvent"
+            :event="editedEvent"
+            @close="$store.commit('SET_EDITED_EVENT', null)"
+        />
     </v-flex>
 </template>
 <script>
@@ -262,6 +266,7 @@
     import SingleModePeriod from './SingleModePeriod'
     import WeekModePeriod from './WeekModePeriod'
     import MonthModeDate from './MonthModeDate'
+    import EventEditor from './EventEditor'
     export default {
         name: 'AppointmentCalendar',
         data: () => ({
@@ -284,6 +289,9 @@
             ]
         }),
         computed: {
+            editedEvent () {
+                return this.$store.state.appointment.editedEvent
+            },
             breakpoint () {
                 return this.$vuetify.breakpoint
             },
@@ -413,7 +421,8 @@
             SingleModePeriod,
             WeekModePeriod,
             MonthModeDate,
-            EventsArchive
+            EventsArchive,
+            EventEditor
         }
     }
 </script>

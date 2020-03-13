@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        editedEvent: null,
         addingCabinetId: null,
         addingHour: null,
         addingDate: null,
@@ -129,6 +130,9 @@ export default {
         }
     },
     mutations: {
+        SET_EDITED_EVENT (state, event) {
+            state.editedEvent = event
+        },
         UNSET_ADDING_CABINET_ID (state) {
             state.addingCabinetId = null
         },

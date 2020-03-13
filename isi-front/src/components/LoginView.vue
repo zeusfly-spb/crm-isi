@@ -35,7 +35,12 @@
 
                             <v-card-actions>
                                 <v-spacer/>
-                                <v-btn primary @click="logIn">ВХОД</v-btn>
+                                <v-btn
+                                    primary
+                                    @click="logIn"
+                                >
+                                    ВХОД
+                                </v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-card>

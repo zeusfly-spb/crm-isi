@@ -55,9 +55,28 @@
                             </span>
                         <v-icon
                                 :class="{disabled: !can(item.action) }"
-                                :color="{active: 'blue', 'done': 'green', cancel: 'red'}[item.action]"
+                                :color="{active: 'blue', 'done': 'green', cancel: 'red accent-2'}[item.action]"
                         >
                             {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
+                        </v-icon>
+                    </v-list-tile-title>
+                </v-list-tile>
+                <v-divider/>
+                <v-list-tile
+                    v-for="(item, index) in commonItems"
+                    :key="$store.state.appointment.uniqID(index)"
+                    @click="commonAction(item.action)"
+                >
+                    <v-list-tile-title
+                        :class="{disabled: !can(item.action) }"
+                    >
+                           <span class="body-2 right">
+                                {{ item.title }}
+                            </span>
+                        <v-icon
+                            :color="item.color"
+                        >
+                            {{ item.icon  }}
                         </v-icon>
                     </v-list-tile-title>
                 </v-list-tile>
@@ -74,6 +93,10 @@
                 {title: 'Сменить статус на "Выполнено"', action: 'done'},
                 {title: 'Сменить статус на "Отменено"', action: 'cancel'},
                 {title: 'Сменить статус на "Активно"', action: 'active'},
+            ],
+            commonItems: [
+                {title: 'Редактировать', action: 'edit', icon: 'edit', color: 'blue'},
+                {title: 'Удалить', action: 'delete', icon: 'delete', color: 'red'}
             ]
         }),
         computed: {
@@ -91,6 +114,18 @@
             }
         },
         methods: {
+            commonAction (val) {
+                switch (val) {
+                    case 'edit':
+                        this.$store.commit('SET_EDITED_EVENT', this.event)
+                        break
+                    case 'delete':
+                        this.$store.commit('ATTEMPT_TO_DELETE_EVENT', this.event)
+                        break
+                    default: break
+                }
+                this.visible = false
+            },
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
