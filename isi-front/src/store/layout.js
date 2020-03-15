@@ -5,8 +5,15 @@ export default {
     },
     mutations: {
         SET_SIDE_PANEL_STATUS (state, data) {
-            state.sidePanel = data.status
-            state.sidePanelMode = data.mode
+            if (data.status) {
+                state.sidePanel = data.status
+                state.sidePanelMode = data.mode
+            } else {
+                setTimeout (() => {
+                    state.sidePanel = data.status
+                    state.sidePanelMode = data.mode
+                }, 3000)
+            }
         }
     }
 }
