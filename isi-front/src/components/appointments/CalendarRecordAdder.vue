@@ -2,7 +2,6 @@
     <v-dialog
         value="true"
         max-width="1000"
-        :hide-overlay="$store.state.layout.sidePanel || false"
         @update:returnValue="deliverClose"
     >
     <v-card class="round-corner" width="1000px">
