@@ -12,7 +12,7 @@ export default {
                 setTimeout (() => {
                     state.sidePanel = data.status
                     state.sidePanelMode = data.mode
-                }, 3000)
+                }, 1500)
             }
         }
     }

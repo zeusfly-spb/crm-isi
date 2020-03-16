@@ -292,7 +292,8 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        this.$store.dispatch('createAppointment', this.editedAppointment)
+                        let data = this.lead ? {... this.editedAppointment, lead_id: this.lead.id} : this.editedAppointment
+                        this.$store.dispatch('createAppointment', data)
                             .then(res => {
                                 let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
                                 if (this.lead) {
