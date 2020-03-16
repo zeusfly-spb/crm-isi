@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Jobs\AddEventToLead;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -95,6 +96,9 @@ class AppointmentController extends Controller
     public function create(Request $request)
     {
         $appointment = Appointment::create($request->all());
+        if ($request->lead_id) {
+            AddEventToLead::dispatch($request->lead_id, $appointment);
+        }
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
     }

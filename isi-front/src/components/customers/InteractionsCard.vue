@@ -40,110 +40,27 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    <div
-                        v-if="leads.length"
-                    >
-                        <strong>Заявка</strong>
-                        <v-data-table
-                            :headers="leadHeaders"
-                            :items="leads"
-                            hide-actions
-                            hide-headers
-                        >
-                            <template v-slot:items="props">
-                                <td align="left">{{ props.item.name }}</td>
-                                <td align="left">{{ props.item.phone | phone }}</td>
-                                <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
-                            </template>
-                        </v-data-table>
-                    </div>
-                    <div
+                    <lead-row
+                        v-if="lead"
+                        :lead="lead"
+                    />
+                    <events-row
+                        v-if="events.length"
+                        :events="events"
+                    />
+                    <comments-row
                         v-if="comments.length"
-                    >
-                        <strong>Комментарии ({{ comments.length }})</strong>
-                        <v-data-table
-                            :items="comments"
-                            hide-actions
-                            hide-headers
-                        >
-                            <template v-slot:items="props">
-                                <td align="left">
-                                    <v-avatar
-                                        size="36px"
-                                        :title="props.item.user && props.item.user.full_name || ''"
-                                    >
-                                        <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
-                                        <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
-                                    </v-avatar>
-                                </td>
-                                <td align="left">{{ props.item.text }}</td>
-                                <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
-                            </template>
-                        </v-data-table>
-                    </div>
-                    <div
+                        :comments="comments"
+                    />
+                    <calls-row
                         v-if="calls.length"
-                    >
-                        <strong>Исходящие звонки ({{ calls.length }})</strong>
-                        <v-data-table
-                            :headers="callsHeaders"
-                            :items="calls"
-                            hide-actions
-                            hide-headers
-                        >
-                            <template v-slot:items="props">
-                                <td align="left">
-                                    <v-avatar
-                                        size="36px"
-                                        :title="props.item.user && props.item.user.full_name || ''"
-                                    >
-                                        <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                                        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
-                                        <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
-                                    </v-avatar>
-                                </td>
-                                <td align="right">{{ props.item.timestamp | moment('DD MMMM YYYY г. HH:mm') }}</td>
-                            </template>
-                        </v-data-table>
-                    </div>
-                    <div
+                        :calls="calls"
+                    />
+                    <customer-row
                         v-if="customer"
-                    >
-                        <strong>Клиент</strong>
-                        <v-data-table
-                            :headers="customerHeaders"
-                            :items="[customer]"
-                            hide-headers
-                            hide-actions
-                        >
-                            <template v-slot:items="props">
-                                <td align="left">
-                                    <span class="title green--text ">{{ props.item.full_name }}</span>
-                                    <v-btn icon
-                                           v-if="!edit"
-                                           @click="edit = true"
-                                           title="Редактировать данные клиента"
-                                    >
-                                        <v-icon
-                                            color="green"
-                                        >
-                                            edit
-                                        </v-icon>
-                                    </v-btn>
-                                </td>
-                                <td align="left">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
-                                <td align="right">{{ props.item.address }}</td>
-                            </template>
-                        </v-data-table>
-                        <customer-editor
-                            :customer="customer"
-                            v-if="edit"
-                            @close="edit = false"
-                            @snack="showSnack"
-                            @change="$emit('change')"
-                        />
-                    </div>
+                        :customer="customer"
+                        @change="$emit('change')"
+                    />
                     <div
                         v-if="deals.length"
                     >
@@ -188,6 +105,11 @@
 </template>
 <script>
     import CustomerEditor from './CustomerEditor'
+    import EventsRow from './EventsRow'
+    import CommentsRow from './CommentsRow'
+    import LeadRow from './LeadRow'
+    import CallsRow from './CallsRow'
+    import CustomerRow from './CustomerRow'
     export default {
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
@@ -197,16 +119,6 @@
             snackColor: 'green',
             edit: false,
             active: true,
-            leadHeaders: [
-                {text: 'Имя', align: 'left', sortable: false},
-                {text: 'Номер телефона', align: 'center', sortable: false},
-                {text: 'Дата / Время', align: 'right', sortable: false}
-            ],
-            commentsHeaders: [
-                {text: 'Сотрудник', align: 'left', sortable: false},
-                {text: 'Текст', align: 'center', sortable: false},
-                {text: 'Дата / Время', align: 'right', sortable: false},
-            ],
             callsHeaders: [
                 {text: 'Сотрудник', align: 'left'},
                 {text: 'Дата / Время', align: 'right'}
@@ -224,6 +136,12 @@
             ]
         }),
         computed: {
+            events () {
+                if (!this.lead || !this.lead.appointments || !this.lead.appointments.length) {
+                    return []
+                }
+                return JSON.parse(this.lead.appointments) || []
+            },
             users () {
                 return this.$store.state.users
             },
@@ -262,7 +180,12 @@
             }
         },
         components: {
-            CustomerEditor
+            CustomerEditor,
+            EventsRow,
+            CommentsRow,
+            LeadRow,
+            CallsRow,
+            CustomerRow
         }
     }
 </script>
