@@ -1,5 +1,6 @@
 <template>
     <v-card
+        v-if="visible"
         class="round-corner"
         color="teal lighten-5"
     >
@@ -110,13 +111,21 @@
     import CustomerPhonesEditor from './CustomerPhonesEditor'
     export default {
         name: 'CustomerEditor',
-        props: ['customer'],
+        props: ['customer', 'value'],
         data: () => ({
             menu: false,
             editedCustomer: {},
             date: ''
         }),
         computed: {
+            visible: {
+                get () {
+                    return this.value
+                },
+                set (val) {
+                    this.$emit('input', val)
+                }
+            },
             changed () {
                 return JSON.stringify(this.customer) !== JSON.stringify(this.editedCustomer)
             }
@@ -129,21 +138,23 @@
                         this.$store.dispatch('updateCustomer', this.editedCustomer)
                             .then((res) => {
                                 if (res.data.exists) {
-                                    this.$emit('snack', 'Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.', 'red')
+                                    this.$store.dispatch('pushMessage', {
+                                        text: 'Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.',
+                                        color: 'red'
+                                    })
                                     return
                                 }
-                                this.$emit('close')
-                                // this.$emit('snack', 'Данные клиента изменены', 'green')
+                                this.visible = false
                                 this.$store.dispatch('pushMessage', {
                                     text: 'Данные клиента изменены',
                                     color: 'green'
                                 })
-                                this.$emit('change')
+                                this.$store.commit('SET_CUSTOMERS_CHANGED', true)
                             })
                     })
             },
             cancelEdit () {
-                this.$emit('close')
+                this.visible = false
             },
             datePicked (date) {
                 this.editedCustomer.birth_date = new Date(date).toISOString().split('T')[0]

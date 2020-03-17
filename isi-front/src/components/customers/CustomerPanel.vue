@@ -161,7 +161,6 @@
                         :customer="props.item"
                         v-if="+interactionsOpenId === +props.item.id"
                         @close="interactionsOpenId = null"
-                        @change="querySelection"
                     />
                 </td>
                 <td>{{ props.item.patronymic }}</td>
@@ -270,6 +269,9 @@
             ]
         }),
         computed: {
+            customersChanged () {
+                return this.$store.state.layout.customersChanged
+            },
             customers () {
                 const excludeExists = (arr) => {
                     let existsIds = this.$store.state.customers.map(item => item.id)
@@ -284,6 +286,10 @@
             }
         },
         methods:{
+            updateSelection () {
+                this.querySelection()
+                this.$store.commit('SET_CUSTOMERS_CHANGED', false)
+            },
             showInteractions (id) {
                 this.interactionsOpenId = id
             },
@@ -354,6 +360,9 @@
             this.editedCustomer = JSON.parse(JSON.stringify(this.defaultCustomer))
         },
         watch: {
+            customersChanged (val) {
+                val ? this.updateSelection() : null
+            },
             searchString (val) {
                 if (!val.length) {
                     this.loadedCustomers = []

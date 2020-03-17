@@ -26,10 +26,8 @@
             </template>
         </v-data-table>
         <customer-editor
+            v-model="edit"
             :customer="customer"
-            v-if="edit"
-            @close="edit = false"
-            @change="$emit('change')"
         />
     </div>
 </template>
