@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div
+        v-if="lead"
+    >
         <strong>Заявка</strong>
         <v-data-table
             :items="[lead]"

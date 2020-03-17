@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div
+        v-if="comments.length"
+    >
         <strong>Комментарии ({{ comments.length }})</strong>
         <v-data-table
             :items="comments"

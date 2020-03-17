@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div
+        v-if="events.length"
+    >
         <strong>Записи: ({{ events.length }})</strong>
         <v-data-table
             :items="events"

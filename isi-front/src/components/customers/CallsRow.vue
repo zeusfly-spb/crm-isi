@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div
+        v-if="calls.length"
+    >
         <strong>Исходящие звонки ({{ calls.length }})</strong>
         <v-data-table
             :items="calls"

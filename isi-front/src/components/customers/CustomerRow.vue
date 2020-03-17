@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div
+        v-if="customer"
+    >
         <strong>Клиент</strong>
         <v-data-table
             :items="[customer]"
