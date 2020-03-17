@@ -95,7 +95,10 @@
 
         },
         name: 'Event',
-        props: ['event', 'first'],
+        props: {
+            event: Object,
+            first: Boolean
+        },
         data: () => ({
             mouseOver: false,
             eventToDelete: null,

@@ -70,17 +70,17 @@
                     </v-icon>
                 </v-btn>
 <!--            </template>-->
-        <v-slide-x-transition>
+<!--        <v-dialog-bottom-transition>-->
             <div
                 v-if="display && firstEvent"
             >
                 <event
-                    :first="true"
+                    first
                     :event="firstEvent"
                     @hide="display = false"
                 />
             </div>
-        </v-slide-x-transition>
+<!--        </v-dialog-bottom-transition>-->
 
 <!--        </v-menu>-->
         <v-menu
