@@ -21,7 +21,7 @@
                         </v-icon>
                     </v-btn>
                 </td>
-                <td align="left">{{ props.item.birth_date | moment('DD MMMM YYYY г.')}}</td>
+                <td align="left">{{ props.item.birth_date | moment('D MMMM YYYY г.')}}</td>
                 <td align="right">{{ props.item.address }}</td>
             </template>
         </v-data-table>
@@ -29,7 +29,6 @@
             :customer="customer"
             v-if="edit"
             @close="edit = false"
-            @snack="showSnack"
             @change="$emit('change')"
         />
     </div>
@@ -42,11 +41,6 @@
         data: () => ({
             edit: false
         }),
-        methods: {
-            showSnack (data) {
-                console.dir(data)
-            }
-        },
         components: {
             CustomerEditor
         }
