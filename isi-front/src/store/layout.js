@@ -1,5 +1,6 @@
 export default {
     state: {
+        customerEditing: false,
         customersChanged: false,
         messageTime: 3,
         messages: [],
@@ -27,8 +28,11 @@ export default {
         }
     },
     mutations: {
-        SET_CUSTOMERS_CHANGED (state, status) {
-            state.customersChanged = status
+        SET_CUSTOMER_EDITING (state, val) {
+            state.customerEditing = val
+        },
+        SET_CUSTOMERS_CHANGED (state, val) {
+            state.customersChanged = val
         },
         SET_SIDE_PANEL_STATUS (state, data) {
             if (data.status) {

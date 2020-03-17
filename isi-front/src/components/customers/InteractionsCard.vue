@@ -3,33 +3,14 @@
         <v-dialog
             v-model="active"
             max-width="1000px"
-            :persistent="edit"
+            :persistent="$store.state.layout.customerEditing"
         >
             <v-card class="round-corner">
-                <v-card-title
-                    class="light-blue darken-3"
-                >
-                    <v-icon
-                        :color="customer ? 'green' : 'yellow darken-3'"
-                        class="pr-2"
-                    >
-                        contacts
-                    </v-icon>
-                    <span class="title white--text">
-                        История взаимодействия
-                        <span v-if="lead && !customer">по заявке с номера {{ lead.phone  | phone}}</span>
-                        <span v-else>с клиентом {{ customer.full_name }}</span>
-                    </span>
-                    <v-spacer/>
-                    <v-icon
-                        color="white"
-                        class="clickable"
-                        title="Закрыть"
-                        @click="active=false"
-                    >
-                        close
-                    </v-icon>
-                </v-card-title>
+                <interactions-title
+                    :lead="lead"
+                    :customer="customer"
+                    @close="active = false"
+                />
                 <v-card-text>
                     <lead-row
                         :lead="lead"
@@ -62,13 +43,11 @@
     import CallsRow from './CallsRow'
     import CustomerRow from './CustomerRow'
     import DealsRow from './DealsRow'
+    import InteractionsTitle from './InteractionsTitle'
     export default {
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
         data: () => ({
-            snackbar: false,
-            snackText: '',
-            snackColor: 'green',
             edit: false,
             active: true,
             callsHeaders: [
@@ -138,7 +117,8 @@
             LeadRow,
             CallsRow,
             CustomerRow,
-            DealsRow
+            DealsRow,
+            InteractionsTitle
         }
     }
 </script>

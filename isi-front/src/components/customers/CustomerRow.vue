@@ -38,9 +38,16 @@
     export default {
         name: 'CustomerRow',
         props: ['customer'],
-        data: () => ({
-            edit: false
-        }),
+        computed: {
+            edit: {
+                get () {
+                    return this.$store.state.layout.customerEditing
+                },
+                set (val) {
+                    this.$store.commit('SET_CUSTOMER_EDITING', val)
+                }
+            }
+        },
         components: {
             CustomerEditor
         }
