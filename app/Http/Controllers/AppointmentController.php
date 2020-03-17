@@ -97,7 +97,7 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::create($request->all());
         if ($request->lead_id) {
-            AddEventToLead::dispatch($request->lead_id, $appointment);
+            AddEventToLead::dispatch($request->lead_id, $appointment->id);
         }
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());

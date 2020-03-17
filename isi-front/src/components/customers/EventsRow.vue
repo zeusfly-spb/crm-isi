@@ -27,7 +27,7 @@
                 <td
                     align="right"
                 >
-                    {{ props.item.date | moment('D MMMM YYYY г.') }}
+                    {{ props.item.date | moment('D MMMM YYYY г. HH:mm') }}
                 </td>
             </template>
         </v-data-table>

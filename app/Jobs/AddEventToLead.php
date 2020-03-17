@@ -13,7 +13,7 @@ class AddEventToLead implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $appointment;
+    protected $appointment_id;
     protected $lead_id;
 
     /**
@@ -21,10 +21,10 @@ class AddEventToLead implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($lead_id, $appointment)
+    public function __construct($lead_id, $appointment_id)
     {
         $this->lead_id = $lead_id;
-        $this->appointment = $appointment->load('user');
+        $this->appointment_id = $appointment_id;
     }
 
     /**
@@ -34,6 +34,6 @@ class AddEventToLead implements ShouldQueue
      */
     public function handle()
     {
-        Lead::find($this->lead_id)->addAppointment($this->appointment);
+        Lead::find($this->lead_id)->addAppointment($this->appointment_id);
     }
 }

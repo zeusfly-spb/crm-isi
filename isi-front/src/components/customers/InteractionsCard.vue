@@ -52,10 +52,7 @@
         }),
         computed: {
             events () {
-                if (!this.lead || !this.lead.appointments || !this.lead.appointments.length) {
-                    return []
-                }
-                return JSON.parse(this.lead.appointments) || []
+                return this.lead.appointments || []
             },
             users () {
                 return this.$store.state.users
@@ -75,13 +72,6 @@
                 let base = this.customer && this.customer.deals || []
                 base = base.map(item => ({...item, user: this.users.find(user => +user.id === +item.user_id) || null}))
                 return  base.reverse() || []
-            }
-        },
-        methods: {
-            showSnack (text, color) {
-                this.snackText = text
-                this.snackColor = color
-                this.snackbar = true
             }
         },
         watch: {
