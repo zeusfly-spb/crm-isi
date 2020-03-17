@@ -211,7 +211,7 @@
                     postpone_id: this.postponeToDelete.id
                 })
                     .then(() => {
-                        this.$store.commit('SEND_LEAD_MESSAGE', {
+                        this.$store.dispatch('pushMessage', {
                             text: 'Удален запланированный звонок',
                             color: 'green'
                         })
@@ -231,7 +231,7 @@
             },
             selectDate (data) {
                 if (data.past) {
-                    this.$store.commit('SEND_LEAD_MESSAGE', {
+                    this.$store.dispatch('pushMessage', {
                         text: 'Невозможно назначить звонок на дату в прошлом!',
                         color: 'red'
                     })
@@ -249,10 +249,11 @@
                 })
                     .then(() => {
                         this.resetSelected()
-                        this.$store.commit('SEND_LEAD_MESSAGE', {
+                        this.$store.dispatch('pushMessage', {
                             text: 'Заявке назначен перезвон',
                             color: 'green'
                         })
+
                     })
             }
         },

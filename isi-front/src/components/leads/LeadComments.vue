@@ -190,7 +190,7 @@
             deleteComment () {
                 this.$store.dispatch('deleteLeadComment', this.commentToDelete.id)
                     .then(() => {
-                        this.$store.commit('SEND_LEAD_MESSAGE', {
+                        this.$store.dispatch('pushMessage', {
                             text: `Комментарий '${this.commentToDelete.text}' удален`,
                             color: 'green'
                         })
@@ -211,7 +211,7 @@
                         })
                             .then(() => {
                                 this.adding = false
-                                this.$store.commit('SEND_LEAD_MESSAGE', {
+                                this.$store.dispatch('pushMessage', {
                                     text: `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`,
                                     color: 'green'
                                 })

@@ -99,7 +99,10 @@
                         })
                             .then(() => {
                                 this.active = false
-                                this.$emit('updated', `Статус заявки с номера ${this.lead.phone} изменен`, 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: `Статус заявки с номера ${this.$options.filters.phone(this.lead.phone)} изменен`,
+                                    color: 'green'
+                                })
                             })
                     })
             }

@@ -1,14 +1,5 @@
 <template>
     <v-flex>
-        <v-snackbar
-            v-model="snackbar"
-            auto-height
-            top
-            :timeout="3000"
-            :color="snackColor"
-        >
-            <span>{{ snackText }}</span>
-        </v-snackbar>
         <island-switcher
             v-if="isSuperadmin"
         />
@@ -69,19 +60,7 @@
                 return this.currentViewMode === 'all' ? base : base.filter(item => item.status === this.currentViewMode)
             }
         },
-        methods: {
-            showSnack ({color, text}) {
-                this.snackColor = color
-                this.snackText = text
-                this.snackbar = true
-            }
-        },
         watch: {
-            '$store.state.lead.message': function (val) {
-                if (val) {
-                    this.showSnack({...val})
-                }
-            },
             currentViewMode () {
                 this.$store.commit('SET_OPEN_LEAD_ID', null)
             }

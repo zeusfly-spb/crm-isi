@@ -1,6 +1,7 @@
 <template>
-    <v-dialog v-model="confirm"
-              max-width="600"
+    <v-dialog
+        v-model="confirm"
+        max-width="600"
     >
         <v-card class="round-corner">
             <v-card-title class="red darken-1">
@@ -21,6 +22,7 @@
                     color="red darken-1"
                     flat="flat"
                     @click="deleteLead"
+                    :disabled="!buttonEnabled"
                 >
                     Удалить
                 </v-btn>
@@ -31,6 +33,9 @@
 <script>
     export default {
         name: 'LeadRemover',
+        data: () => ({
+            buttonEnabled: true
+        }),
         computed: {
             confirmText () {
                 return this.leadToDelete && this.leadToDelete.phone || ''
@@ -56,14 +61,21 @@
         },
         methods: {
             deleteLead () {
+                this.buttonEnabled = false
                 this.$store.dispatch('deleteLead', {lead_id: this.leadToDelete.id})
                     .then(() => {
-                        this.$store.commit('SEND_LEAD_MESSAGE', {
+                        this.$store.dispatch('pushMessage', {
                             text: `Заявка с номера ${this.$options.filters.phone(this.leadToDelete.phone)} удалена`,
                             color: 'green'
+
                         })
                         this.leadToDelete = null
                     })
+            }
+        },
+        watch: {
+            confirm (val) {
+                val ? this.buttonEnabled = true : null
             }
         }
     }
