@@ -1,7 +1,29 @@
 export default {
     state: {
+        messageTime: 3,
+        messages: [],
         sidePanel: false,
         sidePanelMode: null
+    },
+    actions: {
+        pushMessage ({commit}, message) {
+            commit('PUSH_MESSAGE', message)
+        },
+        pullMessage ({state, commit}) {
+            return new Promise((resolve, reject) => {
+                try {
+                    if (state.messages.length) {
+                        let message = state.messages[state.messages.length - 1]
+                        commit('PULL_MESSAGE')
+                        resolve(message)
+                    } else {
+                        reject(null)
+                    }
+                } catch (e) {
+                    reject(e)
+                }
+            })
+        }
     },
     mutations: {
         SET_SIDE_PANEL_STATUS (state, data) {
@@ -14,6 +36,12 @@ export default {
                     state.sidePanelMode = data.mode
                 }, 1500)
             }
+        },
+        PUSH_MESSAGE (state, message) {
+            state.messages.push(message)
+        },
+        PULL_MESSAGE (state) {
+            state.messages.pop
         }
     }
 }

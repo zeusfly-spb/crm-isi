@@ -3,6 +3,7 @@
       <side-panel/>
       <app-toolbar/>
       <v-content>
+          <messages-panel/>
           <call-reminder/>
           <query-inspector/>
           <v-progress-linear :indeterminate="true" v-if="loading"/>
@@ -18,6 +19,7 @@ import QueryInspector from './components/QueryInspector'
 import AppToolbar from './components/main/AppToolbar'
 import AppMenu from './components/main/AppMenu'
 import SidePanel from './components/main/SidePanel'
+import MessagesPanel from './components/main/MessagesPanel'
 import $ from 'jquery'
 export default {
     name: 'App',
@@ -88,7 +90,8 @@ export default {
         QueryInspector,
         AppToolbar,
         AppMenu,
-        SidePanel
+        SidePanel,
+        MessagesPanel
     }
 }
 </script>

@@ -133,7 +133,11 @@
                                     return
                                 }
                                 this.$emit('close')
-                                this.$emit('snack', 'Данные клиента изменены', 'green')
+                                // this.$emit('snack', 'Данные клиента изменены', 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: 'Данные клиента изменены',
+                                    color: 'green'
+                                })
                                 this.$emit('change')
                             })
                     })
