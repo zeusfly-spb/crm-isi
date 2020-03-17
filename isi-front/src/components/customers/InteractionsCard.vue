@@ -1,7 +1,7 @@
 <template>
     <v-flex>
         <v-dialog
-            v-model="active"
+            :value="active"
             max-width="1000px"
             :persistent="$store.state.layout.customerEditing"
         >
@@ -48,23 +48,7 @@
         name: 'InteractionsCard',
         props: ['lead', 'customer'],
         data: () => ({
-            edit: false,
-            active: true,
-            callsHeaders: [
-                {text: 'Сотрудник', align: 'left'},
-                {text: 'Дата / Время', align: 'right'}
-            ],
-            customerHeaders: [
-                {text: 'ФИО', align: 'left'},
-                {text: 'Дата рождения', align: 'left'},
-                {text: 'Адрес', align: 'left'}
-            ],
-            dealsHeaders: [
-                {text: 'Сотрудник / Вид сделки', align: 'left'},
-                {text: 'Наименование', align: 'center'},
-                {text: 'Цена', align: 'left'},
-                {text: 'Дата / Время', align: 'right'}
-            ]
+            active: true
         }),
         computed: {
             events () {
@@ -75,9 +59,6 @@
             },
             users () {
                 return this.$store.state.users
-            },
-            basePath () {
-                return this.$store.state.basePath
             },
             comments () {
                 return this.lead && this.lead.comments && this.lead.comments.reverse() || []
