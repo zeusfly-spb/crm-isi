@@ -10,28 +10,30 @@
         @dragleave="dragLeave"
         @drop="dragDrop"
     >
-        <v-menu
-            v-model="display"
-            v-if="hasEvents"
-            :close-on-content-click="false"
-            :close-on-click="!$store.state.appointment.editedEvent"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-        >
-            <template v-slot:activator="{ on }">
+<!--        <v-menu-->
+<!--            v-model="display"-->
+<!--            v-if="hasEvents"-->
+<!--            :close-on-content-click="false"-->
+<!--            :close-on-click="!$store.state.appointment.editedEvent"-->
+<!--            :nudge-right="40"-->
+<!--            lazy-->
+<!--            transition="scale-transition"-->
+<!--            offset-y-->
+<!--            full-width-->
+<!--            min-width="290px"-->
+<!--        >-->
+<!--            <template v-slot:activator="{ on }">-->
                 <v-btn
                     flat
-                    round
+                    :round="!display"
+                    :icon="display"
+                    v-if="hasEvents && !display"
                     :draggable="firstEvent.draggable"
-                    title="Просмотр записи"
+                    :title="display ? 'Скрыть подробности' : 'Показать подробности'"
                     :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
                     :ripple="false"
                     :id="`first-${firstEvent.id}`"
-                    v-on="on"
+                    @click="display = !display"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
                     @dragenter="dragEnter"
@@ -42,37 +44,50 @@
                     @contextmenu.prevent="firstRightClick"
                 >
                     <v-icon
+                        v-if="!display"
                         :color="firstEvent.icon.color"
                         class="ml-1"
                     >
                         {{ firstEvent.icon.type }}
                     </v-icon>
                     <span
+                        v-if="!display"
                         class="green--text"
                     >
                             {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
                         </span>
                     <span
+                        v-if="!display"
                         class="blue--text ml-1 mr-1"
                     >
                             {{ firstEvent.client_name }}
                     </span>
+                    <v-icon
+                        v-if="display"
+                        color="blue"
+                    >
+                        arrow_left
+                    </v-icon>
                 </v-btn>
-            </template>
+<!--            </template>-->
+        <v-slide-x-transition>
             <div
-                class="teal lighten-5"
+                v-if="display && firstEvent"
             >
                 <event
+                    :first="true"
                     :event="firstEvent"
+                    @hide="display = false"
                 />
             </div>
-        </v-menu>
+        </v-slide-x-transition>
+
+<!--        </v-menu>-->
         <v-menu
             v-model="periodDisplay"
             v-if="events.length > 1"
             :close-on-content-click="false"
             :close-on-click="!addMode && !deleteMode && !$store.state.appointment.editedEvent"
-            :nudge-right="40"
             lazy
             transition="scale-transition"
             offset-y
