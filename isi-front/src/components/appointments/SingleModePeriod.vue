@@ -115,10 +115,11 @@
                 </v-card-title>
                 <v-card-text>
                     <event
-                        v-for="(event, index) in events"
+                        v-for="(event, index) in listEvents"
+                        :top="index === 0"
+                        :bottom="(index + 1) === listEvents.length"
                         :key="`e${event.id}${index}`"
                         :event="event"
-                        @delete="emitDelete(event)"
                     />
                 </v-card-text>
             </v-card>
@@ -153,6 +154,9 @@
             periodDisplay: false
         }),
         computed: {
+            listEvents () {
+                return this.display ? this.events.filter(item => +item.id !== +this.firstEvent.id) : this.events
+            },
             displayedEvent: {
                 get () {
                     return this.$store.state.appointment.displayedEvent
@@ -266,6 +270,12 @@
             },
             periodDisplay (val) {
                 this.dialogLockControl(val)
+            },
+            firstEvent (val) {
+                if (!this.displayedEvent) {
+                    return
+                }
+                this.display = +val.id === +this.displayedEvent.id
             }
         },
         components: {

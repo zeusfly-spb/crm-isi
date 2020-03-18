@@ -9,9 +9,9 @@
                 <v-icon
                     style="margin-top: 3px"
                     size="20"
-                    :color="fabStyle.color"
                     class="clickable"
                     title="Сменить статус записи"
+                    :color="fabStyle.color"
                 >
                     {{ fabStyle.icon }}
                 </v-icon>
@@ -24,6 +24,7 @@
                 :key="index"
                 :color="item.color"
                 :title="item.title"
+                style="z-index: 1000"
                 @click="performAction(item.status)"
             >
                 <v-icon>
@@ -55,7 +56,11 @@
 <script>
     export default {
         name: 'EventControlChip',
-        props: ['event'],
+        props: {
+            event: Object,
+            top: Boolean,
+            bottom: Boolean
+        },
         data: () => ({
             fab: false,
             statsRaw: [

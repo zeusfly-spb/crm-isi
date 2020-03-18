@@ -1,5 +1,5 @@
 <template>
-    <v-flex v-resize="onResize">
+    <v-flex>
         <v-layout
             class="ml-2 mr-2"
             align-center
@@ -328,8 +328,6 @@
             }
         },
         methods: {
-            onResize () {
-            },
             resetDeleting () {
                 this.$store.commit('CANCEL_DELETE_EVENT')
             },
