@@ -10,57 +10,44 @@
         @dragleave="dragLeave"
         @drop="dragDrop"
     >
-<!--        <v-menu-->
-<!--            v-model="display"-->
-<!--            v-if="hasEvents"-->
-<!--            :close-on-content-click="false"-->
-<!--            :close-on-click="!$store.state.appointment.editedEvent"-->
-<!--            :nudge-right="40"-->
-<!--            lazy-->
-<!--            transition="scale-transition"-->
-<!--            offset-y-->
-<!--            full-width-->
-<!--            min-width="290px"-->
-<!--        >-->
-<!--            <template v-slot:activator="{ on }">-->
-                <v-btn
-                    flat
-                    round
-                    v-if="hasEvents && !display"
-                    :draggable="firstEvent.draggable"
-                    :title="display ? 'Скрыть подробности' : 'Показать подробности'"
-                    :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
-                    :ripple="false"
-                    :id="`first-${firstEvent.id}`"
-                    @click="display = true"
-                    @dragstart="firstDragStart"
-                    @dragend="firstDragEnd"
-                    @dragenter="dragEnter"
-                    @dragover="dragEnter"
-                    @dragleave="dragEnter"
-                    @mousedown="firstDragging = true"
-                    @mouseup="firstDragging = false"
-                    @contextmenu.prevent="firstRightClick"
+
+            <v-btn
+                flat
+                round
+                v-if="hasEvents && !display"
+                :draggable="firstEvent.draggable"
+                :title="display ? 'Скрыть подробности' : 'Показать подробности'"
+                :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
+                :ripple="false"
+                :id="`first-${firstEvent.id}`"
+                @click="display = true"
+                @dragstart="firstDragStart"
+                @dragend="firstDragEnd"
+                @dragenter="dragEnter"
+                @dragover="dragEnter"
+                @dragleave="dragEnter"
+                @mousedown="firstDragging = true"
+                @mouseup="firstDragging = false"
+                @contextmenu.prevent="firstRightClick"
+            >
+                <v-icon
+                    :color="firstEvent.icon.color"
+                    class="ml-1"
                 >
-                    <v-icon
-                        :color="firstEvent.icon.color"
-                        class="ml-1"
-                    >
-                        {{ firstEvent.icon.type }}
-                    </v-icon>
-                    <span
-                        class="green--text"
-                    >
-                            {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
-                        </span>
-                    <span
-                        class="blue--text ml-1 mr-1"
-                    >
-                            {{ firstEvent.client_name }}
+                    {{ firstEvent.icon.type }}
+                </v-icon>
+                <span
+                    class="green--text"
+                >
+                        {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
                     </span>
-                </v-btn>
-<!--            </template>-->
-<!--        <v-dialog-bottom-transition>-->
+                <span
+                    class="blue--text ml-1 mr-1"
+                >
+                        {{ firstEvent.client_name }}
+                </span>
+            </v-btn>
+        <v-expand-transition>
             <div
                 v-if="display && firstEvent"
             >
@@ -70,9 +57,8 @@
                     @hide="display = false"
                 />
             </div>
-<!--        </v-dialog-bottom-transition>-->
+        </v-expand-transition>
 
-<!--        </v-menu>-->
         <v-menu
             v-model="periodDisplay"
             v-if="events.length > 1"

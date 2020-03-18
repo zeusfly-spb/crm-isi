@@ -33,31 +33,14 @@
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
             <v-spacer/>
-            <v-chip>
-                <v-icon
-                    size="20"
-                    color="green"
-                    class="clickable"
-                    title="Редактировать запись"
-                    @click="$store.commit('SET_EDITED_EVENT', event)"
-                >
-                    edit
-                </v-icon>
-                <v-icon
-                    size="20"
-                    color="red"
-                    class="clickable"
-                    title="Удалить запись"
-                    v-if="isSuperadmin"
-                    @click="$store.commit('ATTEMPT_TO_DELETE_EVENT', event)"
-                >
-                    delete
-                </v-icon>
-            </v-chip>
+            <event-control-chip
+                :event="event"
+            />
         </div>
 </template>
 <script>
     import Caller from '../leads/Caller'
+    import EventControlChip from './EventControlChip'
     export default {
         name: 'Event',
         props: {
@@ -107,7 +90,8 @@
             }
         },
         components: {
-            Caller
+            Caller,
+            EventControlChip
         }
     }
 </script>
