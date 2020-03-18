@@ -1,9 +1,5 @@
 <template>
         <div
-            v-closable="{
-                            exclude: ['button'],
-                            handler: 'onClose'
-                        }"
             class="mb-0 pb-0 event"
             draggable="true"
             style="cursor: grab"
@@ -61,39 +57,8 @@
         </div>
 </template>
 <script>
-    import EventEditor from './EventEditor'
     import Caller from '../leads/Caller'
-    let handleOutsideClick
-    const emit = (vnode, name, data) => {
-        var handlers = (vnode.data && vnode.data.on) ||
-            (vnode.componentOptions && vnode.componentOptions.listeners);
-
-        if (handlers && handlers[name]) {
-            handlers[name].fns(data);
-        }
-    }
     export default {
-        directives: {
-            closable: {
-                bind (el, binding, vnode) {
-                    handleOutsideClick = (e) => {
-                        e.stopPropagation()
-                        let senderId = e && e.path[2] && e.path[2].attributes && e.path[2].attributes.id && e.path[2].attributes.id.value || null
-                        let trueId = `first-${vnode.context.event.id}`
-                        if (senderId !== trueId) {
-                            vnode.context.$emit('hide')
-                        }
-                    }
-                    document.addEventListener('click', handleOutsideClick)
-                    document.addEventListener('touchstart', handleOutsideClick)
-                },
-                unbind () {
-                    document.removeEventListener('click', handleOutsideClick)
-                    document.removeEventListener('touchstart', handleOutsideClick)
-                }
-            }
-
-        },
         name: 'Event',
         props: {
             event: Object,
@@ -134,8 +99,7 @@
             }
         },
         components: {
-            Caller,
-            EventEditor
+            Caller
         }
     }
 </script>
