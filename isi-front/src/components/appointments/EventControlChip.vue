@@ -90,7 +90,11 @@
             }
         },
         mounted () {
-            this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - 100 + 'px'
+            if (!this.$parent.first) {
+                this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + 'px'
+            } else {
+                this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - 100 + 'px'
+            }
         },
         methods: {
             performAction (status) {
