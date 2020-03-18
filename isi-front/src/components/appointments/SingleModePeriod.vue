@@ -262,7 +262,6 @@
                 this.dialogLockControl(val)
             },
             display (val) {
-                this.dialogLockControl(val)
                 val ? this.displayedEvent = this.firstEvent : null
             },
             periodDisplay (val) {

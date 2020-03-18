@@ -18,12 +18,13 @@
             </template>
             <v-btn
                 v-for="(item, index) in statsButtons"
-                :key="index"
                 fab
                 dark
                 small
+                :key="index"
                 :color="item.color"
                 :title="item.title"
+                @click="performAction(item.status)"
             >
                 <v-icon>
                     {{ item.icon }}
@@ -75,6 +76,19 @@
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
+            }
+        },
+        methods: {
+            performAction (status) {
+                this.$store.dispatch('changeEventStatus', {
+                    event_id: this.event.id,
+                    status: status
+                })
+                    .then(() => {
+                        this.visible = false
+                        let text = `Статус записи изменен на ${{completed: 'Выполнено', cancelled: 'Отменено', active: 'Активно'}[status]}`
+                        this.$store.dispatch('pushMessage', {color: 'green', text: text})
+                    })
             }
         }
     }
