@@ -45,9 +45,7 @@
         name: 'Event',
         props: {
             event: Object,
-            first: Boolean,
-            top: Boolean,
-            bottom: Boolean
+            first: Boolean
         },
         data: () => ({
             mouseOver: false,

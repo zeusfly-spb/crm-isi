@@ -116,8 +116,6 @@
                 <v-card-text>
                     <event
                         v-for="(event, index) in listEvents"
-                        :top="index === 0"
-                        :bottom="(index + 1) === listEvents.length"
                         :key="`e${event.id}${index}`"
                         :event="event"
                     />

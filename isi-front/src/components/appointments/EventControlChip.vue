@@ -11,26 +11,33 @@
                     size="20"
                     class="clickable"
                     title="Сменить статус записи"
+                    ref="activator"
                     :color="fabStyle.color"
                 >
                     {{ fabStyle.icon }}
                 </v-icon>
             </template>
-            <v-btn
-                v-for="(item, index) in statsButtons"
-                fab
-                dark
-                small
-                :key="index"
-                :color="item.color"
-                :title="item.title"
-                style="z-index: 1000"
-                @click="performAction(item.status)"
+            <v-layout
+                column
+                style="position: fixed"
+                :style="{'top': layoutTop}"
             >
-                <v-icon>
-                    {{ item.icon }}
-                </v-icon>
-            </v-btn>
+                <v-btn
+                    v-for="(item, index) in statsButtons"
+                    fab
+                    dark
+                    small
+                    class="p-0 m-0"
+                    :key="index"
+                    :color="item.color"
+                    :title="item.title"
+                    @click="performAction(item.status)"
+                >
+                    <v-icon>
+                        {{ item.icon }}
+                    </v-icon>
+                </v-btn>
+            </v-layout>
         </v-speed-dial>
         <v-icon
             size="20"
@@ -57,9 +64,7 @@
     export default {
         name: 'EventControlChip',
         props: {
-            event: Object,
-            top: Boolean,
-            bottom: Boolean
+            event: Object
         },
         data: () => ({
             fab: false,
@@ -67,7 +72,8 @@
                 {status: 'active', color: 'blue', icon: 'event', title: 'Сменить статус на "Активно"'},
                 {status: 'completed', color: 'green', icon: 'event_available', title: 'Сменить статус на "Выполнено"'},
                 {status: 'cancelled', color: 'red', icon: 'event_busy', title: 'Сменить статус на "Отменено"'},
-            ]
+            ],
+            layoutTop: null
         }),
         computed: {
             statsButtons () {
@@ -82,6 +88,9 @@
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             }
+        },
+        mounted () {
+            this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - 100 + 'px'
         },
         methods: {
             performAction (status) {
@@ -98,3 +107,4 @@
         }
     }
 </script>
+
