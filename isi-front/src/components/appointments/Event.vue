@@ -3,7 +3,7 @@
             class="mb-0 pb-0 event"
             draggable="true"
             style="cursor: grab"
-            :class="{'teal lighten-4': mouseOver && !first}"
+            :class="{'teal lighten-4': mouseOver && !first, 'ml-2': first}"
             :title="caption"
             @mouseover="mouseOver = true"
             @mouseleave="mouseOver = false"
@@ -15,7 +15,7 @@
             >
                 {{   `${ {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[event.status]}` }}
             </v-icon>
-            <span class="blue--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
+            <span class="green--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
             <span class="pl-1 pr-1">{{ event.service && event.service.description }}</span>
             <strong>Клиент:</strong>
             <span class="pl-1 pr-1">
@@ -70,6 +70,9 @@
             editMode: false
         }),
         computed: {
+            displayedEvent () {
+                return this.$store.state.appointment.displayedEvent
+            },
             draggedEvent () {
                 return this.$store.state.appointment.draggedEvent
             },
@@ -96,6 +99,11 @@
                 evt.dataTransfer.setData("Text", this.event.id)
                 this.$store.commit('SET_DRAG_EVENT', this.event)
                 return false
+            }
+        },
+        watch: {
+            displayedEvent (val) {
+                !val || val.id !== this.event.id ? this.$emit('hide') : null
             }
         },
         components: {

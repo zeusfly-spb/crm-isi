@@ -25,15 +25,14 @@
 <!--            <template v-slot:activator="{ on }">-->
                 <v-btn
                     flat
-                    :round="!display"
-                    :icon="display"
+                    round
                     v-if="hasEvents && !display"
                     :draggable="firstEvent.draggable"
                     :title="display ? 'Скрыть подробности' : 'Показать подробности'"
                     :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
                     :ripple="false"
                     :id="`first-${firstEvent.id}`"
-                    @click="display = !display"
+                    @click="display = true"
                     @dragstart="firstDragStart"
                     @dragend="firstDragEnd"
                     @dragenter="dragEnter"
@@ -44,30 +43,21 @@
                     @contextmenu.prevent="firstRightClick"
                 >
                     <v-icon
-                        v-if="!display"
                         :color="firstEvent.icon.color"
                         class="ml-1"
                     >
                         {{ firstEvent.icon.type }}
                     </v-icon>
                     <span
-                        v-if="!display"
                         class="green--text"
                     >
                             {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
                         </span>
                     <span
-                        v-if="!display"
                         class="blue--text ml-1 mr-1"
                     >
                             {{ firstEvent.client_name }}
                     </span>
-                    <v-icon
-                        v-if="display"
-                        color="blue"
-                    >
-                        arrow_left
-                    </v-icon>
                 </v-btn>
 <!--            </template>-->
 <!--        <v-dialog-bottom-transition>-->
@@ -177,6 +167,14 @@
             periodDisplay: false
         }),
         computed: {
+            displayedEvent: {
+                get () {
+                    return this.$store.state.appointment.displayedEvent
+                },
+                set (val) {
+                    this.$store.commit('SET_DISPLAYED_EVENT', val)
+                }
+            },
             moveReady () {
                 return this.$store.getters.moveReady
             },
@@ -279,6 +277,7 @@
             },
             display (val) {
                 this.dialogLockControl(val)
+                val ? this.displayedEvent = this.firstEvent : null
             },
             periodDisplay (val) {
                 this.dialogLockControl(val)
