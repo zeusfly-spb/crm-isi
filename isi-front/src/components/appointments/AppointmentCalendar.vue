@@ -13,7 +13,8 @@
                 >
                     <v-btn
                         flat
-                        v-for="icon in icons"
+                        v-for="(icon, index) in icons"
+                        :key="index"
                         color="blue-grey darken-2"
                         :value="icon.mode"
                         :title="icon.mode !== mode ? `Переключить на режим ${icon.caption}` : ''"

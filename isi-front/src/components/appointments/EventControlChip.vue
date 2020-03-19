@@ -1,5 +1,5 @@
 <template>
-    <v-chip>
+    <v-chip disabled>
         <v-speed-dial
             v-model="fab"
             open-on-hover
@@ -19,21 +19,22 @@
             </template>
             <v-layout
                 column
-                style="position: fixed"
-                :style="{'top': layoutTop}"
+                :style="{'top': layoutTop, 'position': event.first ? 'fixed' : 'absolute'}"
             >
                 <v-btn
                     v-for="(item, index) in statsButtons"
-                    fab
+                    icon
                     dark
-                    small
-                    class="p-0 m-0"
+                    style="margin: .15em!important; padding: 0!important;"
+                    :style="{'width': event.first ? 20 : 15}"
                     :key="index"
                     :color="item.color"
                     :title="item.title"
                     @click="performAction(item.status)"
                 >
-                    <v-icon>
+                    <v-icon
+                        small
+                    >
                         {{ item.icon }}
                     </v-icon>
                 </v-btn>
@@ -67,6 +68,7 @@
             event: Object
         },
         data: () => ({
+            fabRect: null,
             fab: false,
             statsRaw: [
                 {status: 'active', color: 'blue', icon: 'event', title: 'Сменить статус на "Активно"'},
@@ -90,10 +92,11 @@
             }
         },
         mounted () {
-            if (!this.$parent.first) {
-                this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + 'px'
+            let padding = 80
+            if (this.event.first) {
+                this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - padding + 'px'
             } else {
-                this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - 100 + 'px'
+                this.layoutTop = window.pageYOffset - padding + 5 + 'px'
             }
         },
         methods: {

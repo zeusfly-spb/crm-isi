@@ -34,7 +34,7 @@
             </v-avatar>
             <v-spacer/>
             <event-control-chip
-                :event="event"
+                :event="{...event, first: first}"
             />
         </div>
 </template>
