@@ -229,7 +229,7 @@
                 this.dialogLockControl(val)
             },
             firstEvent () {
-                this.display = false
+                // this.display = false
                 // Commented feature to keep displayed event
                 // if (!this.displayedEvent) {
                 //     return

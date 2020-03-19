@@ -35,6 +35,14 @@
             >
                     {{ event.client_name }}
             </span>
+            <v-avatar
+             size="28px"
+             class="mr-1"
+             :title="event.performer.full_name"
+            >
+                <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
+                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+            </v-avatar>
         </v-btn>
         <v-expand-transition>
             <div
@@ -74,6 +82,9 @@
             },
             dialogLocked () {
                 return this.$store.state.appointment.dialogLocked
+            },
+            basePath () {
+                return this.$store.state.basePath
             }
         },
         methods: {
@@ -92,6 +103,12 @@
                     this.$store.dispatch('moveEvent')
                 }
             }
+        },
+        mounted () {
+            if (!this.displayedEvent) {
+                return
+            }
+            this.display = +this.displayedEvent.id === +this.event.id
         },
         watch: {
             display (val) {
