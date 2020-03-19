@@ -41,6 +41,7 @@
                 {text: '#', value: 'id', sortable: false, width: '5px'},
                 {text: 'Имя', value: 'name', sortable: false},
                 {text: 'Телефон', value: 'phone', sortable: false},
+                {text: 'Запись', value: null, sortable: false},
                 {text: 'Дата перезвона', value: 'phone', sortable: false},
                 {text: 'Источник', value: 'site', sortable: false},
                 {text: 'Комментарии', value: null, sortable: false},
@@ -57,6 +58,11 @@
                     .sort(this.$store.state.lead.sortByPostpones)
                     .sort(this.$store.state.lead.sortByTimeInDay)
                     .sort(this.$store.state.lead.moveFutureDown)
+                base = base.map(item => ({
+                    ...item,
+                    hasEvents: item.appointments.length > 0,
+                    lastEvent: item.appointments.length > 0 && item.appointments[item.appointments.length - 1] || null
+                }))
                 return this.currentViewMode === 'all' ? base : base.filter(item => item.status === this.currentViewMode)
             }
         },

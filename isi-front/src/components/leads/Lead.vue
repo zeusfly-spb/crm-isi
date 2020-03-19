@@ -63,6 +63,15 @@
             />
         </td>
         <td>
+            <v-icon
+                :style="{'cursor': props.item.hasEvents ? 'default' : ''}"
+                :color="props.item.hasEvents ? 'green' : 'grey lighten-2'"
+                :title="props.item.lastEvent ? `Запись на ${$moment(props.item.lastEvent.date).format('D MMMM YYYY г. HH:mm')}` : ''"
+            >
+                event
+            </v-icon>
+        </td>
+        <td>
             <template v-if="props.item.id === openLeadId">
                 <lead-postpones
                         :lead="props.item"

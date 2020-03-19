@@ -63,7 +63,7 @@
                 return this.$store.state.appointment.dragTarget
             },
             caption () {
-                return `Запись на ${this.$moment(this.event.date).format('DD MMMM YYYY г. HH:mm')}`
+                return `Запись на ${this.$moment(this.event.date).format('D MMMM YYYY г. HH:mm')}`
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
