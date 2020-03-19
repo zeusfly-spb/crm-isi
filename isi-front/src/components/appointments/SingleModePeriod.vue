@@ -269,11 +269,13 @@
             periodDisplay (val) {
                 this.dialogLockControl(val)
             },
-            firstEvent (val) {
-                if (!this.displayedEvent) {
-                    return
-                }
-                this.display = +val.id === +this.displayedEvent.id
+            firstEvent () {
+                this.display = false
+                // Commented feature to keep displayed event
+                // if (!this.displayedEvent) {
+                //     return
+                // }
+                // this.display = +val.id === +this.displayedEvent.id
             }
         },
         components: {

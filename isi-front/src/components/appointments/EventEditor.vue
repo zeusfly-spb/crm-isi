@@ -52,7 +52,6 @@
                                 <template v-slot:activator="{ on }">
                                     <sub>Дата</sub>
                                     <v-text-field
-                                        style="width: 13em"
                                         :label="date | moment('DD MMMM YYYY г.')"
                                         readonly
                                         prepend-inner-icon="event"
