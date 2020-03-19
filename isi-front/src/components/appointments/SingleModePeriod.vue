@@ -10,54 +10,12 @@
         @dragleave="dragLeave"
         @drop="dragDrop"
     >
-
-            <v-btn
-                flat
-                round
-                v-if="hasEvents && !display"
-                :draggable="firstEvent.draggable"
-                :title="display ? 'Скрыть подробности' : 'Показать подробности'"
-                :style="{'cursor': !firstEvent.draggable ? 'pointer' : firstDragging ? 'grabbing' : 'grab'}"
-                :ripple="false"
-                :id="`first-${firstEvent.id}`"
-                @click="display = true"
-                @dragstart="firstDragStart"
-                @dragend="firstDragEnd"
-                @dragenter="dragEnter"
-                @dragover="dragEnter"
-                @dragleave="dragEnter"
-                @mousedown="firstDragging = true"
-                @mouseup="firstDragging = false"
-                @contextmenu.prevent="firstRightClick"
-            >
-                <v-icon
-                    :color="firstEvent.icon.color"
-                    class="ml-1"
-                >
-                    {{ firstEvent.icon.type }}
-                </v-icon>
-                <span
-                    class="green--text"
-                >
-                        {{ $store.state.appointment.displayTime(firstEvent.date.split(' ')[1]) }}
-                    </span>
-                <span
-                    class="blue--text ml-1 mr-1"
-                >
-                        {{ firstEvent.client_name }}
-                </span>
-            </v-btn>
-        <v-expand-transition>
-            <div
-                v-if="display && firstEvent"
-            >
-                <event
-                    first
-                    :event="firstEvent"
-                    @hide="display = false"
-                />
-            </div>
-        </v-expand-transition>
+        <first-event
+            v-if="firstEvent"
+            :event="firstEvent"
+            @drag-enter="dragEnter"
+            @show-context-menu="firstRightClick"
+        />
 
         <v-menu
             v-model="periodDisplay"
@@ -140,6 +98,7 @@
     import EventContextMenu from './EventContextMenu.vue'
     import Event from './Event'
     import CalendarRecordAdder from './CalendarRecordAdder'
+    import FirstEvent from './FirstEvent'
     export default {
         name: 'SingleModePeriod',
         props: ['date', 'hour'],
@@ -281,7 +240,8 @@
         components: {
             CalendarRecordAdder,
             Event,
-            EventContextMenu
+            EventContextMenu,
+            FirstEvent
         }
     }
 </script>
@@ -289,21 +249,6 @@
     .disabled {
         color: darkgray!important;
         cursor: not-allowed;
-    }
-    .v-btn{
-        text-transform: none!important;
-    }
-    .v-btn__content {
-           padding: .5em!important;
-           margin: .5em!important;
-    }
-    .v-btn:hover:before {
-        background-color: transparent!important;
-        border: 3px solid black;
-    }
-    .v-btn:focus:before {
-        background-color: transparent!important;
-        border: 3px solid black;
     }
     .context-menu {
         cursor: default;

@@ -1,0 +1,123 @@
+<template>
+    <span>
+        <v-btn
+            flat
+            round
+            v-if="!display"
+            :draggable="event.draggable"
+            title="Показать подробности"
+            :style="{'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab'}"
+            :ripple="false"
+            :id="`first-${event.id}`"
+            @click="display = true"
+            @dragstart="dragStart"
+            @dragend="dragEnd"
+            @dragenter="dragEnter"
+            @dragover="dragEnter"
+            @dragleave="dragEnter"
+            @mousedown="dragging = true"
+            @mouseup="dragging = false"
+            @contextmenu.prevent="$emit('show-context-menu')"
+        >
+            <v-icon
+                :color="event.icon.color"
+                class="ml-1"
+            >
+                {{ event.icon.type }}
+            </v-icon>
+            <span
+                class="green--text"
+            >
+                    {{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}
+                </span>
+            <span
+                class="blue--text ml-1 mr-1"
+            >
+                    {{ event.client_name }}
+            </span>
+        </v-btn>
+        <v-expand-transition>
+            <div
+                v-if="display"
+            >
+                <event
+                    first
+                    :event="event"
+                    @hide="display = false"
+                />
+            </div>
+        </v-expand-transition>
+    </span>
+</template>
+<script>
+    import EventContextMenu from './EventContextMenu.vue'
+    import Event from './Event'
+    export default {
+        name: 'FirstEvent',
+        props: ['event'],
+        data: () => ({
+            display: false,
+            dragging: false,
+            contextMenu: false
+        }),
+        computed: {
+            displayedEvent: {
+                get () {
+                    return this.$store.state.appointment.displayedEvent
+                },
+                set (val) {
+                    this.$store.commit('SET_DISPLAYED_EVENT', val)
+                }
+            },
+            moveReady () {
+                return this.$store.getters.moveReady
+            },
+            dialogLocked () {
+                return this.$store.state.appointment.dialogLocked
+            }
+        },
+        methods: {
+            dragEnter (evt) {
+                this.$emit('drag-enter', evt)
+            },
+            dragStart (evt) {
+                this.dragging = true
+                evt.dataTransfer.setData("Text", this.event.id)
+                this.$store.commit('SET_DRAG_EVENT', this.event)
+                return false
+            },
+            dragEnd () {
+                this.dragging = false
+                if (this.moveReady) {
+                    this.$store.dispatch('moveEvent')
+                }
+            }
+        },
+        watch: {
+            display (val) {
+                val ? this.displayedEvent = this.event : null
+            }
+        },
+        components: {
+            Event,
+            EventContextMenu
+        }
+    }
+</script>
+<style scoped>
+    .v-btn{
+        text-transform: none!important;
+    }
+    .v-btn__content {
+        padding: .5em!important;
+        margin: .5em!important;
+    }
+    .v-btn:hover:before {
+        background-color: transparent!important;
+        border: 3px solid black;
+    }
+    .v-btn:focus:before {
+        background-color: transparent!important;
+        border: 3px solid black;
+    }
+</style>
