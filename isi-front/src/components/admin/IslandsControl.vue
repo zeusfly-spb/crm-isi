@@ -173,7 +173,7 @@
                         color="green darken-1"
                         flat
                         @click="submitForm"
-                        :disabled="!changed"
+                        :disabled="!changed && mode==='edit'"
                     >
                         Сохранить
                     </v-btn>

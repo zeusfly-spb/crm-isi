@@ -93,7 +93,8 @@ export function createRouter() {
             expenses: false,
             leads: true
         })
-        document.title = to.meta.title + ' ОСТРОВКИ'
+        let currentIslandName = store.getters.workingIsland && store.getters.workingIsland.name || null
+        document.title =  `${currentIslandName || 'ВСЕ'} - ${to.meta.title}`
         let targetPage = to.path.substring(1)
         store.dispatch('setCurrentPage', targetPage)
         if (targetPage === 'daily') {
