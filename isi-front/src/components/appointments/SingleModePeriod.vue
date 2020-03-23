@@ -17,86 +17,15 @@
             @drag-enter="dragEnter"
             @show-context-menu="firstRightClick"
         />
-
-<!--        <v-menu-->
-<!--            v-model="periodDisplay"-->
-<!--            v-if="events.length > 1"-->
-<!--            :close-on-content-click="false"-->
-<!--            :close-on-click="!addMode && !deleteMode && !$store.state.appointment.editedEvent"-->
-<!--            lazy-->
-<!--            transition="scale-transition"-->
-<!--            offset-y-->
-<!--            full-width-->
-<!--            min-width="290px"-->
-<!--        >-->
-<!--            <template v-slot:activator="{ on }">-->
-<!--                <v-btn-->
-<!--                    style="margin: 0; padding: 0"-->
-<!--                    small-->
-<!--                    icon-->
-<!--                    v-on="on"-->
-<!--                    color="blue"-->
-<!--                    :title="`Показать все записи часа (${events.length})`"-->
-<!--                >-->
-<!--                        <span class="subheading white&#45;&#45;text">-->
-<!--                            <strong>-->
-<!--                                + {{ `${events.length - 1}` }}-->
-<!--                            </strong>-->
-<!--                        </span>-->
-<!--                </v-btn>-->
-<!--            </template>-->
-<!--            <v-card-->
-<!--                class="round-corner teal lighten-5"-->
-<!--            >-->
-<!--                <v-card-title-->
-<!--                    class="light-blue darken-3 pt-0 pb-0"-->
-<!--                >-->
-<!--                    <span class="subheading white&#45;&#45;text">-->
-<!--                        Все записи островка {{ workingIsland && workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59-->
-<!--                    </span>-->
-<!--                    <v-spacer/>-->
-<!--                    <v-btn-->
-<!--                        outline-->
-<!--                        small-->
-<!--                        icon-->
-<!--                        flat-->
-<!--                        color="white"-->
-<!--                        @click="addMode = true"-->
-<!--                        :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"-->
-<!--                    >-->
-<!--                        <v-icon-->
-<!--                            small-->
-<!--                            color="white"-->
-<!--                        >-->
-<!--                            queue-->
-<!--                        </v-icon>-->
-<!--                    </v-btn>-->
-<!--                </v-card-title>-->
-<!--                <v-card-text>-->
-<!--                    <event-->
-<!--                        v-for="(event, index) in listEvents"-->
-<!--                        :key="`e${event.id}${index}`"-->
-<!--                        :event="event"-->
-<!--                    />-->
-<!--                </v-card-text>-->
-<!--            </v-card>-->
-<!--        </v-menu>-->
         <calendar-record-adder
             v-if="addMode"
             :date-prop="date"
             :preset-hour="hour"
             @reset="addMode = false"
         />
-        <event-context-menu
-                v-if="contextEvent"
-                v-model="contextMenu"
-                :event="firstEvent"
-                :selector="`#first-${contextEvent.id}`"
-        />
     </div>
 </template>
 <script>
-    import EventContextMenu from './EventContextMenu.vue'
     import Event from './Event'
     import CalendarRecordAdder from './CalendarRecordAdder'
     import FirstEvent from './FirstEvent'
@@ -104,26 +33,12 @@
         name: 'SingleModePeriod',
         props: ['date', 'hour'],
         data: () => ({
-            contextEvent: null,
-            contextMenu: false,
-            firstDragging: false,
             draggingOver: false,
             addMode: false,
             display: false,
             periodDisplay: false
         }),
         computed: {
-            listEvents () {
-                return this.display ? this.events.filter(item => +item.id !== +this.firstEvent.id) : this.events
-            },
-            displayedEvent: {
-                get () {
-                    return this.$store.state.appointment.displayedEvent
-                },
-                set (val) {
-                    this.$store.commit('SET_DISPLAYED_EVENT', val)
-                }
-            },
             moveReady () {
                 return this.$store.getters.moveReady
             },
@@ -132,20 +47,6 @@
             },
             draggedEvent () {
                 return this.$store.state.appointment.draggedEvent
-            },
-            firstEvent () {
-                const extend = (base) => {
-                    base.draggable = base.status !== 'completed'
-                    base.icon = {
-                        type: {active: 'event', cancelled: 'event_busy', completed: 'event_available'}[base.status],
-                        color: {active: 'blue', cancelled: 'red', completed: 'green'}[base.status]
-                    }
-                    return base
-                }
-                return this.hasEvents && extend(this.events[0])
-            },
-            hasEvents () {
-                return this.events.length
             },
             dialogLocked () {
                 return this.$store.state.appointment.dialogLocked
@@ -232,29 +133,9 @@
                 this.$emit('delete', event)
             }
         },
-        watch: {
-            contextMenu (val) {
-                this.dialogLockControl(val)
-            },
-            display (val) {
-                val ? this.displayedEvent = this.firstEvent : null
-            },
-            periodDisplay (val) {
-                this.dialogLockControl(val)
-            },
-            firstEvent () {
-                // this.display = false
-                // Commented feature to keep displayed event
-                // if (!this.displayedEvent) {
-                //     return
-                // }
-                // this.display = +val.id === +this.displayedEvent.id
-            }
-        },
         components: {
             CalendarRecordAdder,
             Event,
-            EventContextMenu,
             FirstEvent
         }
     }
@@ -268,7 +149,7 @@
         cursor: default;
     }
     .target {
-        border: 3px solid green;
+        border: 3px solid grey;
     }
     .single-mode-period {
         width: 100%;

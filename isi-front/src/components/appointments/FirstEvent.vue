@@ -67,10 +67,15 @@
                 </v-icon>
             </v-chip>
         </v-expand-x-transition>
+        <event-context-menu
+            v-model="menu"
+            :selector="`#first-${event.id}`"
+            :event="event"
+        />
     </span>
 </template>
 <script>
-    import EventContextMenuEntry from './EventContextMenuEntry.vue'
+    import EventContextMenu from './EventContextMenu'
     import Event from './Event'
     export default {
         name: 'FirstEvent',
@@ -141,7 +146,7 @@
         },
         components: {
             Event,
-            EventContextMenuEntry
+            EventContextMenu
         }
     }
 </script>
