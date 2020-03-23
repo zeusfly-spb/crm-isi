@@ -49,7 +49,7 @@
             <v-chip
                 disabled
                 outline
-                style="height: 40px; border: 2px solid lightgrey; padding: 0!important;"
+                style="height: 40px; border: 2px solid lightgrey"
                 v-if="display"
             >
                 <event

@@ -23,8 +23,13 @@
             </span>
             {{ event.client_phone | phone }}
             <caller :phone="event.client_phone"/>
-            <strong>Исполнитель:</strong>
+            <span>
+                <strong>Исполнитель:</strong>
+            </span>
             &nbsp;
+            &nbsp;
+            &nbsp;
+
             <v-avatar
                 size="36px"
                 :title="event.performer.full_name"
