@@ -45,8 +45,11 @@
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
         </v-btn>
-        <v-expand-transition>
-            <div
+        <v-expand-x-transition>
+            <v-chip
+                disabled
+                outline
+                style="height: 40px; border: 2px solid lightgrey; padding: 0!important;"
                 v-if="display"
             >
                 <event
@@ -54,8 +57,13 @@
                     :event="event"
                     @hide="display = false"
                 />
-            </div>
-        </v-expand-transition>
+                <v-icon
+                    color="grey lighten-1"
+                >
+                    cancel
+                </v-icon>
+            </v-chip>
+        </v-expand-x-transition>
     </span>
 </template>
 <script>
@@ -133,10 +141,10 @@
     }
     .v-btn:hover:before {
         background-color: transparent!important;
-        border: 3px solid black;
+        border: 1px solid black;
     }
     .v-btn:focus:before {
         background-color: transparent!important;
-        border: 3px solid black;
+        border: 1px solid black;
     }
 </style>
