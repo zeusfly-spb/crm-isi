@@ -3,6 +3,7 @@
         <v-btn
             flat
             round
+            outline
             v-if="!display"
             :draggable="event.draggable"
             title="Показать подробности"
@@ -124,6 +125,7 @@
 <style scoped>
     .v-btn{
         text-transform: none!important;
+        border: 2px solid lightgrey!important;
     }
     .v-btn__content {
         padding: .5em!important;
