@@ -10,7 +10,7 @@
             :style="{'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab'}"
             :ripple="false"
             :id="`first-${event.id}`"
-            @click="display = true"
+            @click="show"
             @dragstart="dragStart"
             @dragend="dragEnd"
             @dragenter="dragEnter"
@@ -18,7 +18,7 @@
             @dragleave="dragEnter"
             @mousedown="dragging = true"
             @mouseup="dragging = false"
-            @contextmenu.prevent="$emit('show-context-menu')"
+            @contextmenu.prevent="$emit('show-context-menu', event)"
         >
             <v-icon
                 :color="event.icon.color"
@@ -49,7 +49,7 @@
             <v-chip
                 disabled
                 outline
-                style="height: 40px; border: 2px solid lightgrey"
+                style="height: 40px; border: 1px solid lightgrey"
                 v-if="display"
             >
                 <event
@@ -61,7 +61,7 @@
                     color="grey lighten-1"
                     class="clickable"
                     title="Скрыть подробности"
-                    @click="display = false"
+                    @click="hide"
                 >
                     cancel
                 </v-icon>
@@ -100,6 +100,14 @@
             }
         },
         methods: {
+            show () {
+                this.$store.commit('SET_DISPLAYED_EVENT', this.event)
+                this.display = true
+            },
+            hide () {
+                this.$store.commit('UNSET_DISPLAYED_EVENT')
+                this.display = false
+            },
             dragEnter (evt) {
                 this.$emit('drag-enter', evt)
             },
@@ -122,11 +130,6 @@
             }
             this.display = +this.displayedEvent.id === +this.event.id
         },
-        watch: {
-            display (val) {
-                val ? this.displayedEvent = this.event : null
-            }
-        },
         components: {
             Event,
             EventContextMenu
@@ -136,7 +139,7 @@
 <style scoped>
     .v-btn{
         text-transform: none!important;
-        border: 2px solid lightgrey!important;
+        border: 1px solid lightgrey!important;
     }
     .v-btn__content {
         padding: .5em!important;

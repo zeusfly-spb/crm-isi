@@ -131,6 +131,9 @@ export default {
         }
     },
     mutations: {
+        UNSET_DISPLAYED_EVENT (state) {
+            state.displayedEvent = null
+        },
         SET_DISPLAYED_EVENT (state, event) {
             state.displayedEvent = event
         },

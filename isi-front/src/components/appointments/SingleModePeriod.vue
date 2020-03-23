@@ -11,75 +11,76 @@
         @drop="dragDrop"
     >
         <first-event
-            v-if="firstEvent"
-            :event="firstEvent"
+            v-for="(event, index) in events"
+            :key="`${index}-${event.id}`"
+            :event="event"
             @drag-enter="dragEnter"
             @show-context-menu="firstRightClick"
         />
 
-        <v-menu
-            v-model="periodDisplay"
-            v-if="events.length > 1"
-            :close-on-content-click="false"
-            :close-on-click="!addMode && !deleteMode && !$store.state.appointment.editedEvent"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-        >
-            <template v-slot:activator="{ on }">
-                <v-btn
-                    style="margin: 0; padding: 0"
-                    small
-                    icon
-                    v-on="on"
-                    color="blue"
-                    :title="`Показать все записи часа (${events.length})`"
-                >
-                        <span class="subheading white--text">
-                            <strong>
-                                + {{ `${events.length - 1}` }}
-                            </strong>
-                        </span>
-                </v-btn>
-            </template>
-            <v-card
-                class="round-corner teal lighten-5"
-            >
-                <v-card-title
-                    class="light-blue darken-3 pt-0 pb-0"
-                >
-                    <span class="subheading white--text">
-                        Все записи островка {{ workingIsland && workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59
-                    </span>
-                    <v-spacer/>
-                    <v-btn
-                        outline
-                        small
-                        icon
-                        flat
-                        color="white"
-                        @click="addMode = true"
-                        :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"
-                    >
-                        <v-icon
-                            small
-                            color="white"
-                        >
-                            queue
-                        </v-icon>
-                    </v-btn>
-                </v-card-title>
-                <v-card-text>
-                    <event
-                        v-for="(event, index) in listEvents"
-                        :key="`e${event.id}${index}`"
-                        :event="event"
-                    />
-                </v-card-text>
-            </v-card>
-        </v-menu>
+<!--        <v-menu-->
+<!--            v-model="periodDisplay"-->
+<!--            v-if="events.length > 1"-->
+<!--            :close-on-content-click="false"-->
+<!--            :close-on-click="!addMode && !deleteMode && !$store.state.appointment.editedEvent"-->
+<!--            lazy-->
+<!--            transition="scale-transition"-->
+<!--            offset-y-->
+<!--            full-width-->
+<!--            min-width="290px"-->
+<!--        >-->
+<!--            <template v-slot:activator="{ on }">-->
+<!--                <v-btn-->
+<!--                    style="margin: 0; padding: 0"-->
+<!--                    small-->
+<!--                    icon-->
+<!--                    v-on="on"-->
+<!--                    color="blue"-->
+<!--                    :title="`Показать все записи часа (${events.length})`"-->
+<!--                >-->
+<!--                        <span class="subheading white&#45;&#45;text">-->
+<!--                            <strong>-->
+<!--                                + {{ `${events.length - 1}` }}-->
+<!--                            </strong>-->
+<!--                        </span>-->
+<!--                </v-btn>-->
+<!--            </template>-->
+<!--            <v-card-->
+<!--                class="round-corner teal lighten-5"-->
+<!--            >-->
+<!--                <v-card-title-->
+<!--                    class="light-blue darken-3 pt-0 pb-0"-->
+<!--                >-->
+<!--                    <span class="subheading white&#45;&#45;text">-->
+<!--                        Все записи островка {{ workingIsland && workingIsland.name }} на {{ date | moment('DD MMMM YYYY г.') }} c {{ hour }}:00 до {{ hour }}:59-->
+<!--                    </span>-->
+<!--                    <v-spacer/>-->
+<!--                    <v-btn-->
+<!--                        outline-->
+<!--                        small-->
+<!--                        icon-->
+<!--                        flat-->
+<!--                        color="white"-->
+<!--                        @click="addMode = true"-->
+<!--                        :title="`Добавить запись на ${$moment(date).format('DD MMMM YYYY г.')}`"-->
+<!--                    >-->
+<!--                        <v-icon-->
+<!--                            small-->
+<!--                            color="white"-->
+<!--                        >-->
+<!--                            queue-->
+<!--                        </v-icon>-->
+<!--                    </v-btn>-->
+<!--                </v-card-title>-->
+<!--                <v-card-text>-->
+<!--                    <event-->
+<!--                        v-for="(event, index) in listEvents"-->
+<!--                        :key="`e${event.id}${index}`"-->
+<!--                        :event="event"-->
+<!--                    />-->
+<!--                </v-card-text>-->
+<!--            </v-card>-->
+<!--        </v-menu>-->
         <calendar-record-adder
             v-if="addMode"
             :date-prop="date"
@@ -87,10 +88,10 @@
             @reset="addMode = false"
         />
         <event-context-menu
-                v-if="hasEvents && firstEvent"
+                v-if="contextEvent"
                 v-model="contextMenu"
                 :event="firstEvent"
-                :selector="`#first-${firstEvent.id}`"
+                :selector="`#first-${contextEvent.id}`"
         />
     </div>
 </template>
@@ -103,6 +104,7 @@
         name: 'SingleModePeriod',
         props: ['date', 'hour'],
         data: () => ({
+            contextEvent: null,
             contextMenu: false,
             firstDragging: false,
             draggingOver: false,
@@ -161,16 +163,28 @@
                 return this.$store.getters.workingIsland
             },
             events () {
+                const extend = (base) => {
+                    base.draggable = base.status !== 'completed'
+                    base.icon = {
+                        type: {active: 'event', cancelled: 'event_busy', completed: 'event_available'}[base.status],
+                        color: {active: 'blue', cancelled: 'red', completed: 'green'}[base.status]
+                    }
+                    return base
+                }
                 let base = this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
-                return base.sort(this.$store.state.appointment.sortByDateTime)
+                return base
+                    .sort(this.$store.state.appointment.sortByDateTime)
+                    .map(item => extend(item))
             }
         },
         methods: {
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
-            firstRightClick () {
+            firstRightClick (event) {
+                console.dir(event)
                 if (!this.dialogLocked) {
+                    this.contextEvent = event
                     this.contextMenu = true
                 }
             },
