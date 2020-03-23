@@ -18,7 +18,7 @@
             @dragleave="dragEnter"
             @mousedown="dragging = true"
             @mouseup="dragging = false"
-            @contextmenu.prevent="$emit('show-context-menu', event)"
+            @contextmenu.prevent="menu = true"
         >
             <v-icon
                 :color="event.icon.color"
@@ -37,9 +37,9 @@
                     {{ event.client_name }}
             </span>
             <v-avatar
-             size="28px"
-             class="mr-1"
-             :title="event.performer.full_name"
+                size="28px"
+                class="mr-1"
+                :title="event.performer.full_name"
             >
                 <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
@@ -70,12 +70,13 @@
     </span>
 </template>
 <script>
-    import EventContextMenu from './EventContextMenu.vue'
+    import EventContextMenuEntry from './EventContextMenuEntry.vue'
     import Event from './Event'
     export default {
         name: 'FirstEvent',
         props: ['event'],
         data: () => ({
+            menu: false,
             display: false,
             dragging: false,
             contextMenu: false
@@ -100,6 +101,9 @@
             }
         },
         methods: {
+            dialogLockControl (val) {
+                val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
+            },
             show () {
                 this.$store.commit('SET_DISPLAYED_EVENT', this.event)
                 this.display = true
@@ -130,9 +134,14 @@
             }
             this.display = +this.displayedEvent.id === +this.event.id
         },
+        watch: {
+            menu (val) {
+                this.dialogLockControl(val)
+            }
+        },
         components: {
             Event,
-            EventContextMenu
+            EventContextMenuEntry
         }
     }
 </script>

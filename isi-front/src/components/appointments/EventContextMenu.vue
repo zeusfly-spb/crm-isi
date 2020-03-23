@@ -12,80 +12,11 @@
             full-width
             min-width="290px"
     >
-        <div class="context-menu">
-            <v-list
-                    dense
-                    class="list-style"
-            >
-                <v-list-tile
-                        class="teal lighten-5 main-list-tile"
-                >
-                    <v-list-tile-title>
-                        <v-icon
-                                class="mr-2"
-                                :color="{active: 'blue', cancelled: 'red', completed: 'green'}[event.status]"
-                        >
-                            {{ {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[event.status] }}
-                        </v-icon>
-                        <span
-                                class="green--text body-2 mr-1"
-                        >
-                                <strong>{{ event.date | moment('DD MMM YYYY г. HH:mm')}}</strong>
-                            </span>
-                        <span
-                                class="body-2"
-                        >
-                                <strong>
-                                    {{ event.client_name }}
-                                </strong>
-                            </span>
-                    </v-list-tile-title>
-                </v-list-tile>
-                <v-divider/>
-                <v-list-tile
-                        v-for="(item, index) in contextMenuItems"
-                        :key="index"
-                        :title="can(item.action) ? '' : 'Невозможно выполнить операцию'"
-                        @click="can(item.action) ? performAction(item.action) : null"
-                >
-                    <v-list-tile-title
-                            :class="{disabled: !can(item.action) }"
-                    >
-                           <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
-                        <v-icon
-                                :class="{disabled: !can(item.action) }"
-                                :color="{active: 'blue', 'done': 'green', cancel: 'red accent-2'}[item.action]"
-                        >
-                            {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
-                        </v-icon>
-                    </v-list-tile-title>
-                </v-list-tile>
-                <v-divider/>
-                <v-list-tile
-                    v-for="(item, index) in commonItems"
-                    :key="$store.state.appointment.uniqID(index)"
-                    @click="commonAction(item.action)"
-                >
-                    <v-list-tile-title
-                        :class="{disabled: !can(item.action) }"
-                    >
-                           <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
-                        <v-icon
-                            :color="item.color"
-                        >
-                            {{ item.icon  }}
-                        </v-icon>
-                    </v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </div>
+        <event-context-menu-entry :event="event"/>
     </v-menu>
 </template>
 <script>
+    import EventContextMenuEntry from './EventContextMenuEntry'
     export default {
         name: 'EventContextMenu',
         props: ['value', 'event', 'selector'],
@@ -151,6 +82,9 @@
                         return this.event.status !== 'active' || false
                 }
             }
+        },
+        components: {
+            EventContextMenuEntry
         }
     }
 </script>
