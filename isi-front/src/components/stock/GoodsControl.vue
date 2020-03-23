@@ -1,5 +1,7 @@
 <template>
-    <span>
+    <span
+            v-if="isSuperadmin"
+    >
         <v-btn icon
                title="Редактирование списка наименований товаров и цен"
                @click="activate"
@@ -20,6 +22,15 @@
             <v-card class="round-corner">
                 <v-card-title class="light-blue darken-3">
                     <span class="title white--text">Товары и цены</span>
+                    <v-spacer/>
+                    <v-icon
+                            class="clickable"
+                            color="white"
+                            @click="active = false"
+                            title="Закрыть"
+                    >
+                        close
+                    </v-icon>
                 </v-card-title>
                 <v-card-text>
                     <v-btn icon
@@ -127,7 +138,7 @@
                            v-if="edit"
                            flat
                            @click="makeAction"
-                           :disabled="JSON.stringify(backupGood) === JSON.stringify(editGood)"
+                           :disabled="JSON.stringify(backupGood) === JSON.stringify(editGood) || performing"
                     >
                         Сохранить
                     </v-btn>
@@ -135,7 +146,7 @@
                            v-if="adding"
                            flat
                            @click="makeAction"
-                           :disabled="JSON.stringify(backupGood) === JSON.stringify(editGood)"
+                           :disabled="JSON.stringify(backupGood) === JSON.stringify(editGood) || performing"
                     >
                         Добавить
                     </v-btn>
@@ -156,7 +167,14 @@
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn color="darken-1" flat @click="confirm=false">Отмена</v-btn>
-                    <v-btn color="red darken-1" flat @click="deleteGood">Удалить</v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        :disabled="performing"
+                        flat
+                        @click="deleteGood"
+                    >
+                        Удалить
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -166,6 +184,7 @@
     export default {
         name: 'GoodsControl',
         data: () => ({
+            performing: false,
             goodToDelete: null,
             dialog: false,
             newGood: {name: '', price: '', changeable_price: false},
@@ -185,6 +204,9 @@
             ]
         }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             goods () {
                 let base = this.$store.state.stock.options.products
                 return base && base.filter(item => item.description === 'good') || []
@@ -192,11 +214,16 @@
         },
         methods: {
             deleteGood () {
+                this.performing = true
                 this.$store.dispatch('deleteProduct', this.goodToDelete.id)
                     .then(() => {
                         this.confirm = false
-                        this.$emit('updated', `Наименование '${this.goodToDelete.name}' удалено`, 'green')
+                        this.$store.dispatch('pushMessage', {
+                            text: `Наименование '${this.goodToDelete.name}' удалено`,
+                            color: 'green'
+                        })
                     })
+                .finally(() => this.performing = false)
             },
             showDeleteConfirm (good) {
                 this.goodToDelete = good
@@ -223,24 +250,34 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.performing = true
                         this.$store.dispatch('addGood', this.editGood)
                             .then(() => {
                                 this.adding = false
                                 this.dialog = false
-                                this.$emit('updated', `Добавлен новый товар '${this.editGood.name}'`, 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: `Добавлен новый товар '${this.editGood.name}'`,
+                                    color: 'green'
+                                })
                             })
+                        .finally(() => this.performing = false)
                     })
             },
             saveGood () {
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.performing = true
                         this.$store.dispatch('updateProduct', this.editGood)
                             .then(() => {
                                 this.edit = false
                                 this.dialog = false
-                                this.$emit('updated', `Товар '${this.editGood.name}' отредактирован`, 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: `Товар '${this.editGood.name}' отредактирован`,
+                                    color: 'green'
+                                })
                             })
+                            .finally(() => this.performing = false)
                     })
             },
             openEditDialog (good) {

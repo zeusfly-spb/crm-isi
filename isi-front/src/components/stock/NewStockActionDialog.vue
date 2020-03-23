@@ -1,5 +1,7 @@
 <template>
-    <v-flex>
+    <v-flex
+            v-if="isSuperadmin"
+    >
         <v-dialog
             v-model="dialog"
             max-width="1000px"
@@ -123,6 +125,9 @@
             ]
         }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             isGood () {
                 return this.currentProduct && this.currentProduct.description === 'good'
             },
