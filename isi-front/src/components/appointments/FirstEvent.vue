@@ -59,6 +59,9 @@
                 />
                 <v-icon
                     color="grey lighten-1"
+                    class="clickable"
+                    title="Скрыть подробности"
+                    @click="display = false"
                 >
                     cancel
                 </v-icon>
