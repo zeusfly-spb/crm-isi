@@ -27,6 +27,9 @@ export default {
         timerId: null
     }),
     computed: {
+        waitingLeadsCount () {
+            return this.$store.getters.waitingLeadsCount
+        },
         access () {
             return this.$store.state.access
         },
@@ -67,7 +70,6 @@ export default {
                     this.showLeadsOnTitle()
                 }
             }, 2000)
-
         });
         $(window).focus(function() {
             setInterval(() => {
