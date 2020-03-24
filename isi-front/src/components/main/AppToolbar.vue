@@ -46,7 +46,7 @@
                               <span
                                   :class="{'headline': !isMobile, 'caption': isMobile}"
                               >
-                                  Островки
+                                  Crmkin
                               </span>
                                 <div
                                     class="font-weight-bold"

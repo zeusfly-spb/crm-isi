@@ -43,7 +43,11 @@
                         :class="{'mt-2': (tab.users && !tab.users.length) && tab.id !== 0}"
                     >
                         <div class="text-center">
-                            {{ tab.name }}
+                            <span
+                                :class="{'ml-5 mr-5': !tab.id}"
+                            >
+                                {{ tab.name }}
+                            </span>
                         </div>
                     </v-card-actions>
 
@@ -78,7 +82,7 @@
                 return this.$store.state.basePath
             },
             tabs () {
-                return [{id: 0, name: 'Все островки', users: [{avatar: '/img/logo.png'}]}, ...this.islands]
+                return [{id: 0, name: 'Все', users: [{avatar: '/img/logo.png'}]}, ...this.islands]
             },
             islands () {
                 let result = this.$store.state.islands
