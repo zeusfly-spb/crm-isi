@@ -149,7 +149,7 @@
         cursor: default;
     }
     .target {
-        border: 3px solid grey;
+        border: 3px solid #26A69A;
     }
     .single-mode-period {
         width: 100%;
