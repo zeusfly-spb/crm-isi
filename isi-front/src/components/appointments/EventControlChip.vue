@@ -1,5 +1,8 @@
 <template>
-    <v-chip disabled>
+    <v-chip
+        disabled
+        class="pl-1 pr-1"
+    >
         <v-speed-dial
             v-model="fab"
             open-on-hover
@@ -114,4 +117,5 @@
         }
     }
 </script>
+
 

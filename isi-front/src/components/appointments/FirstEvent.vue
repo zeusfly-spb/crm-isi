@@ -49,6 +49,7 @@
             <v-chip
                 disabled
                 outline
+                text-color="black"
                 style="height: 40px; border: 1px solid lightgrey"
                 v-if="display"
             >
@@ -151,6 +152,9 @@
     }
 </script>
 <style scoped>
+    .v-chip >>> .v-chip__content {
+        padding: 0!important;
+    }
     .v-btn{
         text-transform: none!important;
         border: 1px solid lightgrey!important;
@@ -167,4 +171,5 @@
         background-color: transparent!important;
         border: 1px solid black;
     }
+
 </style>
