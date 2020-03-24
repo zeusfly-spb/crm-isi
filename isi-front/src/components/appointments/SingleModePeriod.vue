@@ -15,7 +15,6 @@
             :key="`${index}-${event.id}`"
             :event="event"
             @drag-enter="dragEnter"
-            @show-context-menu="firstRightClick"
         />
         <calendar-record-adder
             v-if="addMode"
@@ -82,13 +81,6 @@
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
-            firstRightClick (event) {
-                console.dir(event)
-                if (!this.dialogLocked) {
-                    this.contextEvent = event
-                    this.contextMenu = true
-                }
-            },
             dragDrop (evt) {
                 evt.preventDefault()
                 evt.dataTransfer.dropEffect = "move"
@@ -149,7 +141,7 @@
         cursor: default;
     }
     .target {
-        border: 3px solid grey;
+        border: 3px solid #26A69A;
     }
     .single-mode-period {
         width: 100%;
