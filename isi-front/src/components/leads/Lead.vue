@@ -20,13 +20,13 @@
         </td>
         <td nowrap>
             <v-menu
-                    style="display: inline"
-                    v-model="contextMenu"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    lazy
-                    offset-y
-                    full-width
+                style="display: inline"
+                v-model="contextMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                lazy
+                offset-y
+                full-width
             >
                 <template v-slot:activator="{ on }">
                     <v-icon
@@ -64,9 +64,11 @@
         </td>
         <td>
             <v-icon
+                class="add"
                 :style="{'cursor': props.item.hasEvents ? 'default' : ''}"
                 :color="props.item.hasEvents ? 'green' : 'grey lighten-2'"
-                :title="props.item.lastEvent ? `Запись на ${$moment(props.item.lastEvent.date).format('D MMMM YYYY г. HH:mm')}` : ''"
+                :title="props.item.lastEvent ? `Запись на ${$moment(props.item.lastEvent.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
+                @click="$store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
             >
                 event
             </v-icon>
@@ -237,6 +239,12 @@
     }
 </script>
 <style scoped>
+    .add {
+        opacity: 1;
+    }
+    .add:hover {
+        color: red;
+    }
     .clear-td {
         padding: 0 !important;
         margin: 0 !important;
