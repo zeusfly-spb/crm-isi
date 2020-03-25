@@ -52,7 +52,7 @@
         }),
         computed: {
             events () {
-                return this.lead.appointments || []
+                return this.lead && this.lead.appointments || []
             },
             users () {
                 return this.$store.state.users

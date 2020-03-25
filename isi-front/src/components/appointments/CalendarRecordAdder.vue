@@ -228,7 +228,7 @@
                 }
                 let createdDate = this.lead && this.lead.created_at.split(' ')[0] || null
                 let lastPostponeDate = this.lead && this.lead.last_postpone && this.lead.last_postpone.date.split(' ')[0] || null
-                let lastCommentDate = this.lead && this.lead.last_comment.created_at.split(' ')[0] || null
+                let lastCommentDate = this.lead && this.lead.last_comment && this.lead.last_comment.created_at.split(' ')[0] || null
                 let realDate = this.$store.state.realDate || null
                 let dates = [createdDate, lastPostponeDate, lastCommentDate, realDate].filter(item => !!item)
                 return dates.sort((a, b) => a < b ? 1 : a > b ? -1 : 0)[0]
