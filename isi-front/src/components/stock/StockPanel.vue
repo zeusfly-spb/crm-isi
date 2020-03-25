@@ -11,7 +11,6 @@
         <v-spacer/>
     </v-layout>
     <stock-actions-table/>
-
     </v-flex>
 </template>
 <script>

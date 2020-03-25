@@ -114,9 +114,6 @@ class Lead extends Model
 
     public function getAppointmentsAttribute()
     {
-        if (!$this->attributes['appointments']) {
-            return [];
-        }
         if (Cache::has((new Appointment)->getTable()) || Cache::has('users') || Cache::has('services') || Cache::has('islands')) {
             return $this->eventsFromCache();
         } else {
