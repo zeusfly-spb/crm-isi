@@ -116,28 +116,13 @@
                         Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                     </td>
                     <td align="center" style="border-right: 0">
-                            <span v-if="workingIslandId">
-                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Кожа').count }}
-                            </span>
-                        <span v-else>
-                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Кожа').reduce((a, b) => a + b.count, 0) }}
-                            </span>
+                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) }}</span>
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
-                            <span v-if="workingIslandId">
-                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Санаформ').count }}
-                            </span>
-                        <span v-else>
-                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Санаформ').reduce((a, b) => a + b.count, 0) }}
-                            </span>
+                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }}</span>
                     </td>
                     <td align="center" style="border-left: 0">
-                            <span v-if="workingIslandId">
-                                {{ halfInsolesReserves.find(item => item.size_id === props.item && item.type.name === 'Флис').count }}
-                            </span>
-                        <span v-else>
-                                {{ halfInsolesReserves.filter(item => item.size_id === props.item && item.type.name === 'Флис').reduce((a, b) => a + b.count, 0) }}
-                            </span>
+                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Флис'}) }}</span>
                     </td>
                     <td align="center" style="border-right: 0">
                         {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
@@ -196,6 +181,15 @@
             }
         },
         methods: {
+            reservesCount ({sizeId, typeName}) {
+                if (this.workingIslandId) {
+                    let base = this.halfInsolesReserves.find(item => +item.size_id === +sizeId && item.type.name === typeName)
+                    return base && base.count || 0
+                }
+                return this.halfInsolesReserves
+                    .filter(item => +item.size_id === +sizeId && item.type.name === typeName)
+                    .reduce((a, b) => a + b.count, 0)
+            },
             currentCount (productName, typeName, sizeId) {
                 let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
