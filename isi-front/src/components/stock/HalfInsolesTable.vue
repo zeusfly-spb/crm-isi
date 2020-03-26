@@ -143,13 +143,13 @@
                         {{ findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
                     </td>
                     <td align="center" style="border-right: 0">
-                        {{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) + findActionCount('receipt', 'Полустельки', 'Кожа', props.item) - findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
+                        {{ countAfter({sizeId: props.item, typeName: 'Кожа'}) }}
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
-                        {{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) + findActionCount('receipt', 'Полустельки', 'Санаформ', props.item) - findActionCount('expense', 'Полустельки', 'Санаформ', props.item) }}
+                        {{ countAfter({sizeId: props.item, typeName: 'Санаформ'}) }}
                     </td>
                     <td align="center" style="border-left: 0">
-                        {{ reservesCount({sizeId: props.item, typeName: 'Флис'}) + findActionCount('receipt', 'Полустельки', 'Флис', props.item) - findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
+                        {{ countAfter({sizeId: props.item, typeName: 'Флис'}) }}
                     </td>
                 </tr>
             </template>
@@ -178,6 +178,9 @@
             }
         },
         methods: {
+            countAfter ({sizeId, typeName}) {
+                return this.reservesCount({sizeId: sizeId, typeName: typeName}) + this.findActionCount('receipt', 'Полустельки', typeName, sizeId) - this.findActionCount('expense', 'Полустельки', typeName, sizeId)
+            },
             reservesCount ({sizeId, typeName}) {
                 if (this.workingIslandId) {
                     let base = this.halfInsolesReserves.find(item => +item.size_id === +sizeId && item.type.name === typeName)
