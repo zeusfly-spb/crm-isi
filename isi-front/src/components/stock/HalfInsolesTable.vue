@@ -143,13 +143,13 @@
                         {{ findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
                     </td>
                     <td align="center" style="border-right: 0">
-                        {{ currentCount('Полустельки', 'Кожа', props.item) }}
+                        {{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) + findActionCount('receipt', 'Полустельки', 'Кожа', props.item) - findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
-                        {{ currentCount('Полустельки', 'Санаформ', props.item) }}
+                        {{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) + findActionCount('receipt', 'Полустельки', 'Санаформ', props.item) - findActionCount('expense', 'Полустельки', 'Санаформ', props.item) }}
                     </td>
                     <td align="center" style="border-left: 0">
-                        {{ currentCount('Полустельки', 'Флис', props.item) }}
+                        {{ reservesCount({sizeId: props.item, typeName: 'Флис'}) + findActionCount('receipt', 'Полустельки', 'Флис', props.item) - findActionCount('expense', 'Полустельки', 'Флис', props.item) }}
                     </td>
                 </tr>
             </template>
@@ -161,9 +161,6 @@
     export default {
         name: 'HalfInsolesTable',
         computed: {
-            currentReserves () {
-                return this.$store.getters.currentReserves
-            },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -190,14 +187,12 @@
                     .filter(item => +item.size_id === +sizeId && item.type.name === typeName)
                     .reduce((a, b) => a + b.count, 0)
             },
-            currentCount (productName, typeName, sizeId) {
-                let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
-                return target && target.count || 0
-            },
             findActionCount (action, productName, typeName, sizeId) {
-                const nameOfType = (type_id) => this.$store.state.stock.options.types && this.$store.state.stock.options.types.find(item => +item.id === +type_id).name
+                const nameOfType = (type_id) => this.$store.state.stock.options.types && this.$store.state.stock.options.types
+                    .find(item => +item.id === +type_id).name
                 const add = (a, b) => +a + +b.count
-                let currentEntityActions = this.stockActions.filter(item => item.type === action && item.product.name === productName && nameOfType(item.type_id) === typeName && +item.size_id === +sizeId)
+                let currentEntityActions = this.stockActions
+                    .filter(item => item.type === action && item.product.name === productName && nameOfType(item.type_id) === typeName && +item.size_id === +sizeId)
                 return currentEntityActions.reduce(add, 0) || 0
             }
         }

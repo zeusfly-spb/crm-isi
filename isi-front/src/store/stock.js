@@ -126,7 +126,8 @@ export default {
             let result = []
             if (rootState.workingIslandId) {
                 state.reserves.forEach(item => {
-                    let positionOperations = state.stockActions.filter(action => action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
+                    let positionOperations = state.stockActions
+                        .filter(action => +action.product_id === +item.product_id && +action.type_id === +item.type_id && +action.size_id === +item.size_id)
                     const add = (a, b) => b.type === 'receipt' ? +a + +b.count : +a - +b.count
                     let clone = JSON.parse(JSON.stringify(item))
                     clone.count += positionOperations.reduce(add, 0)
@@ -134,10 +135,12 @@ export default {
                 })
             } else {
                 state.reserves.forEach(item => {
-                    let positionOperations = state.stockActions.filter(action => action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
+                    let positionOperations = state.stockActions
+                        .filter(action => action.product_id === item.product_id && action.type_id === item.type_id && action.size_id === item.size_id)
                     const add = (a, b) => b.type === 'receipt' ? +a + +b.count : +a - +b.count
                     let clone = JSON.parse(JSON.stringify(item))
-                    let count = state.reserves.filter(reserve => reserve.product_id === item.product_id && reserve.type_id === item.type_id && reserve.size_id === item.size_id)
+                    let count = state.reserves
+                        .filter(reserve => reserve.product_id === item.product_id && reserve.type_id === item.type_id && reserve.size_id === item.size_id)
                         .reduce((a, b) => a + b.count, 0)
                     clone.count = count + positionOperations.reduce(add, 0)
                     result.push(clone)
