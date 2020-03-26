@@ -114,7 +114,7 @@
                     status: `${{done: 'completed', cancel: 'cancelled', active: 'active'}[action]}`
                 })
                     .then(() => {
-                        this.visible = false
+                        this.$emit('changed')
                         let text = `Статус записи изменен на ${{done: 'Выполнено', cancel: 'Отменено', active: 'Активно'}[action]}`
                         this.$store.commit('SEND_EVENT_MESSAGE', {color: 'green', text: text})
                     })

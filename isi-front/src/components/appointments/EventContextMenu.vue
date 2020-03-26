@@ -12,7 +12,10 @@
             full-width
             min-width="290px"
     >
-        <event-context-menu-entry :event="event"/>
+        <event-context-menu-entry
+            :event="event"
+            @changed="visible = false"
+        />
     </v-menu>
 </template>
 <script>
