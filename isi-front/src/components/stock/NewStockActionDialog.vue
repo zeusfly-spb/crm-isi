@@ -9,7 +9,7 @@
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2"
                        @click="showDialog"
-                       :disabled="workingIslandId === 0"
+                       :disabled="!workingIslandId"
                 >
                     Новая операция
                 </v-btn>
