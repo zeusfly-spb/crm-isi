@@ -117,73 +117,112 @@
                         Размер <strong>{{ normalInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                     </td>
                     <td align="center" style="border-right: 0">
-                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) }}</span>
+                        <span
+                            :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Кожа'}) }"
+                        >
+                            {{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) }}
+                        </span>
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
-                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }}</span>
+                        <span
+                            :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }"
+                        >
+                            {{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }}
+                        </span>
                     </td>
                     <td align="center" style="border-left: 0">
-                        <span>{{ reservesCount({sizeId: props.item, typeName: 'Флис'}) }}</span>
+                        <span
+                            :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Флис'}) }"
+                        >
+                            {{ reservesCount({sizeId: props.item, typeName: 'Флис'}) }}
+                        </span>
                     </td>
                     <td align="center" style="border-right: 0">
                         <span
-                            :class="{'accented receipt': !!findActionCount('receipt', 'Стельки', 'Кожа', props.item)}"
+                            :class="{
+                                'accented receipt': !!findActionCount('receipt', 'Стельки', 'Кожа', props.item),
+                                'empty': !findActionCount('receipt', 'Стельки', 'Кожа', props.item)
+                            }"
                         >
                             {{ findActionCount('receipt', 'Стельки', 'Кожа', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
                         <span
-                            :class="{'accented receipt': !!findActionCount('receipt', 'Санаформ', 'Кожа', props.item)}"
+                            :class="{
+                                'accented receipt': !!findActionCount('receipt', 'Санаформ', 'Кожа', props.item),
+                                'empty': !findActionCount('receipt', 'Санаформ', 'Кожа', props.item)
+                            }"
                         >
                             {{ findActionCount('receipt', 'Стельки', 'Санаформ', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0">
                         <span
-                            :class="{'accented receipt': !!findActionCount('receipt', 'Флис', 'Кожа', props.item)}"
+                            :class="{
+                                'accented receipt': !!findActionCount('receipt', 'Флис', 'Кожа', props.item),
+                                'empty': !findActionCount('receipt', 'Флис', 'Кожа', props.item)
+                            }"
                         >
                             {{ findActionCount('receipt', 'Стельки', 'Флис', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-right: 0">
                         <span
-                            :class="{'accented expense': !!findActionCount('expense', 'Стельки', 'Кожа', props.item) }"
+                            :class="{
+                                'accented expense': !!findActionCount('expense', 'Стельки', 'Кожа', props.item),
+                                'empty': !findActionCount('expense', 'Стельки', 'Кожа', props.item)
+                            }"
                         >
                             {{ findActionCount('expense', 'Стельки', 'Кожа', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
                         <span
-                            :class="{'accented expense': !!findActionCount('expense', 'Стельки', 'Санаформ', props.item) }"
+                            :class="{
+                                'accented expense': !!findActionCount('expense', 'Стельки', 'Санаформ', props.item),
+                                'empty': !findActionCount('expense', 'Стельки', 'Санаформ', props.item)
+                            }"
                         >
                             {{ findActionCount('expense', 'Стельки', 'Санаформ', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0">
                         <span
-                            :class="{'accented expense': !!findActionCount('expense', 'Стельки', 'Флис', props.item) }"
+                            :class="{
+                                'accented expense': !!findActionCount('expense', 'Стельки', 'Флис', props.item),
+                                'empty': !findActionCount('expense', 'Стельки', 'Флис', props.item)
+                            }"
                         >
                             {{ findActionCount('expense', 'Стельки', 'Флис', props.item) }}
                         </span>
                     </td>
                     <td align="center" style="border-right: 0">
                         <span
-                            :class="{'accented': countChanged({sizeId: props.item, typeName: 'Кожа'}) }"
+                            :class="{
+                                'accented': countChanged({sizeId: props.item, typeName: 'Кожа'}),
+                                'empty': !countAfter({sizeId: props.item, typeName: 'Кожа'})
+                            }"
                         >
                             {{ countAfter({sizeId: props.item, typeName: 'Кожа'}) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0; border-right: 0">
                         <span
-                            :class="{'accented': countChanged({sizeId: props.item, typeName: 'Санаформ'}) }"
+                            :class="{
+                                'accented': countChanged({sizeId: props.item, typeName: 'Санаформ'}),
+                                'empty': !countAfter({sizeId: props.item, typeName: 'Санаформ'})
+                            }"
                         >
                             {{ countAfter({sizeId: props.item, typeName: 'Санаформ'}) }}
                         </span>
                     </td>
                     <td align="center" style="border-left: 0">
                         <span
-                            :class="{'accented': countChanged({sizeId: props.item, typeName: 'Флис'}) }"
+                            :class="{
+                                'accented': countChanged({sizeId: props.item, typeName: 'Флис'}),
+                                'empty': !countAfter({sizeId: props.item, typeName: 'Флис'})
+                            }"
                         >
                             {{ countAfter({sizeId: props.item, typeName: 'Флис'}) }}
                         </span>
@@ -271,5 +310,8 @@
     }
     .expense {
         color: #D32F2F;
+    }
+    .empty {
+        color: #BDBDBD;
     }
 </style>
