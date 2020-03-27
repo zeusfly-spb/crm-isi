@@ -31,9 +31,33 @@
             <template v-slot:items="props">
                 <tr style="height: 1em">
                     <td align="center">{{ goodName(props.item) }}</td>
-                    <td align="center">{{ goodsReserves.find(item => item.product_id === props.item).count }}</td>
-                    <td align="center">{{ goodActionCount(props.item, 'receipt') }}</td>
-                    <td align="center">{{ goodActionCount(props.item, 'expense') }}</td>
+                    <td align="center">
+                        <span
+                            :class="{'empty': !reservesCount(props.item)}"
+                        >
+                            {{ reservesCount(props.item) }}
+                        </span>
+                    </td>
+                    <td align="center">
+                        <span
+                            :class="{
+                                'accented receipt': !!goodActionCount(props.item, 'receipt'),
+                                'empty': !goodActionCount(props.item, 'receipt')
+                            }"
+                        >
+                            {{ goodActionCount(props.item, 'receipt') }}
+                        </span>
+                    </td>
+                    <td align="center">
+                        <span
+                            :class="{
+                                'accented expense':  !!goodActionCount(props.item, 'expense'),
+                                'empty': !goodActionCount(props.item, 'expense')
+                            }"
+                        >
+                            {{ goodActionCount(props.item, 'expense') }}
+                        </span>
+                    </td>
                     <td align="center">{{ goodsReserves.find(item => item.product_id === props.item).count + goodActionCount(props.item, 'receipt') - goodActionCount(props.item, 'expense') }}</td>
                 </tr>
             </template>
@@ -62,6 +86,11 @@
             }
         },
         methods: {
+            reservesCount (productId) {
+                let base = this.goodsReserves
+                    .find(item => item.product_id === productId)
+                return base && base.count || 0
+            },
             goodActionCount (productId, action) {
                 let actions = this.stockActions.filter(item => +item.product_id === +productId && item.type === action)
                 const add = (a, b) => +a + +b.count
@@ -99,5 +128,17 @@
     }
     .clickable:hover {
         opacity: 1;
+    }
+    .accented {
+        font-weight: bold;
+    }
+    .receipt {
+        color: #388E3C;
+    }
+    .expense {
+        color: #D32F2F;
+    }
+    .empty {
+        color: #BDBDBD;
     }
 </style>
