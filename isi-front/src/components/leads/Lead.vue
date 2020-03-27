@@ -54,8 +54,9 @@
             />
         </td>
         <td nowrap>
-            <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>
-            <span v-else>{{ props.item.phone | phone }}</span>
+<!--            <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>-->
+<!--            <span v-else>{{ props.item.phone | phone }}</span>-->
+            <phone-viewer :phone="props.item.phone"/>
             <caller
                 :phone="props.item.phone"
                 :lead="props.item"
@@ -158,6 +159,7 @@
     import LeadPostpones from './LeadPostpones'
     import InteractionsCard from '../customers/InteractionsCard'
     import LeadContextMenuEntry from './LeadContextMenuEntry'
+    import PhoneViewer from '../main/PhoneViewer'
     export default {
         name: 'Lead',
         props: ['props'],
@@ -234,7 +236,8 @@
             LeadStatus,
             LeadPostpones,
             InteractionsCard,
-            LeadContextMenuEntry
+            LeadContextMenuEntry,
+            PhoneViewer
         }
     }
 </script>
