@@ -59,6 +59,7 @@
                     @hide="display = false"
                 />
                 <v-icon
+                    small
                     color="grey lighten-1"
                     class="clickable"
                     title="Скрыть подробности"
