@@ -9,6 +9,7 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class LeadController extends Controller
@@ -39,9 +40,14 @@ class LeadController extends Controller
             }
 
         } else {
-            $leads = Lead::with('comments', 'user', 'postpones')
-                ->where('status', '<>', 'done')
-                ->get()->reverse()->values()->toArray();
+            $leads = Cache::rememberForever('leads_list', function () {
+                return Lead::with('comments', 'user', 'postpones')
+                    ->where('status', '<>', 'done')
+                    ->get()->reverse()->values()->toArray();
+            });
+//            $leads = Lead::with('comments', 'user', 'postpones')
+//                ->where('status', '<>', 'done')
+//                ->get()->reverse()->values()->toArray();
         }
         return response()->json($leads);
     }
