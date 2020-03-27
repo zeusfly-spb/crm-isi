@@ -1,7 +1,10 @@
 <template>
     <span>
         <span
-            :class="{'open': open}"
+            :class="{
+                'open': open,
+                'closed': !open
+            }"
         >
             {{ displayPhone }}
         </span>
@@ -41,6 +44,9 @@
 </script>
 <style scoped>
     .open {
-        font-weight: bold;
+        color: black;
+    }
+    .closed {
+        opacity: .8;
     }
 </style>
