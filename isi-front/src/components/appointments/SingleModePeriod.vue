@@ -63,6 +63,11 @@
                 return this.$store.getters.workingIsland
             },
             events () {
+                const compareHour = (item) => {
+                    let dateEq = item.date && item.date.split(' ')[0] === this.date || false
+                    let hourEq = item.date && item.date.split(' ')[1] && +item.date.split(' ')[1].split(':')[0] === +this.hour || false
+                    return dateEq && hourEq
+                }
                 const extend = (base) => {
                     base.draggable = base.status !== 'completed'
                     base.icon = {
@@ -71,7 +76,8 @@
                     }
                     return base
                 }
-                let base = this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                let base = this.appointments && this.appointments
+                    .filter(item => compareHour(item)) || []
                 return base
                     .sort(this.$store.state.appointment.sortByDateTime)
                     .map(item => extend(item))
