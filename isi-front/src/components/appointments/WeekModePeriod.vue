@@ -39,8 +39,13 @@
                 return this.workingIsland && this.workingIsland.cabinets || []
             },
             appointments () {
+                const compareItem = (item) => {
+                    let dateEq = item.date && item.date.split(' ')[0] === this.date || false
+                    let hourEq = item.date && item.date.split(' ')[1] && +item.date.split(' ')[1].split(':')[0] === +this.hour || false
+                    return dateEq && hourEq
+                }
                 let base = this.$store.state.appointment.appointments
-                    .filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour)
+                    .filter(item => compareItem(item))
                 if (this.single) {
                     return base.filter(item => item.cabinet_id === null)
                 } else {
