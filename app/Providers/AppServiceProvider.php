@@ -52,6 +52,6 @@ class AppServiceProvider extends ServiceProvider
         Sick::observe(SickObserver::class);
         Vacation::observe(VacationObserver::class);
         WorkDay::observe(WorkDayObserver::class);
-        Lead::observe(LeadObserver::class);
+//        Lead::observe(LeadObserver::class);
     }
 }
