@@ -47,16 +47,16 @@
                             />
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
-                        <td>{{ props.item.time_start }}</td>
-                        <td>{{ props.item.time_finish || '' }}</td>
+                        <td>{{ displayTime(props.item.time_start) }}</td>
+                        <td>{{ displayTime(props.item.time_finish) || '' }}</td>
                         <td align="center">
                             <v-flex v-for="timeBreak in props.item.time_breaks"
                                     :key="timeBreak.id"
                                     class="text-xs-center"
                             >
-                                <span>{{ timeBreak.start_time }}</span>
+                                <span>{{ displayTime(timeBreak.start_time) }}</span>
                                 -
-                                <span>{{ timeBreak.finish_time }}</span>
+                                <span>{{ displayTime(timeBreak.finish_time) }}</span>
                             </v-flex>
                         </td>
 
@@ -172,6 +172,9 @@
             }
         },
         methods: {
+            displayTime (fullTime) {
+                return this.$store.state.appointment.displayTime(fullTime)
+            },
             updateHours (workday) {
                 if (!this.isSuperAdmin) return
                 this.$store.dispatch('updateWorkDay', {
