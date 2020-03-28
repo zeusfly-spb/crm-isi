@@ -15,6 +15,7 @@ import catalog from './catalog'
 import appointment from './appointment'
 import lead from './lead'
 import layout from './layout'
+import deal from './deal'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ export const store = new Vuex.Store({
         catalog,
         appointment,
         lead,
-        layout
+        layout,
+        deal
     },
     state: {
         loading: 0,

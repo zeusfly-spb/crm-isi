@@ -40,17 +40,14 @@ class DealController extends Controller
             $queryBuilder = $queryBuilder->where('user_id', $user_id);
         }
         return response()->json($queryBuilder->get()->toArray());
-//        $deals = Cache::get('deals')->where('created_at', 'LIKE', $date . '%');
-//        if ($island_id) {
-//            $deals = $deals->where('island_id', $island_id);
-//        }
-//        $deals->transform(function ($item) {
-//            $item['user'] = Cache::get('users')->where('id', $item->user_id)->first();
-//            $item['customer'] = Cache::get('customers')->where('id', $item->customer_id)->first();
-//            $item['action'] = Cache::get('deal_actions')->where('id', $item->deal_action_id)->first();
-//            return $item;
-//        });
-//        return response()->json($deals->toArray());
+    }
+
+    public function updateCustomerId(Request $request)
+    {
+        $deal = Deal::find($request->deal_id);
+        $deal->update(['customer_id' => $request->customer_id]);
+        $deal->load('user', 'customer', 'action');
+        return response()->json($deal->toArray());
     }
 
     public function create(Request $request)

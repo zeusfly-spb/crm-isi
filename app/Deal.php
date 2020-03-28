@@ -76,5 +76,4 @@ class Deal extends Model
     {
         return $this->action->type ?? null;
     }
-
 }

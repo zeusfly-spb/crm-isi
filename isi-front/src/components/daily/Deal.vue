@@ -47,36 +47,10 @@
             />
         </td>
         <td v-if="!isTotal">
-            <span
-                @click="switchEditMode('customer')"
-            >
-                <span v-if="!editMode.customer"
-                      :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
-                      :class="{clickable: canUpdate}"
-                >
-                    {{ deal.customer.full_name }}
-                </span>
-                <v-select
-                    v-else
-                    autofocus
-                    :items="customers"
-                    v-model="selectedCustomerId"
-                    height="1em"
-                    style="width: 25em"
-                    item-text="full_name"
-                    item-value="id"
-                    single-line
-                    @focus="focused('customer')"
-                    @blur="blur('customer')"
-                    @change="customerSelected"
-                >
-                    <template v-slot:item="data">
-                        <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
-                            {{ data.item.full_name }}
-                        </span>
-                    </template>
-                </v-select>
-            </span>
+            <customer-updater
+                    :deal="deal"
+                    @new="newCustomer = true"
+            />
         </td>
         <td v-if="!isTotal">
             {{ deal.action && deal.action.text || '' }}
@@ -183,6 +157,8 @@
 <script>
     import NewCustomerDialog from './NewCustomerDialog'
     import DealUpdater from './DealUpdater'
+    import CustomerUpdater from './CustomerUpdater'
+
     export default {
         name: 'Deal',
         props: ['deal'],
@@ -317,7 +293,8 @@
         },
         components: {
             NewCustomerDialog,
-            DealUpdater
+            DealUpdater,
+            CustomerUpdater
         }
     }
 </script>
