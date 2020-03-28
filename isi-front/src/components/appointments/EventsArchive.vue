@@ -47,7 +47,7 @@
                                 {{ props.item.client_name }}
                             </td>
                             <td>
-                                {{ props.item.client_phone | phone}}
+                                <phone-viewer :phone="props.item.client_phone"/>
                             </td>
                             <td>
                                 <v-avatar
@@ -72,7 +72,8 @@
     </v-flex>
 </template>
 <script>
-    export default {
+    import PhoneViewer from "../main/PhoneViewer"
+        export default {
         name: 'EventsArchive',
         data: () => ({
             currentIndex: 0,
@@ -107,6 +108,9 @@
             statusEvents (status) {
                 return this.events && this.events.filter(event => event.status === status)
             }
+        },
+        components: {
+            PhoneViewer
         }
     }
 </script>
