@@ -57,7 +57,11 @@
         </td>
         <td v-if="!isTotal">
             <span>
-                <deal-updater :deal="deal" @activated="focused" @deactivated="blur('insole')"/>
+                <deal-updater
+                        :deal="deal"
+                        @activated="focused"
+                        @deactivated="blur('insole')"
+                />
             </span>
         </td>
         <td>
@@ -227,10 +231,16 @@
             setNewCustomer (customer) {
                 this.newCustomer = false
                 this.selectedCustomerId = this.deal.customer_id = customer.id
-                this.$store.dispatch('updateDeal', this.deal)
+                this.$store.dispatch('updateDealCustomerId', {
+                    deal_id: this.deal.id,
+                    customer_id: customer.id
+                })
                     .then(() => {
-                        this.blur('customer')
-                        this.$emit('snack', 'Значение "Клиент" изменено', 'green')
+                        this.blur()
+                        this.$store.dispatch('pushMessage', {
+                            text: 'Значение "Клиент" изменено',
+                            color: 'green'
+                        })
                     })
             },
             cancelNewCustomer () {

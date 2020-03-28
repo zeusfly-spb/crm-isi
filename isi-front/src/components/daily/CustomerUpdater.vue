@@ -83,8 +83,6 @@
                         this.$emit('new')
                         break
                     default:
-                        // this.deal.customer_id = this.selectedCustomerId
-                        // const restore = (deal) => ({...deal, size_id: deal.size && deal.size.id || null})
                         this.$store.dispatch('updateDealCustomerId', {
                             deal_id: this.deal.id,
                             customer_id: this.selectedCustomerId
