@@ -47,16 +47,17 @@
                                 {{ props.item.client_name }}
                             </td>
                             <td>
-                                <phone-viewer :phone="props.item.client_phone"/>
+                                <phone-viewer
+                                        :phone="props.item.client_phone"
+                                />
+                                <caller
+                                        :phone="props.item.client_phone"
+                                />
                             </td>
                             <td>
-                                <v-avatar
-                                    size="36px"
-                                    :title="props.item.performer.full_name"
-                                >
-                                    <img :src="basePath + props.item.performer.avatar" alt="Фото" v-if="props.item.performer.avatar">
-                                    <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-                                </v-avatar>
+                                <user-avatar
+                                        :user="props.item.performer"
+                                />
                             </td>
                             <td>
                                 {{ props.item.date | moment('D MMMM YYYY г. HH:mm') }}
@@ -72,7 +73,10 @@
     </v-flex>
 </template>
 <script>
+    import UserAvatar from "../main/UserAvatar";
     import PhoneViewer from "../main/PhoneViewer"
+    import Caller from "../leads/Caller";
+
         export default {
         name: 'EventsArchive',
         data: () => ({
@@ -110,7 +114,9 @@
             }
         },
         components: {
-            PhoneViewer
+            PhoneViewer,
+            UserAvatar,
+            Caller
         }
     }
 </script>
