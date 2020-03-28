@@ -173,6 +173,9 @@
         },
         methods: {
             displayTime (fullTime) {
+                if (!fullTime || !fullTime.length) {
+                    return ''
+                }
                 return this.$store.state.appointment.displayTime(fullTime)
             },
             updateHours (workday) {
