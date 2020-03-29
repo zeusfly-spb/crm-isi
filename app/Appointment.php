@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class Appointment extends Model
 {
     protected $guarded = [];
-    protected $appends = ['status'];
+    protected $appends = ['status', 'last_comment'];
     protected $casts = [
         'comments' => 'array'
     ];
@@ -54,5 +54,13 @@ class Appointment extends Model
         $comments = $this->comments ?? [];
         array_push($comments, $newComment);
         return $this->update(['comments' => $comments]);
+    }
+
+    public function getLastCommentAttribute()
+    {
+        if (!$this->comments) {
+            return null;
+        }
+        return $this->comments[count($this->comments) - 1];
     }
 }

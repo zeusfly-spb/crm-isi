@@ -55,6 +55,11 @@
                                 />
                             </td>
                             <td>
+                                <event-comments
+                                        :event="props.item"
+                                />
+                            </td>
+                            <td>
                                 <user-avatar
                                         :user="props.item.performer"
                                 />
@@ -76,7 +81,7 @@
     import UserAvatar from "../main/UserAvatar";
     import PhoneViewer from "../main/PhoneViewer"
     import Caller from "../leads/Caller";
-
+    import EventComments from "./EventComments";
         export default {
         name: 'EventsArchive',
         data: () => ({
@@ -90,6 +95,7 @@
                 {text: 'Услуга', value: 'service_id'},
                 {text: 'Клиент', value: 'client_name'},
                 {text: 'Телефон', value: 'client_phone'},
+                {text: 'Комментарии', value: null},
                 {text: 'Исполнитель', value: 'performer_id'},
                 {text: 'Дата/Время', value: 'date'},
             ]
@@ -116,7 +122,8 @@
         components: {
             PhoneViewer,
             UserAvatar,
-            Caller
+            Caller,
+            EventComments
         }
     }
 </script>
