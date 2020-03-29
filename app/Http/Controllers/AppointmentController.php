@@ -22,6 +22,14 @@ class AppointmentController extends Controller
         'cancelled' => '"отменена"'
     ];
 
+    public function addComment(Request $request)
+    {
+        $event = Appointment::find($request->event_id);
+        $event->addComment($request->text, $request->user_id);
+        $event->load('user', 'performer', 'service', 'lead', 'island');
+        return response()->json($event->toArray());
+    }
+
     public function change_status(Request $request)
     {
         $actionUser = User::find($request->user_id);
@@ -41,6 +49,9 @@ class AppointmentController extends Controller
         } else {
             Log::info('Querying from mysql user entry for fill system comment');
             $actionUser = User::find($request->user_id);
+        }
+        if ($actionUser->id == 1) {
+            $actionUser->full_name = 'Администратор';
         }
         $event = Appointment::find($request->event_id);
         $eventTimeArr = explode(':', explode(' ', $event->date)[1]);

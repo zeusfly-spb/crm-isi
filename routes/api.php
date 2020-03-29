@@ -162,5 +162,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_appointment', 'AppointmentController@delete');
     Route::post('move_appointment', 'AppointmentController@move');
     Route::post('appointment_change_status', 'AppointmentController@change_status');
-
+    Route::post('add_appointment_comment', 'AppointmentController@addComment');
 });

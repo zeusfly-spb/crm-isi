@@ -11,6 +11,7 @@
         </span>
         <span
             v-if="comments.length > 1"
+            class="count"
         >
             ({{ comments.length }})
         </span>
@@ -18,6 +19,7 @@
             v-if="list"
             v-model="list"
             max-width="1000px"
+            :persistent="addMode"
         >
             <v-card
                 class="round-corner"
@@ -40,7 +42,13 @@
                         close
                     </v-icon>
                 </v-card-title>
-                <v-card-text>
+                <v-card-text
+                        class="list-entry"
+                >
+                    <event-comment-adder
+                            v-model="addMode"
+                            :event="event"
+                    />
                     <v-data-table
                         :items="comments"
                         hide-actions
@@ -76,16 +84,24 @@
                         </template>
                     </v-data-table>
                 </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="darken-1" flat @click="hideList">
+                        Закрыть
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
 </template>
 <script>
+    import EventCommentAdder from "./EventCommentAdder";
     import UserAvatar from "../main/UserAvatar";
     export default {
         name: 'EventComments',
         props: ['event'],
         data: () => ({
+            addMode: false,
             list: false
         }),
         computed: {
@@ -116,13 +132,27 @@
                 this.list = false
             }
         },
+        watch: {
+            list () {
+                this.addMode = false
+            }
+        },
         components: {
-            UserAvatar
+            UserAvatar,
+            EventCommentAdder
         }
     }
 </script>
 <style scoped>
+    .list-entry {
+        padding-top: 0!important;
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .count {
+        color: #2e7d32;
+    }
     .system {
-        color: #00695C;
+        color: #01579B;
     }
 </style>
