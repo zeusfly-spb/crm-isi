@@ -13,6 +13,7 @@
                     :error-messages="errors.collect('text')"
                     v-validate="'required'"
                     @keyup.esc.stop="deactivate"
+                    @keyup.enter="saveNewComment"
             />
                 <v-btn
                         small

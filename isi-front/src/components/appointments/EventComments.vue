@@ -60,6 +60,7 @@
                             <td>
                                 <user-avatar
                                     v-if="props.item.user"
+                                    :user="props.item.user"
                                 />
                                 <v-avatar
                                     size="36px"
@@ -119,8 +120,15 @@
             },
             comments: {
                 get () {
-                    let base = this.event && this.event.comments.reverse()
-                    return base.map(item => ({...item, user: this.users.find(user => +user.id === +item.user_id) || null }))
+                    let base = this.event && this.event.comments
+                    const getUser = (id) => {
+                        let user = this.users.find(user => user.id === id)
+                        if (+id === 1) {
+                            user.full_name = 'Администратор'
+                        }
+                        return user
+                    }
+                    return base.map(item => ({...item, user: getUser(item.user_id) })).reverse()
                 }
             }
         },
