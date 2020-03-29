@@ -55,4 +55,17 @@ class Appointment extends Model
         array_push($comments, $newComment);
         return $this->update(['comments' => $comments]);
     }
+
+    public function deleteComment($id)
+    {
+        $comments = $this->comments;
+        $result = [];
+        foreach ($comments as $comment) {
+            if ($comment[id] !== $id) {
+                $result[] = $comment;
+            }
+        }
+        $this->update(['comments' => $result]);
+    }
+
 }

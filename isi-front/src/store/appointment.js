@@ -34,6 +34,16 @@ export default {
         })
     },
     actions: {
+        deleteEventComment ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_appointment_comment', {... data})
+                    .then(res => {
+                        commit('UPDATE_APPOINTMENT', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addEventComment ({dispatch, commit, rootState}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_appointment_comment', {

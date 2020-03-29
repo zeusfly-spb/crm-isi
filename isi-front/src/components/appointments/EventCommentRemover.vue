@@ -8,6 +8,7 @@
             close
         </v-icon>
         <v-dialog
+            v-if="confirm"
             max-width="600px"
             v-model="confirm"
         >
@@ -33,7 +34,7 @@
                 <v-card-actions>
                      <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="hideConfirm">Отмена</v-btn>
-                    <v-btn color="red darken-1" flat @click="">Удалить</v-btn>
+                    <v-btn color="red darken-1" flat @click="deleteComment">Удалить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -47,6 +48,19 @@
             confirm: false
         }),
         methods: {
+            deleteComment () {
+                this.$store.dispatch('deleteEventComment', {
+                    event_id: this.event.id,
+                    comment_id: this.comment.id
+                })
+                    .then(() => {
+                        this.hideConfirm()
+                        this.$store.dispatch('pushMessage', {
+                            text: `Комментарий от ${this.$moment(this.comment.created_at).format('D MMMM YYYY г. HH:mm')} удален`,
+                            color: 'green'
+                        })
+                    })
+            },
             hideConfirm () {
                 this.confirm = false
             },

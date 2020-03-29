@@ -22,6 +22,14 @@ class AppointmentController extends Controller
         'cancelled' => '"отменена"'
     ];
 
+    public function deleteComment(Request $request)
+    {
+        $event = Appointment::find($request->event_id);
+        $event->deleteComment($request->comment_id);
+        $event->load('user', 'performer', 'service', 'lead', 'island');
+        return response()->json($event->toArray());
+    }
+
     public function addComment(Request $request)
     {
         $event = Appointment::find($request->event_id);
