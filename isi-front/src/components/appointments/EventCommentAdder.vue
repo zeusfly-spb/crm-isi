@@ -102,6 +102,11 @@
             activate () {
                 this.active = true
             }
+        },
+        watch: {
+            active () {
+                this.newCommentText = ''
+            }
         }
     }
 </script>

@@ -115,7 +115,7 @@
                 return this.$store.state.basePath
             },
             events () {
-                return this.$store.state.appointment.appointments
+                return this.$store.state.appointment.appointments.reverse()
             }
         },
         methods: {

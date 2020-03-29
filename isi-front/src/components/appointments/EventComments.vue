@@ -57,7 +57,19 @@
                         <template
                             v-slot:items="props"
                         >
-                            <td>
+                            <td
+                                align="left"
+                                class="control-field"
+                            >
+                                <event-comment-remover
+                                        v-if="props.item.canDelete"
+                                        :comment="props.item"
+                                        :event="event"
+                                />
+                            </td>
+                            <td
+                                class="avatar-field"
+                            >
                                 <user-avatar
                                     v-if="props.item.user"
                                     :user="props.item.user"
@@ -72,14 +84,18 @@
                                     />
                                 </v-avatar>
                             </td>
-                            <td>
+                            <td
+                                align="left"
+                            >
                                 <span
                                     :class="{'system': !props.item.user_id}"
                                 >
                                    {{ props.item.text }}
                                 </span>
                             </td>
-                            <td>
+                            <td
+                                align="right"
+                            >
                                 {{ props.item.created_at | moment('D MMMM YYYY г. HH:mm')}}
                             </td>
                         </template>
@@ -96,8 +112,9 @@
     </div>
 </template>
 <script>
-    import EventCommentAdder from "./EventCommentAdder";
-    import UserAvatar from "../main/UserAvatar";
+    import EventCommentAdder from "./EventCommentAdder"
+    import UserAvatar from "../main/UserAvatar"
+    import EventCommentRemover from "./EventCommentRemover";
     export default {
         name: 'EventComments',
         props: ['event'],
@@ -128,7 +145,21 @@
                         }
                         return user
                     }
-                    return base.map(item => ({...item, user: getUser(item.user_id) })).reverse()
+                    const today = (comment) => {
+                        let commentDay = comment && comment.created_at && comment.created_at.split(' ')[0] || null
+                        return this.$store.state.realDate === commentDay
+                    }
+                    const canDelete = (comment) => {
+                        let hasPermission = !comment.user_id ? false
+                            :this.$store.state.authUser.is_superadmin ? true
+                                : +comment.user_id === +this.$store.state.authUser.id
+                        return hasPermission && today(comment)
+                    }
+                    return base.map(item => ({
+                        ...item,
+                        user: getUser(item.user_id),
+                        canDelete: canDelete(item)
+                    })).reverse()
                 }
             }
         },
@@ -147,11 +178,20 @@
         },
         components: {
             UserAvatar,
-            EventCommentAdder
+            EventCommentAdder,
+            EventCommentRemover
         }
     }
 </script>
 <style scoped>
+    .avatar-field {
+        padding: 0!important;
+    }
+    .control-field {
+        padding-left: 1em!important;
+        padding-right: 0!important;
+        width: 3em;
+    }
     .list-entry {
         padding-top: 0!important;
         padding-left: 0!important;

@@ -1,6 +1,7 @@
 <template>
     <v-chip
         disabled
+        :outline="outline"
         class="pl-1 pr-1"
     >
         <v-speed-dial
@@ -69,7 +70,8 @@
         name: 'EventControlChip',
         props: {
             event: Object,
-            hover: Boolean
+            hover: Boolean,
+            outline: Boolean
         },
         data: () => ({
             fabRect: null,
