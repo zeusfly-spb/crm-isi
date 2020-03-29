@@ -46,14 +46,15 @@
                 </v-btn>
         </v-layout>
         <v-btn
-                v-else
-                icon
-                small
-                title="Добавить комментарий"
-                @click="activate"
+            v-else
+            icon
+            small
+            title="Добавить комментарий"
+            @click="activate"
         >
             <v-icon
-                    color="green"
+                title="Добавить комментарий"
+                color="green"
             >
                 add_circle_outline
             </v-icon>
