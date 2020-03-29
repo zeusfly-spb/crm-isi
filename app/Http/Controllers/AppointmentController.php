@@ -25,7 +25,7 @@ class AppointmentController extends Controller
     public function change_status(Request $request)
     {
         $actionUser = User::find($request->user_id);
-        $actionComment = $actionUser->full_name . ' изменил статус записи на ' . $this->statusList[$request->status];
+        $actionComment = 'Сотрудник ' . $actionUser->full_name . ' изменил(а) статус записи на ' . $this->statusList[$request->status];
         $event = Appointment::find($request->event_id);
         $event->update(['status' => $request->status]);
         $event->addComment($actionComment);
