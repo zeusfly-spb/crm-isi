@@ -68,7 +68,8 @@
     export default {
         name: 'EventControlChip',
         props: {
-            event: Object
+            event: Object,
+            hover: Boolean
         },
         data: () => ({
             fabRect: null,

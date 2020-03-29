@@ -67,6 +67,11 @@
                             <td>
                                 {{ props.item.date | moment('D MMMM YYYY г. HH:mm') }}
                             </td>
+                            <td>
+                                <event-control-chip
+                                        :event="props.item"
+                                />
+                            </td>
                         </template>
                         <template v-slot:no-data>
                             <span class="red--text text-md-center">Нет записей</span>
@@ -82,6 +87,7 @@
     import PhoneViewer from "../main/PhoneViewer"
     import Caller from "../leads/Caller";
     import EventComments from "./EventComments";
+    import EventControlChip from "./EventControlChip";
         export default {
         name: 'EventsArchive',
         data: () => ({
@@ -98,6 +104,7 @@
                 {text: 'Комментарии', value: null},
                 {text: 'Исполнитель', value: 'performer_id'},
                 {text: 'Дата/Время', value: 'date'},
+                {text: 'Действия', value: null}
             ]
         }),
         computed: {
@@ -123,7 +130,8 @@
             PhoneViewer,
             UserAvatar,
             Caller,
-            EventComments
+            EventComments,
+            EventControlChip
         }
     }
 </script>
