@@ -1,5 +1,12 @@
 <template>
     <div>
+        <v-icon
+            color="green"
+            v-if="!comments.length"
+            @click="addFirst"
+        >
+            add_circle_outline
+        </v-icon>
         <span
             v-if="lastComment"
             class="clickable"
@@ -131,7 +138,10 @@
             },
             comments: {
                 get () {
-                    let base = this.event && this.event.comments
+                    let base = this.event && this.event.comments || null
+                    if (!base || !base.length) {
+                        return []
+                    }
                     const getUser = (id) => {
                         let user = this.users.find(user => user.id === id)
                         if (+id === 1) {
@@ -158,6 +168,10 @@
             }
         },
         methods: {
+            addFirst () {
+                this.showList()
+                this.addMode = true
+            },
             showList () {
                 this.list = true
             },
