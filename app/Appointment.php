@@ -61,7 +61,7 @@ class Appointment extends Model
         $comments = $this->comments;
         $result = [];
         foreach ($comments as $comment) {
-            if ($comment[id] !== $commentId) {
+            if ($comment['id'] !== $commentId) {
                 $result[] = $comment;
             }
         }
