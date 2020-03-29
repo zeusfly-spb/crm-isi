@@ -101,12 +101,6 @@
                         </template>
                     </v-data-table>
                 </v-card-text>
-                <v-card-actions>
-                    <v-spacer/>
-                    <v-btn color="darken-1" flat @click="hideList">
-                        Закрыть
-                    </v-btn>
-                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
