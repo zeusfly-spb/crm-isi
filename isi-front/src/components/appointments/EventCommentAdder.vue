@@ -4,6 +4,7 @@
             v-if="active"
         >
             <v-text-field
+                    v-if="active"
                     class="ml-2 mr-2"
                     autofocus
                     label="Комментарий"
@@ -62,11 +63,20 @@
 <script>
     export default {
         name: 'EventCommentAdder',
-        props: ['event', 'value'],
+        props: {
+            event: Object,
+            value: Boolean,
+        },
         data: () => ({
             newCommentText: ''
         }),
         computed: {
+            empty () {
+                return !this.comments || !this.comments.length
+            },
+            comments () {
+                return this.event && this.event.comments
+            },
             active: {
                 get () {
                     return this.value
@@ -102,6 +112,9 @@
             activate () {
                 this.active = true
             }
+        },
+        mounted () {
+            setTimeout(() => this.empty ? this.activate() : null, 300)
         },
         watch: {
             active () {

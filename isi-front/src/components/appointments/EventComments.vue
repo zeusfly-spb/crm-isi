@@ -2,8 +2,9 @@
     <div>
         <v-icon
             color="green"
+            class="clickable"
             v-if="!comments.length"
-            @click="addFirst"
+            @click="list = true"
         >
             add_circle_outline
         </v-icon>
@@ -105,6 +106,9 @@
                             >
                                 {{ props.item.created_at | moment('D MMMM YYYY г. HH:mm')}}
                             </td>
+                        </template>
+                        <template v-slot:no-data>
+                            <span class="gray--text">Нет комментариев</span>
                         </template>
                     </v-data-table>
                 </v-card-text>
