@@ -56,12 +56,12 @@ class Appointment extends Model
         return $this->update(['comments' => $comments]);
     }
 
-    public function deleteComment($id)
+    public function deleteComment($commentId)
     {
         $comments = $this->comments;
         $result = [];
         foreach ($comments as $comment) {
-            if ($comment[id] !== $id) {
+            if ($comment[id] !== $commentId) {
                 $result[] = $comment;
             }
         }
