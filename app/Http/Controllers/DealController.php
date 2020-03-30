@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Deal;
 use App\DealAction;
 use App\Stock\Product;

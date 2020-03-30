@@ -48,8 +48,8 @@
         </td>
         <td v-if="!isTotal">
             <customer-updater
-                    :deal="deal"
-                    @new="newCustomer = true"
+              :deal="deal"
+              @new="newCustomer = true"
             />
         </td>
         <td v-if="!isTotal">
@@ -58,9 +58,9 @@
         <td v-if="!isTotal">
             <span>
                 <deal-updater
-                        :deal="deal"
-                        @activated="focused"
-                        @deactivated="blur('insole')"
+                    :deal="deal"
+                    @activated="focused"
+                    @deactivated="blur('insole')"
                 />
             </span>
         </td>

@@ -158,6 +158,7 @@
                     </v-icon>
                     {{ props.item.first_name }}
                     <interactions-card
+                        no-activator
                         :customer="props.item"
                         v-if="+interactionsOpenId === +props.item.id"
                         @close="interactionsOpenId = null"

@@ -3,12 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Deal;
 use App\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class CustomerController extends Controller
 {
+
+    public function extend(Request $request)
+    {
+        $customer = Customer::with('deals', 'phones')
+            ->find($request->customer_id);
+        return response()->json($customer);
+    }
+
     public function index(Request $request)
     {
         $customers = Customer::with('phones', 'deals')

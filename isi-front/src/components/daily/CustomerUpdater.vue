@@ -1,5 +1,31 @@
 <template>
     <span>
+        <span
+            v-if="!active"
+        >
+            <v-icon
+                v-if="!anonymous"
+                style="user-select: none"
+                color="green"
+                title="Показать историю взаимодействия"
+                @click="showInteractions"
+            >
+                contacts
+            </v-icon>
+            <span
+                :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
+                :class="{clickable: canUpdate}"
+                @click="active = true"
+            >
+                {{ deal.customer.full_name }}
+            </span>
+             <interactions-card
+                 no-activator
+                 v-model="interactionsOpen"
+                 :customer="customer"
+                 @extendCustomer="extendCustomer"
+             />
+        </span>
         <v-select
                 v-if="active"
                 autofocus
@@ -20,25 +46,26 @@
                 </span>
             </template>
         </v-select>
-        <span
-            v-else
-            :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
-            :class="{clickable: canUpdate}"
-            @click="active = true"
-        >
-            {{ deal.customer.full_name }}
-        </span>
     </span>
 </template>
 <script>
+    import InteractionsCard from '../customers/InteractionsCard'
     export default {
         name: 'CustomerUpdater',
         props: ['deal'],
         data: () => ({
+            extendedCustomer: null,
+            interactionsOpen: false,
             active: false,
             selectedCustomerId: null
         }),
         computed: {
+            anonymous () {
+                return this.deal && !this.deal.customer_id
+            },
+            customer () {
+                return this.extendedCustomer || this.deal && this.deal.customer || null
+            },
             realDate () {
                 return this.$store.state.realDate
             },
@@ -77,6 +104,12 @@
             }
         },
         methods: {
+            extendCustomer (data) {
+                this.extendedCustomer = data
+            },
+            showInteractions () {
+                this.interactionsOpen = true
+            },
             customerSelected () {
                 switch (this.selectedCustomerId) {
                     case 0:
@@ -110,6 +143,9 @@
             hide () {
                 this.active = false
             }
+        },
+        components: {
+            InteractionsCard
         }
     }
 </script>

@@ -1,12 +1,11 @@
 import Vue from 'vue'
 export default {
     actions: {
-        updateDealCustomerId ({commit, rootState}, data) {
+        extendCustomer ({commit}, id) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_deal_customer', {...data})
+                Vue.axios.post('/api/extend_customer', {customer_id: id})
                     .then(res => {
-                        commit('UPDATE_DEAL', res.data)
-                        resolve(res)
+                        resolve(res.data)
                     })
                     .catch(e => reject(e))
             })

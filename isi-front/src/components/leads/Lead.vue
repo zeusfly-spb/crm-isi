@@ -47,6 +47,7 @@
             </v-menu>
             {{ props.item.name | upFirst }}
             <interactions-card
+                no-activator
                 v-if="+interactionsOpenId === +props.item.id"
                 :lead="props.item"
                 :customer="props.item.customer"
@@ -54,8 +55,6 @@
             />
         </td>
         <td nowrap>
-<!--            <span v-if="props.item.phone[0] == '+'">{{ props.item.phone | externalPhone }}</span>-->
-<!--            <span v-else>{{ props.item.phone | phone }}</span>-->
             <phone-viewer :phone="props.item.phone"/>
             <caller
                 :phone="props.item.phone"

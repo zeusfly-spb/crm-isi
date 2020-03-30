@@ -72,27 +72,16 @@
                 class="m-0 p-0"
                 text-xs-right
             >
-                <v-btn
-                    left
+                <v-icon
                     v-if="isAuth"
-                    flat
-                    @click="logOut"
                     title="Выход"
+                    color="orange darken-2"
                     :small="isMobile"
+                    :large="!isMobile"
+                    @click="logOut"
                 >
-                      <span
-                          class="mr-1"
-                      >
-                          Выход
-                      </span>
-                    <v-icon
-                        :small="isMobile"
-                        :large="!isMobile"
-                        color="orange darken-2"
-                    >
-                        exit_to_app
-                    </v-icon>
-                </v-btn>
+                    exit_to_app
+                </v-icon>
             </v-flex>
         </v-layout>
     </v-toolbar>
@@ -132,3 +121,9 @@
         }
     }
 </script>
+<style scoped>
+    .v-btn__content {
+        margin: 0!important;
+        padding: 0!important;
+    }
+</style>

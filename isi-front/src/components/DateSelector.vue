@@ -31,12 +31,16 @@
                 v-model="menu"
             >
                 <template v-slot:activator="{ on }">
-                    <v-text-field
-                        :label="accountingDate | moment('D MMMM YYYY г.')"
-                        prepend-inner-icon="event"
-                        readonly
-                        v-on="on"
-                    />
+                    <div
+                        class="date-input"
+                    >
+                        <v-text-field
+                            :label="accountingDate | moment('D MMMM YYYY г.')"
+                            prepend-inner-icon="event"
+                            readonly
+                            v-on="on"
+                        />
+                    </div>
                 </template>
                 <v-date-picker
                     v-model="date" no-title scrollable
@@ -99,3 +103,8 @@
         }
     }
 </script>
+<style>
+    .date-input {
+        width: 14em!important;
+    }
+</style>

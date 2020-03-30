@@ -62,6 +62,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('add_phone', 'CustomerController@addPhone');
     Route::post('search_customer_by_text', 'CustomerController@searchByText');
     Route::post('delete_customer', 'CustomerController@delete');
+    Route::post('extend_customer', 'CustomerController@extend');
+
 
     // WORKDAYS
     Route::post('get_workdays', 'WorkDayController@index');

@@ -164,6 +164,11 @@
         mounted () {
             this.editedCustomer = JSON.parse(JSON.stringify(this.customer))
         },
+        watch: {
+            customer (val) {
+                this.editedCustomer = JSON.parse(JSON.stringify(val))
+            }
+        },
         components: {
             CustomerPhonesEditor
         }
