@@ -13,6 +13,19 @@ class Appointment extends Model
         'comments' => 'array'
     ];
 
+    protected $statusList = [
+        0 => 'cancelled',
+        1 => 'active',
+        2 => 'postponed',
+        3 => 'moderate',
+        4 => 'completed'
+    ];
+
+    public function setStatus(string $status)
+    {
+        x
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -40,7 +53,8 @@ class Appointment extends Model
 
     public function getStatusAttribute()
     {
-        return $this->attributes['status'] ?? 'active';
+//        return $this->attributes['status'] ?? 'active';
+        return $this->statusList[$this->status_id];
     }
 
     public function addComment(string $text, int $user_id = null)
