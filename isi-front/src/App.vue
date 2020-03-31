@@ -1,7 +1,7 @@
 <template>
   <v-app>
       <side-panel/>
-      <app-toolbar/>
+      <app-toolbar v-if="authUser"/>
       <v-content>
           <messages-panel/>
           <call-reminder/>
