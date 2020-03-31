@@ -1,13 +1,18 @@
 <template>
     <div>
         <div v-for="phone in phones" :key="phone.id">
-            {{ phone.number | phone}}
-            <caller :phone="phone.number"/>
+            <phone-viewer
+                :phone="phone.number"
+            />
+            <caller
+                :phone="phone.number"
+            />
         </div>
     </div>
 </template>
 <script>
     import Caller from '../leads/Caller'
+    import PhoneViewer from '../main/PhoneViewer'
     export default {
         name: 'CustomerPhonesColumn',
         props: ['phones'],
@@ -22,7 +27,8 @@
             }
         },
         components: {
-            Caller
+            Caller,
+            PhoneViewer
         }
     }
 </script>

@@ -1,14 +1,17 @@
 <template>
   <v-app>
       <side-panel/>
-      <app-toolbar/>
+      <app-toolbar v-if="authUser"/>
       <v-content>
           <messages-panel/>
           <call-reminder/>
           <query-inspector/>
-          <v-progress-linear :indeterminate="true" v-if="loading"/>
-          <app-menu/>
-          <router-view/>
+          <v-progress-linear
+              indeterminate
+              v-if="loading"
+          />
+          <app-menu v-if="authUser"/>
+          <router-view v-if="authUser || currentPage === 'login'"/>
       </v-content>
   </v-app>
 </template>
@@ -27,6 +30,9 @@ export default {
         timerId: null
     }),
     computed: {
+        currentPage () {
+            return this.$store.getters.currentPage
+        },
         waitingLeadsCount () {
             return this.$store.getters.waitingLeadsCount
         },

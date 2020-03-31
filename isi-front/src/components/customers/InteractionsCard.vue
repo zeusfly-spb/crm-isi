@@ -47,7 +47,6 @@
     </span>
 </template>
 <script>
-    import CustomerEditor from './CustomerEditor'
     import EventsRow from './EventsRow'
     import CommentsRow from './CommentsRow'
     import LeadRow from './LeadRow'
@@ -55,6 +54,9 @@
     import CustomerRow from './CustomerRow'
     import DealsRow from './DealsRow'
     import InteractionsTitle from './InteractionsTitle'
+
+    const clone = arr => JSON.parse(JSON.stringify(arr))
+
     export default {
         name: 'InteractionsCard',
         props: {
@@ -87,7 +89,9 @@
                 return this.$store.state.users
             },
             comments () {
-                return this.lead && this.lead.comments && this.lead.comments.reverse() || []
+                return this.lead && this.lead.comments
+                    && clone(this.lead.comments)
+                        .reverse() || []
             },
             leads () {
                 return this.lead ? [this.lead] : []
@@ -102,7 +106,10 @@
             },
             deals () {
                 let base = this.customer && this.customer.deals || []
-                base = base.map(item => ({...item, user: this.users.find(user => +user.id === +item.user_id) || null}))
+                base = base.map(item => ({
+                    ...item,
+                    user: this.users.find(user => +user.id === +item.user_id) || null
+                }))
                 return  base.reverse() || []
             }
         },
@@ -124,7 +131,6 @@
             }
         },
         components: {
-            CustomerEditor,
             EventsRow,
             CommentsRow,
             LeadRow,

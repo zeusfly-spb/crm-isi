@@ -35,11 +35,26 @@
                         class="date-input"
                     >
                         <v-text-field
+                            :class="{'today': isToday}"
                             :label="accountingDate | moment('D MMMM YYYY г.')"
                             prepend-inner-icon="event"
                             readonly
                             v-on="on"
-                        />
+                        >
+                            <template
+                                slot="label"
+                            >
+                                <span
+                                    :class="{
+                                        'today': isToday,
+                                        'future': isFuture,
+                                        'past': isPast
+                                    }"
+                                >
+                                    {{ accountingDate | moment('D MMMM YYYY г.') }}
+                                </span>
+                            </template>
+                        </v-text-field>
                     </div>
                 </template>
                 <v-date-picker
@@ -81,6 +96,12 @@
             },
             isToday () {
                 return this.$store.getters.isToday
+            },
+            isFuture () {
+                return this.$store.state.accountingDate > this.$store.state.realDate
+            },
+            isPast () {
+                return this.$store.state.accountingDate < this.$store.state.realDate
             }
         },
         methods: {
@@ -103,8 +124,18 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .date-input {
         width: 14em!important;
+    }
+    .today {
+        color: green;
+        font-weight: bold;
+    }
+    .future {
+        color: #00B8D4;
+    }
+    .past {
+        color: lightslategrey;
     }
 </style>
