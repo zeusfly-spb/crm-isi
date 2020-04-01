@@ -55,7 +55,8 @@ class Appointment extends Model
 
     public function getStatusAttribute()
     {
-        return $this->statusList[(integer) $this->status_id];
+        $key = $this->status_id ?? 1;
+        return $this->statusList[$key];
     }
 
     public function addComment(string $text, int $user_id = null)
