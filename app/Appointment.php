@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class Appointment extends Model
 {
@@ -23,7 +24,11 @@ class Appointment extends Model
 
     public function setStatus(string $status)
     {
-        x
+        $id = array_search($status, $this->statusList);
+        if ($id) {
+            return $this->update(['status_id' => $id]);
+        }
+        return false;
     }
 
     public function user()
@@ -53,8 +58,7 @@ class Appointment extends Model
 
     public function getStatusAttribute()
     {
-//        return $this->attributes['status'] ?? 'active';
-        return $this->statusList[$this->status_id];
+        return $this->statusList[(integer) $this->status_id];
     }
 
     public function addComment(string $text, int $user_id = null)
