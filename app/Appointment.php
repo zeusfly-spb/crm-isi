@@ -25,10 +25,7 @@ class Appointment extends Model
     public function setStatus(string $status)
     {
         $id = array_search($status, $this->statusList);
-        if ($id) {
-            return $this->update(['status_id' => $id]);
-        }
-        return false;
+        return $this->update(['status_id' => $id]);
     }
 
     public function user()
