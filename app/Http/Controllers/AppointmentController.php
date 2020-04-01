@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Schema;
 class AppointmentController extends Controller
 {
     public $statusList = [
-        'active' => '"активна"',
-        'completed' => '"завершена"',
-        'cancelled' => '"отменена"'
+        'active' => '"Активна"',
+        'completed' => '"Завершена"',
+        'cancelled' => '"Отменена"',
+        'moderate' => '"На модерации"',
+        'postponed' => '"Отложена"'
     ];
 
     public function deleteComment(Request $request)
@@ -44,7 +46,7 @@ class AppointmentController extends Controller
         $userName = $request->user_id == 1 ? 'Администратор' : 'Сотрудник ' . $actionUser->full_name;
         $actionComment = $userName . ' изменил(а) статус записи на ' . $this->statusList[$request->status];
         $event = Appointment::find($request->event_id);
-        $event->update(['status' => $request->status]);
+        $event->setStatus($request->status);
         $event->addComment($actionComment);
         $event->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($event->toArray());
