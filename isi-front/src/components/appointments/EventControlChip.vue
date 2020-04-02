@@ -89,12 +89,48 @@
         }),
         computed: {
             statsButtons () {
-                return this.statsRaw.filter(item => item.status !== this.event.status)
+                let base = this.statsRaw
+                if (!this.isSuperadmin) {
+                    base = base.filter(item => item.status !== 'cancelled')
+                }
+                switch (this.event.status) {
+                    case 'moderate':
+                        base = base.filter(item => ['active', 'cancelled'].includes(item.status))
+                        break
+                    case 'active':
+                        base = base.filter(item => ['moderate', 'postponed'].includes(item.status))
+                        break
+                    case 'postponed':
+                        base = base.filter(item => ['active', 'moderate'].includes(item.status))
+                        break
+                    case 'completed':
+                        base = base.filter(item => ['moderate', 'cancelled'].includes(item.status))
+                        break
+                    case 'cancelled':
+                        base = base.filter(item => ['active', 'postponed'].includes(item.status))
+                        break
+                }
+
+                return base.filter(item => item.status !== this.event.status)
             },
             fabStyle () {
+                const colors = {
+                    active: 'blue',
+                    postponed: 'orange',
+                    moderate: 'amber',
+                    cancelled: 'red',
+                    completed: 'green'
+                }
+                const icons = {
+                    active: 'event',
+                    postponed: 'timelapse',
+                    moderate: 'assignment_late',
+                    cancelled: 'event_busy',
+                    completed: 'event_available'
+                }
                 return {
-                    color: {active: 'blue', completed: 'green', cancelled: 'red'}[this.event.status],
-                    icon: {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[this.event.status]
+                    color: colors[this.event.status],
+                    icon: icons[this.event.status]
                 }
             },
             isSuperadmin () {
@@ -102,7 +138,7 @@
             }
         },
         mounted () {
-            let padding = 80
+            let padding = 45 * this.statsButtons.length
             if (this.event.first) {
                 this.layoutTop = this.$refs.activator.$el.getBoundingClientRect().top + document.body.scrollTop - padding + 'px'
             } else {
@@ -111,13 +147,20 @@
         },
         methods: {
             performAction (status) {
+                const desc = {
+                    completed: 'Завершена',
+                    active: 'Активна',
+                    postponed: 'Отложена',
+                    cancelled: 'Отменена',
+                    moderate: 'На модерации'
+                }
                 this.$store.dispatch('changeEventStatus', {
                     event_id: this.event.id,
                     status: status
                 })
                     .then(() => {
                         this.visible = false
-                        let text = `Статус записи изменен на ${{completed: 'Выполнено', cancelled: 'Отменено', active: 'Активно'}[status]}`
+                        let text = `Статус записи изменен на ${desc[status]}`
                         this.$store.dispatch('pushMessage', {color: 'green', text: text})
                     })
             }

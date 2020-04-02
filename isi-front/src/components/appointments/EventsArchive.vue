@@ -93,6 +93,8 @@
         data: () => ({
             currentIndex: 0,
             tabs: [
+                {title: 'Отложенные', status: 'postponed', color: 'orange', icon: 'timelapse'},
+                {title: 'На модерации', status: 'moderate', color: 'amber', icon: 'assignment_late'},
                 {title: 'Отмененные', status: 'cancelled', color: 'red', icon: 'event_busy'},
                 {title: 'Завершенные', status: 'completed', color: 'green', icon: 'event_available'}
             ],
@@ -109,7 +111,7 @@
         }),
         computed: {
             sliderColor () {
-                return {0: 'red', 1: 'green'}[this.currentIndex]
+                return {0: 'orange', 1: 'amber', 2: 'red', 3: 'green'}[this.currentIndex]
             },
             basePath () {
                 return this.$store.state.basePath
