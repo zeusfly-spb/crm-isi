@@ -20,8 +20,6 @@ use App\Vacation;
 use App\Observers\VacationObserver;
 use App\WorkDay;
 use App\Observers\WorkDayObserver;
-use App\Lead;
-use App\Observers\LeadObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         setlocale(LC_TIME, 'ru_RU.UTF-8');
-        Carbon::setLocale(config('app.locale'));
+        Carbon::setLocale('ru');
         DocumentPack::observe(DocPackObserver::class);
         User::observe(UserObserver::class);
         Deal::observe (DealObserver::class);
@@ -52,6 +50,5 @@ class AppServiceProvider extends ServiceProvider
         Sick::observe(SickObserver::class);
         Vacation::observe(VacationObserver::class);
         WorkDay::observe(WorkDayObserver::class);
-//        Lead::observe(LeadObserver::class);
     }
 }

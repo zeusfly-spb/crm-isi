@@ -54,21 +54,23 @@ class AppointmentController extends Controller
 
     public function move(Request $request)
     {
-
         if (Cache::has('users')) {
             $actionUser = Cache::get('users')->where('id', $request->user_id)->first();
         } else {
             Log::info('Querying from mysql user entry for fill system comment');
             $actionUser = User::find($request->user_id);
         }
-        if ($actionUser->id == 1) {
-            $actionUser->full_name = 'Администратор';
-        }
         $event = Appointment::find($request->event_id);
         $eventTimeArr = explode(':', explode(' ', $event->date)[1]);
         $changedDate = $request->hour . ':' . $eventTimeArr[1];
         $textDate = Carbon::create($changedDate)->formatLocalized('%e %B %Y');
-        $actionComment = $actionUser->full_name . ' перенес запись на ' . $textDate . ' ' . $changedDate;
+
+        if ($request->user_id == 1) {
+            $actionComment = 'Администратор перенес запись на ' . $textDate . ' ' . $changedDate;
+        } else {
+            $actionComment = $actionUser->full_name . ' перенес запись на ' . $textDate . ' ' . $changedDate;
+        }
+
         $event->addComment($actionComment);
         $newDate = $request->date . ' ' . $request->hour . ':' . $eventTimeArr[1] . ':' . $eventTimeArr[2];
         $event->update(['date' => $newDate, 'cabinet_id' => $request->cabinet_id]);
