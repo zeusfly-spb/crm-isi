@@ -21,10 +21,10 @@
             @contextmenu.prevent="menu = true"
         >
             <v-icon
-                :color="event.icon.color"
+                :color="colors[event.status]"
                 class="ml-1"
             >
-                {{ event.icon.type }}
+                {{ icons[event.status] }}
             </v-icon>
             <span
                 class="green--text"
@@ -86,7 +86,21 @@
             menu: false,
             display: false,
             dragging: false,
-            contextMenu: false
+            contextMenu: false,
+            colors: {
+                active: 'blue',
+                postponed: 'amber',
+                moderate: 'orange',
+                cancelled: 'red',
+                completed: 'green'
+            },
+            icons: {
+                active: 'event',
+                postponed: 'timelapse',
+                moderate: 'assignment_late',
+                cancelled: 'event_busy',
+                completed: 'event_available'
+            }
         }),
         computed: {
             displayedEvent: {

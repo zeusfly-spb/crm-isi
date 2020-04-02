@@ -38,14 +38,14 @@
                 <v-list-tile-title
                     :class="{disabled: !can(item.action) }"
                 >
-                           <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
+                    <span class="body-2 right">
+                        {{ item.title }}
+                    </span>
                     <v-icon
                         :class="{disabled: !can(item.action) }"
-                        :color="{active: 'blue', 'done': 'green', cancel: 'red accent-2'}[item.action]"
+                        :color="colors[item.action]"
                     >
-                        {{ `${ {active: 'event', done: 'event_available', cancel: 'event_busy'}[item.action] }`  }}
+                        {{ `${ icons[item.action] }`  }}
                     </v-icon>
                 </v-list-tile-title>
             </v-list-tile>
@@ -58,9 +58,9 @@
                 <v-list-tile-title
                     :class="{disabled: !can(item.action) }"
                 >
-                           <span class="body-2 right">
-                                {{ item.title }}
-                            </span>
+                    <span class="body-2 right">
+                        {{ item.title }}
+                    </span>
                     <v-icon
                         :color="item.color"
                     >
@@ -76,10 +76,26 @@
         name: 'EventContextMenuEntry',
         props: ['event'],
         data: () => ({
+            colors: {
+                active: 'blue',
+                postponed: 'amber',
+                moderate: 'orange',
+                cancelled: 'red',
+                completed: 'green'
+            },
+            icons: {
+                active: 'event',
+                postponed: 'timelapse',
+                moderate: 'assignment_late',
+                cancelled: 'event_busy',
+                completed: 'event_available'
+            },
             contextMenuRaw: [
-                {title: 'Сменить статус на "Выполнено"', action: 'done'},
-                {title: 'Сменить статус на "Отменено"', action: 'cancel'},
+                {title: 'Сменить статус на "Выполнено"', action: 'completed'},
+                {title: 'Сменить статус на "Отменено"', action: 'cancelled'},
                 {title: 'Сменить статус на "Активно"', action: 'active'},
+                {title: 'Сменить статус на "Отложено"', action: 'postponed'},
+                {title: 'Сменить статус на "На модерации"', action: 'moderate'},
             ],
             commonItems: [
                 {title: 'Редактировать', action: 'edit', icon: 'edit', color: 'blue'},
@@ -87,9 +103,16 @@
             ]
         }),
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             contextMenuItems () {
-                let toExcept = {active: 'active', cancelled: 'cancel', completed: 'done'}[this.event.status]
-                return this.contextMenuRaw.filter(item => item.action !== toExcept)
+                let base = this.contextMenuRaw
+                if (!this.isSuperadmin) {
+                    base = base.filter(item => item.action !== 'cancelled')
+                }
+                base = base.filter(item => item.action !== this.event.status)
+                return base
             }
         },
         methods: {
@@ -111,7 +134,7 @@
             performAction (action) {
                 this.$store.dispatch('changeEventStatus', {
                     event_id: this.event.id,
-                    status: `${{done: 'completed', cancel: 'cancelled', active: 'active'}[action]}`
+                    status: action
                 })
                     .then(() => {
                         this.$emit('changed')
@@ -120,14 +143,7 @@
                     })
             },
             can (action) {
-                switch (action) {
-                    case 'done':
-                        return this.event.status !== 'completed' || false
-                    case 'cancel':
-                        return this.event.status !== 'cancelled' || false
-                    case 'active':
-                        return this.event.status !== 'active' || false
-                }
+                return this.event.status !== action
             }
         }
     }
