@@ -11,9 +11,9 @@
             @dragend="dragEnd"
         >
             <v-icon
-                :color="`${ {active: 'blue', cancelled: 'red', completed: 'green'}[event.status] }`"
+                :color="`${ colors[event.status] }`"
             >
-                {{   `${ {active: 'event', completed: 'event_available', cancelled: 'event_busy'}[event.status]}` }}
+                {{   `${ icons[event.status]}` }}
             </v-icon>
             <span class="green--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
             <span class="pl-1 pr-1">{{ event.service && event.service.description }}</span>
@@ -53,6 +53,20 @@
             first: Boolean
         },
         data: () => ({
+            colors: {
+                active: 'blue',
+                postponed: 'amber',
+                moderate: 'orange',
+                cancelled: 'red',
+                completed: 'green'
+            },
+            icons: {
+                active: 'event',
+                postponed: 'timelapse',
+                moderate: 'assignment_late',
+                cancelled: 'event_busy',
+                completed: 'event_available'
+            },
             mouseOver: false,
             eventToDelete: null,
             editMode: false

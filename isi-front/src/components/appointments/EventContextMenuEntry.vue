@@ -132,13 +132,20 @@
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
             performAction (action) {
+                const info = {
+                    active: 'Активна',
+                    postponed: 'Отложена',
+                    moderate: 'На модерации',
+                    cancelled: 'Отменена',
+                    completed: 'Выполнена'
+                }
                 this.$store.dispatch('changeEventStatus', {
                     event_id: this.event.id,
                     status: action
                 })
                     .then(() => {
                         this.$emit('changed')
-                        let text = `Статус записи изменен на ${{done: 'Выполнено', cancel: 'Отменено', active: 'Активно'}[action]}`
+                        let text = `Статус записи изменен на ${info[action]}`
                         this.$store.commit('SEND_EVENT_MESSAGE', {color: 'green', text: text})
                     })
             },
