@@ -69,7 +69,7 @@
                             </td>
                             <td>
                                 <event-control-chip
-                                        :event="props.item"
+                                    :event="props.item"
                                 />
                             </td>
                         </template>
