@@ -186,6 +186,9 @@
         watch: {
             list () {
                 this.addMode = false
+            },
+            addMode (val) {
+                !val ? setTimeout(() => !this.comments.length ? this.hideList() : null, 300) : null
             }
         },
         components: {
