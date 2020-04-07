@@ -34,7 +34,7 @@
                     <v-data-table
                         :headers="headers"
                         :items="docs"
-                        hide-actions
+                        hide-default-footer
                         hide-headers
                     >
                         <template v-slot:items="props">

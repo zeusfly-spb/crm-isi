@@ -57,7 +57,7 @@
                         v-if="island.chiefs"
                         :items="island.chiefs"
                         hide-headers
-                        hide-actions
+                        hide-default-footer
                     >
                         <template v-slot:items="props">
                             <tr>

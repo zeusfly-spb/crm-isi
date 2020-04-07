@@ -20,7 +20,7 @@
         <v-data-table
             :items="cabinets"
             hide-headers
-            hide-actions
+            hide-default-footer
         >
             <template v-slot:items="props">
                 <tr style="height: 1em!important;">

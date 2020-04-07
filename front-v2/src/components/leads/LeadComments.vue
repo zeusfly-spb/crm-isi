@@ -67,7 +67,7 @@
                             <v-data-table
                                 :items="comments"
                                 :headers="headers"
-                                hide-actions
+                                hide-default-footer
                                 hide-headers
                             >
                                 <template v-slot:items="props">

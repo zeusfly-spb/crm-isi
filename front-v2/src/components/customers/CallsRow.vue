@@ -5,7 +5,7 @@
         <strong>Исходящие звонки ({{ calls.length }})</strong>
         <v-data-table
             :items="calls"
-            hide-actions
+            hide-default-footer
             hide-headers
         >
             <template v-slot:items="props">

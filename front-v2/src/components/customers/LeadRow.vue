@@ -5,7 +5,7 @@
         <strong>Заявка</strong>
         <v-data-table
             :items="[lead]"
-            hide-actions
+            hide-default-footer
             hide-headers
         >
             <template v-slot:items="props">

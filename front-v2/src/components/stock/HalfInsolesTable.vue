@@ -2,7 +2,7 @@
     <v-flex xs12 sm6 md6 justify-center>
         <span class="title">Полустельки</span>
         <v-data-table
-                hide-actions
+                hide-default-footer
                 :items="halfInsolesSizeIds"
                 class="elevation-1"
         >

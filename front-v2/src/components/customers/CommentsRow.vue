@@ -5,7 +5,7 @@
         <strong>Комментарии ({{ comments.length }})</strong>
         <v-data-table
             :items="comments"
-            hide-actions
+            hide-default-footer
             hide-headers
         >
             <template v-slot:items="props">

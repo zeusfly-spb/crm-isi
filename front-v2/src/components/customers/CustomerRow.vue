@@ -6,7 +6,7 @@
         <v-data-table
             :items="[customer]"
             hide-headers
-            hide-actions
+            hide-default-footer
         >
             <template v-slot:items="props">
                 <td align="left">

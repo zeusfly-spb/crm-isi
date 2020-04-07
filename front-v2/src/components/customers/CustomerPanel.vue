@@ -142,7 +142,7 @@
         <v-data-table
             :headers="headers"
             :items="customers"
-            hide-actions
+            hide-default-footer
             :search="searchString"
         >
             <template v-slot:items="props">

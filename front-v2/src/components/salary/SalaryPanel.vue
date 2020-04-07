@@ -7,7 +7,7 @@
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
-                hide-actions
+                hide-default-footer
                 class="elevation-1 no-hover"
             >
                 <template v-slot:items="props">
@@ -33,7 +33,7 @@
             <v-data-table
                 :items="['', ...users]"
                 :headers="headers"
-                hide-actions
+                hide-default-footer
                 class="elevation-1"
             >
                 <template v-slot:items="props">

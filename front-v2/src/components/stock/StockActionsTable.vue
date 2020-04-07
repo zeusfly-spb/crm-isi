@@ -3,7 +3,7 @@
         <v-data-table
             :headers="headers"
             :items="actions"
-            hide-actions
+            hide-default-footer
             class="elevation-1"
         >
             <template v-slot:items="props">

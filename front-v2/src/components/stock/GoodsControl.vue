@@ -47,7 +47,7 @@
                     <v-data-table
                         :items="goods"
                         :headers="headers"
-                        hide-actions
+                        hide-default-footer
                     >
                         <template v-slot:items="props">
                             <td>{{ props.index + 1 }}</td>

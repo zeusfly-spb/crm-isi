@@ -33,7 +33,7 @@
                     <v-data-table
                         :items="services"
                         :headers="headers"
-                        hide-actions
+                        hide-default-footer
                     >
                         <template v-slot:items="props">
                             <tr>

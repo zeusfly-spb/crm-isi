@@ -5,7 +5,7 @@
                 <goods-control/>
             </span>
         <v-data-table
-                hide-actions
+                hide-default-footer
                 :items="goodsProductIds"
                 class="elevation-1"
         >

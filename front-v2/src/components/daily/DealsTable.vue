@@ -13,7 +13,7 @@
         <v-data-table
                 :headers="headers"
                 :items="deals"
-                hide-actions
+                hide-default-footer
                 class="elevation-1"
         >
             <template v-slot:items="props">
@@ -33,7 +33,12 @@
                   @update:returnValue="newCustomer = false"
         >
             <template v-slot:activator="{ on }">
-                <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
+                <v-btn
+                        color="primary"
+                        text
+                        dark
+                        class="mb-2"
+                        @click="showDialog"
                        :disabled="$store.state.workingIslandId === 0 || !isToday"
                 >
                     Новая сделка
@@ -159,9 +164,9 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" flat @click="dialog = false">Отмена</v-btn>
+                    <v-btn color="red darken-1" text @click="dialog = false">Отмена</v-btn>
                     <v-btn color="green darken-1"
-                           flat
+                           text
                            @click="createDeal"
                            :disabled="pendingRequest || loadingUsers"
                     >

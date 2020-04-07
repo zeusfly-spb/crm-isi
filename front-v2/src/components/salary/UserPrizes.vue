@@ -27,7 +27,7 @@
                             <v-data-table
                                 :items="prizes"
                                 :headers="headers"
-                                hide-actions
+                                hide-default-footer
                             >
                                 <template v-slot:items="props">
                                     <td>

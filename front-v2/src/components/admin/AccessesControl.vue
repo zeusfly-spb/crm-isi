@@ -11,7 +11,7 @@
         </v-snackbar>
 
         <v-data-table
-            hide-actions
+            hide-default-footer
             class="elevation-1"
             :headers="headers"
             :items="accessRequests"

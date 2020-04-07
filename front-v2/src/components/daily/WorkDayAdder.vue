@@ -1,7 +1,7 @@
 <template>
     <v-flex>
         <v-btn
-            flat
+            text
             color="primary"
             @click="active = true"
             :disabled="!workingIslandId"
@@ -49,8 +49,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="darken-1" flat @click="active=false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="saveWorkDay">
+                    <v-btn color="darken-1" text @click="active=false">Отмена</v-btn>
+                    <v-btn color="green darken-1" text @click="saveWorkDay">
                         Добавить
                     </v-btn>
                 </v-card-actions>

@@ -2,7 +2,7 @@
     <v-flex xs12 sm6 md6 justify-center>
         <span class="title">Стельки</span>
         <v-data-table
-                hide-actions
+                hide-default-footer
                 :items="normalInsolesSizeIds"
                 class="elevation-1"
         >

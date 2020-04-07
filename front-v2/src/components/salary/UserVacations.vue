@@ -34,7 +34,7 @@
                             <v-data-table
                                 :items="vacations"
                                 :headers="headers"
-                                hide-actions
+                                hide-default-footer
                             >
                                 <template v-slot:items="props">
                                     <td>

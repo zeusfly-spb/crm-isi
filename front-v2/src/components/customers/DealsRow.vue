@@ -5,7 +5,7 @@
         <strong>Сделки</strong>
         <v-data-table
             :items="[...deals, {id: null}]"
-            hide-actions
+            hide-default-footer
             hide-headers
         >
             <template v-slot:items="props">

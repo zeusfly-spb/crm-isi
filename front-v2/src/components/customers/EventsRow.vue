@@ -5,7 +5,7 @@
         <strong>Записи: ({{ events.length }})</strong>
         <v-data-table
             :items="events"
-            hide-actions
+            hide-default-footer
             hide-headers
         >
             <template v-slot:items="props">
