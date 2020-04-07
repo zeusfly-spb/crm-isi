@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar
+    <v-app-bar
         app
         clipped-left
         :class="{'p-0': isMobile, 'm-0': isMobile}"
@@ -84,7 +84,7 @@
                 </v-icon>
             </v-flex>
         </v-layout>
-    </v-toolbar>
+    </v-app-bar>
 </template>
 <script>
     import DateSelector from '../DateSelector'
