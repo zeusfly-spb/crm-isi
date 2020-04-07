@@ -1,15 +1,5 @@
 <template>
         <v-layout align-center justify-center row fill-height>
-            <v-snackbar
-                v-model="snackbar"
-                auto-height
-                top
-                :timeout="3000"
-                :color="snackColor"
-            >
-                <span>{{ snackText }}</span>
-            </v-snackbar>
-
             <v-flex xs12 md3 class="grey lighten-4">
                 <v-container class="text-xs-center">
                     <v-card flat>
@@ -52,16 +42,16 @@
 <script>
     export default {
         data: () => ({
-            snackbar: false,
-            snackColor: 'red',
-            snackText: 'Ошибка авторизации! Проверьте правильность учетных данных.',
             name: '',
             email: '',
             password: ''
         }),
         methods: {
             showError () {
-                this.snackbar = true
+                this.$store.dispatch('pushMessage', {
+                    text: 'Ошибка авторизации! Проверьте правильность учетных данных.',
+                    color: 'red'
+                })
             },
             logIn () {
                 this.$validator.validate()
