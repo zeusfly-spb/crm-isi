@@ -1,7 +1,6 @@
 <template>
     <v-snackbar
         v-model="snackbar"
-        auto-height
         top
         :timeout="messageTime * 1000"
         :color="snackColor"

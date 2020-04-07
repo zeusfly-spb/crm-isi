@@ -21,8 +21,9 @@
                                           v-validate="'required'"
                                           data-vv-as="«Пароль»"
                             />
-                            <span class="red--text">{{ errors.first('password') }}</span>
-
+                            <span class="red--text subtitle-2">
+                                {{ errors.first('password') }}
+                            </span>
                             <v-card-actions>
                                 <v-spacer/>
                                 <v-btn
