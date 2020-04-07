@@ -9,7 +9,7 @@ import {store} from './store'
 import {createRouter} from './router'
 const router = createRouter()
 
-import * as VeeValidate from 'vee-validate';
+import VeeValidate from 'vee-validate';
 import VeeValidate_RU from 'vee-validate/dist/locale/ru';
 Vue.use(VeeValidate, {
   locale:     'ru',
