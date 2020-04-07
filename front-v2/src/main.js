@@ -9,7 +9,7 @@ import {store} from './store'
 import {createRouter} from './router'
 const router = createRouter()
 
-import VeeValidate from 'vee-validate';
+import * as VeeValidate from 'vee-validate';
 import VeeValidate_RU from 'vee-validate/dist/locale/ru';
 Vue.use(VeeValidate, {
   locale:     'ru',
@@ -43,14 +43,14 @@ Vue.axios.interceptors.response.use(
     }
 )
 store.commit('SET_BASE_PATH', process.env.VUE_APP_BASE_URL)
-const token = Cookies.get('isi-token')
+const token = window.Cookies.get('isi-token')
 if (token) {
   Vue.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
   setInterval(() => {
     let now = new Date()
     now.setMinutes(1 + now.getMinutes())
-    Cookies.set('isi-token', token, {expires: now, path: '/'})
+    window.Cookies.set('isi-token', token, {expires: now, path: '/'})
   }, 30000)
 
   store.dispatch('setAuthUser')
