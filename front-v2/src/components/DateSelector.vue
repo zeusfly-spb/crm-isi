@@ -33,6 +33,7 @@
                         class="date-input"
                     >
                         <v-text-field
+                            style="height: 1.8em"
                             :class="{'today': isToday}"
                             :label="accountingDate | moment('D MMMM YYYY г.')"
                             prepend-inner-icon="event"
