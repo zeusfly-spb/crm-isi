@@ -50,7 +50,7 @@
                                         'past': isPast
                                     }"
                                 >
-                                    {{ accountingDate | moment('D MMMM YYYY г.') }}
+                                    {{ label }}
                                 </span>
                             </template>
                         </v-text-field>
@@ -87,6 +87,9 @@
             menu: false
         }),
         computed: {
+            label () {
+                return this.$moment(this.accountingDate).format('D MMMM YYYY г.')
+            },
             isMobile () {
                 return ['xs', 'sm'].includes(this.$vuetify.breakpoint.name)
             },

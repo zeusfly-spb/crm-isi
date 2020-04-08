@@ -69,19 +69,27 @@
                 <v-spacer v-else/>
             </v-flex>
             <v-flex
-                class="m-0 p-0"
+                class="m-0 p-0 right-panel"
                 text-xs-right
             >
-                <v-icon
-                    v-if="isAuth"
-                    title="Выход"
-                    color="orange darken-2"
-                    :small="isMobile"
-                    :large="!isMobile"
-                    @click="logOut"
+                <v-layout
+                        align-end
                 >
-                    exit_to_app
-                </v-icon>
+                    <v-spacer></v-spacer>
+                    <v-icon
+                            v-if="isAuth"
+                            title="Выход"
+                            color="orange darken-2"
+                            :small="isMobile"
+                            :large="!isMobile"
+                            @click="logOut"
+                    >
+                        exit_to_app
+                    </v-icon>
+                </v-layout>
+
+
+
             </v-flex>
         </v-layout>
     </v-app-bar>
@@ -122,6 +130,11 @@
     }
 </script>
 <style scoped>
+    .right-panel {
+        display: flex!important;
+        flex-direction: row!important;
+        align-items: end!important;
+    }
     .v-btn__content {
         margin: 0!important;
         padding: 0!important;
