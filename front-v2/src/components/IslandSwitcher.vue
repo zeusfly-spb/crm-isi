@@ -1,7 +1,6 @@
 <template>
     <v-tabs
         v-if="isSuperadmin"
-        fixed-tabs
         centered
         slider-color="green"
         height="70"
@@ -114,7 +113,7 @@
                     return a.created_at < b.created_at ? -1 : a.created_at > b.created_at ? 1 : 0
                 }
                 const riseChief = (island) => {
-                    const byChiefId = (a, b) => a.id === island.chief_id ? -1 : 1
+                    const byChiefId = (a, b) => a.id === island.chief_id && b.id !== island.chief_id ? -1 : 1
                     island.users = island.users.sort(byChiefId)
                     return island
                 }

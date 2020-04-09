@@ -24,6 +24,9 @@
                     @delete="deleteConfirm"
                 />
             </template>
+            <template v-slot:body.append="{}">
+                <deals-table-footer/>
+            </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет сделок</span>
             </template>
@@ -32,7 +35,7 @@
         <v-dialog v-model="dialog" max-width="900px"
                   @update:returnValue="newCustomer = false"
         >
-            <template v-slot:activator="{ on }">
+            <template v-slot:activator="{}">
                 <v-btn
                         color="primary"
                         text
@@ -215,6 +218,8 @@
 <script>
     import NewCustomerDialog from './NewCustomerDialog'
     import Deal from './Deal'
+    import DealsTableFooter from "./DealsTableFooter";
+    const clone = obj => JSON.parse(JSON.stringify(obj))
     export default {
         name: 'DealsTable',
         data: () => ({
@@ -257,6 +262,12 @@
             ]
         }),
         computed: {
+            // totalDealIncome () {
+            //     return this.$store.getters.totalDealIncome
+            // },
+            // totalDealExpense () {
+            //     return this.$store.getters.totalDealExpense
+            // },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -276,7 +287,7 @@
                     }
                     return a.id - b.id
                 }
-                return this.stockOptions.deal_actions && this.stockOptions.deal_actions.sort(sortAction)
+                return this.stockOptions.deal_actions && clone(this.stockOptions.deal_actions).sort(sortAction)
             },
             goods () {
                 const markLack = (goodsArray) => goodsArray.map(item => ({...item, count: this.goodCount(item.id), disabled: this.goodCount(item.id) < 1}))
@@ -483,7 +494,8 @@
         },
         components: {
             NewCustomerDialog,
-            Deal
+            Deal,
+            DealsTableFooter
         }
     }
 </script>

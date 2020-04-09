@@ -1,12 +1,5 @@
 <template>
     <tr :class="{total: isTotal}">
-        <td
-            v-if="isTotal"
-            colspan="6"
-            align="right"
-        >
-            <span class="medium"><strong>ИТОГО:</strong></span>
-        </td>
         <td v-if="!isTotal">
             <v-icon
                 class="red--text delete"
@@ -17,10 +10,10 @@
                 clear
             </v-icon>
         </td>
-        <td v-if="!isTotal">
+        <td>
             {{ deal.number }}
         </td>
-        <td v-if="!isTotal">
+        <td>
             <v-avatar
                 size="36px"
                 :title="isSuperadmin ? `${deal.user.full_name} : чтобы изменить - клик мышкой` : deal.user.full_name"
@@ -46,16 +39,16 @@
                 @change="updateDeal('user')"
             />
         </td>
-        <td v-if="!isTotal">
+        <td>
             <customer-updater
               :deal="deal"
               @new="newCustomer = true"
             />
         </td>
-        <td v-if="!isTotal">
+        <td>
             {{ deal.action && deal.action.text || '' }}
         </td>
-        <td v-if="!isTotal">
+        <td>
             <span>
                 <deal-updater
                     :deal="deal"
@@ -90,12 +83,7 @@
                 />
             </span>
         </td>
-        <td
-            v-if="isTotal"
-        >
-            <span class="subheading">{{ +`${isTotal ? totalDealExpense : deal.expense}` | pretty }}</span>
-        </td>
-        <td v-if="!isTotal">
+        <td>
             <span
                 @click="switchEditMode('expense')"
             >
@@ -121,7 +109,7 @@
                 />
             </span>
         </td>
-        <td v-if="!isTotal">
+        <td>
             <span
                 @click="switchEditMode('is_cache')"
             >
@@ -188,9 +176,6 @@
             },
             totalDealIncome () {
                 return this.$store.getters.totalDealIncome
-            },
-            isTotal () {
-                return this.deal.id === null
             },
             users () {
                 return this.$store.state.users
