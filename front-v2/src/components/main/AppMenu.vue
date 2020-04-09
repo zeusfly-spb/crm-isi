@@ -1,33 +1,38 @@
 <template>
-    <v-flex align-center row>
-        <v-tabs
-            v-if="isAuth"
-            fixed-tabs
-        >
-            <v-tab
-                v-for="(tab, index) in tabs"
-                :to="{path: tab.href, query: {... $route.query}}"
-                :key="index"
-                router
+    <v-layout
+           justify-center
+    >
+        <v-flex align-center row>
+            <v-tabs
+                    v-if="isAuth"
+                    centered
             >
-                <v-badge
-                    color="red"
-                    v-if="tab.href === '/leads' && waitingLeadsCount"
+                <v-tab
+                        v-for="(tab, index) in tabs"
+                        :to="{path: tab.href, query: {... $route.query}}"
+                        :key="index"
+                        router
                 >
-                    <template v-slot:badge>
-                        <span>{{ waitingLeadsCount }}</span>
-                    </template>
-                    {{ tab.title }}
-                </v-badge>
-                <span v-else>{{ tab.title }}</span>
-            </v-tab>
-        </v-tabs>
-        <audio
-            autoplay
-            v-if="beep"
-            :src="`${basePath}/beep.wav`"
-        />
-    </v-flex>
+                    <v-badge
+                            color="red"
+                            v-if="tab.href === '/leads' && waitingLeadsCount"
+                    >
+                        <template v-slot:badge>
+                            <span>{{ waitingLeadsCount }}</span>
+                        </template>
+                        {{ tab.title }}
+                    </v-badge>
+                    <span v-else>{{ tab.title }}</span>
+                </v-tab>
+            </v-tabs>
+            <audio
+                    autoplay
+                    v-if="beep"
+                    :src="`${basePath}/beep.wav`"
+            />
+        </v-flex>
+    </v-layout>
+
 
 </template>
 <script>

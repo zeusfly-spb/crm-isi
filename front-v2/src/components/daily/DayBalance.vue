@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 md6 offset-md3 justify-center class="md2">
+    <v-flex xs12 md6 offset-md3 justify-center class="md6">
         <v-data-table
             :headers="headers"
             :items="items"

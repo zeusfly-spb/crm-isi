@@ -16,10 +16,10 @@
                 hide-default-footer
                 class="elevation-1"
         >
-            <template v-slot:items="props">
+            <template v-slot:item="{ item, index }">
                 <tr
                     is="deal"
-                    :deal="{...props.item, number: props.index + 1}"
+                    :deal="{...item, number: index + 1}"
                     @snack="showSnack"
                     @delete="deleteConfirm"
                 />
