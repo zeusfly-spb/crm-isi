@@ -40,9 +40,15 @@ class LeadController extends Controller
             }
 
         } else {
-            $leads = Lead::with('comments', 'user', 'postpones')
-                ->where('status', '<>', 'done')
-                ->get()->reverse()->values()->toArray();
+//            $leads = Lead::with('comments', 'user', 'postpones')
+//                ->where('status', '<>', 'done')
+//                ->get()->reverse()->values()->toArray();
+
+            $leads = Cache::rememberForever('leads_list', function () {
+                return Lead::with('comments', 'user', 'postpones')
+                    ->where('status', '<>', 'done')
+                    ->get()->reverse()->values()->toArray();
+            });
         }
         return response()->json($leads);
     }

@@ -20,6 +20,8 @@ use App\Vacation;
 use App\Observers\VacationObserver;
 use App\WorkDay;
 use App\Observers\WorkDayObserver;
+use App\Lead;
+use App\Observers\LeadObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,5 +52,6 @@ class AppServiceProvider extends ServiceProvider
         Sick::observe(SickObserver::class);
         Vacation::observe(VacationObserver::class);
         WorkDay::observe(WorkDayObserver::class);
+        Lead::observe(LeadObserver::class);
     }
 }
