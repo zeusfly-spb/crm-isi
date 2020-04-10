@@ -24,6 +24,8 @@ use App\Lead;
 use App\Observers\LeadObserver;
 use App\Postpone;
 use App\Observers\PostponeObserver;
+use App\LeadComment;
+use App\Observers\LeadCommentObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,5 +58,6 @@ class AppServiceProvider extends ServiceProvider
         WorkDay::observe(WorkDayObserver::class);
         Lead::observe(LeadObserver::class);
         Postpone::observe(PostponeObserver::class);
+        LeadComment::observe(LeadCommentObserver::class);
     }
 }

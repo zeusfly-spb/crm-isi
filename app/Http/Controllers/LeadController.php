@@ -79,7 +79,7 @@ class LeadController extends Controller
     {
         $comment = LeadComment::find($request->comment_id);
         $lead = Lead::find($comment->lead_id);
-        LeadComment::destroy($request->comment_id);
+        $comment->delete();
         $lead->load('comments', 'user', 'postpones');
         return response()->json($lead->toArray());
     }
