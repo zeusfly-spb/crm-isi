@@ -65,7 +65,7 @@
             </span>
         </td>
         <td>
-            <span v-if="isTotal">{{ totalDealIncome }}</span>
+            <span v-if="isTotal">{{ totalDealIncome | pretty }}</span>
             <price-updater
                 v-else
                 :deal="deal"
@@ -73,7 +73,7 @@
             />
         </td>
         <td>
-            <span v-if="isTotal">{{ totalDealExpense }}</span>
+            <span v-if="isTotal">{{ totalDealExpense | pretty }}</span>
             <price-updater
                 v-else
                 :deal="deal"
