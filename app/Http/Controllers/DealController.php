@@ -43,6 +43,14 @@ class DealController extends Controller
         return response()->json($queryBuilder->get()->toArray());
     }
 
+    public function updatePrice(Request $request)
+    {
+        $deal = Deal::find($request->deal_id);
+        $deal->update([$request->field => $request->amount]);
+        $deal->load('user', 'customer', 'action');
+        return response()->json($deal->toArray());
+    }
+
     public function updateCustomerId(Request $request)
     {
         $deal = Deal::find($request->deal_id);

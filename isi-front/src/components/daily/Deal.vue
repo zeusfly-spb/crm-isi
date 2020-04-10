@@ -65,61 +65,20 @@
             </span>
         </td>
         <td>
-            <span
-                @click="switchEditMode('income')"
-            >
-                <span v-if="!editMode.income"
-                      :title="canUpdate ? 'Чтобы изменить цену - клик мышкой' : ''"
-                      :class="{clickable: canUpdate, subheading: isTotal}"
-                >
-                    {{ +`${isTotal ? totalDealIncome : deal.income}` | pretty }}
-                </span>
-                <v-text-field
-                    autofocus
-                    v-else
-                    v-model="deal.income"
-                    single-line
-                    maxlength="7"
-                    style="width: 4em"
-                    height="1em"
-                    @focus="focused"
-                    @blur="blur('income')"
-                    @keyup.esc="blur('income')"
-                    @keyup.enter="updateDeal('income')"
-                    id="income"
-                />
-            </span>
+            <span v-if="isTotal">{{ totalDealIncome }}</span>
+            <price-updater
+                v-else
+                :deal="deal"
+                mode="income"
+            />
         </td>
-        <td
-            v-if="isTotal"
-        >
-            <span class="subheading">{{ +`${isTotal ? totalDealExpense : deal.expense}` | pretty }}</span>
-        </td>
-        <td v-if="!isTotal">
-            <span
-                @click="switchEditMode('expense')"
-            >
-                <span v-if="!editMode.expense"
-                      :title="canUpdate ? 'Чтобы изменить себестоимость - клик мышкой' : ''"
-                      :class="{clickable: canUpdate}"
-                >
-                    {{ deal.expense }}
-                </span>
-                <v-text-field
-                    autofocus
-                    v-else
-                    v-model="deal.expense"
-                    single-line
-                    maxlength="7"
-                    style="width: 4em"
-                    height="1em"
-                    @focus="focused('expense')"
-                    @blur="blur('expense')"
-                    @keyup.esc="blur('expense')"
-                    @keyup.enter="updateDeal('expense')"
-                    id="expense"
-                />
-            </span>
+        <td>
+            <span v-if="isTotal">{{ totalDealExpense }}</span>
+            <price-updater
+                v-else
+                :deal="deal"
+                mode="expense"
+            />
         </td>
         <td v-if="!isTotal">
             <span
@@ -162,6 +121,7 @@
     import NewCustomerDialog from './NewCustomerDialog'
     import DealUpdater from './DealUpdater'
     import CustomerUpdater from './CustomerUpdater'
+    import PriceUpdater from './PriceUpdater'
 
     export default {
         name: 'Deal',
@@ -304,7 +264,8 @@
         components: {
             NewCustomerDialog,
             DealUpdater,
-            CustomerUpdater
+            CustomerUpdater,
+            PriceUpdater
         }
     }
 </script>
