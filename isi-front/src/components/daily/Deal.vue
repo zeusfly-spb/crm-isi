@@ -1,14 +1,21 @@
 <template>
-    <tr :class="{total: isTotal}">
+    <tr
+        :class="{total: isTotal}"
+    >
         <td
+            :class="{'mini': mini}"
             v-if="isTotal"
             colspan="6"
             align="right"
         >
             <span class="medium"><strong>ИТОГО:</strong></span>
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
+
             <v-icon
+                :small="mini"
                 class="red--text delete"
                 :title="`Удалить сделку ${deal.insole.name} на ${deal.income}р.`"
                 @click="confirmToDelete"
@@ -17,20 +24,19 @@
                 clear
             </v-icon>
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
             {{ deal.number }}
         </td>
-        <td v-if="!isTotal">
-            <v-avatar
-                size="36px"
-                :title="isSuperadmin ? `${deal.user.full_name} : чтобы изменить - клик мышкой` : deal.user.full_name"
-                @click="isSuperadmin ? switchEditMode('user') : null"
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
+            <user-avatar
                 v-if="!editMode.user"
-                :class="{clickable: isSuperadmin && isToday}"
-            >
-                <img :src="basePath + deal.user.avatar" alt="Фото" v-if="deal.user.avatar">
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-            </v-avatar>
+                :user="deal.user"
+                :mini="mini"
+            />
             <v-select
                 v-else
                 autofocus
@@ -46,16 +52,23 @@
                 @change="updateDeal('user')"
             />
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
             <customer-updater
-              :deal="deal"
+                :mini="mini"
+                :deal="deal"
               @new="newCustomer = true"
             />
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
             {{ deal.action && deal.action.text || '' }}
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
             <span>
                 <deal-updater
                     :deal="deal"
@@ -64,7 +77,9 @@
                 />
             </span>
         </td>
-        <td>
+        <td
+                :class="{'mini': mini}"
+        >
             <span v-if="isTotal">{{ totalDealIncome | pretty }}</span>
             <price-updater
                 v-else
@@ -72,7 +87,9 @@
                 mode="income"
             />
         </td>
-        <td>
+        <td
+                :class="{'mini': mini}"
+        >
             <span v-if="isTotal">{{ totalDealExpense | pretty }}</span>
             <price-updater
                 v-else
@@ -80,7 +97,9 @@
                 mode="expense"
             />
         </td>
-        <td v-if="!isTotal">
+        <td v-if="!isTotal"
+            :class="{'mini': mini}"
+        >
             <span
                 @click="switchEditMode('is_cache')"
             >
@@ -122,6 +141,7 @@
     import DealUpdater from './DealUpdater'
     import CustomerUpdater from './CustomerUpdater'
     import PriceUpdater from './PriceUpdater'
+    import UserAvatar from "../main/UserAvatar"
 
     export default {
         name: 'Deal',
@@ -143,6 +163,9 @@
             }
         }),
         computed: {
+            mini () {
+                return false
+            },
             totalDealExpense () {
                 return this.$store.getters.totalDealExpense
             },
@@ -265,11 +288,16 @@
             NewCustomerDialog,
             DealUpdater,
             CustomerUpdater,
-            PriceUpdater
+            PriceUpdater,
+            UserAvatar
         }
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
     .clickable {
         cursor: pointer;
     }

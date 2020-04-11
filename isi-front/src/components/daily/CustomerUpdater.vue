@@ -4,6 +4,7 @@
             v-if="!active"
         >
             <v-icon
+                :small="mini"
                 v-if="!anonymous"
                 style="user-select: none"
                 color="green"
@@ -52,7 +53,13 @@
     import InteractionsCard from '../customers/InteractionsCard'
     export default {
         name: 'CustomerUpdater',
-        props: ['deal'],
+        props: {
+            deal: Object,
+            mini: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: () => ({
             extendedCustomer: null,
             interactionsOpen: false,

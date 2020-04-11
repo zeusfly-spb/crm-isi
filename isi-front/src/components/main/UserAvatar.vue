@@ -1,7 +1,7 @@
 <template>
     <v-flex>
         <v-avatar
-                size="36px"
+                :size="size"
                 :title="user && user.full_name || ''"
         >
             <img
@@ -16,8 +16,17 @@
 <script>
     export default {
         name: 'UserAvatar',
-        props: ['user'],
+        props: {
+            user: Object,
+            mini: {
+                type: Boolean,
+                default: false
+            }
+        },
         computed: {
+            size () {
+                return `${this.mini ? 18 : 36}px`
+            },
             fullName () {
                 return this.user && this.user.full_name
             },
