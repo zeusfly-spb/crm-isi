@@ -164,7 +164,7 @@
         }),
         computed: {
             mini () {
-                return false
+                return this.$store.getters.miniMode
             },
             totalDealExpense () {
                 return this.$store.getters.totalDealExpense

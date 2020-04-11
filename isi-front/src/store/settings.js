@@ -31,11 +31,14 @@ export default {
         }
     },
     mutations: {
+        SET_MINI_MODE_VALUE (state, value) {
+            localStorage.setItem('isi-miniMode', value)
+        },
         SET_SETTING (state, setting) {
             state.data = setting.data
         }
     },
     getters: {
-
+        miniMode: () => localStorage.getItem('isi-miniMode') || false
     }
 }
