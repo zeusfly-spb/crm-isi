@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\LeadComment;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\RefreshLeadsList;
 
 class LeadCommentObserver
 {
@@ -15,8 +16,8 @@ class LeadCommentObserver
      */
     public function created(LeadComment $leadComment)
     {
-        Cache::forget('leads_list');
-
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -27,7 +28,8 @@ class LeadCommentObserver
      */
     public function updated(LeadComment $leadComment)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -38,7 +40,8 @@ class LeadCommentObserver
      */
     public function deleted(LeadComment $leadComment)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**

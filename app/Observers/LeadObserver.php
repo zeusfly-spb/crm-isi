@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\RefreshLeadsList;
 use App\Lead;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,7 +16,8 @@ class LeadObserver
      */
     public function created(Lead $lead)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -26,7 +28,8 @@ class LeadObserver
      */
     public function updated(Lead $lead)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -37,7 +40,8 @@ class LeadObserver
      */
     public function deleted(Lead $lead)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**

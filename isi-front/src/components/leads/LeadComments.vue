@@ -187,6 +187,10 @@
             }
         },
         methods: {
+            pause () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 5000)
+            },
             deleteComment () {
                 this.$store.dispatch('deleteLeadComment', this.commentToDelete.id)
                     .then(() => {
@@ -195,6 +199,7 @@
                             color: 'green'
                         })
                         this.confirm = false
+                        this.pause()
                     })
             },
             showDeleteConfirm (comment) {
@@ -215,7 +220,7 @@
                                     text: `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`,
                                     color: 'green'
                                 })
-
+                                this.pause()
                             })
                     })
             },

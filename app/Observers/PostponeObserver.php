@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Postpone;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\RefreshLeadsList;
 
 class PostponeObserver
 {
@@ -15,7 +16,8 @@ class PostponeObserver
      */
     public function created(Postpone $postpone)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -26,7 +28,7 @@ class PostponeObserver
      */
     public function updated(Postpone $postpone)
     {
-        //
+        RefreshLeadsList::dispatch();
     }
 
     /**
@@ -37,7 +39,8 @@ class PostponeObserver
      */
     public function deleted(Postpone $postpone)
     {
-        Cache::forget('leads_list');
+//        Cache::forget('leads_list');
+        RefreshLeadsList::dispatch();
     }
 
     /**

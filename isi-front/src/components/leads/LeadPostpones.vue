@@ -90,7 +90,7 @@
                                     :key="postpone.created_at"
                                     color="blue"
                                     class="white--text pa-1 mb-1"
-                                    :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено системой'}`"
+                                    :title="`${postpone && postpone.user && postpone.user.full_name ? 'Добавлено пользователем ' + postpone.user.full_name : 'Добавлено Администратором'}`"
                                 >
                                     <v-icon
                                         color="red"
@@ -206,6 +206,10 @@
             }
         },
         methods: {
+            pause () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 5000)
+            },
             deletePostpone () {
                 this.$store.dispatch('deleteLeadPostpone', {
                     postpone_id: this.postponeToDelete.id
@@ -216,6 +220,7 @@
                             color: 'green'
                         })
                         this.confirm = false
+                        this.pause()
                     })
             },
             showDeleteConfirm (postpone) {
@@ -253,7 +258,7 @@
                             text: 'Заявке назначен перезвон',
                             color: 'green'
                         })
-
+                        this.pause()
                     })
             }
         },
