@@ -80,10 +80,6 @@ export function createRouter() {
         routes
     })
     router.beforeEach((to, from, next) => {
-        store.commit('SET_SIDE_PANEL_STATUS', {
-            status: false,
-            mode: null
-        })
         store.commit('SET_SCAN_MODE', {
             workdays: false,
             accesses: false,

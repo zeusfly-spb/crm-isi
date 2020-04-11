@@ -1,17 +1,17 @@
 <template>
-    <v-flex>
-        <span
-            class="title"
+    <v-sheet dark height="100%">
+        <v-flex
+            class="subheading pt-1 text-xs-center"
         >
-            Настройки отображения
-        </span>
+            <strong>Настройки отображения</strong>
+        </v-flex>
         <v-switch
             v-model="miniMode"
             label='Режим "Мини"'
             :true-value="true"
             :false-value="false"
         />
-    </v-flex>
+    </v-sheet>
 </template>
 <script>
     export default {
@@ -23,6 +23,7 @@
                 },
                 set (val) {
                     this.$store.commit('SET_MINI_MODE_VALUE', val)
+                    this.$router.go(this.$route.path)
                 }
             }
         }

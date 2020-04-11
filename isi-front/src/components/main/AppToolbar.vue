@@ -74,12 +74,14 @@
             >
                 <v-icon
                     v-if="isSuperadmin"
-                    title="Настройки просмотра"
+                    :title="`${sidePanel ? 'Закрыть' : 'Открыть'} панель настроек отображения`"
+                    style="user-select: none"
                     color="grey lighten-1"
-                    class="clickable ghost"
+                    class="clickable"
+                    :class="{'ghost': !sidePanel}"
                     :small="isMobile"
                     :large="!isMobile"
-                    @click="toggleSettingsPanel"
+                    @click="sidePanel = !sidePanel"
                 >
                     settings
                 </v-icon>
@@ -102,6 +104,17 @@
     export default {
         name: 'AppToolbar',
         computed: {
+            sidePanel: {
+                get () {
+                    return this.$store.state.layout.sidePanel && this.$store.state.layout.sidePanelMode === 'view-options'
+                },
+                set (val) {
+                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                        status: val,
+                        mode: val ? 'view-options' : null
+                    })
+                }
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
@@ -125,19 +138,6 @@
             }
         },
         methods: {
-            toggleSettingsPanel () {
-                if (this.$store.state.layout.sidePanel) {
-                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
-                        status: false,
-                        mode: null
-                    })
-                } else {
-                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
-                        status: true,
-                        mode: 'view-options'
-                    })
-                }
-            },
             logOut () {
                 this.$store.dispatch('logOut')
                 this.$router.push('/login')
