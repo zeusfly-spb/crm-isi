@@ -129,8 +129,8 @@
                                     <v-time-picker
                                         v-model="time"
                                         format="24hr"
-                                        :max="presetHour ? `${presetHour}:59` : null"
-                                        :min="presetHour ? `${presetHour}:00` : null"
+                                        :max="presetHour ? `${presetHour}:59` : '22:59'"
+                                        :min="presetHour ? `${presetHour}:00` : '08:00'"
                                         @click:hour="setHour"
                                     />
                                 </v-card-text>
