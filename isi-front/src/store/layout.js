@@ -35,15 +35,8 @@ export default {
             state.customersChanged = val
         },
         SET_SIDE_PANEL_STATUS (state, data) {
-            if (data.status) {
-                state.sidePanel = data.status
-                state.sidePanelMode = data.mode
-            } else {
-                setTimeout (() => {
-                    state.sidePanel = data.status
-                    state.sidePanelMode = data.mode
-                }, 1500)
-            }
+            state.sidePanel = data.status
+            state.sidePanelMode = data.mode
         },
         PUSH_MESSAGE (state, message) {
             state.messages.push(message)

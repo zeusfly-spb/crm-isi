@@ -73,6 +73,17 @@
                 text-xs-right
             >
                 <v-icon
+                    v-if="isSuperadmin"
+                    title="Настройки просмотра"
+                    color="grey lighten-1"
+                    class="clickable ghost"
+                    :small="isMobile"
+                    :large="!isMobile"
+                    @click="toggleSettingsPanel"
+                >
+                    settings
+                </v-icon>
+                <v-icon
                     v-if="isAuth"
                     title="Выход"
                     color="orange darken-2"
@@ -91,6 +102,9 @@
     export default {
         name: 'AppToolbar',
         computed: {
+            isSuperadmin () {
+                return this.$store.getters.isSuperadmin
+            },
             access () {
                 return this.$store.state.access
             },
@@ -111,6 +125,19 @@
             }
         },
         methods: {
+            toggleSettingsPanel () {
+                if (this.$store.state.layout.sidePanel) {
+                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                        status: false,
+                        mode: null
+                    })
+                } else {
+                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                        status: true,
+                        mode: 'view-options'
+                    })
+                }
+            },
             logOut () {
                 this.$store.dispatch('logOut')
                 this.$router.push('/login')
@@ -122,6 +149,12 @@
     }
 </script>
 <style scoped>
+    .ghost {
+        opacity: 0;
+    }
+    .ghost:hover {
+        opacity: 1;
+    }
     .v-btn__content {
         margin: 0!important;
         padding: 0!important;

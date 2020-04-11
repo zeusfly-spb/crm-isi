@@ -39,6 +39,6 @@ export default {
         }
     },
     getters: {
-        miniMode: () => localStorage.getItem('isi-miniMode') || false
+        miniMode: () => localStorage.getItem('isi-miniMode') === 'true' || false
     }
 }
