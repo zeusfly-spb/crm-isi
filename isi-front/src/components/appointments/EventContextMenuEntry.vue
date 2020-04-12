@@ -92,7 +92,7 @@
             },
             contextMenuRaw: [
                 {title: 'Сменить статус на "Выполнено"', action: 'completed'},
-                {title: 'Сменить статус на "Отменено"', action: 'cancelled'},
+                {title: 'Сменить статус на "Отказ"', action: 'cancelled'},
                 {title: 'Сменить статус на "Активно"', action: 'active'},
                 {title: 'Сменить статус на "Отложено"', action: 'postponed'},
                 {title: 'Сменить статус на "На модерации"', action: 'moderate'},

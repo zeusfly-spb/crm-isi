@@ -81,7 +81,7 @@
             statsRaw: [
                 {status: 'active', color: 'blue', icon: 'event', title: 'Сменить статус на "Активно"'},
                 {status: 'completed', color: 'green', icon: 'event_available', title: 'Сменить статус на "Выполнено"'},
-                {status: 'cancelled', color: 'red', icon: 'event_busy', title: 'Сменить статус на "Отменено"'},
+                {status: 'cancelled', color: 'red', icon: 'event_busy', title: 'Сменить статус на "Отказ"'},
                 {status: 'moderate', color: 'amber darken-3', icon: 'assignment_late', title: 'Сменить статус на "Модерация"'},
                 {status: 'postponed', color: 'orange accent-4', icon: 'timelapse', title: 'Сменить статус на "Отложена"'}
             ],
