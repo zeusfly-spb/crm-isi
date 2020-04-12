@@ -1,5 +1,8 @@
 <template>
-    <v-sheet dark height="100%">
+    <v-sheet
+        height="100%"
+        color="cyan lighten-5"
+    >
         <v-flex
             class="subheading pt-1 text-xs-center"
         >
