@@ -70,7 +70,7 @@
         methods: {
             pause () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
-                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 15000)
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 20000)
             },
             showModal () {
                 this.dialog = true
@@ -79,6 +79,7 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.pause()
                         this.$store.dispatch('addLead', {
                             phone: this.phone,
                             name: this.name,
@@ -91,7 +92,6 @@
                                     color: 'green'
                                 })
                             })
-                            .finally(() => this.pause())
                     })
             }
         },

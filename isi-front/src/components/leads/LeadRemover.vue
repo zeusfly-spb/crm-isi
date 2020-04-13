@@ -66,6 +66,7 @@
             },
             deleteLead () {
                 this.buttonEnabled = false
+                this.pause()
                 this.$store.dispatch('deleteLead', this.leadToDelete.id)
                     .then(() => {
                         this.$store.dispatch('pushMessage', {
@@ -75,7 +76,6 @@
                         })
                         this.leadToDelete = null
                     })
-                    .finally(() => this.pause())
             }
         },
         watch: {
