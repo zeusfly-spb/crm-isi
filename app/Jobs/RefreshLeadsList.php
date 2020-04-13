@@ -20,6 +20,7 @@ class RefreshLeadsList implements ShouldQueue
     protected $model;
     protected $operation;
     protected $lead_id;
+    protected $class;
 
     /**
      * Create a new job instance.
@@ -30,6 +31,7 @@ class RefreshLeadsList implements ShouldQueue
     {
         $this->model = $model;
         $this->operation = $operation;
+        $this->class = get_class($this->model);
         if (get_class($this->model) == 'App\Lead') {
             $this->lead_id = $this->model->id;
         } else {
@@ -46,6 +48,29 @@ class RefreshLeadsList implements ShouldQueue
         return $data;
     }
 
+    protected function performCreate ($data) {
+        $targetLead = $data->where('id', $this->lead_id)->first();
+        switch ($this->class) {
+            case 'App\Lead':
+                $newItem = $this->model->load('user')->toArray();
+                $data = $data->push($newItem);
+                break;
+            case 'App\LeadComment':
+                $targetLead->comments = $targetLead->comments->push($this->model->toArray());
+                $data = $data->map(function ($item) use ($targetLead) {
+                    return $item->id == $targetLead->id ? $targetLead : $item;
+                });
+                break;
+            case 'App\Postpone':
+                $targetLead->postpones = $targetLead->postpones->push($this->model->toArray());
+                $data = $data->map(function ($item) use ($targetLead) {
+                    return $item->id == $targetLead->id ? $targetLead : $item;
+                });
+                break;
+        }
+        return $data;
+    }
+
     protected function updateLeadInfo () {
         $leadId = $this->lead_id;
         $cacheData = Cache::get('leads_list');
@@ -54,14 +79,7 @@ class RefreshLeadsList implements ShouldQueue
                 $cacheData = $this->commonUpdate($cacheData);
                 break;
             case 'create':
-                if (get_class($this->model) == 'App\Lead') {
-                    $newItem = $this->model->load('user')->toArray();
-                    $cacheData = $cacheData->map(function ($item) use ($leadId, $newItem) {
-                        return $item->id == $leadId ? $newItem : $item;
-                    });
-                } else {
-                    $cacheData = $this->commonUpdate($cacheData);
-                }
+                $this->performCreate($cacheData);
                 break;
             case 'delete':
                 if (get_class($this->model) == 'App\Lead') {

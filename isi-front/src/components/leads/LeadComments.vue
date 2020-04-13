@@ -189,9 +189,10 @@
         methods: {
             pause () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
-                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 10000)
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 15000)
             },
             deleteComment () {
+                this.pause()
                 this.$store.dispatch('deleteLeadComment', this.commentToDelete.id)
                     .then(() => {
                         this.$store.dispatch('pushMessage', {
@@ -199,7 +200,6 @@
                             color: 'green'
                         })
                         this.confirm = false
-                        this.pause()
                     })
             },
             showDeleteConfirm (comment) {
@@ -210,6 +210,7 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
+                        this.pause()
                         this.$store.dispatch('addLeadComment', {
                             lead_id: this.lead.id,
                             text: this.newComment
@@ -220,7 +221,6 @@
                                     text: `Добавлен комментарий к заявке с номера ${this.$options.filters.phone(this.lead.phone)}`,
                                     color: 'green'
                                 })
-                                this.pause()
                             })
                     })
             },
