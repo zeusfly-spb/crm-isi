@@ -39,8 +39,9 @@ class RefreshLeadsList implements ShouldQueue
 
     protected function commonUpdate ($data) {
         $leadId = $this->lead_id;
-        $data = $data->map(function ($item) use ($leadId) {
-            return $item->id == $leadId ? Lead::with('comments', 'user', 'postpones')->find($leadId)->toArray() : $item;
+        $newItem = Lead::with('comments', 'user', 'postpones')->find($leadId)->toArray();
+        $data = $data->map(function ($item) use ($leadId, $newItem) {
+            return $item->id == $leadId ? $newItem : $item;
         });
         return $data;
     }
@@ -54,8 +55,9 @@ class RefreshLeadsList implements ShouldQueue
                 break;
             case 'create':
                 if (get_class($this->model) == 'App\Lead') {
-                    $cacheData = $cacheData->map(function ($item) use ($leadId) {
-                        return $item->id == $leadId ? Lead::with('user')->find($leadId)->toArray() : $item;
+                    $newItem = $this->model->load('user')->toArray();
+                    $cacheData = $cacheData->map(function ($item) use ($leadId, $newItem) {
+                        return $item->id == $leadId ? $newItem : $item;
                     });
                 } else {
                     $cacheData = $this->commonUpdate($cacheData);

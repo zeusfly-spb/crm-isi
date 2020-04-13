@@ -79,7 +79,6 @@
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
-                        this.pause()
                         this.$store.dispatch('addLead', {
                             phone: this.phone,
                             name: this.name,

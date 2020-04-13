@@ -62,7 +62,7 @@
         methods: {
             pause () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
-                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 15000)
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 20000)
             },
             deleteLead () {
                 this.buttonEnabled = false

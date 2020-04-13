@@ -204,7 +204,7 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('ADD_LEAD', res.data)
+                        // commit('ADD_LEAD', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
