@@ -98,6 +98,7 @@ class LeadController extends Controller
         if ($request->comment) {
             $lead->addComment($request->comment, $request->user_id);
         }
+        $lead->load('user');
         return response()->json($lead->toArray());
     }
 

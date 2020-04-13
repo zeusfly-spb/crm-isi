@@ -68,6 +68,10 @@
             comment: ''
         }),
         methods: {
+            pause () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 15000)
+            },
             showModal () {
                 this.dialog = true
             },
@@ -82,11 +86,12 @@
                         })
                             .then(() => {
                                 this.dialog = false
-                                this.$store.commit('SEND_LEAD_MESSAGE', {
+                                this.$store.dispatch('pushMessage', {
                                     text: 'Добавлена новая заявка',
                                     color: 'green'
                                 })
                             })
+                            .finally(() => this.pause())
                     })
             }
         },
