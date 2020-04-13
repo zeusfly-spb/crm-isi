@@ -60,9 +60,13 @@
             }
         },
         methods: {
+            pause () {
+                this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
+                setTimeout(() => this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: true}), 15000)
+            },
             deleteLead () {
                 this.buttonEnabled = false
-                this.$store.dispatch('deleteLead', {lead_id: this.leadToDelete.id})
+                this.$store.dispatch('deleteLead', this.leadToDelete.id)
                     .then(() => {
                         this.$store.dispatch('pushMessage', {
                             text: `Заявка с номера ${this.$options.filters.phone(this.leadToDelete.phone)} удалена`,
@@ -71,6 +75,7 @@
                         })
                         this.leadToDelete = null
                     })
+                    .finally(() => this.pause())
             }
         },
         watch: {

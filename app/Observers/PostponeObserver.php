@@ -16,8 +16,7 @@ class PostponeObserver
      */
     public function created(Postpone $postpone)
     {
-//        Cache::forget('leads_list');
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($postpone, 'create');
     }
 
     /**
@@ -28,7 +27,7 @@ class PostponeObserver
      */
     public function updated(Postpone $postpone)
     {
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($postpone, 'update');
     }
 
     /**
@@ -39,8 +38,7 @@ class PostponeObserver
      */
     public function deleted(Postpone $postpone)
     {
-//        Cache::forget('leads_list');
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($postpone, 'delete');
     }
 
     /**

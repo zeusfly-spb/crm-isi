@@ -16,8 +16,7 @@ class LeadCommentObserver
      */
     public function created(LeadComment $leadComment)
     {
-//        Cache::forget('leads_list');
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($leadComment, 'create');
     }
 
     /**
@@ -28,8 +27,7 @@ class LeadCommentObserver
      */
     public function updated(LeadComment $leadComment)
     {
-//        Cache::forget('leads_list');
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($leadComment, 'update');
     }
 
     /**
@@ -40,8 +38,7 @@ class LeadCommentObserver
      */
     public function deleted(LeadComment $leadComment)
     {
-//        Cache::forget('leads_list');
-        RefreshLeadsList::dispatch();
+        RefreshLeadsList::dispatch($leadComment, 'delete');
     }
 
     /**

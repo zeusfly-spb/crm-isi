@@ -354,7 +354,7 @@ export default {
             state.leads = state.leads.map(item => +item.id === +lead.id ? lead : item)
         },
         DELETE_LEAD (state, data) {
-            state.leads = state.leads.filter(item => +item.id !== +data.lead_id)
+            state.leads = state.leads.filter(item => +item.id !== +data.id)
         },
         SET_LEADS (state, leads) {
             let prevCount = state.leads.filter(item => item.status === 'wait')
