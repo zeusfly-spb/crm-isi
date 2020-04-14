@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 
 class RefreshLeadsList implements ShouldQueue
@@ -27,16 +28,9 @@ class RefreshLeadsList implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Model $model, string $operation)
+    public function __construct()
     {
-        $this->model = $model;
-        $this->operation = $operation;
-        $this->class = get_class($this->model);
-        if (get_class($this->model) == 'App\Lead') {
-            $this->lead_id = $this->model->id;
-        } else {
-            $this->lead_id = $this->model->lead_id;
-        }
+
     }
 
     protected function commonUpdate ($data) {
@@ -73,7 +67,7 @@ class RefreshLeadsList implements ShouldQueue
 
     protected function updateLeadInfo () {
         $leadId = $this->lead_id;
-        $cacheData = Cache::get('leads_list');
+        $cacheData = collect(Cache::get('leads_list'));
         switch ($this->operation) {
             case 'update':
                 $cacheData = $this->commonUpdate($cacheData);
@@ -91,7 +85,7 @@ class RefreshLeadsList implements ShouldQueue
                 }
                 break;
         }
-        Cache::put('leads_list', $cacheData);
+        Cache::put('leads_list', $cacheData->all());
     }
 
     /**
@@ -101,10 +95,10 @@ class RefreshLeadsList implements ShouldQueue
      */
     public function handle()
     {
-//        $leads = Lead::with('comments', 'user', 'postpones')
-//            ->where('status', '<>', 'done')
-//            ->get()->reverse()->values()->toArray();
-//        Cache::put('leads_list', $leads);
-        $this->updateLeadInfo();
+        $leads = Lead::with('comments', 'user', 'postpones')
+            ->where('status', '<>', 'done')
+            ->get()->reverse()->values()->toArray();
+        Cache::put('leads_list', $leads);
+//        $this->updateLeadInfo();
     }
 }
