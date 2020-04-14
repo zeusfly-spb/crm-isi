@@ -197,6 +197,21 @@ class Island extends Model
     public function getCabinetsAttribute()
     {
         $cabinets = $this->options['cabinets'] ?? [];
-        return $cabinets;
+        return collect($cabinets);
+    }
+
+    public function cabinetsReduced()
+    {
+        if (!$this->cabinets->count()) {
+            $events = Appointment::where('island_id', $this->id)->get();
+            $events->each(function ($item) {
+                $item->update(['cabinet_id' => null]);
+            });
+            $result = (object) [
+                'mode' => 'last',
+                'count' => $events->count()
+            ];
+            return $result;
+        }
     }
 }

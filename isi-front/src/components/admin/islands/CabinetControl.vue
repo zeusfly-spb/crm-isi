@@ -176,6 +176,9 @@
             }
         }),
         computed: {
+            cabinetsCount () {
+                return this.cabinets.length
+            },
             island () {
                 return this.$store.state.islands.find(island => +island.id === +this.islandId)
             },
@@ -257,6 +260,21 @@
         },
         created () {
             this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
+        },
+        watch: {
+            cabinetsCount (val, oldVal) {
+                let baseMessage = `В островке "${this.island.name}" `
+                let firstMessage = baseMessage + 'добавлен первый кабинет, и все существующие записи назначены на него.'
+                let lastMessage = baseMessage + 'удален последний кабинет и все его записи получили статус "без кабинета".'
+                let postAction = oldVal === 0 && val > 0 ? 'first' : oldVal > 0 && val === 0 ? 'last' : oldVal > val ? 'reduce' : 'advance'
+                setTimeout(() => {
+                    postAction ? this.$store.dispatch('pushMessage', {
+                        text: {first: firstMessage, last: lastMessage}[postAction],
+                        color: 'blue'
+                    }) : null
+                }, 3000)
+
+            }
         }
     }
 </script>
