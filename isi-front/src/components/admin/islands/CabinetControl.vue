@@ -117,6 +117,7 @@
                         Отмена
                     </v-btn>
                     <v-btn
+                        :disabled="loading"
                         color="green darken-1"
                         flat="flat"
                         @click="saveCabinet"
@@ -165,6 +166,7 @@
         name: 'CabinetControl',
         props: ['islandId'],
         data: () => ({
+            loading: false,
             currentAction: null,
             cabinetToDelete: null,
             confirm: false,
@@ -191,6 +193,7 @@
                 },
                 set (val) {
                     let updatedOptions = {... this.options, cabinets: val}
+                    this.loading = true
                     this.$store.dispatch('updateIsland', {...this.island, options: updatedOptions})
                         .then(() => {
                             let targetCabinet
@@ -209,6 +212,7 @@
                             })
                             this.closeDialog()
                         })
+                        .finally(() => this.loading = false)
                 }
             }
         },

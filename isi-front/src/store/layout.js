@@ -42,7 +42,7 @@ export default {
             state.messages.push(message)
         },
         PULL_MESSAGE (state) {
-            state.messages.pop
+            state.messages.pop()
         }
     }
 }

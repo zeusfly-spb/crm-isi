@@ -38,10 +38,12 @@ export default {
                 let lastMessage = baseMessage + 'удален последний кабинет и все его записи получили статус "без кабинета"' + ` (${result.post.count})`
                 let message = result.post.mode === 'first' ? firstMessage : result.post.mode === 'last' ? lastMessage : null
                 if (message) {
-                    dispatch('pushMessage', {
-                        text: message,
-                        color: 'blue'
-                    })
+                    setTimeout(() => {
+                        dispatch('pushMessage', {
+                            text: message,
+                            color: 'blue'
+                        })
+                    }, 1000)
                 }
             }
             return new Promise((resolve, reject) => {
