@@ -203,13 +203,56 @@
                                     break
                             }
                             let successText = `Кабинет "${targetCabinet.name}" ${{add: 'добавлен', delete: 'удален', edit: 'изменен'}[this.currentAction]} в островке "${this.island.name}"`
-                            this.$emit('success', successText)
+                            this.$store.dispatch('pushMessage', {
+                                text: successText,
+                                color: 'green'
+                            })
                             this.closeDialog()
                         })
                 }
             }
         },
         methods: {
+            performPostAction: async function ({old, now}) {
+                console.log(old, now)
+                let baseMessage = `В островке "${this.island.name}" `
+                let firstMessage = baseMessage + 'добавлен первый кабинет, и все существующие записи назначены на него'
+                let lastMessage = baseMessage + 'удален последний кабинет и все его записи получили статус "без кабинета"'
+                let postAction = old === 0 && now > 0 ? 'first' : old > 0 && now === 0 ? 'last' : old > now ? 'reduce': null
+                console.log(postAction)
+                if (postAction) {
+                    let storeAction = {first: 'firstCabinetCreated', last: 'cabinetsReduced', reduce: 'cabinetsReduced'}[postAction]
+                    let result = await this.$store.dispatch(storeAction, this.islandId)
+                    console.dir(result)
+                    switch (result.mode) {
+                        case 'error':
+                            this.$store.dispatch('pushMessage', {
+                                text: `Произошла непредвиденная ошибка, количество кабинетов: ${result.count}`,
+                                color: 'red'
+                            })
+                            break
+                        case 'first':
+                            this.$store.dispatch('pushMessage', {
+                                text: `${firstMessage} (${result.count})`,
+                                color: 'blue'
+                            })
+                            break
+                        case 'last':
+                            this.$store.dispatch('pushMessage', {
+                                text: `${lastMessage} (${result.count})`,
+                                color: 'blue'
+                            })
+                            break
+                        case 'middle':
+                            this.$store.dispatch('pushMessage', {
+                                text: `Записи (${result.count}) прежде назначенные на уделенный кабинет, были переоформлены на кабинет добавленный позже остальных.`,
+                                color: 'blue'
+                            })
+                            break
+                        default: break
+                    }
+                }
+            },
             openEditDialog (cabinet) {
                 this.editedCabinet = JSON.parse(JSON.stringify(cabinet))
                 this.currentAction = 'edit'
@@ -260,34 +303,6 @@
         },
         created () {
             this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
-        },
-        watch: {
-            cabinetsCount: async function (val, oldVal) {
-                let baseMessage = `В островке "${this.island.name}" `
-                let firstMessage = baseMessage + 'добавлен первый кабинет, и все существующие записи назначены на него'
-                let lastMessage = baseMessage + 'удален последний кабинет и все его записи получили статус "без кабинета"'
-                let postAction = oldVal === 0 && val > 0 ? 'first' : oldVal > 0 && val === 0 ? 'last' : oldVal > val ? 'reduce': null;
-                if (postAction) {
-                    let storeAction = {first: 'firstCabinetCreated', last: 'cabinetsReduced', reduce: 'cabinetsReduced'}[postAction]
-                    let result = await this.$store.dispatch(storeAction, this.islandId)
-                    switch (result.mode) {
-                        case 'first':
-                            this.$store.dispatch('pushMessage', {
-                                text: `${firstMessage} (${result.count})`,
-                                color: 'blue'
-                            })
-                            break;
-
-                    }
-                }
-                // setTimeout(() => {
-                //     postAction ? this.$store.dispatch('pushMessage', {
-                //         text: {first: firstMessage, last: lastMessage}[postAction],
-                //         color: 'blue'
-                //     }) : null
-                // }, 3000)
-
-            }
         }
     }
 </script>

@@ -28,10 +28,36 @@ class IslandController extends Controller
 
     public function update(Request $request)
     {
+        function mode (int $old, int $new) {
+            if ($old == 0 && $new == 1) {
+                return 'first';
+            }
+            if ($old > $new) {
+                return 'reduced';
+            }
+            return null;
+        }
         $island = Island::find($request->id);
+        $oldCabinetsCount = $island->cabinets->count();
         $inputs = Arr::except($request->all(), ['users', 'chief', 'services', 'cabinets']);
         $island->update($inputs);
+        $newCabinetsCount = $island->cabinets->count();
+        $mode = mode($oldCabinetsCount, $newCabinetsCount);
+        switch ($mode) {
+            case 'first':
+                $post = $island->firstCabinetCreated();
+                break;
+            case 'reduced':
+                $post = $island->cabinetsReduced();
+                break;
+            default:
+                $post = null;
+                break;
+        }
         $island->load('users');
+        if ($post) {
+            $island->post = $post;
+        }
         return response()->json($island->toArray());
     }
 
@@ -108,11 +134,15 @@ class IslandController extends Controller
 
     public function firstCabinet(Request $request)
     {
-        return response()->json(Island::find($request->island_id)->firstCabinetCreated());
+        $island = Island::find($request->island_id);
+        $result = $island->firstCabinetCreated();
+        return response()->json($result);
     }
 
     public function cabinetsReduced(Request $request)
     {
-        return response()->json(Island::find($request->island_id)->cabinetsReduced());
+        $island = Island::find($request->island_id);
+        $result = $island->cabinetsReduced();
+        return response()->json($result);
     }
 }

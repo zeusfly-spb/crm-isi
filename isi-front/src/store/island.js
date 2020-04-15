@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default {
     actions: {
-        cabinetsReduced (islandId) {
+        cabinetsReduced ({}, islandId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/island_cabinets_reduced', {
                     island_id: islandId
@@ -11,7 +11,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        firstCabinetCreated (islandId) {
+        firstCabinetCreated ({}, islandId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/island_first_cabinet', {
                     island_id: islandId
@@ -31,12 +31,36 @@ export default {
                     .finally(() => commit('APPEND_USER_ISLANDS'))
             })
         },
-        updateIsland ({commit}, data) {
+        updateIsland ({dispatch, commit}, data) {
+            const performPost = (result) => {
+                let baseMessage = `В островке "${data.name}" `
+                let firstMessage = baseMessage + 'добавлен первый кабинет, и все существующие записи назначены на него' + ` (${result.post.count})`
+                let lastMessage = baseMessage + 'удален последний кабинет и все его записи получили статус "без кабинета"' + ` (${result.post.count})`
+                let message = result.post.mode === 'first' ? firstMessage : result.post.mode === 'last' ? lastMessage : null
+                if (message) {
+                    dispatch('pushMessage', {
+                        text: message,
+                        color: 'blue'
+                    })
+                }
+            }
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_island', {...data})
                     .then(res => {
-                        commit('UPDATE_ISLAND', res.data)
-                        resolve(res)
+                        if (res.data.post) {
+                            performPost(res.data)
+                            let payload = {}
+                            for (let key in res.data) {
+                                if (key !== 'post') {
+                                    payload[key] = res.data[key]
+                                }
+                            }
+                            commit('UPDATE_ISLAND', payload)
+                            resolve(res)
+                        } else {
+                            commit('UPDATE_ISLAND', res.data)
+                            resolve(res)
+                        }
                     })
                     .catch(e => reject(e))
                     .finally(() => commit('APPEND_USER_ISLANDS'))

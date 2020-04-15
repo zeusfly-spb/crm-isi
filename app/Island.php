@@ -22,7 +22,7 @@ class Island extends Model
         'cabinets' => 'array'
     ];
 
-    protected $appends = ['services', 'cabinets', 'events'];
+    protected $appends = ['services', 'cabinets'];
 
     public function workDays()
     {
@@ -217,7 +217,7 @@ class Island extends Model
                 'count' => $this->events->count()
             ];
         } else {
-            $lastCabinetId = $this->cabinets->last()->id;
+            $lastCabinetId = $this->cabinets->last()['id'];
             $cabinetIds = $this->cabinets->pluck('id')->all();
             $toUpdate = $this->events->whereNotIn('cabinet_id', $cabinetIds);
             $toUpdate->each(function ($item) use ($lastCabinetId) {
@@ -239,13 +239,14 @@ class Island extends Model
                 'count' => $this->cabinets->count()
             ];
         }
-       $firstCabinetId = $this->cabinets->first()->id;
-       $this->events->each(function ($item) use ($firstCabinetId) {
-           $item->update(['cabinet_id' => $firstCabinetId]);
-       });
-       $result = (object) [
-           'mode' => 'first',
-           'count' => $this->events->count()
-       ];
+        $firstCabinetId = $this->cabinets->first()['id'];
+        $this->events->each(function ($item) use ($firstCabinetId) {
+            $item->update(['cabinet_id' => $firstCabinetId]);
+        });
+        $result = (object) [
+            'mode' => 'first',
+            'count' => $this->events->count()
+        ];
+        return $result;
     }
 }
