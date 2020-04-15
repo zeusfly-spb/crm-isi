@@ -8,7 +8,12 @@
             colspan="6"
             align="right"
         >
-            <span class="medium"><strong>ИТОГО:</strong></span>
+            <span
+                class="medium"
+                :class="{'mr-1': mini}"
+            >
+                <strong>ИТОГО:</strong>
+            </span>
         </td>
         <td v-if="!isTotal"
             :class="{'mini': mini}"
@@ -80,7 +85,12 @@
         <td
                 :class="{'mini': mini}"
         >
-            <span v-if="isTotal">{{ totalDealIncome | pretty }}</span>
+            <span
+                v-if="isTotal"
+                :class="{'ml-1': mini}"
+            >
+                {{ totalDealIncome | pretty }}
+            </span>
             <price-updater
                 v-else
                 :deal="deal"
@@ -90,7 +100,11 @@
         <td
                 :class="{'mini': mini}"
         >
-            <span v-if="isTotal">{{ totalDealExpense | pretty }}</span>
+            <span
+                v-if="isTotal"
+            >
+                {{ totalDealExpense | pretty }}
+            </span>
             <price-updater
                 v-else
                 :deal="deal"
