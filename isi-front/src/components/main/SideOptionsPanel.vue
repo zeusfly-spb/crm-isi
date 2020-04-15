@@ -26,7 +26,6 @@
                 },
                 set (val) {
                     this.$store.commit('SET_MINI_MODE_VALUE', val)
-                    this.$router.go(this.$route.path)
                 }
             }
         }

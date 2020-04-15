@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        mini: null,
         data: {
             switcherPanel: {
                 maxAvaCount: 5,
@@ -32,6 +33,7 @@ export default {
     },
     mutations: {
         SET_MINI_MODE_VALUE (state, value) {
+            state.mini = value
             localStorage.setItem('isi-miniMode', value)
         },
         SET_SETTING (state, setting) {
@@ -39,6 +41,6 @@ export default {
         }
     },
     getters: {
-        miniMode: () => localStorage.getItem('isi-miniMode') === 'true' || false
+        miniMode: (state) => state.mini !== null && state.mini || localStorage.getItem('isi-miniMode') === 'true' || false
     }
 }

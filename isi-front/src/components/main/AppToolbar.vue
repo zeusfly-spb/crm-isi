@@ -73,11 +73,10 @@
                 text-xs-right
             >
                 <v-icon
-                    v-if="isSuperadmin"
                     :title="`${sidePanel ? 'Закрыть' : 'Открыть'} панель настроек отображения`"
                     style="user-select: none"
                     color="grey lighten-1"
-                    class="clickable"
+                    class="clickable mr-2"
                     :class="{'ghost': !sidePanel}"
                     :small="isMobile"
                     :large="!isMobile"
