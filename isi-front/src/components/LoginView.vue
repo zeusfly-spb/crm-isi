@@ -17,19 +17,25 @@
                             <h4>Вход</h4>
                         </v-card-title>
                         <v-form>
-                            <v-text-field prepend-icon="person" name="name" label="Имя пользователя"
-                                          v-model="name"
-                                          @keyup.enter="logIn"
-                                          v-validate="'required'"
-                                          data-vv-as="«Логин»"
+                            <v-text-field
+                                class="mr-4"
+                                prepend-icon="person" name="name" label="Имя пользователя"
+                                v-model="name"
+                                @keyup.enter="logIn"
+                                v-validate="'required'"
+                                data-vv-as="«Логин»"
                             />
                             <span class="red--text">{{ errors.first('name') }}</span>
-
-                            <v-text-field prepend-icon="lock" name="password" label="Пароль" type="password"
-                                          v-model="password"
-                                          @keyup.enter="logIn"
-                                          v-validate="'required'"
-                                          data-vv-as="«Пароль»"
+                            <v-text-field
+                                class="mr-4"
+                                prepend-icon="lock"
+                                name="password"
+                                label="Пароль"
+                                type="password"
+                                v-model="password"
+                                @keyup.enter="logIn"
+                                v-validate="'required'"
+                                data-vv-as="«Пароль»"
                             />
                             <span class="red--text">{{ errors.first('password') }}</span>
 
