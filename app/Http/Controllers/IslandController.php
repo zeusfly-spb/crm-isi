@@ -105,4 +105,14 @@ class IslandController extends Controller
         $users = User::with('documentPack', 'islands')->find($request->user_ids);
         return response()->json(['island' => $island->toArray(), 'users' => $users->toArray()]);
     }
+
+    public function firstCabinet(Request $request)
+    {
+        return response()->json(Island::find($request->island_id)->firstCabinetCreated());
+    }
+
+    public function cabinetsReduced(Request $request)
+    {
+        return response()->json(Island::find($request->island_id)->cabinetsReduced());
+    }
 }

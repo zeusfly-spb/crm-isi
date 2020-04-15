@@ -10,6 +10,7 @@ use App\Stock\Type;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use phpDocumentor\Reflection\Types\Object_;
 
 class Island extends Model
 {
@@ -21,7 +22,7 @@ class Island extends Model
         'cabinets' => 'array'
     ];
 
-    protected $appends = ['services', 'cabinets'];
+    protected $appends = ['services', 'cabinets', 'events'];
 
     public function workDays()
     {
@@ -200,18 +201,51 @@ class Island extends Model
         return collect($cabinets);
     }
 
+    public function getEventsAttribute()
+    {
+        return Appointment::where('island_id', $this->id)->get();
+    }
+
     public function cabinetsReduced()
     {
         if (!$this->cabinets->count()) {
-            $events = Appointment::where('island_id', $this->id)->get();
-            $events->each(function ($item) {
+            $this->events->each(function ($item) {
                 $item->update(['cabinet_id' => null]);
             });
             $result = (object) [
                 'mode' => 'last',
-                'count' => $events->count()
+                'count' => $this->events->count()
             ];
-            return $result;
+        } else {
+            $lastCabinetId = $this->cabinets->last()->id;
+            $cabinetIds = $this->cabinets->pluck('id')->all();
+            $toUpdate = $this->events->whereNotIn('cabinet_id', $cabinetIds);
+            $toUpdate->each(function ($item) use ($lastCabinetId) {
+                $item->update(['cabinet_id' => $lastCabinetId]);
+            });
+            $result = (object) [
+                'mode' => 'middle',
+                'count' => $toUpdate->count()
+            ];
         }
+        return $result;
+    }
+
+    public function firstCabinetCreated()
+    {
+        if ($this->cabinets->count() !== 1) {
+            return (object) [
+                'mode' => 'error',
+                'count' => $this->cabinets->count()
+            ];
+        }
+       $firstCabinetId = $this->cabinets->first()->id;
+       $this->events->each(function ($item) use ($firstCabinetId) {
+           $item->update(['cabinet_id' => $firstCabinetId]);
+       });
+       $result = (object) [
+           'mode' => 'first',
+           'count' => $this->events->count()
+       ];
     }
 }
