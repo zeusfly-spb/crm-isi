@@ -69,25 +69,64 @@ class CacheController extends Controller
 
     public static function createActiveLeadsCache()
     {
+        function type1 () {
+            $leads = Lead::with('user')->where('status', '<>', 'done')->get();
+            $comments = LeadComment::whereIn('lead_id', $leads->pluck('id')->all())->get();
+            $postpones = Postpone::whereIn('lead_id', $leads->pluck('id')->all())->get();
+
+            $leads->each(function ($item) {
+                Redis::set("lead:$item->id", json_encode($item->toArray()));
+                Redis::set("lead:$item->id:user", $item->user ? json_encode($item->user->toArray()) : null);
+            });
+
+            $comments->each(function ($item) {
+                Redis::rpush("lead:$item->lead_id:comments", json_encode($item->toArray()));
+            });
+
+            $postpones->each(function ($item) {
+                Redis::rpush("lead:$item->lead_id:postpones", json_encode($item->toArray()));
+            });
+        }
+
+        function type2 () {
+            $leads = Lead::where('status', '<>', 'done')->get();
+            $leads->each(function ($lead) {
+                $name = 'lead:' . $lead->id;
+
+                $att = $lead->getAttributes();
+                foreach ($att as $key => $value) {
+                    Redis::command('HSET', ['temp', $key, $value]);
+                }
+                Redis::command('RENAME', ['temp', $name]);
+
+                $comments = LeadComment::with('user')
+                    ->where('lead_id', $lead->id)->get();
+                if ($comments->count()) {
+                    $comments->each(function ($comment) {
+                        Redis::command('RPUSH', ['temp', json_encode($comment->toArray())]);
+                    });
+                    $commentsName = $name . ':comments';
+                    Redis::command('RENAME', ['temp', $commentsName]);
+                }
+
+                $postpones = Postpone::with('user')
+                    ->where('lead_id', $lead->id)->get();
+                if ($postpones->count()) {
+                    $postpones->each(function ($postpone) {
+                        Redis::command('RPUSH', ['temp', json_encode($postpone->toArray())]);
+                    });
+                    $postponesName = $name . ':postpones';
+                    Redis::command('RENAME', ['temp', $postponesName]);
+                }
+
+                if ($lead->user_id) {
+                    Redis::command('SET', [$name . ':user', json_encode(User::find($lead->user_id)->toArray())]);
+                }
+            });
+        }
+
         $start = microtime(true);
-
-        $leads = Lead::where('status', '<>', 'done')->get();
-        $comments = LeadComment::whereIn('lead_id', $leads->pluck('id')->all())->get();
-        $postpones = Postpone::whereIn('lead_id', $leads->pluck('id')->all())->get();
-        $users = User::whereIn('id', $leads->pluck('user_id')->all())->get();
-
-        $leads->each(function ($item) {
-            Redis::set("lead:$item->id", json_encode($item->toArray()));
-        });
-
-        $comments->each(function ($item) {
-            Redis::rpush("lead:$item->lead_id:comments", json_encode($item->toArray()));
-        });
-
-        $postpones->each(function ($item) {
-            Redis::rpush("lead:$item->lead_id:postpones", json_encode($item->toArray()));
-        });
-
+        type2();
         $finish = microtime(true);
         $elapsed = $finish - $start;
         return $elapsed;
