@@ -69,30 +69,14 @@ class CacheController extends Controller
 
     public static function createActiveLeadsCache()
     {
-        function type1 () {
-            $leads = Lead::with('user')->where('status', '<>', 'done')->get();
-            $comments = LeadComment::whereIn('lead_id', $leads->pluck('id')->all())->get();
-            $postpones = Postpone::whereIn('lead_id', $leads->pluck('id')->all())->get();
-
-            $leads->each(function ($item) {
-                Redis::set("lead:$item->id", json_encode($item->toArray()));
-                Redis::set("lead:$item->id:user", $item->user ? json_encode($item->user->toArray()) : null);
-            });
-
-            $comments->each(function ($item) {
-                Redis::rpush("lead:$item->lead_id:comments", json_encode($item->toArray()));
-            });
-
-            $postpones->each(function ($item) {
-                Redis::rpush("lead:$item->lead_id:postpones", json_encode($item->toArray()));
-            });
-        }
-
-        function type2 () {
+        function perform () {
+            Redis::command('DEL', ['active_leads']);
             $leads = Lead::where('status', '<>', 'done')->get();
-            $leads->each(function ($lead) {
-                $name = 'lead:' . $lead->id;
 
+            $leads->each(function ($lead) {
+                Redis::command('RPUSH', ['active_leads', $lead->id]);
+
+                $name = 'lead:' . $lead->id;
                 $att = $lead->getAttributes();
                 foreach ($att as $key => $value) {
                     Redis::command('HSET', ['temp', $key, $value]);
@@ -124,11 +108,33 @@ class CacheController extends Controller
                 }
             });
         }
-
         $start = microtime(true);
-        type2();
+        perform();
         $finish = microtime(true);
         $elapsed = $finish - $start;
         return $elapsed;
+    }
+
+    public static function getActiveLeadsCache() {
+        function attachComments ($lead) {
+            $id = $lead['id'];
+            $comments = [];
+            $commentJsons = Redis::command('LRANGE', ["lead:$id:comments", 0, -1]);
+            if (count($commentJsons)) {
+                foreach ($commentJsons as $item) {
+                    $comments[] = json_decode($item);
+                }
+            }
+            $lead['comments'] = $comments;
+            return $lead;
+        }
+        $ids = Redis::command('LRANGE', ['active_leads', 0, -1]);
+        $leads = [];
+        foreach ($ids as $id) {
+            $lead = Redis::command('HGETALL', ["lead:$id"]);
+            $lead = attachComments($lead);
+            $leads[] = $lead;
+        }
+        return $leads;
     }
 }
