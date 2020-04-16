@@ -102,9 +102,10 @@ class CacheController extends Controller
                     $postponesName = $name . ':postpones';
                     Redis::command('RENAME', ['temp', $postponesName]);
                 }
-
                 if ($lead->user_id) {
                     Redis::command('SET', [$name . ':user', json_encode(User::find($lead->user_id)->toArray())]);
+                } else {
+                    Redis::command('SET', [$name . ':user', '']);
                 }
             });
         }
@@ -115,7 +116,8 @@ class CacheController extends Controller
         return $elapsed;
     }
 
-    public static function getActiveLeadsCache() {
+    public static function getActiveLeadsCache()
+    {
         function attachComments ($lead) {
             $id = $lead['id'];
             $comments = [];
@@ -128,11 +130,32 @@ class CacheController extends Controller
             $lead['comments'] = $comments;
             return $lead;
         }
+        function attachPostpones ($lead) {
+            $id = $lead['id'];
+            $postpones = [];
+            $postponeJsons = Redis::command('LRANGE', ["lead:$id:postpones", 0, -1]);
+            if (count($postponeJsons)) {
+                foreach ($postponeJsons as $item) {
+                    $postpones[] = json_decode($item);
+                }
+            }
+            $lead['postpones'] = $postpones;
+            return $lead;
+        }
+        function attachUser ($lead) {
+            $id = $lead['id'];
+            $userJson = Redis::command('GET', ["lead:$id:user"]);
+            $lead['user'] = json_decode($userJson);
+            return $lead;
+        }
+
         $ids = Redis::command('LRANGE', ['active_leads', 0, -1]);
         $leads = [];
         foreach ($ids as $id) {
             $lead = Redis::command('HGETALL', ["lead:$id"]);
             $lead = attachComments($lead);
+            $lead = attachPostpones($lead);
+            $lead = attachUser($lead);
             $leads[] = $lead;
         }
         return $leads;

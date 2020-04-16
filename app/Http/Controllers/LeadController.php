@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\CacheController;
 
 class LeadController extends Controller
 {
@@ -40,11 +41,12 @@ class LeadController extends Controller
             }
 
         } else {
-            $leads = Cache::rememberForever('leads_list', function () {
-                return Lead::with('comments', 'user', 'postpones')
-                    ->where('status', '<>', 'done')
-                    ->get()->reverse()->values()->toArray();
-            });
+//            $leads = Cache::rememberForever('leads_list', function () {
+//                return Lead::with('comments', 'user', 'postpones')
+//                    ->where('status', '<>', 'done')
+//                    ->get()->reverse()->values()->toArray();
+//            });
+            $leads = CacheController::getActiveLeadsCache();
         }
         return response()->json($leads);
     }
