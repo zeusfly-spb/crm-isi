@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Lead;
+use App\LeadComment;
+use App\Postpone;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class CacheController extends Controller
 {
@@ -60,5 +65,31 @@ class CacheController extends Controller
             return $item->id == $model->id;
         });
         Cache::put($model->getTable(), $data);
+    }
+
+    public static function createActiveLeadsCache()
+    {
+        $start = microtime(true);
+
+        $leads = Lead::where('status', '<>', 'done')->get();
+        $comments = LeadComment::whereIn('lead_id', $leads->pluck('id')->all())->get();
+        $postpones = Postpone::whereIn('lead_id', $leads->pluck('id')->all())->get();
+        $users = User::whereIn('id', $leads->pluck('user_id')->all())->get();
+
+        $leads->each(function ($item) {
+            Redis::set("lead:$item->id", json_encode($item->toArray()));
+        });
+
+        $comments->each(function ($item) {
+            Redis::rpush("lead:$item->lead_id:comments", json_encode($item->toArray()));
+        });
+
+        $postpones->each(function ($item) {
+            Redis::rpush("lead:$item->lead_id:postpones", json_encode($item->toArray()));
+        });
+
+        $finish = microtime(true);
+        $elapsed = $finish - $start;
+        return $elapsed;
     }
 }
