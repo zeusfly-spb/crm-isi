@@ -47,10 +47,15 @@ class ConvertLeadEvents extends Command
                 $toModify[] = $lead;
             }
         });
-        if (count($toModify)) foreach ($toModify as $item) {
-            $item->update(['appointment_id' => $item->appointments[count($item->appointments) - 1]->id]);
-            $convertedCount++;
+
+        if ($count = count($toModify)) {
+            $this->info("That are $count leads to be modified!");
+            foreach ($toModify as $item) {
+                $item->update(['appointment_id' => $item->appointments[count($item->appointments) - 1]->id]);
+                ++$convertedCount;
+            }
         }
+
         $finish = microtime(true);
         $estimated = $finish - $start;
         $this->info("Converted $convertedCount leads in $estimated sec.");
