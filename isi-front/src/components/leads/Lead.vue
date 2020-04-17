@@ -117,7 +117,7 @@
         <td>
             <template v-if="leadCommentsId === props.item.id">
                 <lead-comments
-                        :lead="props.item"
+                        :lead="lead"
                         @close="leadCommentsId = null"
                 />
             </template>
@@ -164,11 +164,17 @@
         name: 'Lead',
         props: ['props'],
         computed: {
-            lead () {
-                return this.props && this.props.item || null
+            lastPostpone () {
+                return this.lead && this.lead.postpones && this.lead.postpones.length
             },
             lastComment () {
-                return this.lead && this.lead.comments && this.lead.comments.length && this.lead.comments[this.lead.comments.length - 1] || null
+                return this.comments.length && this.comments[0] || null
+            },
+            comments () {
+                return this.lead && this.lead.comments || []
+            },
+            lead () {
+                return this.props && this.props.item || null
             },
             leadCommentsId: {
                 get () {

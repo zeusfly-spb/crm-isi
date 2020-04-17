@@ -168,10 +168,10 @@
                 return this.$store.state.basePath
             },
             lastComment () {
-                return this.comments && this.comments.length && this.comments[0]
+                return this.comments.length && this.comments[0]
             },
             comments () {
-                return this.lead && this.lead.comments && this.lead.comments.reverse() || []
+                return this.lead && this.lead.comments || []
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate

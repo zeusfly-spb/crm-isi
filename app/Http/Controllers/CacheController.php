@@ -123,7 +123,7 @@ class CacheController extends Controller
             $comments = [];
             $commentJsons = Redis::command('LRANGE', ["lead:$id:comments", 0, -1]);
             if (count($commentJsons)) {
-                foreach ($commentJsons as $item) {
+                foreach (array_reverse($commentJsons) as $item) {
                     $comments[] = json_decode($item);
                 }
             }
