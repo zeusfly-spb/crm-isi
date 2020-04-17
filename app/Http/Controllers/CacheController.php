@@ -135,7 +135,7 @@ class CacheController extends Controller
             $postpones = [];
             $postponeJsons = Redis::command('LRANGE', ["lead:$id:postpones", 0, -1]);
             if (count($postponeJsons)) {
-                foreach ($postponeJsons as $item) {
+                foreach (array_reverse($postponeJsons) as $item) {
                     $postpones[] = json_decode($item);
                 }
             }

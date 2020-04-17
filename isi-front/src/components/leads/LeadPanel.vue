@@ -55,6 +55,10 @@
             },
             leads () {
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
+                    .map(item => ({
+                        ...item,
+                        last_postpone: item.postpones && item.postpones.length && item.postpones[0] || null
+                    }))
                     .sort(this.$store.state.lead.sortByPostpones)
                     .sort(this.$store.state.lead.sortByTimeInDay)
                     .sort(this.$store.state.lead.moveFutureDown)

@@ -74,22 +74,22 @@
             </v-icon>
         </td>
         <td>
-            <template v-if="props.item.id === openLeadId">
+            <template v-if="lead.id === openLeadId">
                 <lead-postpones
-                        :lead="props.item"
-                        :open="props.item.id === openLeadId"
-                        @closed="openLeadId = null"
+                    :lead="lead"
+                    :open="lead.id === openLeadId"
+                    @closed="openLeadId = null"
                 />
             </template>
             <template v-else>
-                            <span
-                                v-if="props.item.last_postpone"
-                                class="clickable"
-                                @click="showLead"
-                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
-                            >
-                                {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
-                            </span>
+                <span
+                    v-if="lastPostpone"
+                    class="clickable"
+                    @click="showLead"
+                    :class="{'today': lastPostpone.date.split(' ')[0] === accountingDate, 'lost': lastPostpone.date < accountingDate}"
+                >
+                    {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm')}}
+                </span>
                 <v-icon
                     v-else
                     class="clickable"
@@ -147,7 +147,7 @@
         </td>
         <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
         <td>
-            <lead-status :lead="props.item"/>
+            <lead-status :lead="lead"/>
         </td>
     </tr>
 
@@ -165,10 +165,13 @@
         props: ['props'],
         computed: {
             lastPostpone () {
-                return this.lead && this.lead.postpones && this.lead.postpones.length
+                return this.postpones.length && this.postpones[0]
             },
             lastComment () {
                 return this.comments.length && this.comments[0] || null
+            },
+            postpones () {
+                return this.lead && this.lead.postpones || []
             },
             comments () {
                 return this.lead && this.lead.comments || []
