@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
 use App\Lead;
 use App\LeadComment;
 use App\Postpone;
@@ -108,10 +109,18 @@ class CacheController extends Controller
             }
             Redis::command('SET', [name($lead) . ':user', $user]);
         }
+        function cacheLeadEvent ($lead) {
+            $event = '';
+            if ($lead->appointment_id && $leadEvent = Appointment::with('user', 'performer', 'service', 'lead', 'island')->find($lead->appointment_id)) {
+                $event = json_encode($leadEvent->toArray());
+            }
+            Redis::command('SET', [name($lead) . ':event', $event]);
+        }
         function cacheLeadRelations ($lead) {
             cacheLeadComments($lead);
             cacheLeadPostpones($lead);
             cacheLeadUser($lead);
+            cacheLeadEvent($lead);
         }
         function perform () {
             Redis::command('DEL', ['active_leads']);
@@ -155,11 +164,17 @@ class CacheController extends Controller
             $lead['postpones'] = $postpones;
             return $lead;
         }
+        function attachEvent ($lead) {
+            $id = $lead['id'];
+            $eventJson = Redis::command('GET', ["lead:$id:event"]);
+            $lead['event'] = json_decode($eventJson);
+            return $lead;
+        }
         function attachRelations ($lead) {
             $id = $lead['id'];
             $userJson = Redis::command('GET', ["lead:$id:user"]);
             $lead['user'] = json_decode($userJson);
-            $lead = attachPostpones(attachComments($lead)) ;
+            $lead = attachEvent(attachPostpones(attachComments($lead)));
             return $lead;
         }
 
