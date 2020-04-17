@@ -42,14 +42,22 @@ class ConvertLeadEvents extends Command
         $start = microtime(true);
         $leads = Lead::all();
         $toModify = [];
-        $leads->each(function ($lead) {
-            if ($lead->appointments->count() > 1) {
+        $leads->each(function ($lead) use (&$toModify) {
+            $events = json_decode($lead->getAttributes()['appointments']) ?? null;
+            if ($events && count($events)) {
                 $toModify[] = $lead;
             }
         });
-        if (count($toModify)) foreach ($toModify as $item) {
-            $item->update(['appointment_id' => $item->appointments[count($item->appointments) - 1]]);
-            ++$convertedCount;
+        if ($count = count($toModify)) {
+            $this->info("That are $count leads to be modified!");
+            foreach ($toModify as $item) {
+                $events = json_decode($item->getAttributes()['appointments']) ?? null;
+                if (count($events)) {
+                    $lastEventId = $events[count($events) - 1];
+                    $item->update(['appointment_id' => $lastEventId]);
+                    ++$convertedCount;
+                }
+            }
         }
         $finish = microtime(true);
         $estimated = $finish - $start;
