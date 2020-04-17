@@ -120,4 +120,9 @@ class Lead extends Model
             return $this->eventsFromSql();
         }
     }
+
+    public function event()
+    {
+        return $this->hasOne(Appointment::class);
+    }
 }
