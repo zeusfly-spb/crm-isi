@@ -69,44 +69,57 @@ class CacheController extends Controller
 
     public static function createActiveLeadsCache()
     {
+        function name ($lead) {
+            return 'lead:' . $lead->id;
+        }
+        function cacheLead ($lead) {
+            $att = $lead->getAttributes();
+            foreach ($att as $key => $value) {
+                Redis::command('HSET', ['temp', $key, $value]);
+            }
+            Redis::command('RENAME', ['temp', name($lead)]);
+        }
+        function cacheLeadComments ($lead) {
+            $comments = LeadComment::with('user')
+                ->where('lead_id', $lead->id)->get();
+            if ($comments->count()) {
+                $comments->each(function ($comment) {
+                    Redis::command('RPUSH', ['temp', json_encode($comment->toArray())]);
+                });
+                $commentsName = name($lead) . ':comments';
+                Redis::command('RENAME', ['temp', $commentsName]);
+            }
+        }
+        function cacheLeadPostpones ($lead) {
+            $postpones = Postpone::with('user')
+                ->where('lead_id', $lead->id)->get();
+            if ($postpones->count()) {
+                $postpones->each(function ($postpone) {
+                    Redis::command('RPUSH', ['temp', json_encode($postpone->toArray())]);
+                });
+                $postponesName = name($lead) . ':postpones';
+                Redis::command('RENAME', ['temp', $postponesName]);
+            }
+        }
+        function cacheLeadUser ($lead) {
+            $user = '';
+            if ($lead->user_id && $leadUser = User::find($lead->user_id)) {
+                $user = json_encode($leadUser->toArray());
+            }
+            Redis::command('SET', [name($lead) . ':user', $user]);
+        }
+        function cacheLeadRelations ($lead) {
+            cacheLeadComments($lead);
+            cacheLeadPostpones($lead);
+            cacheLeadUser($lead);
+        }
         function perform () {
             Redis::command('DEL', ['active_leads']);
             $leads = Lead::where('status', '<>', 'done')->get();
-
             $leads->each(function ($lead) {
                 Redis::command('RPUSH', ['active_leads', $lead->id]);
-
-                $name = 'lead:' . $lead->id;
-                $att = $lead->getAttributes();
-                foreach ($att as $key => $value) {
-                    Redis::command('HSET', ['temp', $key, $value]);
-                }
-                Redis::command('RENAME', ['temp', $name]);
-
-                $comments = LeadComment::with('user')
-                    ->where('lead_id', $lead->id)->get();
-                if ($comments->count()) {
-                    $comments->each(function ($comment) {
-                        Redis::command('RPUSH', ['temp', json_encode($comment->toArray())]);
-                    });
-                    $commentsName = $name . ':comments';
-                    Redis::command('RENAME', ['temp', $commentsName]);
-                }
-
-                $postpones = Postpone::with('user')
-                    ->where('lead_id', $lead->id)->get();
-                if ($postpones->count()) {
-                    $postpones->each(function ($postpone) {
-                        Redis::command('RPUSH', ['temp', json_encode($postpone->toArray())]);
-                    });
-                    $postponesName = $name . ':postpones';
-                    Redis::command('RENAME', ['temp', $postponesName]);
-                }
-                if ($lead->user_id) {
-                    Redis::command('SET', [$name . ':user', json_encode(User::find($lead->user_id)->toArray())]);
-                } else {
-                    Redis::command('SET', [$name . ':user', '']);
-                }
+                cacheLead($lead);
+                cacheLeadRelations($lead);
             });
         }
         $start = microtime(true);
