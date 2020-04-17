@@ -43,7 +43,7 @@ class ConvertLeadEvents extends Command
         $leads = Lead::all();
         $toModify = [];
         $leads->each(function ($lead) {
-            if ($lead->appointments->count() > 1) {
+            if ($lead->appointments->count()) {
                 $toModify[] = $lead;
             }
         });
