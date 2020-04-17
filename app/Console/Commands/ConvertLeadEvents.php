@@ -48,8 +48,8 @@ class ConvertLeadEvents extends Command
             }
         });
         if (count($toModify)) foreach ($toModify as $item) {
-            $item->update(['appointment_id' => $item->appointments[count($item->appointments) - 1]]);
-            ++$convertedCount;
+            $item->update(['appointment_id' => $item->appointments[count($item->appointments) - 1]->id]);
+            $convertedCount++;
         }
         $finish = microtime(true);
         $estimated = $finish - $start;
