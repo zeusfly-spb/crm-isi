@@ -122,17 +122,18 @@
                 />
             </template>
             <template v-else>
-                        <span v-if="props.item.last_comment"
-                              @click="leadCommentsId = props.item.id"
-                              class="clickable"
-                        >
-                            {{ props.item.last_comment.text }}
-                            <span class="green--text accent-4"
-                                  v-if="props.item.comments.length > 1"
-                            >
-                                <strong>({{ props.item.comments.length }})</strong>
-                            </span>
-                        </span>
+                <span
+                    v-if="lastComment"
+                    @click="leadCommentsId = props.item.id"
+                    class="clickable"
+                >
+                    {{ lastComment.text }}
+                    <span class="green--text accent-4"
+                          v-if="props.item.comments.length > 1"
+                    >
+                        <strong>({{ props.item.comments.length }})</strong>
+                    </span>
+                </span>
                 <v-icon
                         v-else
                         color="green"
@@ -163,6 +164,12 @@
         name: 'Lead',
         props: ['props'],
         computed: {
+            lead () {
+                return this.props && this.props.item || null
+            },
+            lastComment () {
+                return this.lead && this.lead.comments && this.lead.comments.length && this.lead.comments[this.lead.comments.length - 1] || null
+            },
             leadCommentsId: {
                 get () {
                     return this.$store.state.lead.leadCommentsId

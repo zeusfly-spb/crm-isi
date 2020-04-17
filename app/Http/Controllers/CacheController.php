@@ -142,21 +142,18 @@ class CacheController extends Controller
             $lead['postpones'] = $postpones;
             return $lead;
         }
-        function attachUser ($lead) {
+        function attachRelations ($lead) {
             $id = $lead['id'];
             $userJson = Redis::command('GET', ["lead:$id:user"]);
             $lead['user'] = json_decode($userJson);
+            $lead = attachPostpones(attachComments($lead)) ;
             return $lead;
         }
 
         $ids = Redis::command('LRANGE', ['active_leads', 0, -1]);
         $leads = [];
         foreach ($ids as $id) {
-            $lead = Redis::command('HGETALL', ["lead:$id"]);
-            $lead = attachComments($lead);
-            $lead = attachPostpones($lead);
-            $lead = attachUser($lead);
-            $leads[] = $lead;
+            $leads[] = attachRelations(Redis::command('HGETALL', ["lead:$id"]));
         }
         return $leads;
     }
