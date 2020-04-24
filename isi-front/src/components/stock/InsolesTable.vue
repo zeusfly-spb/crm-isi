@@ -150,8 +150,8 @@
                     <td align="center" style="border-left: 0; border-right: 0">
                         <span
                             :class="{
-                                'accented receipt': !!findActionCount('receipt', 'Санаформ', 'Кожа', props.item),
-                                'empty': !findActionCount('receipt', 'Санаформ', 'Кожа', props.item)
+                                'accented receipt': !!findActionCount('receipt', 'Стельки', 'Санаформ', props.item),
+                                'empty': !findActionCount('receipt', 'Стельки', 'Санаформ', props.item)
                             }"
                         >
                             {{ findActionCount('receipt', 'Стельки', 'Санаформ', props.item) }}
@@ -160,8 +160,8 @@
                     <td align="center" style="border-left: 0">
                         <span
                             :class="{
-                                'accented receipt': !!findActionCount('receipt', 'Флис', 'Кожа', props.item),
-                                'empty': !findActionCount('receipt', 'Флис', 'Кожа', props.item)
+                                'accented receipt': !!findActionCount('receipt', 'Стельки', 'Флис', props.item),
+                                'empty': !findActionCount('receipt', 'Стельки', 'Флис', props.item)
                             }"
                         >
                             {{ findActionCount('receipt', 'Стельки', 'Флис', props.item) }}

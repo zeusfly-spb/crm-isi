@@ -72,12 +72,22 @@
                 class="m-0 p-0"
                 text-xs-right
             >
+<!--                <v-icon-->
+<!--                    :title="`${sidePanel ? 'Закрыть' : 'Открыть'} панель записей`"-->
+<!--                    style="user-select: none"-->
+<!--                    color="grey lighten-1"-->
+<!--                    class="clickable mr-2"-->
+<!--                    :small="isMobile"-->
+<!--                    :large="!isMobile"-->
+<!--                    @click=""-->
+<!--                >-->
+<!--                    event-->
+<!--                </v-icon>-->
                 <v-icon
                     :title="`${sidePanel ? 'Закрыть' : 'Открыть'} панель настроек отображения`"
                     style="user-select: none"
                     color="grey lighten-1"
                     class="clickable mr-2"
-                    :class="{'ghost': !sidePanel}"
                     :small="isMobile"
                     :large="!isMobile"
                     @click="sidePanel = !sidePanel"
