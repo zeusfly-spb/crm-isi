@@ -55,6 +55,9 @@
             borderEffect: false
         }),
         computed: {
+            attemptToEvent () {
+                return this.$store.state.lead.attemptToEvent
+            },
             addingHour () {
                 return this.$store.state.appointment.addingHour
             },
