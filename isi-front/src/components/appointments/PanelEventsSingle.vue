@@ -9,6 +9,43 @@
             :interval-height="intervalHeight"
             :interval-format="intervalFormat"
         >
+            <template v-slot:dayHeader="{ date, past, present, future }">
+                <div>
+                    <v-menu
+                            :close-on-content-click="false"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                            v-model="menu"
+                    >
+                        <template v-slot:activator="{ on }">
+                            <span class="clickable"
+                                  title="Изменить дату календаря"
+                                  v-on="on"
+                            >
+                                    <div
+                                          class="ml-1 clickable"
+                                          :class="{
+                                                    'green--text': present,
+                                                    'grey--text': past,
+                                                    'blue--text': future
+                                                  }"
+                                    >
+                                        {{ date | moment('D MMMM YYYY г.') }}
+                                    </div>
+                            </span>
+                        </template>
+                        <v-date-picker v-model="addingDate" no-title scrollable
+                                       @change="menu = false"
+                                       locale="ru"
+                                       first-day-of-week="1"
+                        >
+                        </v-date-picker>
+                    </v-menu>
+                </div>
+            </template>
             <template v-slot:interval="{ hour }">
                 <v-flex
                     class="interval"
@@ -51,6 +88,7 @@
     export default {
         name: 'PanelEventsSingle',
         data: () => ({
+            menu:false,
             timerId: null,
             borderEffect: false
         }),
@@ -61,8 +99,13 @@
             addingHour () {
                 return this.$store.state.appointment.addingHour
             },
-            addingDate () {
-                return this.$store.state.appointment.addingDate || this.$store.state.realDate
+            addingDate: {
+                get () {
+                    return this.$store.state.appointment.addingDate || this.$store.state.realDate
+                },
+                set (val) {
+                    this.$store.commit('SET_ADDING_DATE', val);
+                }
             },
             events () {
                 return this.$store.state.appointment.appointments
@@ -84,6 +127,9 @@
             }
         },
         methods: {
+            datePicked (val) {
+                this.$store.commit('SET_ADDING_DATE', val)
+            },
             showHourBorder () {
                 if (this.timerId) {
                     clearTimeout(this.timerId)
