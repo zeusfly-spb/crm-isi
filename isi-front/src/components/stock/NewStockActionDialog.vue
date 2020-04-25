@@ -14,9 +14,13 @@
                     Новая операция
                 </v-btn>
             </template>
-            <v-card>
-                <v-card-title>
-                    <span class="headline">Новая операция по складу</span>
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title
+                    class="light-blue darken-3"
+                >
+                    <span class="headline white--text">Новая операция по складу</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>

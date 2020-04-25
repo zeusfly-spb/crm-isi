@@ -72,18 +72,8 @@
                 class="m-0 p-0"
                 text-xs-right
             >
-                <v-icon
-                    :title="`${sidePanel ? 'Закрыть' : 'Открыть'} панель настроек отображения`"
-                    style="user-select: none"
-                    color="grey lighten-1"
-                    class="clickable mr-2"
-                    :class="{'ghost': !sidePanel}"
-                    :small="isMobile"
-                    :large="!isMobile"
-                    @click="sidePanel = !sidePanel"
-                >
-                    settings
-                </v-icon>
+                <events-button/>
+                <settings-button/>
                 <v-icon
                     v-if="isAuth"
                     title="Выход"
@@ -100,6 +90,9 @@
 </template>
 <script>
     import DateSelector from '../DateSelector'
+    import SettingsButton from './SettingsButton'
+    import EventsButton from './EventsButton'
+
     export default {
         name: 'AppToolbar',
         computed: {
@@ -143,7 +136,9 @@
             }
         },
         components: {
-            DateSelector
+            DateSelector,
+            SettingsButton,
+            EventsButton
         }
     }
 </script>
