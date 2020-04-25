@@ -4,7 +4,7 @@
         style="user-select: none"
         class="clickable mr-2"
         :class="{
-                    'blue--text text--lighten-3': active,
+                    'teal--text text--lighten-3': active,
                     'grey--text text--lighten-1': !active
                 }"
         :small="isMobile"
