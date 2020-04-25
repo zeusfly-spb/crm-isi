@@ -109,7 +109,6 @@
             },
             events () {
                 return this.$store.state.appointment.appointments
-                    .filter(item => item.status === 'active')
                     .filter(item => item.date.split(' ')[0] === this.addingDate)
                     .map(item => ({...item, hour: item.date.split(' ')[1].split(':')[0]}))
             },
