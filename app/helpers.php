@@ -17,8 +17,14 @@ function cacheRelation (Model $model, string $relation)
             cacheModel($item, class_basename($model) . "$model->id:$relation:$item->id");
         }
     } else {
-        cacheModel($model->$relation, class_basename($model) . "$model->id:$relation:{$model->$relation}->id")
+        cacheModel($model->$relation, class_basename($model) . "$model->id:$relation:{$model->$relation}->id");
     }
+}
+
+function pullOut (string $model, $id, array $options = [])
+{
+        $result = Redis::command('HGETALL', "$model:$id");
+        return $result;
 }
 
 function getRelType (Model $model, string $relation)
