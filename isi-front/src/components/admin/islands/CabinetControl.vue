@@ -166,6 +166,7 @@
         name: 'CabinetControl',
         props: ['islandId'],
         data: () => ({
+            prompt: false,
             loading: false,
             currentAction: null,
             cabinetToDelete: null,
@@ -178,6 +179,10 @@
             }
         }),
         computed: {
+            islandEvents () {
+                let base = this.$store.state.appointment.appointments || []
+                return base.filter(item => +item.island_id === +this.islandId)
+            },
             cabinetsCount () {
                 return this.cabinets.length
             },
