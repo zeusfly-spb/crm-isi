@@ -90,7 +90,6 @@
                             <v-flex xs12 sm6 md6>
                                 <v-text-field
                                     v-if="!!dialog"
-                                    autofocus
                                     v-model="editedCabinet.name"
                                     label="Название"
                                     data-vv-as="Название"
@@ -159,14 +158,22 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <cabinet-prompt
+            :island="island"
+            :prompt="prompt"
+            :to-delete="cabinetToDelete"
+            @action="promptAction"
+            @cancel="promptCancel"
+        />
     </v-flex>
 </template>
 <script>
+    import CabinetPrompt from './CabinetPrompt'
     export default {
         name: 'CabinetControl',
         props: ['islandId'],
         data: () => ({
-            prompt: false,
+            prompt: null,
             loading: false,
             currentAction: null,
             cabinetToDelete: null,
@@ -222,6 +229,22 @@
             }
         },
         methods: {
+            promptCancel (mode) {
+                this.prompt = null
+            },
+            promptAction (mode) {
+                switch (mode) {
+                    case 'first':
+                        this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
+                        this.currentAction = 'add'
+                        this.openDialog('add')
+                        break
+                    case 'last':
+                        this.confirm = true
+                        break
+                    default: break
+                }
+            },
             performPostAction: async function ({old, now}) {
                 console.log(old, now)
                 let baseMessage = `В островке "${this.island.name}" `
@@ -275,6 +298,11 @@
                 this.confirm = false
             },
             showDeleteConfirm (cabinet) {
+                if (this.cabinetsCount === 1 && this.islandEvents.length) {
+                    this.cabinetToDelete = cabinet
+                    this.prompt = 'last'
+                    return
+                }
                 this.cabinetToDelete = cabinet
                 this.confirm = true
             },
@@ -298,6 +326,10 @@
                     })
             },
             openAddDialog () {
+                if (!this.cabinetsCount && this.islandEvents.length) {
+                    this.prompt = 'first'
+                    return
+                }
                 this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
                 this.currentAction = 'add'
                 this.openDialog('add')
@@ -306,12 +338,16 @@
                 this.dialog = mode
             },
             closeDialog () {
+                this.prompt = null
                 this.currentAction = null
                 this.dialog = null
             }
         },
         created () {
             this.editedCabinet = JSON.parse(JSON.stringify(this.blankCabinet))
+        },
+        components: {
+            CabinetPrompt
         }
     }
 </script>
