@@ -20,16 +20,18 @@
                     <tr :class="{'working red lighten-5': props.item.working && isToday}"
                         style="border-bottom: solid 1px #fafafa!important;"
                     >
-                        <td>
-                            <v-avatar
-                                size="36px"
-                            >
-                                <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user.avatar">
-                                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-                            </v-avatar>
+                        <td
+                            :class="{'mini': mini}"
+                        >
+                            <user-avatar
+                                :user="props.item.user"
+                                :mini="mini"
+                            />
                             {{ props.item.user && props.item.user.full_name}}
                         </td>
-                        <td>
+                        <td
+                            :class="{'mini': mini}"
+                        >
                             <v-text-field
                                     type="number"
                                     step="0.01"
@@ -47,9 +49,19 @@
                             />
                             <span v-else>{{ props.item.working_hours }}</span>
                         </td>
-                        <td>{{ displayTime(props.item.time_start) }}</td>
-                        <td>{{ displayTime(props.item.time_finish) || '' }}</td>
-                        <td align="center">
+                        <td
+                            :class="{'mini': mini}"
+                        >
+                            {{ displayTime(props.item.time_start) }}
+                        </td>
+                        <td
+                            :class="{'mini': mini}"
+                        >
+                            {{ displayTime(props.item.time_finish) || '' }}
+                        </td>
+                        <td align="center"
+                            :class="{'mini': mini}"
+                        >
                             <v-flex v-for="timeBreak in props.item.time_breaks"
                                     :key="timeBreak.id"
                                     class="text-xs-center"
@@ -59,7 +71,6 @@
                                 <span>{{ displayTime(timeBreak.finish_time) }}</span>
                             </v-flex>
                         </td>
-
                     </tr>
                 </template>
                 <template v-slot:no-data>
@@ -105,6 +116,7 @@
 
 </template>
 <script>
+    import UserAvatar from '../main/UserAvatar'
     export default {
         name: 'WorkDaysTable',
         data: () => ({
@@ -120,6 +132,9 @@
             ]
         }),
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             loading () {
                 return this.$store.getters.busy
             },
@@ -222,10 +237,18 @@
                 this.$store.dispatch('startUserDay')
                     .then(() => this.showSnack(`Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
             }
+        },
+        components: {
+            UserAvatar
         }
     }
 </script>
 <style>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+        padding-left: 1em!important;
+    }
     .working {
         border-bottom: 2pt solid #fafafa!important;
     }
