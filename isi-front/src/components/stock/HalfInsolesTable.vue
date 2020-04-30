@@ -111,25 +111,32 @@
             <template v-slot:items="props">
                 <tr style="height: 1em">
                     <td align="center"
+                        :class="{'mini': mini}"
                         style="border-top: 1px solid rgb(200,200,200); border-left: 1px solid rgb(200,200,200);"
                     >
                         Размер <strong>{{ halfInsolesReserves.find(item => item.size_id === props.item).size.name }}</strong>
                     </td>
-                    <td align="center" style="border-right: 0">
+                    <td align="center" style="border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Кожа'}) }"
                         >
                             {{ reservesCount({sizeId: props.item, typeName: 'Кожа'}) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0; border-right: 0">
+                    <td align="center" style="border-left: 0; border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }"
                         >
                             {{ reservesCount({sizeId: props.item, typeName: 'Санаформ'}) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0">
+                    <td align="center" style="border-left: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{'empty': !reservesCount({sizeId: props.item, typeName: 'Флис'}) }"
                         >
@@ -137,7 +144,9 @@
                         </span>
                     </td>
 
-                    <td align="center" style="border-right: 0">
+                    <td align="center" style="border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented receipt': !!findActionCount('receipt', 'Полустельки', 'Кожа', props.item),
@@ -147,7 +156,9 @@
                             {{ findActionCount('receipt', 'Полустельки', 'Кожа', props.item) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0; border-right: 0">
+                    <td align="center" style="border-left: 0; border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented receipt': !!findActionCount('receipt', 'Полустельки', 'Санаформ', props.item),
@@ -158,7 +169,9 @@
                         </span>
 
                     </td>
-                    <td align="center" style="border-left: 0">
+                    <td align="center" style="border-left: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented receipt': !!findActionCount('receipt', 'Полустельки', 'Флис', props.item),
@@ -169,7 +182,9 @@
                         </span>
                     </td>
 
-                    <td align="center" style="border-right: 0">
+                    <td align="center" style="border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented expense': !!findActionCount('expense', 'Полустельки', 'Кожа', props.item),
@@ -179,7 +194,9 @@
                             {{ findActionCount('expense', 'Полустельки', 'Кожа', props.item) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0; border-right: 0">
+                    <td align="center" style="border-left: 0; border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented expense': !!findActionCount('expense', 'Полустельки', 'Санаформ', props.item),
@@ -189,7 +206,9 @@
                             {{ findActionCount('expense', 'Полустельки', 'Санаформ', props.item) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0">
+                    <td align="center" style="border-left: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented expense': !!findActionCount('expense', 'Полустельки', 'Флис', props.item),
@@ -200,7 +219,9 @@
                         </span>
                     </td>
 
-                    <td align="center" style="border-right: 0">
+                    <td align="center" style="border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented': countChanged({sizeId: props.item, typeName: 'Кожа'}),
@@ -210,7 +231,9 @@
                             {{ countAfter({sizeId: props.item, typeName: 'Кожа'}) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0; border-right: 0">
+                    <td align="center" style="border-left: 0; border-right: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented': countChanged({sizeId: props.item, typeName: 'Санаформ'}),
@@ -220,7 +243,9 @@
                            {{ countAfter({sizeId: props.item, typeName: 'Санаформ'}) }}
                         </span>
                     </td>
-                    <td align="center" style="border-left: 0">
+                    <td align="center" style="border-left: 0"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented': countChanged({sizeId: props.item, typeName: 'Флис'}),
@@ -240,6 +265,9 @@
     export default {
         name: 'HalfInsolesTable',
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -284,6 +312,10 @@
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
     table {
         border: solid 1px rgb(200,200,200);
         display: table;
