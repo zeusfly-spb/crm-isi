@@ -1,6 +1,7 @@
 <template>
     <v-sheet>
         <v-calendar
+            v-if="workingIsland"
             locale="ru"
             type="day"
             first-interval="8"
@@ -44,6 +45,14 @@
                         >
                         </v-date-picker>
                     </v-menu>
+                    <v-select
+                        label="Кабинет"
+                        v-if="hasCabinets"
+                        v-model="selectedCabinetId"
+                        :items="cabinets"
+                        item-text="name"
+                        item-value="id"
+                    />
                 </div>
             </template>
             <template v-slot:interval="{ hour }">
@@ -82,17 +91,30 @@
                 </v-flex>
             </template>
         </v-calendar>
+        <v-flex
+            v-else
+            class="subheading orange--text text-md-center"
+        >
+            <strong>Выберите островок</strong>
+        </v-flex>
     </v-sheet>
 </template>
 <script>
     export default {
         name: 'PanelEventsSingle',
         data: () => ({
+            selectedCabinetId: null,
             menu:false,
             timerId: null,
             borderEffect: false
         }),
         computed: {
+            hasCabinets () {
+                return this.cabinets.length > 0
+            },
+            cabinets () {
+                return this.workingIsland && this.workingIsland.cabinets || []
+            },
             attemptToEvent () {
                 return this.$store.state.lead.attemptToEvent
             },
@@ -104,11 +126,20 @@
                     return this.$store.state.appointment.addingDate || this.$store.state.realDate
                 },
                 set (val) {
-                    this.$store.commit('SET_ADDING_DATE', val);
+                    this.$store.commit('SET_ADDING_DATE', val)
+                    let eventsDateMonth = this.$store.state.appointment.date.split(' ')[0].split('-')[1] || ''
+                    let valMonth = val.split(' ')[0].split('-')[1]
+                    if (eventsDateMonth !== valMonth) {
+                        this.$store.dispatch('changeAppointmentDate', val)
+                    }
                 }
             },
             events () {
-                return this.$store.state.appointment.appointments
+                let base  = this.$store.state.appointment.appointments
+                if (this.hasCabinets) {
+                    base = base.filter(item => item.cabinet_id === this.selectedCabinetId)
+                }
+                return base
                     .filter(item => item.date.split(' ')[0] === this.addingDate)
                     .map(item => ({...item, hour: item.date.split(' ')[1].split(':')[0]}))
             },
@@ -126,6 +157,12 @@
             }
         },
         methods: {
+            selectFirstCabinet () {
+                if (!this.hasCabinets) {
+                    return
+                }
+                this.selectedCabinetId = this.cabinets[0]['id']
+            },
             datePicked (val) {
                 this.$store.commit('SET_ADDING_DATE', val)
             },
@@ -150,6 +187,7 @@
             }
         },
         mounted () {
+            this.selectFirstCabinet()
             setInterval(() => {
                 if (this.addingHour) {
                     this.showHourBorder()
@@ -157,6 +195,11 @@
             }, 1000)
         },
         watch: {
+            hasCabinets (val) {
+                if (val) {
+                    this.selectFirstCabinet()
+                }
+            },
             addingHour (val) {
                 if (val) {
                     this.showHourBorder()
