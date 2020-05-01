@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-        value="true"
+        :value="active"
         max-width="1000"
         @update:returnValue="deliverClose"
     >
@@ -203,8 +203,18 @@
 <script>
     export default {
         name: 'CalendarRecordAdder',
-        props: ['dateProp', 'presetHour', 'presetCabinet', 'lead'],
+        props: {
+            dateProp: String,
+            presetHour: Number,
+            presetCabinet: Object,
+            lead: Object,
+            free: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: () => ({
+            active: true,
             menu: false,
             inputDate: null,
             timeMenu: false,
@@ -306,6 +316,7 @@
                     })
             },
             reset () {
+                this.active = false
                 this.$emit('reset')
             },
             sidePanelControl () {
@@ -338,7 +349,7 @@
             this.editedAppointment.date = this.date
         },
         destroyed () {
-            if (this.$store.getters.currentPage !== 'appointments') {
+            if (this.$store.getters.currentPage !== 'appointments' && !this.free) {
                 this.$store.commit('SET_SIDE_PANEL_STATUS', {
                     status: false,
                     mode: null

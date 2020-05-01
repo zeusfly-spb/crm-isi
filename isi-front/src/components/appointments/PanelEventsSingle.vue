@@ -59,6 +59,7 @@
                 <v-flex
                     class="interval"
                     :class="{'effect': borderEffect && addingHour === hour}"
+                    @click="intervalClick(hour)"
                 >
                     <v-badge
                         right
@@ -97,18 +98,31 @@
         >
             <strong>Выберите островок</strong>
         </v-flex>
+        <calendar-record-adder
+            free
+            v-if="addingHour"
+            :date-prop="addingDate"
+            :preset-cabinet="currentCabinet"
+            :preset-hour="addingHour"
+            @reset="resetAdding"
+        />
     </v-sheet>
 </template>
 <script>
+    import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
     export default {
         name: 'PanelEventsSingle',
         data: () => ({
+            adding: false,
             selectedCabinetId: null,
             menu:false,
             timerId: null,
             borderEffect: false
         }),
         computed: {
+            currentCabinet () {
+                return this.hasCabinets && this.cabinets.find(item => item.id === this.selectedCabinetId) || null
+            },
             hasCabinets () {
                 return this.cabinets.length > 0
             },
@@ -118,8 +132,13 @@
             attemptToEvent () {
                 return this.$store.state.lead.attemptToEvent
             },
-            addingHour () {
-                return this.$store.state.appointment.addingHour
+            addingHour: {
+                get () {
+                    return this.$store.state.appointment.addingHour
+                },
+                set (val) {
+                    this.$store.commit('SET_ADDING_HOUR', val)
+                }
             },
             addingDate: {
                 get () {
@@ -157,6 +176,13 @@
             }
         },
         methods: {
+            resetAdding () {
+                this.$store.commit('UNSET_ADDING_HOUR')
+            },
+            intervalClick (hour) {
+                this.addingHour = hour
+                this.adding = true
+            },
             selectFirstCabinet () {
                 if (!this.hasCabinets) {
                     return
@@ -205,6 +231,9 @@
                     this.showHourBorder()
                 }
             }
+        },
+        components: {
+            CalendarRecordAdder
         }
     }
 </script>
