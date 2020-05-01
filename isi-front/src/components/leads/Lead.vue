@@ -119,7 +119,13 @@
             class="clear-td"
         >
             <span v-if="props.item.site">{{ props.item.site }}</span>
-            <user-avatar v-else :user="props.item.user" :mini="mini"/>
+            <user-avatar v-if="props.item.user" :user="props.item.user" :mini="mini"/>
+            <v-avatar
+                :size="mini ? '18px' : '36px'"
+                title="Заявка из сети"
+            >
+                <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user && !props.item.site">
+            </v-avatar>
         </td>
         <td
             :class="{'mini': mini}"
