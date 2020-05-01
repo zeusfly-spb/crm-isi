@@ -66,7 +66,7 @@
         },
         watch: {
             prompt (val) {
-                if (!!val) {
+                if (val) {
                     this.visible = true
                     this.mode = val
                 }
