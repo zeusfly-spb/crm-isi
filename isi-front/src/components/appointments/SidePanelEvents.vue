@@ -1,8 +1,6 @@
 <template>
     <v-flex>
-        <component
-            :is="hasCabinets ? 'PanelEventsCabinets' : 'PanelEventsSingle'"
-        />
+        <panel-events-single/>
     </v-flex>
 </template>
 <script>

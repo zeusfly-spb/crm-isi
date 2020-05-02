@@ -30,15 +30,23 @@
             </template>
             <template v-slot:items="props">
                 <tr style="height: 1em">
-                    <td align="center">{{ goodName(props.item) }}</td>
-                    <td align="center">
+                    <td align="center"
+                        :class="{'mini': mini}"
+                    >
+                        {{ goodName(props.item) }}
+                    </td>
+                    <td align="center"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{'empty': !reservesCount(props.item)}"
                         >
                             {{ reservesCount(props.item) }}
                         </span>
                     </td>
-                    <td align="center">
+                    <td align="center"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented receipt': !!goodActionCount(props.item, 'receipt'),
@@ -48,7 +56,9 @@
                             {{ goodActionCount(props.item, 'receipt') }}
                         </span>
                     </td>
-                    <td align="center">
+                    <td align="center"
+                        :class="{'mini': mini}"
+                    >
                         <span
                             :class="{
                                 'accented expense':  !!goodActionCount(props.item, 'expense'),
@@ -58,7 +68,11 @@
                             {{ goodActionCount(props.item, 'expense') }}
                         </span>
                     </td>
-                    <td align="center">{{ goodsReserves.find(item => item.product_id === props.item).count + goodActionCount(props.item, 'receipt') - goodActionCount(props.item, 'expense') }}</td>
+                    <td align="center"
+                        :class="{'mini': mini}"
+                    >
+                        {{ goodsReserves.find(item => item.product_id === props.item).count + goodActionCount(props.item, 'receipt') - goodActionCount(props.item, 'expense') }}
+                    </td>
                 </tr>
             </template>
         </v-data-table>
@@ -69,6 +83,9 @@
     export default {
         name: 'GoodsTable',
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -106,6 +123,10 @@
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
     table {
         border: solid 1px rgb(200,200,200);
         display: table;

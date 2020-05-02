@@ -10,7 +10,7 @@
     </v-navigation-drawer>
 </template>
 <script>
-    import SidePanelEvents from '../appointments/SidePanelEvents'
+    import  SidePanelEvents from '../appointments/SidePanelEvents'
     import SideOptionsPanel from "./SideOptionsPanel"
     export default {
         name: 'SidePanel',

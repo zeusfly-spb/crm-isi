@@ -83,7 +83,7 @@ class LeadController extends Controller
     public function missed(Request $request)
     {
         $lead = Lead::create(['phone' => substr($request->phone, -10), 'comment' => 'Пропущенный звонок']);
-        $lead->addComment('Пропущенный звонок', null);
+        $lead->addComment('Пропущенный звонок', 0);
         return response()->json($lead->toArray());
     }
 

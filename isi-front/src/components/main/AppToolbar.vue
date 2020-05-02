@@ -52,7 +52,11 @@
                                     class="font-weight-bold"
                                     :class="{'caption': isMobile, 'headline': !isMobile}"
                                 >
-                                    {{ authUser && authUser.full_name }}
+                                    <span
+                                        v-if="authUser.full_name.length"
+                                    >
+                                        {{ authUser && authUser.full_name }}
+                                    </span>
                                     <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
                                 </div>
                             </div>

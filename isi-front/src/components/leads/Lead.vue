@@ -1,24 +1,29 @@
 <template>
     <tr>
         <td
-                align="center"
-                class="clear-td"
+            :class="{'mini': mini}"
+            align="center"
+            class="clear-td"
         >
             <v-icon
-                    class="red--text delete"
-                    title="Удалить заявку?"
-                    @click="confirmToDelete"
-                    v-if="isSuperadmin"
+                :small="mini"
+                class="red--text delete"
+                title="Удалить заявку?"
+                @click="confirmToDelete"
+                v-if="isSuperadmin"
             >
                 clear
             </v-icon>
         </td>
         <td
-                align="center"
+            :class="{'mini': mini}"
+            align="center"
         >
             {{ props.index + 1 }}
         </td>
-        <td nowrap>
+        <td nowrap
+            :class="{'mini': mini}"
+        >
             <v-menu
                 style="display: inline"
                 v-model="contextMenu"
@@ -30,6 +35,7 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-icon
+                        :small="mini"
                         style="user-select: none"
                         class="clickable"
                         title="Показать историю взаимодействия"
@@ -54,7 +60,9 @@
                 @close="interactionsOpenId = null"
             />
         </td>
-        <td nowrap>
+        <td nowrap
+            :class="{'mini': mini}"
+        >
             <phone-viewer :phone="props.item.phone"/>
             <caller
                 :phone="props.item.phone"
@@ -62,8 +70,11 @@
                 :blinked="false"
             />
         </td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
             <v-icon
+                :small="mini"
                 class="add"
                 :style="{'cursor': props.item.hasEvents ? 'default' : ''}"
                 :color="props.item.hasEvents ? 'green' : 'grey lighten-2'"
@@ -73,7 +84,9 @@
                 event
             </v-icon>
         </td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
             <template v-if="props.item.id === openLeadId">
                 <lead-postpones
                         :lead="props.item"
@@ -101,20 +114,22 @@
             </template>
         </td>
         <td
-                align="center"
-                class="clear-td"
+            :class="{'mini': mini}"
+            align="center"
+            class="clear-td"
         >
             <span v-if="props.item.site">{{ props.item.site }}</span>
+            <user-avatar v-if="props.item.user" :user="props.item.user" :mini="mini"/>
             <v-avatar
-                    v-else
-                    size="36"
-                    :title="props.item.user && props.item.user.full_name || ''"
+                :size="mini ? '18px' : '36px'"
+                title="Заявка из сети"
             >
-                <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user && !props.item.site">
             </v-avatar>
         </td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
             <template v-if="leadCommentsId === props.item.id">
                 <lead-comments
                         :lead="props.item"
@@ -144,8 +159,14 @@
                 </v-icon>
             </template>
         </td>
-        <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
+            {{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}
+        </td>
+        <td
+            :class="{'mini': mini}"
+        >
             <lead-status :lead="props.item"/>
         </td>
     </tr>
@@ -159,10 +180,14 @@
     import InteractionsCard from '../customers/InteractionsCard'
     import LeadContextMenuEntry from './LeadContextMenuEntry'
     import PhoneViewer from '../main/PhoneViewer'
+    import UserAvatar from '../main/UserAvatar'
     export default {
         name: 'Lead',
         props: ['props'],
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             leadCommentsId: {
                 get () {
                     return this.$store.state.lead.leadCommentsId
@@ -236,11 +261,16 @@
             LeadPostpones,
             InteractionsCard,
             LeadContextMenuEntry,
-            PhoneViewer
+            PhoneViewer,
+            UserAvatar
         }
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
     .add {
         opacity: 1;
     }
