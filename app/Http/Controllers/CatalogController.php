@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
     public function createService(Request $request)
     {
         $service = Service::create($request->all());
+        Cache::forget('services');
         return response()->json($service->toArray());
     }
 
