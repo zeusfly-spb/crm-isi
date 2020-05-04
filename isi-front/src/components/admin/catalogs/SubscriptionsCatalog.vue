@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md6>
+    <v-flex xs12 sm12 md12>
         <v-card
             class="round-corner"
         >
@@ -14,13 +14,8 @@
             </v-card-title>
             <v-card-text>
                 <v-flex>
-                    <v-btn
-                        flat
-                        color="primary"
-                        @click=""
-                    >
-                        Добавить абонемент
-                    </v-btn>
+                    <subscription-adder/>
+                    <subscriptions-table/>
                 </v-flex>
             </v-card-text>
         </v-card>
@@ -28,7 +23,13 @@
 </template>
 
 <script>
+    import SubscriptionAdder from './SubscriptionAdder'
+    import SubscriptionsTable from './SubscriptionsTable'
     export default {
-        name: 'SubscriptionsCatalog'
+        name: 'SubscriptionsCatalog',
+        components: {
+            SubscriptionsTable,
+            SubscriptionAdder
+        }
     }
 </script>

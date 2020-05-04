@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     protected $guarded = [];
+    protected $casts = [
+        'changeable_price' => 'boolean'
+    ];
 
     public function service()
     {
