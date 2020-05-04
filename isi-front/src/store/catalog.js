@@ -6,6 +6,16 @@ export default {
         subscriptions: []
     },
     actions: {
+        createSubscription ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_subscription', {... data})
+                    .then(res => {
+                        commit('ADD_SUBSCRIPTION', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteService ({commit}, id) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_service', {id: id})
@@ -48,6 +58,9 @@ export default {
         }
     },
     mutations: {
+        ADD_SUBSCRIPTION (state, subscription) {
+            state.subscriptions.push(subscription)
+        },
         DELETE_SERVICE (state, id) {
             state.services = state.services.filter(item => item.id !== id)
         },

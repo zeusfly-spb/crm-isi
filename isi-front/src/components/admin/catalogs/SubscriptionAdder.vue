@@ -82,6 +82,23 @@
                                     v-validate="'required'"
                                 />
                             </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Цена</sub>
+                                <v-text-field
+                                    v-model="newSubscription.base_price"
+                                    type="number"
+                                    data-vv-as="Цена"
+                                    data-vv-name="base_price"
+                                    :error-messages="errors.collect('base_price')"
+                                    v-validate="'required'"
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <sub>Изменяемая цена</sub>
+                                <v-checkbox
+                                    v-model="newSubscription.changeable_price"
+                                />
+                            </v-flex>
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -121,7 +138,12 @@
                         if (!res) {
                             return
                         }
-                        console.log('Saving new subscription')
+                        this.$store.dispatch('createSubscription', this.newSubscription)
+                            .then(() => this.hide())
+                            .finally(() => this.$store.dispatch('pushMessage', {
+                                text: 'Добавлен новый абонемент',
+                                color: 'green'
+                            }))
                     })
             },
             setFirstService () {
@@ -135,14 +157,28 @@
             },
             hide () {
                 this.active = false
+            },
+            init () {
+                this.newSubscription = {
+                    name: '',
+                    service_id: null,
+                    number_days: null,
+                    supply_amount: null,
+                    base_price: null,
+                    changeable_price: false,
+                }
             }
         },
         mounted () {
             this.setFirstService()
         },
         watch: {
-            services (val, oldVal) {
-                if (!oldVal.length && val.length) {
+            active (val) {
+                !val ? this.init() : null
+            },
+            services (val) {
+                if (val.length) {
+                    console.log('services fetched')
                     this.setFirstService()
                 }
             }

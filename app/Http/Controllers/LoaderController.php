@@ -27,7 +27,7 @@ class LoaderController extends Controller
         $services = Cache::rememberForever('services', function () {
             return Service::all();
         });
-        $subscriptions = Subscription::all();
+        $subscriptions = Subscription::with('service')->get();
         return response()->json([
             'services' => $services->toArray(),
             'subscriptions' => $subscriptions->toArray()

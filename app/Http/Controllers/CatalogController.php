@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Service;
+use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -27,5 +28,12 @@ class CatalogController extends Controller
     public function deleteService(Request $request)
     {
         return response()->json(['result' => Service::destroy($request->id)]);
+    }
+
+    public function createSubscription(Request $request)
+    {
+        $subscription = Subscription::create($request->all());
+        $subscription->load('service');
+        return response()->json($subscription->toArray());
     }
 }

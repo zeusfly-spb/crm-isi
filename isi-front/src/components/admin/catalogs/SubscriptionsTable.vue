@@ -10,22 +10,35 @@
                     {{ props.index + 1 }}
                 </td>
                 <td>
-                    {{ props.item.name }}
+                    {{ props.item.name | upFirst }}
                 </td>
                 <td>
-                    {{ props.item.service.name || props.item.service_id }}
+                    {{ props.item.service.description || props.item.service_id }}
                 </td>
-                <td>
+                <td
+                    align="center"
+                >
                     {{ props.item.number_days }}
                 </td>
-                <td>
+                <td
+                    align="center"
+                >
                     {{ props.item.supply_amount }}
                 </td>
-                <td>
+                <td
+                    align="center"
+                >
                     {{ props.item.base_price }}
                 </td>
-                <td>
-                    {{ props.item.changeable_price }}
+                <td
+                    align="right"
+                >
+                    <v-icon
+                        v-if="props.item.changeable_price"
+                        color="green"
+                    >
+                        check
+                    </v-icon>
                 </td>
                 <td>
                     commands

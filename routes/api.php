@@ -161,6 +161,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('create_service', 'CatalogController@createService');
     Route::post('update_service', 'CatalogController@updateService');
     Route::post('delete_service', 'CatalogController@deleteService');
+    Route::post('create_subscription', 'CatalogController@createSubscription');
 
     //APPOINTMENTS
     Route::post('get_appointments', 'AppointmentController@index');
