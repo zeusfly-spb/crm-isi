@@ -2,7 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
-        services: []
+        services: [],
+        subscriptions: []
     },
     actions: {
         deleteService ({commit}, id) {
@@ -58,6 +59,7 @@ export default {
         },
         SET_CATALOGS (state, data) {
             state.services = data.services
+            state.subscriptions = data.subscriptions
         }
     }
 }

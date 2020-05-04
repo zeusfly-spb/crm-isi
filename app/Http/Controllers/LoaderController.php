@@ -12,6 +12,7 @@ use App\Stock\Reserve;
 use App\Stock\Size;
 use App\Stock\StockAction;
 use App\Stock\Type;
+use App\Subscription;
 use App\WorkDay;
 use App\Setting;
 use Illuminate\Http\Request;
@@ -26,7 +27,11 @@ class LoaderController extends Controller
         $services = Cache::rememberForever('services', function () {
             return Service::all();
         });
-        return response()->json(['services' => $services->toArray()]);
+        $subscriptions = Subscription::all();
+        return response()->json([
+            'services' => $services->toArray(),
+            'subscriptions' => $subscriptions->toArray()
+        ]);
     }
 
     public function loadStockPage(Request $request)
