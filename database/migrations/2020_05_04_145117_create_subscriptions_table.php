@@ -19,6 +19,8 @@ class CreateSubscriptionsTable extends Migration
             $table->bigInteger('service_id')->unsigned()->index();
             $table->tinyInteger('number_days');
             $table->tinyInteger('supply_amount');
+            $table->integer('base_price');
+            $table->boolean('changeable_price')->default(false);
             $table->timestamps();
         });
     }
