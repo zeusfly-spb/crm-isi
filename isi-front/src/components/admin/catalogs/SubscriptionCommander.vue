@@ -39,7 +39,7 @@
                                 <v-text-field
                                     v-if="active"
                                     autofocus
-                                    v-model="newSubscription.name"
+                                    v-model="subscription.name"
                                     data-vv-as="Название"
                                     data-vv-name="name"
                                     :error-messages="errors.collect('name')"
@@ -49,7 +49,7 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Услуга</sub>
                                 <v-select
-                                    v-model="newSubscription.service_id"
+                                    v-model="subscription.service_id"
                                     :items="services"
                                     item-text="description"
                                     item-value="id"
@@ -63,7 +63,7 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Количество дней</sub>
                                 <v-text-field
-                                    v-model="newSubscription.number_days"
+                                    v-model="subscription.number_days"
                                     type="number"
                                     data-vv-as="Количество дней"
                                     data-vv-name="number_days"
@@ -74,7 +74,7 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Количество приемов</sub>
                                 <v-text-field
-                                    v-model="newSubscription.supply_amount"
+                                    v-model="subscription.supply_amount"
                                     type="number"
                                     data-vv-as="Количество приемов"
                                     data-vv-name="supply_amount"
@@ -85,7 +85,7 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Цена</sub>
                                 <v-text-field
-                                    v-model="newSubscription.base_price"
+                                    v-model="subscription.base_price"
                                     type="number"
                                     data-vv-as="Цена"
                                     data-vv-name="base_price"
@@ -96,7 +96,7 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Изменяемая цена</sub>
                                 <v-checkbox
-                                    v-model="newSubscription.changeable_price"
+                                    v-model="subscription.changeable_price"
                                 />
                             </v-flex>
                         </v-layout>
@@ -114,17 +114,10 @@
 
 <script>
     export default {
-        name: 'SubscriptionAdder',
+        name: 'SubscriptionCommander',
         data: () => ({
             active: false,
-            newSubscription: {
-                name: '',
-                service_id: null,
-                number_days: null,
-                supply_amount: null,
-                base_price: null,
-                changeable_price: false,
-            }
+            subscription: null
         }),
         computed: {
             services () {
@@ -138,7 +131,7 @@
                         if (!res) {
                             return
                         }
-                        this.$store.dispatch('createSubscription', this.newSubscription)
+                        this.$store.dispatch('createSubscription', this.subscription)
                             .then(() => this.hide())
                             .finally(() => this.$store.dispatch('pushMessage', {
                                 text: 'Добавлен новый абонемент',
@@ -150,7 +143,7 @@
                 if (!this.services.length) {
                     return
                 }
-                this.newSubscription.service_id = this.services[0].id || null
+                this.subscription.service_id = this.services[0].id || null
             },
             show () {
                 this.active = true
@@ -159,7 +152,7 @@
                 this.active = false
             },
             init () {
-                this.newSubscription = {
+                this.subscription = {
                     name: '',
                     service_id: null,
                     number_days: null,
@@ -169,8 +162,8 @@
                 }
             }
         },
-        mounted () {
-            this.setFirstService()
+        created () {
+            this.init()
         },
         watch: {
             active (val) {

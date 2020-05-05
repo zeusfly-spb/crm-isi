@@ -14,7 +14,7 @@
             </v-card-title>
             <v-card-text>
                 <v-flex>
-                    <subscription-adder/>
+                    <subscription-commander/>
                     <subscriptions-table/>
                     <subscription-remover/>
                 </v-flex>
@@ -24,14 +24,14 @@
 </template>
 
 <script>
-    import SubscriptionAdder from './SubscriptionAdder'
+    import SubscriptionCommander from './SubscriptionCommander'
     import SubscriptionsTable from './SubscriptionsTable'
     import SubscriptionRemover from './SubscriptionRemover'
     export default {
         name: 'SubscriptionsCatalog',
         components: {
             SubscriptionsTable,
-            SubscriptionAdder,
+            SubscriptionCommander,
             SubscriptionRemover
         }
     }
