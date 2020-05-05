@@ -22,7 +22,7 @@
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn color="darken-1" flat @click="hide">Отмена</v-btn>
-                    <v-btn color="red darken-1" flat @click="">Удалить</v-btn>
+                    <v-btn color="red darken-1" flat @click="deleteSubscription">Удалить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -41,8 +41,9 @@
             }
         },
         methods: {
-            delete () {
-                this.$store.dispatch()
+            deleteSubscription () {
+                this.$store.dispatch('deleteSubscription', this.toDelete)
+                    .then(() => this.hide())
             },
             show () {
                 this.dialog = true

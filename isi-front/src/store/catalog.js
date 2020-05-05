@@ -9,7 +9,7 @@ export default {
     actions: {
         deleteSubscription ({commit, dispatch}, subscription) {
             return new Promise ((resolve, reject) => {
-                Vue.axios.post('/api/delete_subscription', {id: subscription.id})
+                Vue.axios.post('/api/delete_subscription', {subscription_id: subscription.id})
                     .then(res => {
                         commit ('DELETE_SUBSCRIPTION', subscription.id)
                         let info = `Абонемент "${subscription.name}" удален`
