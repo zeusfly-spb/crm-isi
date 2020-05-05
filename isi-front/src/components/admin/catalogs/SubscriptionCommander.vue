@@ -137,12 +137,9 @@
                         if (!res) {
                             return
                         }
-                        this.$store.dispatch('createSubscription', this.subscription)
+                        let action = this.editMode ? 'updateSubscription' : 'createSubscription'
+                        this.$store.dispatch(action, this.subscription)
                             .then(() => this.hide())
-                            .finally(() => this.$store.dispatch('pushMessage', {
-                                text: 'Добавлен новый абонемент',
-                                color: 'green'
-                            }))
                     })
             },
             setFirstService () {

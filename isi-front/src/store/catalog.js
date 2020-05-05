@@ -8,6 +8,17 @@ export default {
         subscriptionToEdit: null
     },
     actions: {
+        updateSubscription ({commit, dispatch}, subscription) {
+            return new Promise ((resolve, reject) => {
+                Vue.axios.post('/api/update_subscription', {...subscription})
+                    .then(res => {
+                        commit('UPDATE_SUBSCRIPTION', res.data)
+                        let info = `Абонемент "${subscription.name || ''}" изменен`
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         deleteSubscription ({commit, dispatch}, subscription) {
             return new Promise ((resolve, reject) => {
                 Vue.axios.post('/api/delete_subscription', {subscription_id: subscription.id})
@@ -24,11 +35,16 @@ export default {
             })
 
         },
-        createSubscription ({commit}, data) {
+        createSubscription ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_subscription', {... data})
                     .then(res => {
                         commit('ADD_SUBSCRIPTION', res.data)
+                        let info = `Добавлен абонемент "${res.data.name || ''}"`
+                        dispatch('pushMessage', {
+                            text: info,
+                            color: 'green'
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -76,6 +92,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_SUBSCRIPTION (state, subscription) {
+            state.subscriptions = state.subscriptions.map(item => +item.id === +subscription.id ? subscription : item)
+        },
         UNSET_SUBSCRIPTION_TO_EDIT (state) {
             state.subscriptionToEdit = null
         },
