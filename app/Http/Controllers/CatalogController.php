@@ -36,4 +36,10 @@ class CatalogController extends Controller
         $subscription->load('service');
         return response()->json($subscription->toArray());
     }
+
+    public function deleteSubscription(Request $request)
+    {
+        $subscription = Subscription::find($request->subscription_id);
+        return response()->json(['result' => $subscription->delete()]);
+    }
 }

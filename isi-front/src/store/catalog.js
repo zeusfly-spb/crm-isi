@@ -3,9 +3,26 @@ import Vue from 'vue'
 export default {
     state: {
         services: [],
-        subscriptions: []
+        subscriptions: [],
+        subscriptionToDelete: null
     },
     actions: {
+        deleteSubscription ({commit, dispatch}, subscription) {
+            return new Promise ((resolve, reject) => {
+                Vue.axios.post('/api/delete_subscription', {id: subscription.id})
+                    .then(res => {
+                        commit ('DELETE_SUBSCRIPTION', subscription.id)
+                        let info = `Абонемент "${subscription.name}" удален`
+                        dispatch('pushMessage', {
+                            text: info,
+                            color: 'green'
+                        })
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+
+        },
         createSubscription ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_subscription', {... data})
@@ -58,6 +75,15 @@ export default {
         }
     },
     mutations: {
+        DELETE_SUBSCRIPTION (state, subscriptionId) {
+            state.subscriptions = state.subscriptions.filter(item => item.id !== subscriptionId)
+        },
+        UNSET_SUBSCRIPTION_TO_DELETE (state) {
+            state.subscriptionToDelete = null
+        },
+        SET_SUBSCRIPTION_TO_DELETE (state, subscription) {
+            state.subscriptionToDelete = subscription
+        },
         ADD_SUBSCRIPTION (state, subscription) {
             state.subscriptions.push(subscription)
         },

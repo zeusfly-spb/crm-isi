@@ -40,8 +40,27 @@
                         check
                     </v-icon>
                 </td>
-                <td>
-                    commands
+                <td
+                    align="right"
+                >
+                    <v-icon
+                        small
+                        color="blue"
+                        class="clickable"
+                        title="Редактировать абонемент"
+                        @click="edit(props.item)"
+                    >
+                        edit
+                    </v-icon>
+                    <v-icon
+                        small
+                        color="red"
+                        class="clickable"
+                        title="Удалить абонемент"
+                        @click="confirmDelete(props.item)"
+                    >
+                        delete
+                    </v-icon>
                 </td>
             </tr>
         </template>
@@ -69,6 +88,13 @@
         computed: {
             subscriptions () {
                 return this.$store.state.catalog.subscriptions
+            }
+        },
+        methods: {
+            edit (subscription) {
+            },
+            confirmDelete (subscription) {
+                this.$store.commit('SET_SUBSCRIPTION_TO_DELETE', subscription)
             }
         }
     }

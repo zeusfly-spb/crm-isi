@@ -178,7 +178,6 @@
             },
             services (val) {
                 if (val.length) {
-                    console.log('services fetched')
                     this.setFirstService()
                 }
             }
