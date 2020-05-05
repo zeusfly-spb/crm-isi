@@ -174,7 +174,8 @@
         },
         watch: {
             active (val) {
-                !val ? this.init() : null
+                this.errors.clear()
+                !val ? this.init() : this.setFirstService()
             },
             services (val) {
                 if (val.length) {

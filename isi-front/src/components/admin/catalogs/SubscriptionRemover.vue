@@ -17,7 +17,7 @@
                     </span>
                 </v-card-title>
                 <v-card-text>
-                    Подтвердите удаление абнемента <strong>{{ toDelete && toDelete.name || '' }}</strong>
+                    Подтвердите удаление абонемента <strong>{{ toDelete && toDelete.name || '' }}</strong>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
