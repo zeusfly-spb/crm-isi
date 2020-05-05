@@ -4,7 +4,8 @@ export default {
     state: {
         services: [],
         subscriptions: [],
-        subscriptionToDelete: null
+        subscriptionToDelete: null,
+        subscriptionToEdit: null
     },
     actions: {
         deleteSubscription ({commit, dispatch}, subscription) {
@@ -75,6 +76,12 @@ export default {
         }
     },
     mutations: {
+        UNSET_SUBSCRIPTION_TO_EDIT (state) {
+            state.subscriptionToEdit = null
+        },
+        SET_SUBSCRIPTION_TO_EDIT (state, subscription) {
+            state.subscriptionToEdit = subscription
+        },
         DELETE_SUBSCRIPTION (state, subscriptionId) {
             state.subscriptions = state.subscriptions.filter(item => item.id !== subscriptionId)
         },

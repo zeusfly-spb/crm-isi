@@ -92,6 +92,7 @@
         },
         methods: {
             edit (subscription) {
+                this.$store.commit('SET_SUBSCRIPTION_TO_EDIT', subscription)
             },
             confirmDelete (subscription) {
                 this.$store.commit('SET_SUBSCRIPTION_TO_DELETE', subscription)

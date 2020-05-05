@@ -20,7 +20,7 @@
                     <span
                         class="white--text title"
                     >
-                        Новый абонемент
+                        {{ editMode ? `Редактировать абонемент "${toEdit.name || ''}"` : 'Новый абонемент' }}
                     </span>
                     <v-spacer/>
                     <v-icon
@@ -122,6 +122,12 @@
         computed: {
             services () {
                 return this.$store.state.catalog.services
+            },
+            toEdit () {
+                return this.$store.state.catalog.subscriptionToEdit
+            },
+            editMode () {
+                return !!this.toEdit
             }
         },
         methods: {
@@ -143,6 +149,10 @@
                 if (!this.services.length) {
                     return
                 }
+                this.init()
+                if (this.editMode) {
+                    return
+                }
                 this.subscription.service_id = this.services[0].id || null
             },
             show () {
@@ -150,9 +160,12 @@
             },
             hide () {
                 this.active = false
+                if (this.editMode) {
+                    this.$store.commit('UNSET_SUBSCRIPTION_TO_EDIT')
+                }
             },
             init () {
-                this.subscription = {
+                this.subscription = this.editMode ? this.toEdit : {
                     name: '',
                     service_id: null,
                     number_days: null,
@@ -166,6 +179,11 @@
             this.init()
         },
         watch: {
+            editMode (val) {
+                if (val) {
+                    this.show()
+                }
+            },
             active (val) {
                 this.errors.clear()
                 !val ? this.init() : this.setFirstService()
