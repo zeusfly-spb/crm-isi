@@ -2,7 +2,7 @@
     <v-flex>
         <v-dialog
             v-model="dialog"
-            max-width="600"
+            max-width="500"
         >
             <v-card
                 class="round-corner"
@@ -15,6 +15,15 @@
                     >
                         Удаление абонемента
                     </span>
+                    <v-spacer/>
+                    <v-icon
+                        class="clickable"
+                        color="white"
+                        title="Отмена"
+                        @click="hide"
+                    >
+                        close
+                    </v-icon>
                 </v-card-title>
                 <v-card-text>
                     Подтвердите удаление абонемента <strong>{{ toDelete && toDelete.name || '' }}</strong>

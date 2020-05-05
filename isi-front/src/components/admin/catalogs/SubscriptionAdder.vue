@@ -43,7 +43,7 @@
                                     data-vv-as="Название"
                                     data-vv-name="name"
                                     :error-messages="errors.collect('name')"
-                                    v-validate="'required|max:20'"
+                                    v-validate.persist="'required|max:20'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -57,7 +57,7 @@
                                     data-vv-name="service"
                                     data-vv-as="Услуга"
                                     :error-messages="errors.collect('service')"
-                                    v-validate="'required'"
+                                    v-validate.persist="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -68,7 +68,7 @@
                                     data-vv-as="Количество дней"
                                     data-vv-name="number_days"
                                     :error-messages="errors.collect('number_days')"
-                                    v-validate="'required'"
+                                    v-validate.persist="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -79,7 +79,7 @@
                                     data-vv-as="Количество приемов"
                                     data-vv-name="supply_amount"
                                     :error-messages="errors.collect('supply_amount')"
-                                    v-validate="'required'"
+                                    v-validate.persist="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -90,7 +90,7 @@
                                     data-vv-as="Цена"
                                     data-vv-name="base_price"
                                     :error-messages="errors.collect('base_price')"
-                                    v-validate="'required'"
+                                    v-validate.persist="'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
