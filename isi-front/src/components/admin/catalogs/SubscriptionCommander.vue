@@ -20,7 +20,7 @@
                     <span
                         class="white--text title"
                     >
-                        {{ editMode ? `Редактировать абонемент "${toEdit.name || ''}"` : 'Новый абонемент' }}
+                        {{ editMode ? `Редактировать абонемент "${editedName || ''}"` : 'Новый абонемент' }}
                     </span>
                     <v-spacer/>
                     <v-icon
@@ -116,6 +116,7 @@
     export default {
         name: 'SubscriptionCommander',
         data: () => ({
+            editedName: null,
             active: false,
             subscription: null
         }),
@@ -178,6 +179,7 @@
         watch: {
             editMode (val) {
                 if (val) {
+                    this.editedName = this.toEdit && this.toEdit.name || null
                     this.show()
                 }
             },
