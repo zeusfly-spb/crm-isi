@@ -98,14 +98,9 @@
             <v-flex xs12 sm6 md4
                     class="text-sm-right"
             >
-                <v-btn
-                    flat
-                    color="primary"
-                    :title="archiveView ? 'календарь' : 'завершенные / отмененные записи'"
-                    @click="archiveView = !archiveView"
-                >
-                    {{ archiveView ? 'Календарь' : 'Архив' }}
-                </v-btn>                                &nbsp;
+                <calendar-view-switcher
+                    v-model="viewMode"
+                />&nbsp;
             </v-flex>
         </v-layout>
         <v-layout>
@@ -118,7 +113,7 @@
                     elevation="2"
                 >
                     <v-calendar
-                        v-show="!archiveView"
+                        v-show="viewMode === 'calendar'"
                         :type="mode"
                         locale="ru"
                         :weekdays="[1,2,3,4,5,6,0]"
@@ -211,7 +206,7 @@
                         </template>
                     </v-calendar>
                     <events-archive
-                        v-if="archiveView"
+                        v-if="viewMode === 'archive'"
                     />
                 </v-sheet>
             </v-flex>
@@ -268,9 +263,11 @@
     import WeekModePeriod from './WeekModePeriod'
     import MonthModeDate from './MonthModeDate'
     import EventEditor from './EventEditor'
+    import CalendarViewSwitcher from './CalendarViewSwitcher'
     export default {
         name: 'AppointmentCalendar',
         data: () => ({
+            viewMode: null,
             mode: 'day',
             backupMode: null,
             archiveView: false,
@@ -421,7 +418,8 @@
             WeekModePeriod,
             MonthModeDate,
             EventsArchive,
-            EventEditor
+            EventEditor,
+            CalendarViewSwitcher
         }
     }
 </script>
