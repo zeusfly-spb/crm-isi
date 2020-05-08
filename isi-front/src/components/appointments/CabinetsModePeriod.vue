@@ -81,6 +81,9 @@
         mounted () {
             this.fullWidth = this.$refs.mainLayout.offsetWidth
         },
+        updated () {
+            this.fullWidth = this.$refs.mainLayout.offsetWidth
+        },
         components: {
             CabinetEntry,
             CalendarRecordAdder

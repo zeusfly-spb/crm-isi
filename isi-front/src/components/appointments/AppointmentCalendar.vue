@@ -6,7 +6,7 @@
         >
             <v-flex xs12 sm6 md4>
                 <v-btn-toggle
-                    v-show="!archiveView"
+                    v-show="viewMode === 'calendar'"
                     mandatory
                     v-model="mode"
                     class="ml-2 mt-2"
@@ -270,7 +270,6 @@
             viewMode: null,
             mode: 'day',
             backupMode: null,
-            archiveView: false,
             currentMonth: null,
             newDate: null,
             menu: false,
@@ -390,8 +389,11 @@
             this.currentMonth = this.accountingDate
         },
         watch: {
-            archiveView (val) {
-                if (val) {
+            viewMode (val, oldVal) {
+                if (!oldVal) {
+                    return
+                }
+                if (val === 'archive') {
                     this.backupMode = this.mode
                     this.mode = 'month'
                 } else {

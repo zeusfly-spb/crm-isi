@@ -33,6 +33,10 @@
         mounted () {
             this.fullWidth = this.$refs.mainTr.offsetWidth
             this.$emit('computed', this.columnWidth)
+        },
+        updated () {
+            this.fullWidth = this.$refs.mainTr.offsetWidth
+            this.$emit('computed', this.columnWidth)
         }
     }
 </script>
