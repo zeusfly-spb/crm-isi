@@ -3,6 +3,7 @@
         class="mt-2"
     >
         <v-btn
+            flat
             small
             v-for="(mode, index) in modes"
             :key="index"
