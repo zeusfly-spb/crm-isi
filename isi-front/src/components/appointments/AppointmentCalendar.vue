@@ -390,13 +390,11 @@
         },
         watch: {
             viewMode (val, oldVal) {
-                if (!oldVal) {
-                    return
-                }
-                if (val === 'archive') {
+                if (oldVal === 'calendar') {
                     this.backupMode = this.mode
                     this.mode = 'month'
-                } else {
+                }
+                if (val === 'calendar' && !!oldVal) {
                     this.mode = this.backupMode
                 }
             },
