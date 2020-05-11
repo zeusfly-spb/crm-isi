@@ -452,6 +452,13 @@
                 this.newCustomer = false
             },
             createDeal () {
+                if ((!this.selectedCustomerId || this.selectedCustomerId < 0) && this.subscribe) {
+                    this.$store.dispatch('pushMessage', {
+                        text: 'Абонемент не может быть оформлен на анонимного клиента!',
+                        color: 'red'
+                    })
+                    return
+                }
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
@@ -467,7 +474,6 @@
                             subscription_id: this.selectedSubscriptionId
                         })
                             .then(res => {
-                                // this.showSnack(`Сделка №${res.data.id} добавлена`, 'green')
                                 this.$store.dispatch('pushMessage', {
                                     text: `Сделка №${res.data.id} добавлена`,
                                     color: 'green'
@@ -475,8 +481,6 @@
                                 this.dialog = false
                             })
                             .catch(e => {
-                                // this.showSnack(e.data, 'red')
-                                console.dir(e.data)
                                 this.$store.dispatch('pushMessage', {
                                     text: e.data,
                                     color: 'red'
