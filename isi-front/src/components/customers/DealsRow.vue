@@ -22,7 +22,9 @@
                         </v-avatar>
                         {{ props.item.action.text }}
                     </td>
-                    <td align="left">{{ props.item.insole.name }}</td>
+                    <td align="left">
+                        {{ props.item.subscription_id ? subscriptionName(props.item.subscription_id) : props.item.insole.name }}
+                    </td>
                     <td align="right">{{ props.item.income | pretty }} &#8381;</td>
                     <td align="right">{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
                 </tr>
@@ -41,8 +43,16 @@
         name: 'DealsRow',
         props: ['deals'],
         computed: {
+            subscriptions () {
+                return this.$store.state.catalog.subscriptions
+            },
             basePath () {
                 return this.$store.state.basePath
+            }
+        },
+        methods: {
+            subscriptionName (id) {
+                return this.subscriptions.find(item => +item.id === +id).name || null
             }
         }
     }
