@@ -19,7 +19,8 @@ class ProductsTableSeeder extends Seeder
         ['name' => 'Подпяточник 0.5 см.', 'description' => 'good', 'price' => 100],
         ['name' => 'Пластинка для варуса 0.5 см.', 'description' => 'good', 'price' => 100],
         ['name' => 'Пластинка для варуса 1 см.', 'description' => 'good', 'price' => 100],
-        ['name' => 'Фиксатор для большого пальца', 'description' => 'good', 'price' => 300]
+        ['name' => 'Фиксатор для большого пальца', 'description' => 'good', 'price' => 300],
+        ['name' => 'Абонемент', 'description' => 'subscription', 'price' => null]
     ];
 
     public function run()

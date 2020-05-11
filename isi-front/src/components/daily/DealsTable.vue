@@ -67,6 +67,7 @@
                                         data-vv-name="customer"
                                         data-vv-as="Клиент"
                                         :error-messages="errors.collect('customer')"
+                                        v-validate="'required'"
                                 >
                                     <template v-slot:item="data">
                                         <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
@@ -88,7 +89,31 @@
                                     single-line
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <template
+                                v-if="subscribe"
+                            >
+                                <v-flex
+                                    xs12 sm6 md4
+                                >
+                                    <sub>Тип абонемента</sub>
+                                    <v-select
+                                        v-model="selectedSubscriptionId"
+                                        :items="subscriptions"
+                                        item-text="name"
+                                        item-value="id"
+                                        single-line
+                                        data-vv-name="subscription"
+                                        data-vv-as="Абонемент"
+                                        :error-message="errors.collect('subscription')"
+                                        v-validate="'required'"
+                                    />
+                                </v-flex>
+
+                            </template>
+
+                            <v-flex xs12 sm6 md4
+                                    v-show="!subscribe"
+                            >
                                 <sub>Продукция</sub>
                                 <v-select
                                     v-model="newDealData.product_id"
@@ -103,7 +128,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale'"
+                                    v-show="newDealActionType !== 'sale' && !subscribe"
                             >
                                 <sub>Материал</sub>
                                 <v-select
@@ -115,7 +140,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale'"
+                                    v-show="newDealActionType !== 'sale' && !subscribe"
                             >
                                 <sub>Размер</sub>
                                 <v-select
@@ -133,13 +158,13 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Сумма</sub>
                                 <v-text-field
-                                    :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
-                                    :readonly="newDealActionType === 'sale' && !newDealProduct.changeable_price"
+                                    :disabled="incomeDisabled"
+                                    :readonly="incomeReadonly"
                                     v-model="newDealIncome"
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
-                                    v-validate="['produce', 'return'].includes(newDealActionType) || newDealProduct && newDealProduct.changeable_price ? 'required|integer' : null"
+                                    v-validate="incomeValidate"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -213,6 +238,8 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            newSubscribeStartDate: null,
+            selectedSubscriptionId: null,
             loadingUsers: false,
             pendingRequest: false,
             newDealData: {
@@ -252,6 +279,22 @@
             ]
         }),
         computed: {
+            subscriptions () {
+                return this.$store.state.catalog.subscriptions
+            },
+            incomeReadonly () {
+                return this.newDealActionType === 'sale' && !this.newDealProduct.changeable_price
+            },
+            incomeDisabled () {
+                return ['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(this.newDealActionType)
+            },
+            incomeValidate () {
+                return ['produce', 'return', 'subscribe'].includes(this.newDealActionType)
+                    || this.newDealProduct && this.newDealProduct.changeable_price ? 'required|integer' : null
+            },
+            subscribe () {
+                return this.newDealActionType === 'subscribe'
+            },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -361,6 +404,16 @@
             }
         },
         methods: {
+            setSubscriptionProduct () {
+                let subscriptionProduct = this.stockOptions.products && this.stockOptions.products.find(item => item.description === 'subscription') || null
+                this.newDealData.product_id = subscriptionProduct.id || null
+            },
+            setSubscribeStartToday () {
+                this.newSubscribeStartDate = this.$store.state.realDate || null
+            },
+            setFirstSubscription () {
+                this.selectedSubscriptionId = this.subscriptions[0].id || null
+            },
             goodCount (productId) {
                 let target = this.currentReserves.find(item => +item.product_id === +productId)
                 let initialCount = target && target.count || 0
@@ -410,13 +463,25 @@
                             customer_id: this.selectedCustomerId === -1 ? null : this.selectedCustomerId,
                             income: this.newDealIncome,
                             expense: 0,
-                            is_cache: this.selectedPaymentType
+                            is_cache: this.selectedPaymentType,
+                            subscription_id: this.selectedSubscriptionId
                         })
                             .then(res => {
-                                this.showSnack(`Сделка №${res.data.id} добавлена`, 'green')
+                                // this.showSnack(`Сделка №${res.data.id} добавлена`, 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: `Сделка №${res.data.id} добавлена`,
+                                    color: 'green'
+                                })
                                 this.dialog = false
                             })
-                            .catch(e => this.showSnack(e.data, 'red'))
+                            .catch(e => {
+                                // this.showSnack(e.data, 'red')
+                                console.dir(e.data)
+                                this.$store.dispatch('pushMessage', {
+                                    text: e.data,
+                                    color: 'red'
+                                })
+                            })
                             .finally(() => this.pendingRequest = false)
                     })
             },
@@ -446,13 +511,26 @@
                 this.dialog = true
             }
         },
+        created () {
+            this.$store.dispatch('setCatalogs')
+        },
         watch: {
+            subscriptions (val) {
+                val.length ? this.setFirstSubscription() : null
+            },
             newDealActionType (value) {
-                if (value === 'sale') {
-                    let availableGood = this.goods.filter(item => !item.disabled)[0]
-                    this.newDealData.product_id = availableGood && availableGood.id || null
-                } else {
-                    this.newDealData.product_id = this.products[0].id
+                switch (value) {
+                    case 'sale':
+                        let availableGood = this.goods.filter(item => !item.disabled)[0]
+                        this.newDealData.product_id = availableGood && availableGood.id || null
+                        break
+                    case 'subscribe':
+                        this.setSubscriptionProduct()
+                        this.setSubscribeStartToday()
+                        break
+                    default:
+                        this.newDealData.product_id = this.products[0].id
+                        break
                 }
             },
             formattedSizes (value) {
