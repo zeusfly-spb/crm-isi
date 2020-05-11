@@ -77,7 +77,11 @@ class DealController extends Controller
         $deal = Deal::create($inputs);
         $deal->load('user', 'customer', 'action');
 
-        if ($deal->action_type !== 'correction') {
+        if ($deal->action_type === 'subscribe') {
+
+        }
+
+        if ($deal->action_type !== 'correction' || $deal->action_type !== 'subscribe') {
             $product = Product::find($request->product_id);
             if ($product->description === 'good') {
                 $comment = $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name;
