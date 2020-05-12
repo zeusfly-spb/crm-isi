@@ -15,6 +15,7 @@ class CreateSubscribesTable extends Migration
     {
         Schema::create('subscribes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('island_id')->unsigned()->index();
             $table->bigInteger('subscription_id')->unsigned()->index();
             $table->bigInteger('customer_id')->unsigned()->index();
             $table->bigInteger('user_id')->unsigned()->index();

@@ -81,6 +81,7 @@ class DealController extends Controller
 
         if ($deal->action_type === 'subscribe') {
             $data = [
+                'island_id' => $request->island_id,
                 'user_id' => $request->user_id,
                 'customer_id' => $request->customer_id,
                 'subscription_id' => $request->subscription_id,

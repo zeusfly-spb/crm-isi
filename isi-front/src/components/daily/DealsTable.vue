@@ -282,7 +282,7 @@
     export default {
         name: 'DealsTable',
         data: () => ({
-            meny: false,
+            menu: false,
             newSubscribeStartDate: null,
             selectedSubscriptionId: null,
             loadingUsers: false,
