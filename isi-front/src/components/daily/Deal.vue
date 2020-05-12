@@ -192,7 +192,9 @@
                 return this.deal.id === null
             },
             users () {
-                return this.$store.state.users
+                let base = this.$store.state.users
+                base = base.map(user => ({...user, full_name: user.is_superadmin ? 'Суперадмин' : user.full_name }))
+                return base
             },
             customers () {
                 return [
