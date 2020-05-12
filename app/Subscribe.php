@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Subscribe extends Model
 {
     protected $guarded = [];
+    protected $casts = [
+        'comments' => 'array'
+    ];
 
     public function subscription()
     {

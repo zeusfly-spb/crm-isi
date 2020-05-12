@@ -21,6 +21,7 @@ class CreateSubscribesTable extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->date('start_date');
             $table->unsignedSmallInteger('supply_count')->default(0);
+            $table->json('comments')->nullable()->default(null);
             $table->timestamps();
         });
     }
