@@ -208,6 +208,9 @@
                     <events-archive
                         v-if="viewMode === 'archive'"
                     />
+                    <subscribes-table
+                        v-if="viewMode === 'subscriptions'"
+                    />
                 </v-sheet>
             </v-flex>
         </v-layout>
@@ -264,6 +267,7 @@
     import MonthModeDate from './MonthModeDate'
     import EventEditor from './EventEditor'
     import CalendarViewSwitcher from './CalendarViewSwitcher'
+    import SubscribesTable from '../subscribes/SubscribesTable'
     export default {
         name: 'AppointmentCalendar',
         data: () => ({
@@ -419,7 +423,8 @@
             MonthModeDate,
             EventsArchive,
             EventEditor,
-            CalendarViewSwitcher
+            CalendarViewSwitcher,
+            SubscribesTable
         }
     }
 </script>

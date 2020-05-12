@@ -174,4 +174,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('appointment_change_status', 'AppointmentController@change_status');
     Route::post('add_appointment_comment', 'AppointmentController@addComment');
     Route::post('delete_appointment_comment', 'AppointmentController@deleteComment');
+
+    //SUBSCRIBES
+    Route::post('get_subscribes', 'SubscribeController@index');
+
 });
