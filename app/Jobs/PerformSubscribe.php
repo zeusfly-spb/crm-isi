@@ -7,7 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use stdClass;
+use App\Subscribe;
 
 class PerformSubscribe implements ShouldQueue
 {
@@ -20,7 +20,7 @@ class PerformSubscribe implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(stdClass $data)
+    public function __construct(array $data)
     {
         $this->data = $data;
     }
@@ -32,6 +32,6 @@ class PerformSubscribe implements ShouldQueue
      */
     public function handle()
     {
-        //
+        Subscribe::create($this->data);
     }
 }

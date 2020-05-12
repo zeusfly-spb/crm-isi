@@ -108,6 +108,50 @@
                                         v-validate="'required'"
                                     />
                                 </v-flex>
+                                <v-flex
+                                    xs12 sm6 md4
+                                >
+                                    <sub>Дата начала</sub>
+                                    <v-menu
+                                        :close-on-content-click="false"
+                                        :nudge-right="40"
+                                        lazy
+                                        transition="scale-transition"
+                                        offset-y
+                                        full-width
+                                        min-width="290px"
+                                        v-model="menu"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <div
+                                                class="date-input"
+                                            >
+                                                <v-text-field
+                                                    :label="newSubscribeStartDate | moment('D MMMM YYYY г.')"
+                                                    prepend-inner-icon="event"
+                                                    readonly
+                                                    v-on="on"
+                                                >
+                                                    <template
+                                                        slot="label"
+                                                    >
+                                                        <span>
+                                                            {{ newSubscribeStartDate | moment('D MMMM YYYY г.') }}
+                                                        </span>
+                                                    </template>
+                                                </v-text-field>
+                                            </div>
+                                        </template>
+                                        <v-date-picker
+                                            v-model="newSubscribeStartDate" no-title scrollable
+                                            @change="datePicked"
+                                            locale="ru"
+                                            first-day-of-week="1"
+                                        />
+
+                                    </v-menu>
+
+                                </v-flex>
 
                             </template>
 
@@ -238,6 +282,7 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            meny: false,
             newSubscribeStartDate: null,
             selectedSubscriptionId: null,
             loadingUsers: false,
@@ -404,6 +449,10 @@
             }
         },
         methods: {
+            datePicked (date) {
+                this.newSubscribeStartDate = date
+                this.menu = false
+            },
             setSubscriptionProduct () {
                 let subscriptionProduct = this.stockOptions.products && this.stockOptions.products.find(item => item.description === 'subscription') || null
                 this.newDealData.product_id = subscriptionProduct.id || null
@@ -471,7 +520,8 @@
                             income: this.newDealIncome,
                             expense: 0,
                             is_cache: this.selectedPaymentType,
-                            subscription_id: this.selectedSubscriptionId
+                            subscription_id: this.selectedSubscriptionId,
+                            start_date: this.newSubscribeStartDate
                         })
                             .then(res => {
                                 this.$store.dispatch('pushMessage', {

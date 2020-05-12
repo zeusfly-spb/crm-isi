@@ -12,6 +12,7 @@ use App\Stock\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use App\Jobs\PerformSubscribe;
 
 class DealController extends Controller
 {
@@ -74,11 +75,18 @@ class DealController extends Controller
             $inputs['income'] = 0;
         }
 
+        $inputs = Arr::except($inputs, ['start_date']);
         $deal = Deal::create($inputs);
         $deal->load('user', 'customer', 'action');
 
         if ($deal->action_type === 'subscribe') {
-
+            $data = [
+                'user_id' => $request->user_id,
+                'customer_id' => $request->customer_id,
+                'subscription_id' => $request->subscription_id,
+                'start_date' => $request->start_date
+            ];
+            PerformSubscribe::dispatch($data);
         }
 
         if ($deal->action_type !== 'correction' || $deal->action_type !== 'subscribe') {
