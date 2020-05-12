@@ -2,6 +2,7 @@
     <v-avatar
             :size="size"
             :title="user && user.full_name || ''"
+            @click="$emit('click')"
     >
         <img
                 :src="basePath + user.avatar"
