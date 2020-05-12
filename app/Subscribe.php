@@ -25,4 +25,14 @@ class Subscribe extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function addComment(string $text, int $user_id = null)
+    {
+        $comments = $this->attributes['comments'] ? $this->comments : [];
+         array_push($comments, (object) [
+            'user_id' => $user_id,
+            'text' => $text
+        ]);
+        $this->update(['comments' => $comments]);
+    }
 }
