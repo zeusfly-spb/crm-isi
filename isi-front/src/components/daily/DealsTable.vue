@@ -324,11 +324,16 @@
             ]
         }),
         computed: {
+            selectedSubscription () {
+                return this.subscriptions && this.selectedSubscriptionId && this.subscriptions
+                    .find(item => +item.id === +this.selectedSubscriptionId)  || null
+            },
             subscriptions () {
                 return this.$store.state.catalog.subscriptions
             },
             incomeReadonly () {
-                return this.newDealActionType === 'sale' && !this.newDealProduct.changeable_price
+                return this.newDealActionType === 'sale' && !this.newDealProduct.changeable_price ||
+                    this.newDealActionType === 'subscribe' && !this.selectedSubscription.changeable_price
             },
             incomeDisabled () {
                 return ['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(this.newDealActionType)
@@ -444,11 +449,15 @@
                 if (!this.$store.state.deals.length) {
                     return []
                 }
-
                 return [... this.$store.state.deals, {id: null, income: 200}]
             }
         },
         methods: {
+            setSubscriptionPrice () {
+                if (this.selectedSubscription) {
+                    this.newDealIncome = this.selectedSubscription.base_price
+                }
+            },
             datePicked (date) {
                 this.newSubscribeStartDate = date
                 this.menu = false
@@ -561,7 +570,7 @@
                 this.setDefaultDealData()
                 this.selectedCustomerId = -1
                 this.selectedInsoleId = null
-                this.newDealIncome = null
+                this.newDealIncome = this.newDealActionType === 'subscribe' ? this.selectedSubscription.base_price : null
                 this.dialog = true
             }
         },
@@ -569,6 +578,14 @@
             this.$store.dispatch('setCatalogs')
         },
         watch: {
+            selectedSubscriptionId (val) {
+                if (!val) {
+                    return
+                }
+                if (this.newDealActionType === 'subscribe') {
+                    this.newDealIncome = this.selectedSubscription.base_price
+                }
+            },
             subscriptions (val) {
                 val.length ? this.setFirstSubscription() : null
             },
@@ -581,6 +598,7 @@
                     case 'subscribe':
                         this.setSubscriptionProduct()
                         this.setSubscribeStartToday()
+                        this.setSubscriptionPrice()
                         break
                     default:
                         this.newDealData.product_id = this.products[0].id
@@ -600,11 +618,16 @@
                 val && val !== this.select && this.querySelection(val)
             },
             newDealProduct (value) {
-                if (!value) return
-                if (value.description === 'good') {
-                    this.newDealIncome = value.price
-                } else {
-                    this.newDealIncome = null
+                if (!value || !value.description) return
+                switch (value.description) {
+                    case 'good':
+                        this.newDealIncome = value.price
+                        break
+                    case 'subscription':
+                        break
+                    default:
+                        this.newDealIncome = null
+                        break
                 }
             }
         },
