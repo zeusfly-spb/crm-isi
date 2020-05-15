@@ -256,28 +256,35 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setLeadsOnTimer ({commit, rootState, state}) {
+        setLeadsOnTimer ({commit, rootState, state, getters}) {
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {
                     date: rootState.accountingDate,
-                    with_done: state.withDone
+                    with_done: state.withDone,
+                    page: getters.paginator_page,
+                    per_page: getters.paginator_per_page
                 })
                     .then(res => {
-                        commit('SET_LEADS', res.data)
+                        console.dir(res)
+                        commit('SYNC_PAGINATION', res.data.paginator_data)
+                        commit('SET_LEADS', res.data.leads)
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        setLeads ({commit, rootState, state}) {
+        setLeads ({commit, rootState, state, getters}) {
             return new Promise((resolve ,reject) => {
                 commit('ADD_TASK', 'leads')
                 Vue.axios.post('/api/get_leads', {
                     date: rootState.accountingDate,
-                    with_done: state.withDone
+                    with_done: state.withDone,
+                    page: getters.paginator_page,
+                    per_page: getters.paginator_per_page
                 })
                     .then(res => {
-                        commit('SET_LEADS', res.data)
+                        commit('SYNC_PAGINATION', res.data.paginator_data)
+                        commit('SET_LEADS', res.data.leads)
                         resolve(res)
                     })
                     .catch(e => reject(e))

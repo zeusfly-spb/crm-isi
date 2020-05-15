@@ -7,10 +7,14 @@
                 v-model="currentViewMode"
         />
         <v-data-table
+            class="elevation-1"
+            :loading="loading"
             :headers="headers"
             :items="leads"
-            hide-actions
-            class="elevation-1"
+            :total-items="$store.state.paginator.total"
+            :rows-per-page-items="rowOptions"
+            rows-per-page-text="Заявок на странице"
+            @update:pagination="updatePagination"
         >
             <template v-slot:items="props">
                 <lead :props="props" />
@@ -32,6 +36,13 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            loading: false,
+            rowOptions: [
+                10,
+                25,
+                50,
+                { text: "Все", value: -1 }
+            ],
             currentViewMode: 'wait',
             snackbar: false,
             snackText: '',
@@ -64,6 +75,13 @@
                     lastEvent: item.appointments && item.appointments.length > 0 && item.appointments[item.appointments.length - 1] || null
                 }))
                 return this.currentViewMode === 'all' ? base : base.filter(item => item.status === this.currentViewMode)
+            }
+        },
+        methods: {
+            updatePagination (data) {
+                this.loading = true
+                this.$store.dispatch('updatePagination', data)
+                    .finally(() => this.loading = false)
             }
         },
         watch: {

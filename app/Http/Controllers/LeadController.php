@@ -32,7 +32,7 @@ class LeadController extends Controller
                     ->where('status', '<>', 'done')
                     ->get()->reverse()->values()->toArray();
                 $doneLeads = Lead::where('status', 'done')
-                    ->get()->reverse()->values()->toArray();
+                    ->get()->reverse()->values();
                 $leads = $withoutDone;
             } catch (Exception $e) {
                 Log::info('Problems:( ');
@@ -40,13 +40,23 @@ class LeadController extends Controller
             }
 
         } else {
-            $leads = Cache::rememberForever('leads_list', function () {
-                return Lead::with('comments', 'user', 'postpones')
-                    ->where('status', '<>', 'done')
-                    ->get()->reverse()->values()->toArray();
-            });
+//            $leads = Cache::rememberForever('leads_list', function () {
+//                return Lead::with('comments', 'user', 'postpones')
+//                    ->where('status', '<>', 'done')
+//                    ->get()->reverse()->values()->toArray();
+//            });
+            $paginator = Lead::with('comments', 'user', 'postpones')
+                ->where('status', '<>', 'done')
+                ->paginate($request->per_page);
+            $leads = $paginator->reverse()->values();
+            $paginatorData = [
+                'total' => $paginator->total(),
+                'lastPage' => $paginator->lastPage(),
+                'perPage' => $paginator->perPage(),
+                'currentPage' => $paginator->currentPage()
+            ];
         }
-        return response()->json($leads);
+        return response()->json(['leads' => $leads, 'paginator_data' => $paginatorData]);
     }
 
     public function delete(Request $request)

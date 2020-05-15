@@ -18,6 +18,7 @@ import layout from './layout'
 import deal from './deal'
 import customer from './customer'
 import subscribes from './subscribes'
+import paginator from './paginator'
 
 Vue.use(Vuex)
 
@@ -35,7 +36,8 @@ export const store = new Vuex.Store({
         layout,
         deal,
         customer,
-        subscribes
+        subscribes,
+        paginator
     },
     state: {
         loading: 0,
