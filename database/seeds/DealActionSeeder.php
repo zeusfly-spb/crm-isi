@@ -17,7 +17,8 @@ class DealActionSeeder extends Seeder
         'islandDefect' => 'Брак островка',
         'alteration' => 'Переделка',
         'return' => 'Возврат',
-        'sale' => 'Продажа'
+        'sale' => 'Продажа',
+        'subscribe' => 'Оформление абонемента'
     ];
 
     public function run()

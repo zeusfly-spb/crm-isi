@@ -1,17 +1,16 @@
 <template>
-    <v-flex>
-        <v-avatar
-                :size="size"
-                :title="user && user.full_name || ''"
-        >
-            <img
-                    :src="basePath + user.avatar"
-                    alt="Фото"
-                    v-if="user && user.avatar"
-            />
-            <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-        </v-avatar>
-    </v-flex>
+    <v-avatar
+            :size="size"
+            :title="user && user.full_name || ''"
+            @click="$emit('click')"
+    >
+        <img
+                :src="basePath + user.avatar"
+                alt="Фото"
+                v-if="user && user.avatar"
+        />
+        <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+    </v-avatar>
 </template>
 <script>
     export default {

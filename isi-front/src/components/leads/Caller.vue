@@ -3,11 +3,13 @@
         icon
         title="Позвонить"
         @click="makeCall"
+        :small="mini"
         :disabled="!currentVpxExtension"
         :color="flash ? 'white' : null"
         :large="flash && scalable"
     >
         <v-icon
+            :small="mini"
             v-if="!mustBlink ? flash : true"
             :color="!!currentVpxExtension ? 'green' : 'grey'"
         >
@@ -41,6 +43,9 @@
             mustBlink: true
         }),
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             authUser () {
                 return this.$store.state.authUser
             },

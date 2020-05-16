@@ -131,6 +131,10 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::find($request->id);
         $inputs = Arr::only($request->all(), array_values(Schema::getColumnListing($appointment->getTable())));
+        if ($request->status) {
+            $appointment->setStatus($request->status);
+        }
+        $inputs = Arr::except($inputs, ['status']);
         $appointment->update($inputs);
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());

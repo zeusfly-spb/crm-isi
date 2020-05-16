@@ -38,12 +38,14 @@
             :class="{'mini': mini}"
         >
             <user-avatar
+                class="clickable"
                 v-if="!editMode.user"
                 :user="deal.user"
                 :mini="mini"
+                @click="switchEditMode('user')"
             />
             <v-select
-                v-else
+                v-if="editMode.user"
                 autofocus
                 :items="users"
                 v-model="deal.user_id"
@@ -190,7 +192,9 @@
                 return this.deal.id === null
             },
             users () {
-                return this.$store.state.users
+                let base = this.$store.state.users
+                base = base.map(user => ({...user, full_name: user.is_superadmin ? 'Суперадмин' : user.full_name }))
+                return base
             },
             customers () {
                 return [
@@ -288,6 +292,7 @@
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, deals: false})
             },
             switchEditMode (mode) {
+                console.log('switching ' + mode)
                 if (!this.canUpdate) return
                 for(let key in this.editMode) {
                     this.editMode[key] = false

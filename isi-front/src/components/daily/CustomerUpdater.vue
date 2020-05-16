@@ -16,7 +16,7 @@
             <span
                 :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
                 :class="{clickable: canUpdate}"
-                @click="active = true"
+                @click="canUpdate ? active = true : null"
             >
                 {{ deal.customer.full_name }}
             </span>
@@ -86,7 +86,7 @@
                 return this.$store.state.authUser
             },
             canUpdate () {
-                if (this.isTotal) {
+                if (this.isTotal || this.deal.product.description === 'subscription') {
                     return false
                 }
                 return this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id && this.isToday

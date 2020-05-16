@@ -7,28 +7,44 @@
             class="elevation-1"
         >
             <template v-slot:items="props">
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.index + 1 }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.item.type === 'receipt' ? 'Приход' : 'Расход'}}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.item.product.name }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ !!props.item.product.description ? '' : typeName(props.item.type_id) }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ !!props.item.product.description ? '' : props.item.size.name }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.item.count }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.item.user.full_name }}
                 </td>
-                <td>
+                <td
+                    :class="{'mini': mini}"
+                >
                     {{ props.item.comment || ' - '}}
                 </td>
             </template>
@@ -55,6 +71,9 @@
             ]
         }),
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             types () {
                 return this.$store.state.stock.options.types
             },
@@ -69,3 +88,9 @@
         }
     }
 </script>
+<style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
+</style>

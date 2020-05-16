@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\CacheController;
 
 class LeadController extends Controller
 {
@@ -33,7 +32,7 @@ class LeadController extends Controller
                     ->where('status', '<>', 'done')
                     ->get()->reverse()->values()->toArray();
                 $doneLeads = Lead::where('status', 'done')
-                    ->get()->reverse()->values()->toArray();
+                    ->get()->reverse()->values();
                 $leads = $withoutDone;
             } catch (Exception $e) {
                 Log::info('Problems:( ');
@@ -46,9 +45,18 @@ class LeadController extends Controller
 //                    ->where('status', '<>', 'done')
 //                    ->get()->reverse()->values()->toArray();
 //            });
-            $leads = CacheController::getActiveLeadsCache();
+            $paginator = Lead::with('comments', 'user', 'postpones')
+                ->where('status', '<>', 'done')
+                ->paginate($request->per_page);
+            $leads = $paginator->reverse()->values();
+            $paginatorData = [
+                'total' => $paginator->total(),
+                'lastPage' => $paginator->lastPage(),
+                'perPage' => $paginator->perPage(),
+                'currentPage' => $paginator->currentPage()
+            ];
         }
-        return response()->json($leads);
+        return response()->json(['leads' => $leads, 'paginator_data' => $paginatorData]);
     }
 
     public function delete(Request $request)
@@ -85,7 +93,7 @@ class LeadController extends Controller
     public function missed(Request $request)
     {
         $lead = Lead::create(['phone' => substr($request->phone, -10), 'comment' => 'Пропущенный звонок']);
-        $lead->addComment('Пропущенный звонок', null);
+        $lead->addComment('Пропущенный звонок', 0);
         return response()->json($lead->toArray());
     }
 

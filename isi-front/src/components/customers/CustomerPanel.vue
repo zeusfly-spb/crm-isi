@@ -146,49 +146,82 @@
             :search="searchString"
         >
             <template v-slot:items="props">
-                <td>{{ props.item. id }}</td>
-                <td>{{ props.item.last_name }}</td>
-                <td>
-                    <v-icon
-                        color="green"
-                        @click="showInteractions(props.item.id)"
-                        :title="`Показать историю взаимодействия с клиентом ${props.item.full_name}`"
+                    <td
+                        :class="{'mini': mini}"
                     >
-                        contacts
-                    </v-icon>
-                    {{ props.item.first_name }}
-                    <interactions-card
-                        no-activator
-                        :customer="props.item"
-                        v-if="+interactionsOpenId === +props.item.id"
-                        @close="interactionsOpenId = null"
-                    />
-                </td>
-                <td>{{ props.item.patronymic }}</td>
-                <td>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</td>
-                <td>{{ props.item.address }}</td>
-                <td>
-                    <customer-phones-column :phones="props.item.phones"/>
-                </td>
-                <td>{{ props.item.email | email }}</td>
-                <td class="justify-center layout px-0">
-                    <v-icon
-                        small
-                        class="mr-2 green--text"
-                        @click="showEditDialog(props.item)"
-                        title="Редактировать"
+                        <span>{{ props.item. id }}</span>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
                     >
-                        edit
-                    </v-icon>
-                    <v-icon
-                        class="red--text"
-                        small
-                        @click="showDeleteConfirm(props.item)"
-                        title="Удалить"
+                        <span>{{ props.item.last_name }}</span>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
                     >
-                        delete
-                    </v-icon>
-                </td>
+                        <v-icon
+                            :small="mini"
+                            color="green"
+                            @click="showInteractions(props.item.id)"
+                            :title="`Показать историю взаимодействия с клиентом ${props.item.full_name}`"
+                        >
+                            contacts
+                        </v-icon>
+                        {{ props.item.first_name }}
+                        <interactions-card
+                            no-activator
+                            :customer="props.item"
+                            v-if="+interactionsOpenId === +props.item.id"
+                            @close="interactionsOpenId = null"
+                        />
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
+                    >
+                        <span>{{ props.item.patronymic }}</span>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
+                    >
+                        <span>{{ props.item.birth_date | moment('DD MMMM YYYY г.') }}</span>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
+                    >
+                        <span>{{ props.item.address }}</span>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
+                    >
+                        <customer-phones-column :phones="props.item.phones"/>
+                    </td>
+                    <td
+                        :class="{'mini': mini}"
+                    >
+                        <span>{{ props.item.email | email }}</span>
+                    </td>
+                    <td
+                        class="justify-center layout px-0"
+                        :class="{'mini': mini}"
+                    >
+                        <v-icon
+                            small
+                            class="mr-2 green--text"
+                            @click="showEditDialog(props.item)"
+                            title="Редактировать"
+                        >
+                            edit
+                        </v-icon>
+                        <v-icon
+                            class="red--text"
+                            small
+                            @click="showDeleteConfirm(props.item)"
+                            title="Удалить"
+                        >
+                            delete
+                        </v-icon>
+                    </td>
+
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет записей</span>
@@ -270,6 +303,9 @@
             ]
         }),
         computed: {
+            mini () {
+                return this.$store.getters.miniMode
+            },
             customersChanged () {
                 return this.$store.state.layout.customersChanged
             },
@@ -378,6 +414,11 @@
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+        margin: 0!important;
+    }
     .round-corner {
         border-radius: 5px;
     }

@@ -5,7 +5,7 @@
               @click="activate"
               :title="canUpdate && !loading ? 'Клик чтобы изменить продукцию по сделке' : ''"
         >
-            {{ deal.insole.name }}
+            {{ subscription ? subscription.name : deal.insole.name }}
         </span>
         <span v-else class="grey--text">{{ deal.insole.name }}</span>
         <v-dialog
@@ -83,6 +83,12 @@
             active: false
         }),
         computed: {
+            subscription () {
+                return this.deal.product.description === 'subscription' && this.subscriptions.find(item => item.id === this.deal.subscription_id) || null
+            },
+            subscriptions () {
+                return this.$store.state.catalog.subscriptions
+            },
             products () {
                 return this.$store.state.stock.options.products
             },
@@ -120,6 +126,9 @@
                 return this.$store.state.realDate
             },
             canUpdate () {
+                if (this.subscription) {
+                    return false
+                }
                 return this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id && this.isToday
             },
             basePath () {

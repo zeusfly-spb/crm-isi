@@ -1,24 +1,29 @@
 <template>
     <tr>
         <td
-                align="center"
-                class="clear-td"
+            :class="{'mini': mini}"
+            align="center"
+            class="clear-td"
         >
             <v-icon
-                    class="red--text delete"
-                    title="Удалить заявку?"
-                    @click="confirmToDelete"
-                    v-if="isSuperadmin"
+                :small="mini"
+                class="red--text delete"
+                title="Удалить заявку?"
+                @click="confirmToDelete"
+                v-if="isSuperadmin"
             >
                 clear
             </v-icon>
         </td>
         <td
-                align="center"
+            :class="{'mini': mini}"
+            align="center"
         >
             {{ props.index + 1 }}
         </td>
-        <td nowrap>
+        <td nowrap
+            :class="{'mini': mini}"
+        >
             <v-menu
                 style="display: inline"
                 v-model="contextMenu"
@@ -30,6 +35,7 @@
             >
                 <template v-slot:activator="{ on }">
                     <v-icon
+                        :small="mini"
                         style="user-select: none"
                         class="clickable"
                         title="Показать историю взаимодействия"
@@ -54,7 +60,9 @@
                 @close="interactionsOpenId = null"
             />
         </td>
-        <td nowrap>
+        <td nowrap
+            :class="{'mini': mini}"
+        >
             <phone-viewer :phone="props.item.phone"/>
             <caller
                 :phone="props.item.phone"
@@ -62,8 +70,11 @@
                 :blinked="false"
             />
         </td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
             <v-icon
+                :small="mini"
                 class="add"
                 :style="{'cursor': props.item.hasEvents ? 'default' : ''}"
                 :color="props.item.hasEvents ? 'green' : 'grey lighten-2'"
@@ -73,23 +84,25 @@
                 event
             </v-icon>
         </td>
-        <td>
-            <template v-if="lead.id === openLeadId">
+        <td
+            :class="{'mini': mini}"
+        >
+            <template v-if="props.item.id === openLeadId">
                 <lead-postpones
-                    :lead="lead"
-                    :open="lead.id === openLeadId"
-                    @closed="openLeadId = null"
+                        :lead="props.item"
+                        :open="props.item.id === openLeadId"
+                        @closed="openLeadId = null"
                 />
             </template>
             <template v-else>
-                <span
-                    v-if="lastPostpone"
-                    class="clickable"
-                    @click="showLead"
-                    :class="{'today': lastPostpone.date.split(' ')[0] === accountingDate, 'lost': lastPostpone.date < accountingDate}"
-                >
-                    {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm')}}
-                </span>
+                            <span
+                                v-if="props.item.last_postpone"
+                                class="clickable"
+                                @click="showLead"
+                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
+                            >
+                                {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
+                            </span>
                 <v-icon
                     v-else
                     class="clickable"
@@ -101,39 +114,40 @@
             </template>
         </td>
         <td
-                align="center"
-                class="clear-td"
+            :class="{'mini': mini}"
+            align="center"
+            class="clear-td"
         >
             <span v-if="props.item.site">{{ props.item.site }}</span>
+            <user-avatar v-if="props.item.user" :user="props.item.user" :mini="mini"/>
             <v-avatar
-                    v-else
-                    size="36"
-                    :title="props.item.user && props.item.user.full_name || ''"
+                :size="mini ? '18px' : '36px'"
+                title="Заявка из сети"
             >
-                <img :src="basePath + props.item.user.avatar" alt="Фото" v-if="props.item.user && props.item.user.avatar">
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
+                <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user && !props.item.site">
             </v-avatar>
         </td>
-        <td>
+        <td
+            :class="{'mini': mini}"
+        >
             <template v-if="leadCommentsId === props.item.id">
                 <lead-comments
-                        :lead="lead"
+                        :lead="props.item"
                         @close="leadCommentsId = null"
                 />
             </template>
             <template v-else>
-                <span
-                    v-if="lastComment"
-                    @click="leadCommentsId = props.item.id"
-                    class="clickable"
-                >
-                    {{ lastComment.text }}
-                    <span class="green--text accent-4"
-                          v-if="props.item.comments.length > 1"
-                    >
-                        <strong>({{ props.item.comments.length }})</strong>
-                    </span>
-                </span>
+                        <span v-if="props.item.last_comment"
+                              @click="leadCommentsId = props.item.id"
+                              class="clickable"
+                        >
+                            {{ props.item.last_comment.text }}
+                            <span class="green--text accent-4"
+                                  v-if="props.item.comments.length > 1"
+                            >
+                                <strong>({{ props.item.comments.length }})</strong>
+                            </span>
+                        </span>
                 <v-icon
                         v-else
                         color="green"
@@ -145,9 +159,15 @@
                 </v-icon>
             </template>
         </td>
-        <td>{{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}</td>
-        <td>
-            <lead-status :lead="lead"/>
+        <td
+            :class="{'mini': mini}"
+        >
+            {{ props.item.created_at | moment('DD MMMM YYYY г. HH:mm') }}
+        </td>
+        <td
+            :class="{'mini': mini}"
+        >
+            <lead-status :lead="props.item"/>
         </td>
     </tr>
 
@@ -160,24 +180,13 @@
     import InteractionsCard from '../customers/InteractionsCard'
     import LeadContextMenuEntry from './LeadContextMenuEntry'
     import PhoneViewer from '../main/PhoneViewer'
+    import UserAvatar from '../main/UserAvatar'
     export default {
         name: 'Lead',
         props: ['props'],
         computed: {
-            lastPostpone () {
-                return this.postpones.length && this.postpones[0]
-            },
-            lastComment () {
-                return this.comments.length && this.comments[0] || null
-            },
-            postpones () {
-                return this.lead && this.lead.postpones || []
-            },
-            comments () {
-                return this.lead && this.lead.comments || []
-            },
-            lead () {
-                return this.props && this.props.item || null
+            mini () {
+                return this.$store.getters.miniMode
             },
             leadCommentsId: {
                 get () {
@@ -252,11 +261,16 @@
             LeadPostpones,
             InteractionsCard,
             LeadContextMenuEntry,
-            PhoneViewer
+            PhoneViewer,
+            UserAvatar
         }
     }
 </script>
 <style scoped>
+    .mini {
+        height: 1em!important;
+        padding: 0!important;
+    }
     .add {
         opacity: 1;
     }

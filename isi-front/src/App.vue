@@ -30,6 +30,12 @@ export default {
         timerId: null
     }),
     computed: {
+        paginator () {
+            return this.$store.state.paginator
+        },
+        vuetify () {
+            return this.$vuetify
+        },
         currentPage () {
             return this.$store.getters.currentPage
         },

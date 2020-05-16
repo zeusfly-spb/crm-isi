@@ -67,6 +67,7 @@
                                         data-vv-name="customer"
                                         data-vv-as="Клиент"
                                         :error-messages="errors.collect('customer')"
+                                        v-validate="'required'"
                                 >
                                     <template v-slot:item="data">
                                         <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
@@ -88,7 +89,75 @@
                                     single-line
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <template
+                                v-if="subscribe"
+                            >
+                                <v-flex
+                                    xs12 sm6 md4
+                                >
+                                    <sub>Тип абонемента</sub>
+                                    <v-select
+                                        v-model="selectedSubscriptionId"
+                                        :items="subscriptions"
+                                        item-text="name"
+                                        item-value="id"
+                                        single-line
+                                        data-vv-name="subscription"
+                                        data-vv-as="Абонемент"
+                                        :error-message="errors.collect('subscription')"
+                                        v-validate="'required'"
+                                    />
+                                </v-flex>
+                                <v-flex
+                                    xs12 sm6 md4
+                                >
+                                    <sub>Дата начала</sub>
+                                    <v-menu
+                                        :close-on-content-click="false"
+                                        :nudge-right="40"
+                                        lazy
+                                        transition="scale-transition"
+                                        offset-y
+                                        full-width
+                                        min-width="290px"
+                                        v-model="menu"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <div
+                                                class="date-input"
+                                            >
+                                                <v-text-field
+                                                    :label="newSubscribeStartDate | moment('D MMMM YYYY г.')"
+                                                    prepend-inner-icon="event"
+                                                    readonly
+                                                    v-on="on"
+                                                >
+                                                    <template
+                                                        slot="label"
+                                                    >
+                                                        <span>
+                                                            {{ newSubscribeStartDate | moment('D MMMM YYYY г.') }}
+                                                        </span>
+                                                    </template>
+                                                </v-text-field>
+                                            </div>
+                                        </template>
+                                        <v-date-picker
+                                            v-model="newSubscribeStartDate" no-title scrollable
+                                            @change="datePicked"
+                                            locale="ru"
+                                            first-day-of-week="1"
+                                        />
+
+                                    </v-menu>
+
+                                </v-flex>
+
+                            </template>
+
+                            <v-flex xs12 sm6 md4
+                                    v-show="!subscribe"
+                            >
                                 <sub>Продукция</sub>
                                 <v-select
                                     v-model="newDealData.product_id"
@@ -103,7 +172,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale'"
+                                    v-show="newDealActionType !== 'sale' && !subscribe"
                             >
                                 <sub>Материал</sub>
                                 <v-select
@@ -115,7 +184,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale'"
+                                    v-show="newDealActionType !== 'sale' && !subscribe"
                             >
                                 <sub>Размер</sub>
                                 <v-select
@@ -133,13 +202,13 @@
                             <v-flex xs12 sm6 md4>
                                 <sub>Сумма</sub>
                                 <v-text-field
-                                    :disabled="['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(newDealActionType)"
-                                    :readonly="newDealActionType === 'sale' && !newDealProduct.changeable_price"
+                                    :disabled="incomeDisabled"
+                                    :readonly="incomeReadonly"
                                     v-model="newDealIncome"
                                     data-vv-name="price"
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
-                                    v-validate="['produce', 'return'].includes(newDealActionType) || newDealProduct && newDealProduct.changeable_price ? 'required|integer' : null"
+                                    v-validate="incomeValidate"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -213,6 +282,9 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            menu: false,
+            newSubscribeStartDate: null,
+            selectedSubscriptionId: null,
             loadingUsers: false,
             pendingRequest: false,
             newDealData: {
@@ -252,6 +324,27 @@
             ]
         }),
         computed: {
+            selectedSubscription () {
+                return this.subscriptions && this.selectedSubscriptionId && this.subscriptions
+                    .find(item => +item.id === +this.selectedSubscriptionId)  || null
+            },
+            subscriptions () {
+                return this.$store.state.catalog.subscriptions
+            },
+            incomeReadonly () {
+                return this.newDealActionType === 'sale' && !this.newDealProduct.changeable_price ||
+                    this.newDealActionType === 'subscribe' && !this.selectedSubscription.changeable_price
+            },
+            incomeDisabled () {
+                return ['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(this.newDealActionType)
+            },
+            incomeValidate () {
+                return ['produce', 'return', 'subscribe'].includes(this.newDealActionType)
+                    || this.newDealProduct && this.newDealProduct.changeable_price ? 'required|integer' : null
+            },
+            subscribe () {
+                return this.newDealActionType === 'subscribe'
+            },
             stockActions () {
                 return this.$store.state.stock.stockActions
             },
@@ -356,11 +449,29 @@
                 if (!this.$store.state.deals.length) {
                     return []
                 }
-
                 return [... this.$store.state.deals, {id: null, income: 200}]
             }
         },
         methods: {
+            setSubscriptionPrice () {
+                if (this.selectedSubscription) {
+                    this.newDealIncome = this.selectedSubscription.base_price
+                }
+            },
+            datePicked (date) {
+                this.newSubscribeStartDate = date
+                this.menu = false
+            },
+            setSubscriptionProduct () {
+                let subscriptionProduct = this.stockOptions.products && this.stockOptions.products.find(item => item.description === 'subscription') || null
+                this.newDealData.product_id = subscriptionProduct.id || null
+            },
+            setSubscribeStartToday () {
+                this.newSubscribeStartDate = this.$store.state.realDate || null
+            },
+            setFirstSubscription () {
+                this.selectedSubscriptionId = this.subscriptions[0].id || null
+            },
             goodCount (productId) {
                 let target = this.currentReserves.find(item => +item.product_id === +productId)
                 let initialCount = target && target.count || 0
@@ -399,6 +510,13 @@
                 this.newCustomer = false
             },
             createDeal () {
+                if ((!this.selectedCustomerId || this.selectedCustomerId < 0) && this.subscribe) {
+                    this.$store.dispatch('pushMessage', {
+                        text: 'Абонемент не может быть оформлен на анонимного клиента!',
+                        color: 'red'
+                    })
+                    return
+                }
                 this.$validator.validate()
                     .then(res => {
                         if (!res) return
@@ -410,13 +528,23 @@
                             customer_id: this.selectedCustomerId === -1 ? null : this.selectedCustomerId,
                             income: this.newDealIncome,
                             expense: 0,
-                            is_cache: this.selectedPaymentType
+                            is_cache: this.selectedPaymentType,
+                            subscription_id: this.selectedSubscriptionId,
+                            start_date: this.newSubscribeStartDate
                         })
                             .then(res => {
-                                this.showSnack(`Сделка №${res.data.id} добавлена`, 'green')
+                                this.$store.dispatch('pushMessage', {
+                                    text: `Сделка №${res.data.id} добавлена`,
+                                    color: 'green'
+                                })
                                 this.dialog = false
                             })
-                            .catch(e => this.showSnack(e.data, 'red'))
+                            .catch(e => {
+                                this.$store.dispatch('pushMessage', {
+                                    text: e.data,
+                                    color: 'red'
+                                })
+                            })
                             .finally(() => this.pendingRequest = false)
                     })
             },
@@ -442,17 +570,39 @@
                 this.setDefaultDealData()
                 this.selectedCustomerId = -1
                 this.selectedInsoleId = null
-                this.newDealIncome = null
+                this.newDealIncome = this.newDealActionType === 'subscribe' ? this.selectedSubscription.base_price : null
                 this.dialog = true
             }
         },
+        created () {
+            this.$store.dispatch('setCatalogs')
+        },
         watch: {
+            selectedSubscriptionId (val) {
+                if (!val) {
+                    return
+                }
+                if (this.newDealActionType === 'subscribe') {
+                    this.newDealIncome = this.selectedSubscription.base_price
+                }
+            },
+            subscriptions (val) {
+                val.length ? this.setFirstSubscription() : null
+            },
             newDealActionType (value) {
-                if (value === 'sale') {
-                    let availableGood = this.goods.filter(item => !item.disabled)[0]
-                    this.newDealData.product_id = availableGood && availableGood.id || null
-                } else {
-                    this.newDealData.product_id = this.products[0].id
+                switch (value) {
+                    case 'sale':
+                        let availableGood = this.goods.filter(item => !item.disabled)[0]
+                        this.newDealData.product_id = availableGood && availableGood.id || null
+                        break
+                    case 'subscribe':
+                        this.setSubscriptionProduct()
+                        this.setSubscribeStartToday()
+                        this.setSubscriptionPrice()
+                        break
+                    default:
+                        this.newDealData.product_id = this.products[0].id
+                        break
                 }
             },
             formattedSizes (value) {
@@ -468,11 +618,16 @@
                 val && val !== this.select && this.querySelection(val)
             },
             newDealProduct (value) {
-                if (!value) return
-                if (value.description === 'good') {
-                    this.newDealIncome = value.price
-                } else {
-                    this.newDealIncome = null
+                if (!value || !value.description) return
+                switch (value.description) {
+                    case 'good':
+                        this.newDealIncome = value.price
+                        break
+                    case 'subscription':
+                        break
+                    default:
+                        this.newDealIncome = null
+                        break
                 }
             }
         },
