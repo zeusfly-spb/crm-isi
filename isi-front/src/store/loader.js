@@ -292,7 +292,6 @@ export default {
                     name: state.leadName
                 })
                     .then(res => {
-                        console.dir(res.data.leads)
                         res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
@@ -307,7 +306,7 @@ export default {
                                 last_comment: item.comments && item.comments.length && item.comments[0] || null
                             }))
                             .sort(getters.postponesSort)
-                            // .sort(getters.dateTimeSort)
+                            .sort(getters.dateTimeSort)
                             .sort(getters.futureDownSort)
 
                         commit('SET_LEADS', leads)

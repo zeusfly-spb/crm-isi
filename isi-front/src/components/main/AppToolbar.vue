@@ -53,9 +53,9 @@
                                     :class="{'caption': isMobile, 'headline': !isMobile}"
                                 >
                                     <span
-                                        v-if="authUser.full_name.length"
+                                        v-if="authUser.full_name && !authUser.is_superadmin"
                                     >
-                                        {{ authUser && authUser.full_name }}
+                                        {{ authUser && authUser.full_name  || ''}}
                                     </span>
                                     <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
                                 </div>
