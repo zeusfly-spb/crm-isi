@@ -83,6 +83,7 @@
         },
         methods: {
             updatePagination (data) {
+                console.dir(data)
                 this.loading = true
                 this.$store.dispatch('updatePagination', data)
                     .finally(() => this.loading = false)

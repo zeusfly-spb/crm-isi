@@ -34,14 +34,7 @@
         }),
         computed: {
             counts () {
-                let base = this.$store.state.loader.leads
-                return {
-                    all: base.length,
-                    wait: base.filter(item => item.status === 'wait').length,
-                    process: base.filter(item => item.status === 'process').length,
-                    done: base.filter(item => item.status === 'done').length,
-                    moderate: base.filter(item => item.status === 'moderate').length
-                }
+                return this.$store.state.loader.counts || {all: 0, wait: 0, process: 0, moderate: 0, done: 0}
             },
             doneMode () {
                 return this.$store.state.loader.withDone
@@ -57,6 +50,7 @@
         },
         watch: {
             currentViewMode (val) {
+                this.$store.commit('CHANGE_LEAD_STATUS', val)
                 this.$store.dispatch('setDoneMode', ['all', 'done'].includes(val))
             }
         },

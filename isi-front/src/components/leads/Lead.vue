@@ -19,7 +19,7 @@
             :class="{'mini': mini}"
             align="center"
         >
-            {{ props.index + 1 }}
+            {{ page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
         </td>
         <td nowrap
             :class="{'mini': mini}"
@@ -185,6 +185,12 @@
         name: 'Lead',
         props: ['props'],
         computed: {
+            perPage () {
+                return this.$store.state.paginator.per_page
+            },
+            page () {
+                return this.$store.state.paginator.page
+            },
             mini () {
                 return this.$store.getters.miniMode
             },

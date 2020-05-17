@@ -46,7 +46,7 @@ class LeadController extends Controller
 //                    ->get()->reverse()->values()->toArray();
 //            });
             $paginator = Lead::with('comments', 'user', 'postpones')
-                ->where('status', '<>', 'done')
+                ->where('status', $request->status)
                 ->paginate($request->per_page);
             $leads = $paginator->reverse()->values();
             $paginatorData = [
@@ -55,8 +55,19 @@ class LeadController extends Controller
                 'perPage' => $paginator->perPage(),
                 'currentPage' => $paginator->currentPage()
             ];
+            $counts = [
+                'all' => Lead::where('status', '<>', 'done')->count(),
+                'wait' => Lead::where('status', 'wait')->count(),
+                'process' => Lead::where('status', 'process')->count(),
+                'done' => Lead::where('status', 'done')->count(),
+                'moderate' => Lead::where('status', 'moderate')->count()
+            ];
         }
-        return response()->json(['leads' => $leads, 'paginator_data' => $paginatorData]);
+        return response()->json([
+            'leads' => $leads,
+            'paginator_data' => $paginatorData,
+            'counts' => $counts
+        ]);
     }
 
     public function delete(Request $request)

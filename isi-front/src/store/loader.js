@@ -3,6 +3,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        counts: null,
+        leadStatus: 'wait',
         leads: [],
         beep: false,
         withDone: false,
@@ -262,34 +264,23 @@ export default {
                     date: rootState.accountingDate,
                     with_done: state.withDone,
                     page: getters.paginator_page,
-                    per_page: getters.paginator_per_page
+                    per_page: getters.paginator_per_page,
+                    status: state.leadStatus
                 })
                     .then(res => {
-                        console.dir(res)
-                        commit('SYNC_PAGINATION', res.data.paginator_data)
+                        res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
+                        res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
                         commit('SET_LEADS', res.data.leads)
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        setLeads ({commit, rootState, state, getters}) {
-            return new Promise((resolve ,reject) => {
-                commit('ADD_TASK', 'leads')
-                Vue.axios.post('/api/get_leads', {
-                    date: rootState.accountingDate,
-                    with_done: state.withDone,
-                    page: getters.paginator_page,
-                    per_page: getters.paginator_per_page
-                })
-                    .then(res => {
-                        commit('SYNC_PAGINATION', res.data.paginator_data)
-                        commit('SET_LEADS', res.data.leads)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-                    .finally(() => commit('REMOVE_TASK', 'leads'))
-            })
+        setLeads ({commit, dispatch}) {
+            commit('ADD_TASK', 'leads')
+            dispatch('setLeadsOnTimer')
+                .finally(() => commit('REMOVE_TASK', 'leads'))
+
         },
         updateIslandChiefId ({commit, rootState}, data) {
             return new Promise((resolve, reject) => {
@@ -348,6 +339,12 @@ export default {
         }
     },
     mutations: {
+        SET_COUNTS (state, counts) {
+            state.counts = counts
+        },
+        CHANGE_LEAD_STATUS (state, status) {
+            state.leadStatus = status
+        },
         CHANGE_SAVED_PAGE (state, page) {
             state.savedPage = page
         },
