@@ -6,6 +6,18 @@
         <view-mode-switcher
                 v-model="currentViewMode"
         />
+        <div class="mb-2">
+            <v-text-field
+                    class="right"
+                    style="width: 23em"
+                    v-model="searchString"
+                    append-icon="search"
+                    label="Начните вводить данные для поиска..."
+                    single-line
+                    hide-details
+                    @input="lazyQuerySelection"
+            />
+        </div>
         <v-data-table
             class="elevation-1"
             :loading="$store.state.paginator.loading"
@@ -28,6 +40,7 @@
     </v-flex>
 </template>
 <script>
+    import Lodash from 'lodash'
     import Lead from './Lead'
     import ViewModeSwitcher from './ViewModeSwitcher'
     import LeadRemover from './LeadRemover'
@@ -36,6 +49,7 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            searchString: '',
             rowOptions: [
                 10,
                 25,
@@ -60,6 +74,9 @@
             ]
         }),
         computed: {
+            lazyQuerySelection () {
+                return Lodash.debounce(this.setLeadName, 300)
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },
@@ -81,6 +98,9 @@
             }
         },
         methods: {
+            setLeadName () {
+                this.$store.dispatch('setLeadName', this.searchString)
+            },
             updatePagination (data) {
                 this.$store.dispatch('updatePagination', data)
             }

@@ -47,12 +47,15 @@ class LeadController extends Controller
 //            });
             $builder = Lead::with('comments', 'user', 'postpones');
             if ($request->name) {
-                $builder = $builder->where('name', 'LIKE', "$request->name%");
-                $builder = $builder->where('phone', 'LIKE', "%$request->name");
+                $builder = $builder->where('name', 'LIKE', $request->name . '%')
+                ->orWhere('phone', 'LIKE', '%' . $request->name);
+                $paginator = $builder->paginate($request->per_page);
+            } else {
+                $paginator = $builder
+                    ->where('status', $request->status)
+                    ->paginate($request->per_page);
             }
-            $paginator = $builder
-                ->where('status', $request->status)
-                ->paginate($request->per_page);
+
             $leads = array_reverse($paginator->items());
 
             $paginatorData = [

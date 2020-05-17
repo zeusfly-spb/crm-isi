@@ -10,36 +10,17 @@ export default {
         leads: [],
         beep: false,
         withDone: false,
-        savedPage: null,
-        sortByPostpones: (a, b) => {
-            if (!!a.last_postpone && !!b.last_postpone) {
-                let timeA = parseFloat(new Date(a.last_postpone.date))
-                let timeB = parseFloat(new Date(b.last_postpone.date))
-                return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
-            }
-            if (!a.last_postpone) {
-                if (!b.last_postpone) {
-                    return 0
-                } else {
-                    return -1
-                }
-            }
-            if (!b.last_postpone) {
-                if (!a.last_postpone) {
-                    return 0
-                } else {
-                    return 1
-                }
-            }
-        }
+        savedPage: null
     },
     actions: {
         setLeadName ({commit, dispatch}, name) {
             return new Promise((resolve, reject) => {
+                commit('SET_PAGINATOR_LOADING', true)
                 commit('SET_LEAD_NAME', name)
                 dispatch('setLeadsOnTimer')
                     .then(res => resolve(res))
                     .catch(e => reject(e))
+                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
             })
         },
         changeLeadStatus ({commit, dispatch}, status) {
