@@ -20,6 +20,13 @@ export default {
         }
     },
     mutations: {
+        RESET_PAGINATOR (state) {
+            state.page = 1
+            state.per_page = 10
+            state.total = 0
+            state.last_page = 0
+            state.current_page = 0
+        },
         SET_PAGINATOR_LOADING (state, val) {
             state.loading = val
         },

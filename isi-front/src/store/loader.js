@@ -15,6 +15,7 @@ export default {
             return new Promise ((resolve, reject) => {
                 commit('SET_PAGINATOR_LOADING', true)
                 commit('CHANGE_LEAD_STATUS', status)
+                commit('RESET_PAGINATOR')
                 dispatch('setLeadsOnTimer')
                     .then(res => resolve(res))
                     .catch(e => reject(e))

@@ -50,7 +50,6 @@
         },
         watch: {
             currentViewMode (val) {
-                // this.$store.commit('CHANGE_LEAD_STATUS', val)
                 this.$store.dispatch('changeLeadStatus', val)
                 this.$store.dispatch('setDoneMode', ['all', 'done'].includes(val))
             }
