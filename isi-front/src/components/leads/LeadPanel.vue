@@ -77,7 +77,7 @@
                     hasEvents: item.appointments && item.appointments.length > 0,
                     lastEvent: item.appointments && item.appointments.length > 0 && item.appointments[item.appointments.length - 1] || null
                 }))
-                return this.currentViewMode === 'all' ? base : base.filter(item => item.status === this.currentViewMode)
+                return base
             }
         },
         methods: {

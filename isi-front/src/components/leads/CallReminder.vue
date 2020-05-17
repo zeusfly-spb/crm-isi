@@ -89,8 +89,13 @@
                 let base = this.todayLeads.filter(item => (new Date(item.last_postpone.date) - new Date()) / 60000 < limit)
                 return base.filter(item => !item.last_call || item.last_call && new Date(item.last_call.timestamp) < new Date(item.last_postpone.date))
             },
+            postpones () {
+                return this.$store.state.loader.postpones
+            },
             todayLeads () {
-                return this.leads.filter(item => item.status === 'process' && item.last_postpone && item.last_postpone.date.split(' ')[0] === this.$store.state.realDate)
+                // return this.leads.filter(item => item.status === 'process' && item.last_postpone && item.last_postpone.date.split(' ')[0] === this.$store.state.realDate)
+                let array = Object.values(this.postpones)
+                return array.length ? array.map(item => item.lead) : []
             },
             active () {
                 return true

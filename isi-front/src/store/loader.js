@@ -3,14 +3,45 @@ import Vue from 'vue'
 
 export default {
     state: {
+        leadName: null,
+        postpones: [],
         counts: null,
         leadStatus: 'wait',
         leads: [],
         beep: false,
         withDone: false,
-        savedPage: null
+        savedPage: null,
+        sortByPostpones: (a, b) => {
+            if (!!a.last_postpone && !!b.last_postpone) {
+                let timeA = parseFloat(new Date(a.last_postpone.date))
+                let timeB = parseFloat(new Date(b.last_postpone.date))
+                return timeA === timeB ? 0 : timeA < timeB ? 1 : -1
+            }
+            if (!a.last_postpone) {
+                if (!b.last_postpone) {
+                    return 0
+                } else {
+                    return -1
+                }
+            }
+            if (!b.last_postpone) {
+                if (!a.last_postpone) {
+                    return 0
+                } else {
+                    return 1
+                }
+            }
+        }
     },
     actions: {
+        setLeadName ({commit, dispatch}, name) {
+            return new Promise((resolve, reject) => {
+                commit('SET_LEAD_NAME', name)
+                dispatch('setLeadsOnTimer')
+                    .then(res => resolve(res))
+                    .catch(e => reject(e))
+            })
+        },
         changeLeadStatus ({commit, dispatch}, status) {
             return new Promise ((resolve, reject) => {
                 commit('SET_PAGINATOR_LOADING', true)
@@ -276,12 +307,18 @@ export default {
                     with_done: state.withDone,
                     page: getters.paginator_page,
                     per_page: getters.paginator_per_page,
-                    status: state.leadStatus
+                    status: state.leadStatus,
+                    name: state.leadName
                 })
                     .then(res => {
+                        res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-                        commit('SET_LEADS', res.data.leads)
+                        commit('SET_LEADS', res.data.leads.map(item => ({
+                            ... item,
+                            postpones: item.postpones.reverse(),
+                            comments: item.comments.reverse()
+                        })))
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -350,6 +387,12 @@ export default {
         }
     },
     mutations: {
+        SET_LEAD_NAME (state, name) {
+            state.leadName = name
+        },
+        SET_POSTPONES (state, postpones) {
+            state.postpones = postpones
+        },
         SET_COUNTS (state, counts) {
             state.counts = counts
         },

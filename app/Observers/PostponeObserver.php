@@ -16,7 +16,7 @@ class PostponeObserver
      */
     public function created(Postpone $postpone)
     {
-        RefreshLeadsList::dispatch($postpone, 'create');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**
@@ -27,7 +27,7 @@ class PostponeObserver
      */
     public function updated(Postpone $postpone)
     {
-        RefreshLeadsList::dispatch($postpone, 'update');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**
@@ -38,7 +38,7 @@ class PostponeObserver
      */
     public function deleted(Postpone $postpone)
     {
-        RefreshLeadsList::dispatch($postpone, 'delete');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**
@@ -49,7 +49,7 @@ class PostponeObserver
      */
     public function restored(Postpone $postpone)
     {
-        Cache::forget('leads_list');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**

@@ -45,10 +45,16 @@ class LeadController extends Controller
 //                    ->where('status', '<>', 'done')
 //                    ->get()->reverse()->values()->toArray();
 //            });
-            $paginator = Lead::with('comments', 'user', 'postpones')
+            $builder = Lead::with('comments', 'user', 'postpones');
+            if ($request->name) {
+                $builder = $builder->where('name', 'LIKE', "$request->name%");
+                $builder = $builder->where('phone', 'LIKE', "%$request->name");
+            }
+            $paginator = $builder
                 ->where('status', $request->status)
                 ->paginate($request->per_page);
-            $leads = $paginator->reverse()->values();
+            $leads = array_reverse($paginator->items());
+
             $paginatorData = [
                 'total' => $paginator->total(),
                 'lastPage' => $paginator->lastPage(),
@@ -62,11 +68,18 @@ class LeadController extends Controller
                 'done' => Lead::where('status', 'done')->count(),
                 'moderate' => Lead::where('status', 'moderate')->count()
             ];
+            $postpones = Cache::rememberForever(today()->toDateString() . 'postpones_cache', function () {
+                $base = Postpone::with('lead')->whereDate('date', today()->toDateString())->get();
+                return $base->filter(function ($postpone) {
+                    return $postpone->lead->status !== 'done' && $postpone->lead->last_postpone->id == $postpone->id;
+                });
+            });
         }
         return response()->json([
             'leads' => $leads,
             'paginator_data' => $paginatorData,
-            'counts' => $counts
+            'counts' => $counts,
+            'postpones' => $postpones
         ]);
     }
 
