@@ -8,7 +8,7 @@
         />
         <v-data-table
             class="elevation-1"
-            :loading="loading"
+            :loading="$store.state.paginator.loading"
             :headers="headers"
             :items="leads"
             :total-items="$store.state.paginator.total"
@@ -36,7 +36,6 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
-            loading: false,
             rowOptions: [
                 10,
                 25,
@@ -83,10 +82,7 @@
         },
         methods: {
             updatePagination (data) {
-                console.dir(data)
-                this.loading = true
                 this.$store.dispatch('updatePagination', data)
-                    .finally(() => this.loading = false)
             }
         },
         watch: {
