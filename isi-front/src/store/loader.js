@@ -11,6 +11,16 @@ export default {
         savedPage: null
     },
     actions: {
+        changeLeadStatus ({commit, dispatch}, status) {
+            return new Promise ((resolve, reject) => {
+                commit('SET_PAGINATOR_LOADING', true)
+                commit('CHANGE_LEAD_STATUS', status)
+                dispatch('setLeadsOnTimer')
+                    .then(res => resolve(res))
+                    .catch(e => reject(e))
+                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
+            })
+        },
         loadStockPage ({commit, rootState}) {
             commit('ADD_TASK', 'stock')
             return new Promise((resolve, reject) => {
