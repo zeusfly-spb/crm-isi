@@ -292,14 +292,31 @@ export default {
                     name: state.leadName
                 })
                     .then(res => {
+                        console.dir(res.data.leads)
                         res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-                        commit('SET_LEADS', res.data.leads.map(item => ({
-                            ... item,
-                            postpones: item.postpones.reverse(),
-                            comments: item.comments.reverse()
-                        })))
+                        let leads = res.data.leads
+                            .map(lead => ({
+                                ...lead,
+                                postpones: lead.postpones.reverse(),
+                                comments: lead.comments.reverse()
+                            }))
+                            .map(item => ({
+                                ...item,
+                                last_comment: item.comments && item.comments.length && item.comments[0] || null
+                            }))
+                            .sort(getters.postponesSort)
+                            // .sort(getters.dateTimeSort)
+                            .sort(getters.futureDownSort)
+
+                        commit('SET_LEADS', leads)
+                        // commit('SET_LEADS', res.data.leads.map(item => ({
+                        //     ... item,
+                        //     postpones: item.postpones.reverse(),
+                        //     comments: item.comments.reverse()
+                        // })))
+
                         resolve(res)
                     })
                     .catch(e => reject(e))

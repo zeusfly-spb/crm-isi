@@ -76,5 +76,10 @@ export default {
             state.message = message
             setTimeout(() => state.message = null, 100)
         }
+    },
+    getters: {
+        postponesSort: state => state.sortByPostpones,
+        dateTimeSort: state => state.sortByDateTime,
+        futureDownSort: state => state.moveFutureDown
     }
 }

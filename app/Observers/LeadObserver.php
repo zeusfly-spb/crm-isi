@@ -28,6 +28,7 @@ class LeadObserver
     public function updated(Lead $lead)
     {
 //        RefreshLeadsList::dispatch($lead, 'update');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**
@@ -39,6 +40,7 @@ class LeadObserver
     public function deleted(Lead $lead)
     {
 //        RefreshLeadsList::dispatch($lead, 'delete');
+        Cache::forget(today()->toDateString() . 'postpones_cache');
     }
 
     /**

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone', 'last_comment', 'last_call', 'customer', 'appointments'];
+    protected $appends = ['last_postpone', 'last_call', 'customer', 'appointments'];
     protected $casts = [
         'calls' => 'array',
         'appointments' => 'array'

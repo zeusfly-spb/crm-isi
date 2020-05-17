@@ -26,61 +26,45 @@ class LeadController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->with_done) {
-            try {
-                $withoutDone = Lead::with('comments', 'user', 'postpones')
-                    ->where('status', '<>', 'done')
-                    ->get()->reverse()->values()->toArray();
-                $doneLeads = Lead::where('status', 'done')
-                    ->get()->reverse()->values();
-                $leads = $withoutDone;
-            } catch (Exception $e) {
-                Log::info('Problems:( ');
-                Log::info($e);
-            }
+        $builder = Lead::with('comments', 'user', 'postpones');
+        if ($request->name) {
+            $builder = $builder->where('name', 'LIKE', $request->name . '%')
+            ->orWhere('phone', 'LIKE', '%' . $request->name);
+            $paginator = $builder->paginate($request->per_page);
+        }
 
-        } else {
-//            $leads = Cache::rememberForever('leads_list', function () {
-//                return Lead::with('comments', 'user', 'postpones')
-//                    ->where('status', '<>', 'done')
-//                    ->get()->reverse()->values()->toArray();
-//            });
-            $builder = Lead::with('comments', 'user', 'postpones');
-            if ($request->name) {
-                $builder = $builder->where('name', 'LIKE', $request->name . '%')
-                ->orWhere('phone', 'LIKE', '%' . $request->name);
-                $paginator = $builder->paginate($request->per_page);
-            } else {
-                $paginator = $builder
-                    ->where('status', $request->status)
-                    ->paginate($request->per_page);
-            }
-
+        if ($request->per_page > 0) {
+            $paginator = $builder
+                ->where('status', $request->status)
+                ->paginate($request->per_page);
             $leads = array_reverse($paginator->items());
-
             $paginatorData = [
                 'total' => $paginator->total(),
                 'lastPage' => $paginator->lastPage(),
                 'perPage' => $paginator->perPage(),
                 'currentPage' => $paginator->currentPage()
             ];
-            $counts = [
-                'all' => Lead::where('status', '<>', 'done')->count(),
-                'wait' => Lead::where('status', 'wait')->count(),
-                'process' => Lead::where('status', 'process')->count(),
-                'done' => Lead::where('status', 'done')->count(),
-                'moderate' => Lead::where('status', 'moderate')->count()
-            ];
-            $postpones = Cache::rememberForever(today()->toDateString() . 'postpones_cache', function () {
-                $base = Postpone::with('lead')->whereDate('date', today()->toDateString())->get();
-                return $base->filter(function ($postpone) {
-                    return $postpone->lead->status !== 'done' && $postpone->lead->last_postpone->id == $postpone->id;
-                });
-            });
+        } else {
+            $leads = array_reverse($builder->get()->toArray());
         }
+        $counts = [
+            'all' => Lead::where('status', '<>', 'done')->count(),
+            'wait' => Lead::where('status', 'wait')->count(),
+            'process' => Lead::where('status', 'process')->count(),
+            'done' => Lead::where('status', 'done')->count(),
+            'moderate' => Lead::where('status', 'moderate')->count()
+        ];
+        $postpones = Cache::rememberForever(today()->toDateString() . 'postpones_cache', function () {
+            $base = Postpone::with('lead')->whereDate('date', today()->toDateString())->get();
+            $base =  $base->filter(function ($postpone) {
+                return $postpone->lead->status !== 'done' && $postpone->lead->last_postpone->id == $postpone->id;
+            });
+            return $base;
+        });
+
         return response()->json([
             'leads' => $leads,
-            'paginator_data' => $paginatorData,
+            'paginator_data' => $paginatorData ?? null,
             'counts' => $counts,
             'postpones' => $postpones
         ]);
