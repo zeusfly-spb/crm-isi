@@ -1,5 +1,5 @@
 <template>
-    <v-flex>
+    <v-layout>
         <v-btn
                 small
                 v-for="(mode, index) in viewModes"
@@ -22,7 +22,15 @@
             </span>
         </v-btn>
         <new-lead-dialog style="display: inline"/>
-    </v-flex>
+        <v-spacer/>
+        <v-btn
+            flat
+            small
+            @click="todayPostpones = !todayPostpones"
+        >
+            {{ todayPostpones ? '   Общий список   ' : '   Перезвоны на сегодня   ' }}
+        </v-btn>
+    </v-layout>
 </template>
 <script>
     import NewLeadDialog from './NewLeadDialog'
@@ -33,6 +41,14 @@
             viewModes: ['wait', 'process', 'moderate', 'done', 'all'],
         }),
         computed: {
+            todayPostpones: {
+                get () {
+                    return this.$store.state.loader.showTodayPostpones
+                },
+                set (val) {
+                    this.$store.commit('SET_TODAY_POSTPONES', val)
+                }
+            },
             counts () {
                 return this.$store.state.loader.counts || {all: 0, wait: 0, process: 0, moderate: 0, done: 0}
             },

@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        showTodayPostpones: false,
         leadName: null,
         postpones: [],
         counts: null,
@@ -393,6 +394,9 @@ export default {
         }
     },
     mutations: {
+        SET_TODAY_POSTPONES (state, val) {
+            state.showTodayPostpones = val
+        },
         SET_LEAD_NAME (state, name) {
             state.leadName = name
         },
