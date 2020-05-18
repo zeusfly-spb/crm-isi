@@ -8,14 +8,18 @@ export default {
         loading: false
     },
     actions: {
-        updatePagination ({commit, dispatch}, data) {
+        updatePagination ({commit, dispatch, rootState}, data) {
             return new Promise((resolve, reject) => {
+                commit('SET_SCAN_MODE', {...rootState.scanMode, leads: false})
                 commit('SET_PAGINATOR_LOADING', true)
                 commit('UPDATE_PAGINATION', data)
                 dispatch('setLeadsOnTimer')
                     .then(res => resolve(res))
                     .catch(e => reject(e))
-                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
+                    .finally(() => {
+                        commit('SET_PAGINATOR_LOADING', false)
+                        commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true})
+                    })
             })
         }
     },

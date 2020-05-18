@@ -37,7 +37,9 @@ class LeadController extends Controller
             $paginator = $builder
                 ->where('status', $request->status)
                 ->paginate($request->per_page);
-            $leads = array_reverse($paginator->items());
+
+            $leads = $paginator->items();
+
             $paginatorData = [
                 'total' => $paginator->total(),
                 'lastPage' => $paginator->lastPage(),

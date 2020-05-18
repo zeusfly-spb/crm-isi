@@ -87,6 +87,7 @@
             nowLeads () {
                 const limit = 0.01
                 let base = this.todayLeads.filter(item => (new Date(item.last_postpone.date) - new Date()) / 60000 < limit)
+                    .filter(item => item.status === 'process')
                 return base.filter(item => !item.last_call || item.last_call && new Date(item.last_call.timestamp) < new Date(item.last_postpone.date))
             },
             postpones () {

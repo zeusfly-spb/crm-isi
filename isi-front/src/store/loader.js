@@ -10,17 +10,66 @@ export default {
         leads: [],
         beep: false,
         withDone: false,
-        savedPage: null
+        savedPage: null,
+        lastPostponeSort: (a, b) => {
+            let dateA = a.last_postpone_date || null
+            let dateB = b.last_postpone_date || null
+            return dateA === dateB ? 0 : dateA < dateB ? -1 : 1
+        }
     },
     actions: {
-        setLeadName ({commit, dispatch}, name) {
+        setLeadsOnTimer ({commit, rootState, state, getters}) {
+            return new Promise((resolve ,reject) => {
+                Vue.axios.post('/api/get_leads', {
+                    date: rootState.accountingDate,
+                    with_done: state.withDone,
+                    page: getters.paginator_page,
+                    per_page: getters.paginator_per_page,
+                    status: state.leadStatus,
+                    name: state.leadName
+                })
+                    .then(res => {
+                        res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
+                        res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
+                        res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
+
+                        let leads = res.data.leads
+                            .map(lead => ({
+                                ...lead,
+                                postpones: lead.postpones.reverse(),
+                                comments: lead.comments.reverse()
+                            }))
+                            .map(item => ({
+                                ...item,
+                                last_comment: item.comments && item.comments.length && item.comments[0] || null
+                            }))
+                            .map(item => ({
+                                ...item,
+                                last_postpone_date: item.last_postpone && item.last_postpone.date && item.last_postpone.date.split(' ')[0] || null
+                            }))
+                        // .sort(state.lastPostponeSort)
+                        // .sort(getters.postponesSort)
+                        // .sort(getters.dateTimeSort)
+                        // .sort(getters.futureDownSort)
+
+                        commit('SET_LEADS', leads)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        setLeadName ({commit, dispatch, rootState}, name) {
             return new Promise((resolve, reject) => {
+                commit('SET_SCAN_MODE', {...rootState.scanMode, leads: false})
                 commit('SET_PAGINATOR_LOADING', true)
                 commit('SET_LEAD_NAME', name)
                 dispatch('setLeadsOnTimer')
                     .then(res => resolve(res))
                     .catch(e => reject(e))
-                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
+                    .finally(() => {
+                        commit('SET_PAGINATOR_LOADING', false)
+                        commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true})
+                    })
             })
         },
         changeLeadStatus ({commit, dispatch}, status) {
@@ -276,46 +325,6 @@ export default {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
                     .then(res => {
                         commit('DELETE_LEAD', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-        },
-        setLeadsOnTimer ({commit, rootState, state, getters}) {
-            return new Promise((resolve ,reject) => {
-                Vue.axios.post('/api/get_leads', {
-                    date: rootState.accountingDate,
-                    with_done: state.withDone,
-                    page: getters.paginator_page,
-                    per_page: getters.paginator_per_page,
-                    status: state.leadStatus,
-                    name: state.leadName
-                })
-                    .then(res => {
-                        res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
-                        res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
-                        res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-                        let leads = res.data.leads
-                            .map(lead => ({
-                                ...lead,
-                                postpones: lead.postpones.reverse(),
-                                comments: lead.comments.reverse()
-                            }))
-                            .map(item => ({
-                                ...item,
-                                last_comment: item.comments && item.comments.length && item.comments[0] || null
-                            }))
-                            .sort(getters.postponesSort)
-                            .sort(getters.dateTimeSort)
-                            .sort(getters.futureDownSort)
-
-                        commit('SET_LEADS', leads)
-                        // commit('SET_LEADS', res.data.leads.map(item => ({
-                        //     ... item,
-                        //     postpones: item.postpones.reverse(),
-                        //     comments: item.comments.reverse()
-                        // })))
-
                         resolve(res)
                     })
                     .catch(e => reject(e))
