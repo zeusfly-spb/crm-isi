@@ -16,7 +16,7 @@ class PostponeObserver
      */
     public function created(Postpone $postpone)
     {
-        Cache::forget(today()->toDateString() . 'postpones_cache');
+        clearPostponesCache();
     }
 
     /**
@@ -27,7 +27,7 @@ class PostponeObserver
      */
     public function updated(Postpone $postpone)
     {
-        Cache::forget(today()->toDateString() . 'postpones_cache');
+        clearPostponesCache();
     }
 
     /**
@@ -38,7 +38,7 @@ class PostponeObserver
      */
     public function deleted(Postpone $postpone)
     {
-        Cache::forget(today()->toDateString() . 'postpones_cache');
+        clearPostponesCache();
     }
 
     /**
@@ -49,7 +49,7 @@ class PostponeObserver
      */
     public function restored(Postpone $postpone)
     {
-        Cache::forget(today()->toDateString() . 'postpones_cache');
+        clearPostponesCache();
     }
 
     /**

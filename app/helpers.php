@@ -1,6 +1,11 @@
 <?php
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
+
+function clearPostponesCache () {
+    Cache::forget('call_today_' . today()->toDateString());
+}
 
 function cacheModel (Model $model, string $prefix = '')
 {

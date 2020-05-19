@@ -74,6 +74,9 @@
             ]
         }),
         computed: {
+            callTodayLeads () {
+                return this.$store.state.loader.callTodayLeads || []
+            },
             todayPostpones () {
                 return this.$store.state.loader.showTodayPostpones
             },
@@ -90,11 +93,7 @@
                     hasEvents: item.appointments && item.appointments.length > 0,
                     lastEvent: item.appointments && item.appointments.length > 0 && item.appointments[item.appointments.length - 1] || null
                 }))
-                let postpones = Object.values(this.$store.state.loader.postpones)
-                postpones = postpones.length && postpones
-                    .map(item => item.lead)
-                    .filter(item => item.status === 'process') || []
-                return this.todayPostpones ? postpones : base
+                return this.todayPostpones ? this.callTodayLeads : base
             }
         },
         methods: {

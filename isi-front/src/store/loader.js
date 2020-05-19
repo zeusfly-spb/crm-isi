@@ -3,6 +3,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        callTodayLeads: [],
         showTodayPostpones: false,
         leadName: null,
         postpones: [],
@@ -30,9 +31,9 @@ export default {
                     name: state.leadName
                 })
                     .then(res => {
-                        res.data.postpones ? commit('SET_POSTPONES', res.data.postpones) : null
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
+                        res.data.call_today ? commit('SET_CALL_TODAY_LEADS', res.data.call_today) : null
 
                         let leads = res.data.leads
                             .map(lead => ({
@@ -394,14 +395,23 @@ export default {
         }
     },
     mutations: {
+        SET_CALL_TODAY_LEADS (state, leads) {
+            let base = Object.values(leads)
+            state.callTodayLeads = base
+                .map(item => ({
+                    ...item,
+                    comments: item.comments.length ? item.comments.reverse() : []
+                }))
+                .map(item => ({
+                    ...item,
+                    last_comment: item.comments.length ? item.comments[0] : null
+                }))
+        },
         SET_TODAY_POSTPONES (state, val) {
             state.showTodayPostpones = val
         },
         SET_LEAD_NAME (state, name) {
             state.leadName = name
-        },
-        SET_POSTPONES (state, postpones) {
-            state.postpones = postpones
         },
         SET_COUNTS (state, counts) {
             state.counts = counts

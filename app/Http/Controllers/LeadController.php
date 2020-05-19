@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Log;
 
 class LeadController extends Controller
 {
+    public function leadComments(Request $request)
+    {
+        return response()->json(LeadComment::whereIn('id', $request->ids)->get()->toArray());
+    }
+
     public function save(Request $request)
     {
         $lead = Lead::create($request->all());
@@ -58,19 +63,20 @@ class LeadController extends Controller
             'done' => Lead::where('status', 'done')->count(),
             'moderate' => Lead::where('status', 'moderate')->count()
         ];
-        $postpones = Cache::rememberForever(today()->toDateString() . 'postpones_cache', function () {
-            $base = Postpone::with('lead')->whereDate('date', today()->toDateString())->get();
-            $base =  $base->filter(function ($postpone) {
-                return $postpone->lead->status !== 'done' && $postpone->lead->last_postpone->id == $postpone->id;
-            });
-            return $base;
+
+        $callToday = Cache::rememberForever('call_today_' . today()->toDateString(), function () {
+           $call_leads = Lead::with('comments')->where('status', 'process')->get();
+           $call_leads = $call_leads->filter(function ($item) {
+                    return $item->last_postpone && explode(' ', $item->last_postpone->date)[0] === today()->toDateString();
+                });
+           return $call_leads->toArray();
         });
 
         return response()->json([
             'leads' => $leads,
             'paginator_data' => $paginatorData ?? null,
             'counts' => $counts,
-            'postpones' => $postpones
+            'call_today' => $callToday->toArray()
         ]);
     }
 

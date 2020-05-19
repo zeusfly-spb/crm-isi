@@ -16,7 +16,7 @@ class LeadCommentObserver
      */
     public function created(LeadComment $leadComment)
     {
-//        RefreshLeadsList::dispatch($leadComment, 'create');
+        clearPostponesCache();
     }
 
     /**
@@ -27,7 +27,7 @@ class LeadCommentObserver
      */
     public function updated(LeadComment $leadComment)
     {
-//        RefreshLeadsList::dispatch($leadComment, 'update');
+        clearPostponesCache();
     }
 
     /**
@@ -38,7 +38,7 @@ class LeadCommentObserver
      */
     public function deleted(LeadComment $leadComment)
     {
-//        RefreshLeadsList::dispatch($leadComment, 'delete');
+        clearPostponesCache();
     }
 
     /**
