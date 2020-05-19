@@ -76,7 +76,7 @@ class LeadController extends Controller
             'leads' => $leads,
             'paginator_data' => $paginatorData ?? null,
             'counts' => $counts,
-            'call_today' => $callToday->toArray()
+            'call_today' => $callToday
         ]);
     }
 
