@@ -11,7 +11,10 @@
               v-if="loading"
           />
           <app-menu v-if="authUser"/>
-          <router-view v-if="authUser || currentPage === 'login'"/>
+          <router-view
+                  v-blur="loading"
+                  v-if="authUser || currentPage === 'login'"
+          />
       </v-content>
   </v-app>
 </template>

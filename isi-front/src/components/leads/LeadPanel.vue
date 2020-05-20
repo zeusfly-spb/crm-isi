@@ -25,6 +25,7 @@
             :items="leads"
             :total-items="$store.state.paginator.total"
             :rows-per-page-items="rowOptions"
+            :hide-actions="todayPostpones"
             rows-per-page-text="Заявок на странице"
             @update:pagination="updatePagination"
         >
