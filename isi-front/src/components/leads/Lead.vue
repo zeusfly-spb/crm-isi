@@ -21,7 +21,7 @@
             :class="{'mini': mini}"
             align="center"
         >
-            {{ page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
+            {{ todayPostpones ? props.index + 1 : page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
         </td>
         <td nowrap
             :class="{'mini': mini}"
@@ -186,6 +186,9 @@
         name: 'Lead',
         props: ['props'],
         computed: {
+            todayPostpones () {
+                return this.$store.state.loader.showTodayPostpones
+            },
             perPage () {
                 return this.$store.state.paginator.per_page
             },

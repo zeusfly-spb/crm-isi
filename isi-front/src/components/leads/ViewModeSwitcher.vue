@@ -1,6 +1,7 @@
 <template>
     <v-layout>
         <v-btn
+                v-if="!todayPostpones"
                 small
                 v-for="(mode, index) in viewModes"
                 @click="currentViewMode = mode"
@@ -21,7 +22,10 @@
             )
             </span>
         </v-btn>
-        <new-lead-dialog style="display: inline"/>
+        <new-lead-dialog
+                v-if="!todayPostpones"
+                style="display: inline"
+        />
         <v-spacer/>
         <v-btn
             flat
