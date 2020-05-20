@@ -1,5 +1,7 @@
 <template>
-    <tr>
+    <tr
+        v-blur="$store.state.paginator.loading"
+    >
         <td
             :class="{'mini': mini}"
             align="center"
@@ -76,10 +78,9 @@
             <v-icon
                 :small="mini"
                 class="add"
-                :style="{'cursor': props.item.event ? 'default' : ''}"
                 :color="props.item.event ? 'green' : 'grey lighten-2'"
-                :title="props.item.event ? `Запись на ${$moment(props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
-                @click="props.item.event ? null : $store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
+                :title="props.item.event ? `Редактировать запись на ${$moment(props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
+                @click="props.item.event ? $store.commit('SET_EDITED_EVENT', props.item.event) : $store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
             >
                 event
             </v-icon>

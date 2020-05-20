@@ -37,6 +37,11 @@
         </v-data-table>
         <lead-remover/>
         <lead-event-adder/>
+        <event-editor
+                v-if="editedEvent"
+                :event="editedEvent"
+                @close="$store.commit('SET_EDITED_EVENT', null)"
+        />
     </v-flex>
 </template>
 <script>
@@ -46,6 +51,8 @@
     import LeadRemover from './LeadRemover'
     import LeadEventAdder from './LeadEventAdder'
     import IslandSwitcher from '../IslandSwitcher'
+    import EventEditor from '../appointments/EventEditor'
+
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -74,6 +81,9 @@
             ]
         }),
         computed: {
+            editedEvent () {
+                return this.$store.state.appointment.editedEvent
+            },
             callTodayLeads () {
                 return this.$store.state.loader.callTodayLeads || []
             },
@@ -109,7 +119,8 @@
             ViewModeSwitcher,
             LeadRemover,
             LeadEventAdder,
-            IslandSwitcher
+            IslandSwitcher,
+            EventEditor
         }
     }
 </script>

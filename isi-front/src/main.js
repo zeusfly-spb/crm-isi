@@ -27,6 +27,10 @@ Vue.use(VueMoment, {
     moment,
 });
 
+import vBlur from 'v-blur'
+Vue.use(vBlur)
+
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
