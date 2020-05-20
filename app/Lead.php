@@ -14,6 +14,7 @@ class Lead extends Model
         'calls' => 'array',
         'appointments' => 'array'
     ];
+    protected $hidden = ['appointments'];
 
     public function comments()
     {

@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-flex>
         <island-switcher
             v-if="isSuperadmin"
@@ -88,11 +88,6 @@
             },
             leads () {
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
-                base = base.map(item => ({
-                    ...item,
-                    hasEvents: item.appointments && item.appointments.length > 0,
-                    lastEvent: item.appointments && item.appointments.length > 0 && item.appointments[item.appointments.length - 1] || null
-                }))
                 return this.todayPostpones ? this.callTodayLeads : base
             }
         },

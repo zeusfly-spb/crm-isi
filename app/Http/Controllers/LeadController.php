@@ -31,7 +31,7 @@ class LeadController extends Controller
 
     public function index(Request $request)
     {
-        $builder = Lead::query();
+        $builder = Lead::with('event');
 
         if ($request->name) {
             $builder = $builder->where('name', 'LIKE', $request->name . '%')

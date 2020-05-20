@@ -76,10 +76,10 @@
             <v-icon
                 :small="mini"
                 class="add"
-                :style="{'cursor': props.item.hasEvents ? 'default' : ''}"
-                :color="props.item.hasEvents ? 'green' : 'grey lighten-2'"
-                :title="props.item.lastEvent ? `Запись на ${$moment(props.item.lastEvent.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
-                @click="$store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
+                :style="{'cursor': props.item.event ? 'default' : ''}"
+                :color="props.item.event ? 'green' : 'grey lighten-2'"
+                :title="props.item.event ? `Запись на ${$moment(props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
+                @click="props.item.event ? null : $store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
             >
                 event
             </v-icon>
