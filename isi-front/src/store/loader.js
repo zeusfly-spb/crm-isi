@@ -12,12 +12,7 @@ export default {
         leads: [],
         beep: false,
         withDone: false,
-        savedPage: null,
-        lastPostponeSort: (a, b) => {
-            let dateA = a.last_postpone_date || null
-            let dateB = b.last_postpone_date || null
-            return dateA === dateB ? 0 : dateA < dateB ? -1 : 1
-        }
+        savedPage: null
     },
     actions: {
         setLeadsOnTimer ({commit, rootState, state, getters}) {
@@ -41,14 +36,7 @@ export default {
                                 postpones: lead.postpones.reverse(),
                                 comments: lead.comments.reverse()
                             }))
-                            .map(item => ({
-                                ...item,
-                                last_comment: item.comments && item.comments.length && item.comments[0] || null
-                            }))
-                            .map(item => ({
-                                ...item,
-                                last_postpone_date: item.last_postpone && item.last_postpone.date && item.last_postpone.date.split(' ')[0] || null
-                            }))
+
                         // .sort(state.lastPostponeSort)
                         // .sort(getters.postponesSort)
                         // .sort(getters.dateTimeSort)

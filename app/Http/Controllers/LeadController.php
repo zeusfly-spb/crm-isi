@@ -31,7 +31,8 @@ class LeadController extends Controller
 
     public function index(Request $request)
     {
-        $builder = Lead::with('comments', 'user', 'postpones');
+        $builder = Lead::query();
+
         if ($request->name) {
             $builder = $builder->where('name', 'LIKE', $request->name . '%')
             ->orWhere('phone', 'LIKE', '%' . $request->name);

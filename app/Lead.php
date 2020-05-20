@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class Lead extends Model
 {
     protected $guarded = [];
-    protected $appends = ['last_postpone', 'last_call', 'customer', 'appointments'];
+    protected $appends = ['last_postpone', 'last_comment', 'last_call', 'customer'];
     protected $casts = [
         'calls' => 'array',
         'appointments' => 'array'
@@ -85,41 +85,41 @@ class Lead extends Model
         return $this->number->customer ?? null;
     }
 
-    public function addAppointment($appointmentId)
-    {
-        $events = $this->appointments ?? [];
-        $events[] = $appointmentId;
-        $this->update(['appointments' => $events]);
-    }
+//    public function addAppointment($appointmentId)
+//    {
+//        $events = $this->appointments ?? [];
+//        $events[] = $appointmentId;
+//        $this->update(['appointments' => $events]);
+//    }
 
-    public function eventsFromCache()
-    {
-        $events = Cache::get((new Appointment)->getTable())
-            ->where('lead_id', $this->id);
-        $events->each(function ($item) {
-            $item->user = Cache::get('users')->where('id', $item->user_id)->first();
-            $item->performer = Cache::get('users')->where('id', $item->performer_id)->first();
-            $item->service = Cache::get('services')->where('id', $item->service_id)->first();
-            $item->island = Cache::get('islands')->where('id', $item->island_id)->first();
-        });
-        return $events->values();
-    }
-
-    public function eventsFromSql()
-    {
-        Log::info('Getting lead appointments from MySQL');
-        return Appointment::with('user', 'performer', 'service', 'lead', 'island')
-            ->find($this->attributes['appointments']);
-    }
-
-    public function getAppointmentsAttribute()
-    {
-        if (Cache::has((new Appointment)->getTable()) || Cache::has('users') || Cache::has('services') || Cache::has('islands')) {
-            return $this->eventsFromCache();
-        } else {
-            return $this->eventsFromSql();
-        }
-    }
+//    public function eventsFromCache()
+//    {
+//        $events = Cache::get((new Appointment)->getTable())
+//            ->where('lead_id', $this->id);
+//        $events->each(function ($item) {
+//            $item->user = Cache::get('users')->where('id', $item->user_id)->first();
+//            $item->performer = Cache::get('users')->where('id', $item->performer_id)->first();
+//            $item->service = Cache::get('services')->where('id', $item->service_id)->first();
+//            $item->island = Cache::get('islands')->where('id', $item->island_id)->first();
+//        });
+//        return $events->values();
+//    }
+//
+//    public function eventsFromSql()
+//    {
+//        Log::info('Getting lead appointments from MySQL');
+//        return Appointment::with('user', 'performer', 'service', 'lead', 'island')
+//            ->find($this->attributes['appointments']);
+//    }
+//
+//    public function getAppointmentsAttribute()
+//    {
+//        if (Cache::has((new Appointment)->getTable()) || Cache::has('users') || Cache::has('services') || Cache::has('islands')) {
+//            return $this->eventsFromCache();
+//        } else {
+//            return $this->eventsFromSql();
+//        }
+//    }
 
     public function event()
     {
