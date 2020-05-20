@@ -51,8 +51,8 @@
         data: () => ({
             searchString: '',
             rowOptions: [
-                10,
-                25,
+                15,
+                30,
                 50,
                 { text: "Все", value: -1 }
             ],

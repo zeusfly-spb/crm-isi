@@ -55,6 +55,7 @@ class LeadController extends Controller
                 'currentPage' => $paginator->currentPage()
             ];
         } else {
+            $leads = $builder->orderByDesc('id')->whereIn('status', [$request->status, 'wait']);
             $leads = array_reverse($builder->get()->toArray());
         }
         $counts = [
@@ -66,7 +67,7 @@ class LeadController extends Controller
         ];
 
         $callToday = Cache::rememberForever('call_today_' . today()->toDateString(), function () {
-           $call_leads = Lead::with('comments')->where('status', 'process')->get();
+           $call_leads = Lead::with('event')->where('status', 'process')->get();
            $call_leads = $call_leads->filter(function ($item) {
                     return $item->last_postpone && explode(' ', $item->last_postpone->date)[0] === today()->toDateString();
                 });

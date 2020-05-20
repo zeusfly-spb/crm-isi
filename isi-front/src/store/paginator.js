@@ -1,7 +1,7 @@
 export default {
     state: {
         page: 1,
-        per_page: 10,
+        per_page: 15,
         total: 0,
         last_page: 0,
         current_page: 0,
@@ -26,7 +26,7 @@ export default {
     mutations: {
         RESET_PAGINATOR (state) {
             state.page = 1
-            state.per_page = 10
+            state.per_page = 15
             state.total = 0
             state.last_page = 0
             state.current_page = 0
