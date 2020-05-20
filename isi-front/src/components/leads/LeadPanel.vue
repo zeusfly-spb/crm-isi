@@ -6,7 +6,9 @@
         <view-mode-switcher
                 v-model="currentViewMode"
         />
-        <div class="mb-2">
+        <div class="mb-2"
+             v-if="!todayPostpones"
+        >
             <v-text-field
                     class="right"
                     style="width: 23em"
