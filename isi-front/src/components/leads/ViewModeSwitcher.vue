@@ -22,6 +22,13 @@
             )
             </span>
         </v-btn>
+        <span
+            v-if="todayPostpones"
+            style="display: block"
+            class="pl-1 title blue--text"
+        >
+                Перезвоны на <strong>{{ $store.state.realDate | moment('D MMMM YYYY г.')}}</strong>
+        </span>
         <new-lead-dialog
                 v-if="!todayPostpones"
                 style="display: inline"

@@ -100,7 +100,7 @@
                                 v-if="props.item.last_postpone"
                                 class="clickable"
                                 @click="showLead"
-                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === accountingDate, 'lost': props.item.last_postpone.date < accountingDate}"
+                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === realDate, 'lost': props.item.last_postpone.date < realDate}"
                             >
                                 {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                             </span>
@@ -243,8 +243,8 @@
             basePath () {
                 return this.$store.state.basePath
             },
-            accountingDate () {
-                return this.$store.state.accountingDate
+            realDate () {
+                return this.$store.state.realDate
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
