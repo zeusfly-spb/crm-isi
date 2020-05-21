@@ -56,6 +56,12 @@
     import IslandSwitcher from '../IslandSwitcher'
     import EventEditor from '../appointments/EventEditor'
 
+    const sortByTime = (a, b) => {
+        let timeA = a.time
+        let timeB = b.time
+        return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
+    }
+
     export default {
         name: 'LeadsPanel',
         data: () => ({
@@ -107,8 +113,14 @@
                 return this.$store.getters.isSuperadmin
             },
             leads () {
+                let callToday = JSON.parse(JSON.stringify(this.callTodayLeads))
+                    .map(item => ({
+                        ...item,
+                        time: item.last_postpone.date.split(' ')[1] || null
+                    }))
+                    .sort(sortByTime)
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
-                return this.todayPostpones ? this.callTodayLeads : base
+                return this.todayPostpones ? callToday : base
             }
         },
         methods: {
