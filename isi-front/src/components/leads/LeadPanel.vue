@@ -66,7 +66,6 @@
                 50,
                 { text: "Все", value: -1 }
             ],
-            currentViewMode: 'wait',
             snackbar: false,
             snackText: '',
             snackColor: 'green',
@@ -84,6 +83,14 @@
             ]
         }),
         computed: {
+            currentViewMode: {
+                get () {
+                    return this.$store.state.loader.leadStatus
+                },
+                set (val) {
+                    this.$store.dispatch('changeLeadStatus', val)
+                }
+            },
             editedEvent () {
                 return this.$store.state.appointment.editedEvent
             },

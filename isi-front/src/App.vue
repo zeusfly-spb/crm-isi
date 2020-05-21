@@ -33,15 +33,6 @@ export default {
         timerId: null
     }),
     computed: {
-        realDate () {
-            return this.$store.state.realDate
-        },
-        paginator () {
-            return this.$store.state.paginator
-        },
-        vuetify () {
-            return this.$vuetify
-        },
         currentPage () {
             return this.$store.getters.currentPage
         },

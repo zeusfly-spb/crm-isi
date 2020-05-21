@@ -42,8 +42,7 @@ class LeadController extends Controller
         if ($request->per_page > 0) {
             $paginator = $builder
                 ->orderByDesc('id')
-                ->where('status', $request->status)
-                ->orWhere('status', '=', 'wait')
+                ->whereIn('status', [$request->status, 'wait'])
                 ->paginate($request->per_page);
 
             $leads = array_reverse($paginator->items());
