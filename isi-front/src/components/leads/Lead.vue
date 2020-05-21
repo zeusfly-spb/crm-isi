@@ -79,8 +79,8 @@
                 :small="mini"
                 class="add"
                 :color="props.item.event ? 'green' : 'grey lighten-2'"
-                :title="props.item.event ? `Редактировать запись на ${$moment(props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'"
-                @click="props.item.event ? $store.commit('SET_EDITED_EVENT', props.item.event) : $store.commit('SET_ATTEMPT_TO_EVENT', props.item)"
+                :title="eventControlTitle"
+                @click="eventControlAction"
             >
                 event
             </v-icon>
@@ -186,6 +186,15 @@
         name: 'Lead',
         props: ['props'],
         computed: {
+            eventControlTitle () {
+                if (!this.workingIsland) {
+                    return 'Для управления записями заявок, выберите островок'
+                }
+                return this.props.item.event ? `Редактировать запись на ${this.$moment(this.props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'
+            },
+            workingIsland () {
+                return this.$store.getters.workingIsland
+            },
             todayPostpones () {
                 return this.$store.state.loader.showTodayPostpones
             },
@@ -251,6 +260,12 @@
             }
         },
         methods: {
+            eventControlAction () {
+                if (!this.workingIsland) {
+                    return
+                }
+                this.props.item.event ? this.$store.commit('SET_EDITED_EVENT', this.props.item.event) : this.$store.commit('SET_ATTEMPT_TO_EVENT', this.props.item)
+            },
             confirmToDelete () {
                 this.$store.commit('SET_LEAD_TO_DELETE', this.props.item)
             },
