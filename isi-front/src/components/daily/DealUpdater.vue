@@ -84,7 +84,7 @@
         }),
         computed: {
             subscription () {
-                return this.deal.product.description === 'subscription' && this.subscriptions.find(item => item.id === this.deal.subscription_id) || null
+                return !this.deal.product && this.subscriptions.find(item => item.id === this.deal.subscription_id) || null
             },
             subscriptions () {
                 return this.$store.state.catalog.subscriptions

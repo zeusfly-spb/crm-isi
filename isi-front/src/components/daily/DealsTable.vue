@@ -105,7 +105,7 @@
                                         data-vv-name="subscription"
                                         data-vv-as="Абонемент"
                                         :error-message="errors.collect('subscription')"
-                                        v-validate="'required'"
+                                        v-validate="subscribe ? 'required' : ''"
                                     />
                                 </v-flex>
                                 <v-flex
@@ -148,11 +148,8 @@
                                             locale="ru"
                                             first-day-of-week="1"
                                         />
-
                                     </v-menu>
-
                                 </v-flex>
-
                             </template>
 
                             <v-flex xs12 sm6 md4
@@ -168,7 +165,7 @@
                                     data-vv-name="product"
                                     data-vv-as="Продукция"
                                     :error-messages="errors.collect('product')"
-                                    v-validate="'required'"
+                                    v-validate="subscribe ? '' : 'required'"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
@@ -196,7 +193,7 @@
                                     data-vv-as="Размер"
                                     data-vv-name="size"
                                     :error-messages="newDealActionType !== 'sale' ? errors.collect('size') : ''"
-                                    v-validate="newDealActionType !== 'sale' ? 'required' : ''"
+                                    v-validate="!['sale', 'subscribe'].includes(newDealActionType) ? 'required' : ''"
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
@@ -466,7 +463,7 @@
             },
             setSubscriptionProduct () {
                 let subscriptionProduct = this.stockOptions.products && this.stockOptions.products.find(item => item.description === 'subscription') || null
-                this.newDealData.product_id = subscriptionProduct.id || null
+                this.newDealData.product_id = subscriptionProduct && subscriptionProduct.id || 0
             },
             setSubscribeStartToday () {
                 this.newSubscribeStartDate = this.$store.state.realDate || null
@@ -521,6 +518,7 @@
                 }
                 this.$validator.validate()
                     .then(res => {
+                        console.log(res)
                         if (!res) return
                         this.pendingRequest = true
                         this.$store.dispatch('addDeal', {
@@ -580,15 +578,6 @@
             this.$store.dispatch('setCatalogs')
         },
         watch: {
-            dialog () {
-                this.$validator.pause()
-                this.$nextTick(() => {
-                    this.$validator.errors.clear()
-                    this.$validator.fields.items.forEach(field => field.reset())
-                    this.$validator.fields.items.forEach(field => this.errors.remove(field))
-                    this.$validator.resume()
-                })
-            },
             selectedSubscriptionId (val) {
                 if (!val) {
                     return

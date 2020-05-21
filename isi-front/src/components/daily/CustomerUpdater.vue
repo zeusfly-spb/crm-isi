@@ -86,7 +86,7 @@
                 return this.$store.state.authUser
             },
             canUpdate () {
-                if (this.isTotal || this.deal.product.description === 'subscription') {
+                if (this.isTotal ||  !this.deal.product || this.deal.product.description === 'subscription') {
                     return false
                 }
                 return this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id && this.isToday
