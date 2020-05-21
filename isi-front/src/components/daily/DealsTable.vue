@@ -364,7 +364,9 @@
                     }
                     return a.id - b.id
                 }
-                return this.stockOptions.deal_actions && this.stockOptions.deal_actions.sort(sortAction)
+                return this.stockOptions.deal_actions && this.stockOptions.deal_actions
+                    .sort(sortAction)
+                    .map(item => item.type === 'subscribe' && !this.subscriptions.length ? {...item, disabled: true} : item)
             },
             goods () {
                 const markLack = (goodsArray) => goodsArray.map(item => ({...item, count: this.goodCount(item.id), disabled: this.goodCount(item.id) < 1}))
