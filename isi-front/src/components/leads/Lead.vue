@@ -76,8 +76,8 @@
             :class="{'mini': mini}"
         >
             <v-icon
+                :style="{'cursor': !workingIsland ? 'default' : 'pointer'}"
                 :small="mini"
-                class="add"
                 :color="props.item.event ? 'green' : 'grey lighten-2'"
                 :title="eventControlTitle"
                 @click="eventControlAction"
@@ -295,12 +295,6 @@
     .mini {
         height: 1em!important;
         padding: 0!important;
-    }
-    .add {
-        opacity: 1;
-    }
-    .add:hover {
-        color: red;
     }
     .clear-td {
         padding: 0 !important;
