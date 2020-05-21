@@ -36,10 +36,8 @@ class LeadController extends Controller
         if ($request->name) {
             $builder = $builder->where('name', 'LIKE', $request->name . '%')
             ->orWhere('phone', 'LIKE', '%' . $request->name);
-            $paginator = $builder->paginate($request->per_page);
-        }
-
-        if ($request->per_page > 0) {
+            $leads = array_reverse($builder->get()->toArray());
+        } else if ($request->per_page > 0) {
             $paginator = $builder
                 ->orderByDesc('id')
                 ->whereIn('status', [$request->status, 'wait'])
@@ -54,9 +52,10 @@ class LeadController extends Controller
                 'currentPage' => $paginator->currentPage()
             ];
         } else {
-            $leads = $builder->orderByDesc('id')->whereIn('status', [$request->status, 'wait']);
+            $builder = $builder->orderByDesc('id')->whereIn('status', [$request->status, 'wait']);
             $leads = array_reverse($builder->get()->toArray());
         }
+
         $counts = [
             'all' => Lead::where('status', '<>', 'done')->count(),
             'wait' => Lead::where('status', 'wait')->count(),

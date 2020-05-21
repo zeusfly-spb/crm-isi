@@ -36,12 +36,6 @@ export default {
                                 postpones: lead.postpones.reverse(),
                                 comments: lead.comments.reverse()
                             }))
-
-                        // .sort(state.lastPostponeSort)
-                        // .sort(getters.postponesSort)
-                        // .sort(getters.dateTimeSort)
-                        // .sort(getters.futureDownSort)
-
                         commit('SET_LEADS', leads)
                         resolve(res)
                     })

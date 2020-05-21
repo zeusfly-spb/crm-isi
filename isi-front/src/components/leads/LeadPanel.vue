@@ -27,7 +27,7 @@
             :items="leads"
             :total-items="$store.state.paginator.total"
             :rows-per-page-items="rowOptions"
-            :hide-actions="todayPostpones"
+            :hide-actions="todayPostpones || byQuery"
             rows-per-page-text="Заявок на странице"
             @update:pagination="updatePagination"
         >
@@ -66,9 +66,6 @@
                 50,
                 { text: "Все", value: -1 }
             ],
-            snackbar: false,
-            snackText: '',
-            snackColor: 'green',
             headers: [
                 {text: '', value: null, sortable: false, width: '5px'},
                 {text: '#', value: 'id', sortable: false, width: '5px'},
@@ -83,6 +80,9 @@
             ]
         }),
         computed: {
+            byQuery () {
+                return !!this.searchString.length
+            },
             currentViewMode: {
                 get () {
                     return this.$store.state.loader.leadStatus

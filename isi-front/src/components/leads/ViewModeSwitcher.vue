@@ -1,7 +1,7 @@
 <template>
     <v-layout>
         <v-btn
-                v-if="!todayPostpones"
+                v-if="!todayPostpones && !byQuery"
                 small
                 v-for="(mode, index) in viewModes"
                 @click="currentViewMode = mode"
@@ -24,13 +24,18 @@
         </v-btn>
         <span
             v-if="todayPostpones"
-            style="display: block"
-            class="pl-1 title blue--text"
+            class="pl-1 pt-2 title today"
         >
                 Перезвоны на <strong>{{ $store.state.realDate | moment('D MMMM YYYY г.')}}</strong>
         </span>
+        <span
+                v-if="byQuery"
+                class="pl-1 pt-2 title blue--text"
+        >
+                Заявки по строке поиска "<strong>{{ $store.state.loader.leadName }}</strong>"
+        </span>
         <new-lead-dialog
-                v-if="!todayPostpones"
+                v-if="!todayPostpones && !byQuery"
                 style="display: inline"
         />
         <v-spacer/>
@@ -52,6 +57,9 @@
             viewModes: ['wait', 'process', 'moderate', 'done', 'all'],
         }),
         computed: {
+            byQuery () {
+                return !!this.$store.state.loader.leadName
+            },
             todayPostpones: {
                 get () {
                     return this.$store.state.loader.showTodayPostpones
@@ -86,3 +94,8 @@
         }
     }
 </script>
+<style scoped>
+    .today {
+        color: #2a9055;
+    }
+</style>
