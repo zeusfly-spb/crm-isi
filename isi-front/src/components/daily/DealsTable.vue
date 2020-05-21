@@ -580,6 +580,15 @@
             this.$store.dispatch('setCatalogs')
         },
         watch: {
+            dialog () {
+                this.$validator.pause()
+                this.$nextTick(() => {
+                    this.$validator.errors.clear()
+                    this.$validator.fields.items.forEach(field => field.reset())
+                    this.$validator.fields.items.forEach(field => this.errors.remove(field))
+                    this.$validator.resume()
+                })
+            },
             selectedSubscriptionId (val) {
                 if (!val) {
                     return
