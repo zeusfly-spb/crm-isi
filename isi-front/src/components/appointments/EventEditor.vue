@@ -92,6 +92,8 @@
                                     </v-card-title>
                                     <v-card-text>
                                         <v-time-picker
+                                            min="08:00"
+                                            max="22:59"
                                             v-model="time"
                                             format="24hr"
                                         />
