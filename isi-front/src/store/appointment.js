@@ -100,6 +100,7 @@ export default {
                     commit('SET_APPOINTMENT_DATE', date)
                     if (mustUpdate) {
                         dispatch('setAppointments')
+                        dispatch('setSubscribes')
                     }
                 } catch (e) {
                     reject (e)
@@ -233,6 +234,7 @@ export default {
     },
     getters: {
         moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id),
-        todayEvents: (state, getters, rootState) => state.appointments.filter(event => event.date.split(' ')[0] === rootState.realDate)
+        todayEvents: (state, getters, rootState) => state.appointments.filter(event => event.date.split(' ')[0] === rootState.realDate),
+        eventsDate: state => state.date
     }
 }

@@ -5,11 +5,11 @@ export default {
         subscribes: []
     },
     actions: {
-        setSubscribes ({commit, rootState}) {
+        setSubscribes ({commit, rootState, getters}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_subscribes', {
                     island_id: rootState.workingIslandId,
-                    date: rootState.accountingDate
+                    date: getters.eventsDate
                 })
                     .then(res => {
                         commit('SET_SUBSCRIBES', res.data)
