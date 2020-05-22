@@ -26,12 +26,14 @@
         name: 'SubscribesTable',
         data: () => ({
             headers: [
-                {text: '#', value: null},
+                {text: '#', value: null, sortable: false},
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
                 {text: 'Абонемент', value: 'subscription_id'},
                 {text: 'Начало периода', value: 'start_date'},
-                {text: 'Окончание периода', value: 'finish_date'}
+                {text: 'Окончание периода', value: 'finish_date'},
+                {text: 'Записи', value: null, sortable: false},
+                {text: 'Комментарии', value: null, sortable: false}
             ]
         }),
         computed: {

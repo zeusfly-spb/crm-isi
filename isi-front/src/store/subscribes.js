@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        commentsOpenId: null,
+        eventsOpenId: null,
         subscribesLoading: false,
         subscribes: []
     },

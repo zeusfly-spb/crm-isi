@@ -11,7 +11,7 @@ class Subscribe extends Model
     protected $casts = [
         'comments' => 'array'
     ];
-    protected $appends = ['finish_date'];
+    protected $appends = ['finish_date', 'last_comment'];
 
     public function subscription()
     {
@@ -35,7 +35,15 @@ class Subscribe extends Model
             'user_id' => $user_id,
             'text' => $text
         ]);
-        $this->update(['comments' => $comments]);
+        return $this->update(['comments' => $comments]);
+    }
+
+    public function getLastCommentAttribute()
+    {
+        if (!$this->attributes['comments']) {
+            return null;
+        }
+        return $this->comments[count($this->comments) - 1];
     }
 
     public function getFinishDateAttribute()
@@ -43,5 +51,15 @@ class Subscribe extends Model
         $startDate = new Carbon($this->start_date);
         $finishDate = $startDate->addDays($this->subscription->number_days);
         return $finishDate->toDateString();
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function addEvent(array $data)
+    {
+        return $this->events()->create($data);
     }
 }
