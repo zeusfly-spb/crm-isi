@@ -1,6 +1,7 @@
 <template>
     <v-flex>
         <v-data-table
+            v-blur="subscribesLoading"
             :headers="headers"
             :items="subscribes"
             hide-actions
@@ -34,6 +35,9 @@
             ]
         }),
         computed: {
+            subscribesLoading () {
+                return this.$store.state.subscribes.subscribesLoading
+            },
             subscribes () {
                 return this.$store.state.subscribes.subscribes
             }
