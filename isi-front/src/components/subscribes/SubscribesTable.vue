@@ -29,7 +29,8 @@
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
                 {text: 'Абонемент', value: 'subscription_id'},
-                {text: 'Начало периода', value: 'start_date'}
+                {text: 'Начало периода', value: 'start_date'},
+                {text: 'Окончание периода', value: 'finish_date'}
             ]
         }),
         computed: {

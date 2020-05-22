@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Subscribe extends Model
 {
@@ -10,6 +11,7 @@ class Subscribe extends Model
     protected $casts = [
         'comments' => 'array'
     ];
+    protected $appends = ['finish_date'];
 
     public function subscription()
     {
@@ -34,5 +36,12 @@ class Subscribe extends Model
             'text' => $text
         ]);
         $this->update(['comments' => $comments]);
+    }
+
+    public function getFinishDateAttribute()
+    {
+        $startDate = new Carbon($this->start_date);
+        $finishDate = $startDate->addDays($this->subscription->number_days);
+        return $finishDate->toDateString();
     }
 }
