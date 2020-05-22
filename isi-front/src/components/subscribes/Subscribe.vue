@@ -15,10 +15,10 @@
             </span>
         </td>
         <td>
-            {{ subscribe.start_date |  moment('D MMMM YYYY г.') }}
+            {{ subscribe.subscription.name }}
         </td>
         <td>
-            {{ subscribe.subscription.name }}
+            {{ subscribe.start_date |  moment('D MMMM YYYY г.') }}
         </td>
     </tr>
 </template>

@@ -28,8 +28,8 @@
                 {text: '#', value: null},
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
-                {text: 'Начало периода', value: 'start_date'},
-                {text: 'Абонемент', value: 'subscription_id'}
+                {text: 'Абонемент', value: 'subscription_id'},
+                {text: 'Начало периода', value: 'start_date'}
             ]
         }),
         computed: {
