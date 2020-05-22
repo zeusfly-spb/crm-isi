@@ -67,8 +67,8 @@ class LeadController extends Controller
         $callToday = Cache::rememberForever('call_today_' . today()->toDateString(), function () {
            $call_leads = Lead::with('event')->where('status', 'process')->get();
            $call_leads = $call_leads->filter(function ($item) {
-                    return $item->last_postpone && explode(' ', $item->last_postpone->date)[0] === today()->toDateString();
-                });
+                return $item->last_postpone && explode(' ', $item->last_postpone->date)[0] === today()->toDateString();
+            });
            return $call_leads->toArray();
         });
 
