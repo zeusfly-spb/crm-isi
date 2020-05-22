@@ -119,9 +119,10 @@
             align="center"
             class="clear-td"
         >
-            <span v-if="props.item.site">{{ props.item.site }}</span>
+            <div v-if="props.item.site">{{ props.item.site }}</div>
             <user-avatar v-if="props.item.user" :user="props.item.user" :mini="mini"/>
             <v-avatar
+                v-if="!props.item.site && !props.item.user"
                 :size="mini ? '18px' : '36px'"
                 title="Заявка из сети"
             >
