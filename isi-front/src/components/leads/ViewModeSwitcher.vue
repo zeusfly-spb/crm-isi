@@ -42,6 +42,7 @@
         <v-btn
             flat
             small
+            :title="todayPostpones ? 'Показать общий список заявок' : `Показать заявки с перезвонами на ${$moment($store.state.realDate).format('D MMMM YYYY г.')}`"
             @click="todayPostpones = !todayPostpones"
         >
             {{ todayPostpones ? '   Общий список   ' : '   Перезвоны на сегодня   ' }}
