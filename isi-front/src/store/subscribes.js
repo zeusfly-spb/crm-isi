@@ -25,6 +25,9 @@ export default {
         }
     },
     mutations: {
+        SET_SUBSCRIBE_COMMENTS_OPEN_ID (state, subscribeId) {
+            state.commentsOpenId = subscribeId
+        },
         SET_SUBSCRIBES_LOADING (state, val) {
             state.subscribesLoading = val
         },

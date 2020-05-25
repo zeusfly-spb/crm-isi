@@ -18,10 +18,12 @@
                 <span class="red--text">Нет оформленных абонементов</span>
             </template>
         </v-data-table>
+        <subscribe-comments/>
     </v-flex>
 </template>
 <script>
     import Subscribe from './Subscribe'
+    import SubscribeComments from './SubscribeComments'
     export default {
         name: 'SubscribesTable',
         data: () => ({
@@ -48,7 +50,8 @@
             this.$store.dispatch('setSubscribes')
         },
         components: {
-            Subscribe
+            Subscribe,
+            SubscribeComments
         }
     }
 </script>

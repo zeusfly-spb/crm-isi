@@ -33,7 +33,8 @@ class Subscribe extends Model
         $comments = $this->attributes['comments'] ? $this->comments : [];
          array_push($comments, (object) [
             'user_id' => $user_id,
-            'text' => $text
+            'text' => $text,
+            'created_at' => now()->toDateTimeString()
         ]);
         return $this->update(['comments' => $comments]);
     }

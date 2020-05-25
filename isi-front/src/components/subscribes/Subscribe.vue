@@ -31,7 +31,23 @@
             </span>
         </td>
         <td>
-            <span>{{ subscribe.last_comment && subscribe.last_comment.text || 'нет комментариев'}}</span>
+            <span
+                v-if="subscribe.last_comment"
+                class="last-comment clickable"
+                title="Открыть панель комментариев"
+                @click="openComments"
+            >
+                {{ subscribe.last_comment.text || ''}}
+            </span>
+            <v-icon
+                v-else
+                color="green"
+                class="clickable"
+                title="Добавить комментарий"
+                @click="openComments"
+            >
+                add_circle_outline
+            </v-icon>
         </td>
     </tr>
 </template>
@@ -50,13 +66,18 @@
                 }
             },
             commentsOpenId () {
-                return this.$store.state.subscribes.eventsOpenId
+                return this.$store.state.subscribes.commentsOpenId
             },
             eventsOpenId () {
                 return this.$store.state.subscribes.eventsOpenId
             },
             events () {
                 return this.subscribe && this.subscribe.events || []
+            }
+        },
+        methods: {
+            openComments () {
+                this.$store.commit('SET_SUBSCRIBE_COMMENTS_OPEN_ID', this.subscribe.id)
             }
         },
         components: {
@@ -66,5 +87,8 @@
 </script>
 
 <style scoped>
+    .last-comment:hover {
+        color: #03A9F4;
+    }
 
 </style>
