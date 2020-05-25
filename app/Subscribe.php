@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class Subscribe extends Model
 {
@@ -31,12 +32,13 @@ class Subscribe extends Model
     public function addComment(string $text, int $user_id = null)
     {
         $comments = $this->attributes['comments'] ? $this->comments : [];
-         array_push($comments, (object) [
-            'user_id' => $user_id,
-            'text' => $text,
-            'created_at' => now()->toDateTimeString()
+         array_unshift($comments, (object) [
+             'id' => Str::uuid(),
+             'user_id' => $user_id,
+             'text' => $text,
+             'created_at' => now()->toDateTimeString()
         ]);
-        return $this->update(['comments' => $comments]);
+        $this->update(['comments' => $comments]);
     }
 
     public function getLastCommentAttribute()
@@ -44,7 +46,7 @@ class Subscribe extends Model
         if (!$this->attributes['comments']) {
             return null;
         }
-        return $this->comments[count($this->comments) - 1];
+        return $this->comments[0];
     }
 
     public function getFinishDateAttribute()

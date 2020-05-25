@@ -8,6 +8,19 @@ export default {
         subscribes: []
     },
     actions: {
+        addSubscribeComment ({commit, rootState}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_subscribe_comment', {
+                    ... data,
+                    user_id: rootState.authUser.id
+                })
+                    .then(res => {
+                        commit('UPDATE_SUBSCRIBE', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         setSubscribes ({commit, rootState, getters}) {
             commit('SET_SUBSCRIBES_LOADING', true)
             return new Promise((resolve, reject) => {
@@ -25,6 +38,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_SUBSCRIBE (state, subscribe) {
+            state.subscribes = state.subscribes.map(item => +item.id === +subscribe.id ? subscribe : item)
+        },
         SET_SUBSCRIBE_COMMENTS_OPEN_ID (state, subscribeId) {
             state.commentsOpenId = subscribeId
         },

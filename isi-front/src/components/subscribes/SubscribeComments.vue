@@ -19,6 +19,7 @@
                 <v-icon
                     color="white"
                     class="clickable"
+                    title="Закрыть панель комментариев"
                     @click="close"
                 >
                     close
@@ -38,7 +39,10 @@
                     label="Новый комментарий"
                     v-if="active && addMode"
                     v-model="newCommentText"
+                    ref="addInput"
                     @keyup.esc="addModeOff"
+                    @blur="addModeOff"
+                    @keyup.enter="saveNewComment"
                 />
                 <v-data-table
                     :items="comments"
@@ -99,7 +103,7 @@
                 return this.subscribe && this.subscribe.subscription && this.subscribe.subscription.name || 'Абонемент'
             },
             comments () {
-                let base = this.subscribe && this.subscribe.comments && this.subscribe.comments.reverse() || []
+                let base = this.subscribe && this.subscribe.comments || []
                 return base.map(item => ({
                     ... item,
                     user: this.$store.state.users.find(user => +user.id === +item.user_id)
@@ -125,6 +129,13 @@
             }
         },
         methods: {
+            saveNewComment () {
+                this.$store.dispatch('addSubscribeComment', {
+                    subscribe_id: this.subscribe.id,
+                    text: this.newCommentText
+                })
+                    .then(() => this.addModeOff())
+            },
             addModeOff () {
                 this.addMode = false
             },

@@ -27,7 +27,7 @@
                 return `${this.mini ? 18 : 36}px`
             },
             fullName () {
-                return this.user && this.user.full_name && this.user.full_name !== 'null' ? this.user.full_name : ''
+                return this.user && this.user.full_name && this.user.full_name !== 'null' ? this.user.full_name : 'Суперадмин'
             },
             basePath () {
                 return this.$store.state.basePath

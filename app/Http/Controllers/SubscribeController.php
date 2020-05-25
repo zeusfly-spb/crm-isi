@@ -22,4 +22,11 @@ class SubscribeController extends Controller
         });
         return response()->json($subscribes->toArray());
     }
+
+    public function addComment(Request $request)
+    {
+        $subscribe = Subscribe::with('customer', 'user')->find($request->subscribe_id);
+        $subscribe->addComment($request->text, $request->user_id);
+        return response()->json($subscribe->toArray());
+    }
 }
