@@ -2,6 +2,7 @@
     <v-dialog
         v-model="active"
         max-width="1000px"
+        :persistent="addMode"
     >
         <v-card
             class="round-corner"
@@ -24,12 +25,30 @@
                 </v-icon>
             </v-card-title>
             <v-card-text>
+                <v-icon
+                    v-if="!addMode"
+                    color="green"
+                    class="clickable"
+                    @click="addModeOn"
+                >
+                    add_circle_outline
+                </v-icon>
+                <v-text-field
+                    autofocus
+                    label="Новый комментарий"
+                    v-if="active && addMode"
+                    v-model="newCommentText"
+                    @keyup.esc="addModeOff"
+                />
                 <v-data-table
                     :items="comments"
                     hide-headers
                     hide-actions
                 >
                     <template v-slot:items="props">
+                        <td>
+                            {{ props.item.text }}
+                        </td>
                         <td>
                             <user-avatar
                                 v-if="props.item.user"
@@ -44,9 +63,6 @@
                                         :src="`${basePath}/img/logo.png`"
                                 />
                             </v-avatar>
-                        </td>
-                        <td>
-                            {{ props.item.text }}
                         </td>
                         <td>
                             {{ props.item.created_at | moment('D MMMM YYYY г.')}}
@@ -65,7 +81,14 @@
     import UserAvatar from '../main/UserAvatar'
     export default {
         name: 'SubscribeComments',
+        data: () => ({
+            newCommentText: '',
+            addMode: false
+        }),
         computed: {
+            empty () {
+                return this.comments && this.comments.length === 0
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -76,7 +99,7 @@
                 return this.subscribe && this.subscribe.subscription && this.subscribe.subscription.name || 'Абонемент'
             },
             comments () {
-                let base = this.subscribe && this.subscribe.comments || []
+                let base = this.subscribe && this.subscribe.comments && this.subscribe.comments.reverse() || []
                 return base.map(item => ({
                     ... item,
                     user: this.$store.state.users.find(user => +user.id === +item.user_id)
@@ -102,8 +125,25 @@
             }
         },
         methods: {
+            addModeOff () {
+                this.addMode = false
+            },
+            addModeOn () {
+                this.addMode = true
+            },
             close () {
                 this.active = false
+            }
+        },
+        watch: {
+            addMode (val) {
+                val ? this.newCommentText = '' : null
+                if (!val && this.empty) {
+                    this.close()
+                }
+            },
+            active (val) {
+                val && this.empty ? this.addModeOn() : null
             }
         },
         components: {
