@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Subscribe extends Model
@@ -41,12 +42,21 @@ class Subscribe extends Model
         $this->update(['comments' => $comments]);
     }
 
+    public function deleteComment(string $id)
+    {
+        $comments = $this->comments;
+        $comments = Arr::where($comments, function ($item) use ($id) {
+            return $item['id'] !== $id;
+        });
+        $this->update(['comments' => $comments]);
+    }
+
     public function getLastCommentAttribute()
     {
         if (!$this->attributes['comments']) {
             return null;
         }
-        return $this->comments[0];
+        return $this->comments[0] ?? null;
     }
 
     public function getFinishDateAttribute()

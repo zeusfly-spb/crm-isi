@@ -1,4 +1,5 @@
 <template>
+    <v-flex>
     <v-dialog
         v-model="active"
         max-width="1000px"
@@ -45,15 +46,32 @@
                     @keyup.enter="saveNewComment"
                 />
                 <v-data-table
+                    v-blur="updating"
                     :items="comments"
                     hide-headers
                     hide-actions
                 >
                     <template v-slot:items="props">
+                        <td
+                            style="width: 1em"
+                            align="left"
+                        >
+                            <v-icon
+                                v-if="canDelete(props.item)"
+                                color="red"
+                                class="clickable"
+                                @click="confirmDelete(props.item)"
+                            >
+                                close
+                            </v-icon>
+                        </td>
                         <td>
                             {{ props.item.text }}
                         </td>
-                        <td>
+                        <td
+                            style="width: 3em"
+                            align="right"
+                        >
                             <user-avatar
                                 v-if="props.item.user"
                                 :user="props.item.user"
@@ -68,8 +86,11 @@
                                 />
                             </v-avatar>
                         </td>
-                        <td>
-                            {{ props.item.created_at | moment('D MMMM YYYY г.')}}
+                        <td
+                            style="width: 15em"
+                            align="right"
+                        >
+                            {{ props.item.created_at | moment('D MMMM YYYY г. H:m')}}
                         </td>
                     </template>
                     <template v-slot:no-data>
@@ -79,6 +100,36 @@
             </v-card-text>
         </v-card>
     </v-dialog>
+    <v-dialog
+        v-model="confirm"
+        max-width="500px"
+    >
+        <v-card
+            class="round-corner"
+        >
+            <v-card-title
+                class="red darken-3"
+            >
+                <span class="white--text title">
+                    Подтверждение
+                </span>
+            </v-card-title>
+            <v-card-text>
+                <span
+                    class="subheading"
+                >
+                    Удалить комментарий <strong>"{{ commentToDelete && commentToDelete.text || ''}}"</strong> ?
+                </span>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="darken-1" flat @click="hideConfirm">Отмена</v-btn>
+                <v-btn color="red darken-1" flat @click="deleteComment">Удалить</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    </v-flex>
+
 </template>
 
 <script>
@@ -86,10 +137,22 @@
     export default {
         name: 'SubscribeComments',
         data: () => ({
+            commentToDelete: null,
             newCommentText: '',
             addMode: false
         }),
         computed: {
+            confirm: {
+                get () {
+                    return !!this.commentToDelete
+                },
+                set (val) {
+                    !val ? this.commentToDelete = null : null
+                }
+            },
+            updating () {
+                return this.$store.state.subscribes.commentsUpdating
+            },
             empty () {
                 return this.comments && this.comments.length === 0
             },
@@ -103,7 +166,7 @@
                 return this.subscribe && this.subscribe.subscription && this.subscribe.subscription.name || 'Абонемент'
             },
             comments () {
-                let base = this.subscribe && this.subscribe.comments || []
+                let base = this.subscribe && this.subscribe.comments && Object.values(this.subscribe.comments) || []
                 return base.map(item => ({
                     ... item,
                     user: this.$store.state.users.find(user => +user.id === +item.user_id)
@@ -129,6 +192,26 @@
             }
         },
         methods: {
+            deleteComment () {
+                this.$store.dispatch('deleteSubscribeComment', {
+                    subscribe_id: this.subscribe.id,
+                    comment_id: this.commentToDelete.id
+                })
+                    .then(() => this.hideConfirm())
+            },
+            hideConfirm () {
+                this.confirm = false
+            },
+            confirmDelete (comment) {
+                this.commentToDelete = comment
+            },
+            canDelete (comment) {
+                if (!comment.created_at || comment.created_at && comment.created_at.split(' ')[0] !== this.$store.state.realDate) {
+                    return false
+                }
+                return this.$store.getters.isSuperadmin ? true : +comment.user_id === +this.$store.state.authUser.id
+            },
+
             saveNewComment () {
                 this.$store.dispatch('addSubscribeComment', {
                     subscribe_id: this.subscribe.id,

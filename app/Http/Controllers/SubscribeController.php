@@ -29,4 +29,11 @@ class SubscribeController extends Controller
         $subscribe->addComment($request->text, $request->user_id);
         return response()->json($subscribe->toArray());
     }
+
+    public function deleteComment(Request $request)
+    {
+        $subscribe = Subscribe::with('customer', 'user')->find($request->subscribe_id);
+        $subscribe->deleteComment($request->comment_id);
+        return response()->json($subscribe->toArray());
+    }
 }

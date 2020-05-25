@@ -178,5 +178,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     //SUBSCRIBES
     Route::post('get_subscribes', 'SubscribeController@index');
     Route::post('add_subscribe_comment', 'SubscribeController@addComment');
+    Route::post('delete_subscribe_comment', 'SubscribeController@deleteComment');
 
 });

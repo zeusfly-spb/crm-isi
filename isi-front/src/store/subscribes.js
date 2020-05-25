@@ -2,23 +2,46 @@ import Vue from 'vue'
 
 export default {
     state: {
+        commentsUpdating: false,
         commentsOpenId: null,
         eventsOpenId: null,
         subscribesLoading: false,
         subscribes: []
     },
     actions: {
-        addSubscribeComment ({commit, rootState}, data) {
+        deleteSubscribeComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
+                commit('SET_DESCRIBE_COMMENTS_UPDATING', true)
+                Vue.axios.post('/api/delete_subscribe_comment', {... data})
+                    .then(res => {
+                        commit('UPDATE_SUBSCRIBE', res.data)
+                        dispatch('pushMessage', {
+                            text: 'Комментарий абонемента удален',
+                            color: 'green'
+                        })
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+                    .finally(() => commit('SET_DESCRIBE_COMMENTS_UPDATING', false))
+            })
+        },
+        addSubscribeComment ({commit, dispatch, rootState}, data) {
+            return new Promise((resolve, reject) => {
+                commit('SET_DESCRIBE_COMMENTS_UPDATING', true)
                 Vue.axios.post('/api/add_subscribe_comment', {
                     ... data,
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
                         commit('UPDATE_SUBSCRIBE', res.data)
+                        dispatch('pushMessage', {
+                            text: 'К абонементу добавлен комментарий',
+                            color: 'green'
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('SET_DESCRIBE_COMMENTS_UPDATING', false))
             })
         },
         setSubscribes ({commit, rootState, getters}) {
@@ -38,6 +61,9 @@ export default {
         }
     },
     mutations: {
+        SET_DESCRIBE_COMMENTS_UPDATING (state, val) {
+            state.commentsUpdating = val
+        },
         UPDATE_SUBSCRIBE (state, subscribe) {
             state.subscribes = state.subscribes.map(item => +item.id === +subscribe.id ? subscribe : item)
         },
