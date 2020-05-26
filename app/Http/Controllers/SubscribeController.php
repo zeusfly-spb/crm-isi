@@ -14,7 +14,7 @@ class SubscribeController extends Controller
         $start = $baseDate->startOfMonth()->toDateString();
         $finish = $baseDate->endOfMonth()->toDateString();
         $island_id = $request->island_id;
-        $subscribes = Subscribe::with('customer', 'user')
+        $subscribes = Subscribe::with('user')
             ->where('island_id', $island_id)
             ->get()
             ->filter(function ($subscribe) use ($start, $finish) {
@@ -25,14 +25,14 @@ class SubscribeController extends Controller
 
     public function addComment(Request $request)
     {
-        $subscribe = Subscribe::with('customer', 'user')->find($request->subscribe_id);
+        $subscribe = Subscribe::with('user')->find($request->subscribe_id);
         $subscribe->addComment($request->text, $request->user_id);
         return response()->json($subscribe->toArray());
     }
 
     public function deleteComment(Request $request)
     {
-        $subscribe = Subscribe::with('customer', 'user')->find($request->subscribe_id);
+        $subscribe = Subscribe::with('user')->find($request->subscribe_id);
         $subscribe->deleteComment($request->comment_id);
         return response()->json($subscribe->toArray());
     }

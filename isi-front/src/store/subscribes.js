@@ -81,8 +81,18 @@ export default {
         }
     },
     getters: {
-        eventsOpenSubscribe: state => !state.eventsOpenId ? null
-            : !state.subscribes.length ? null
-            : state.subscribes.find(item => +item.id === +state.eventsOpenId)
+        eventsOpenSubscribe: state => {
+            const attachScale = subscribe => {
+                if (!subscribe) {
+                    return subscribe
+                }
+                let scale = new Array(subscribe.nominal)
+                return {... subscribe, scale: scale}
+            }
+            let base = !state.eventsOpenId ? null
+                : !state.subscribes.length ? null
+                : state.subscribes.find(item => +item.id === +state.eventsOpenId)
+            return attachScale(base)
+        }
     }
 }

@@ -13,7 +13,7 @@ class Subscribe extends Model
     protected $casts = [
         'comments' => 'array'
     ];
-    protected $appends = ['finish_date', 'last_comment', 'nominal'];
+    protected $appends = ['finish_date', 'last_comment', 'nominal', 'customer_name'];
 
     public function subscription()
     {
@@ -23,6 +23,11 @@ class Subscribe extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function getCustomerNameAttribute()
+    {
+        return $this->customer->full_name ?? '';
     }
 
     public function user()

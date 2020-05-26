@@ -2,7 +2,7 @@
     <v-flex>
         <v-dialog
             v-model="active"
-            max-width="800px"
+            max-width="1000px"
         >
             <v-card
                 class="round-corner"
@@ -14,6 +14,11 @@
                         class="white--text title"
                     >
                         Записи абонемента
+                        <span
+                            class="customer-name"
+                        >
+                            {{ customerName }}
+                        </span>
                         <span
                             class="subscribe-name"
                         >
@@ -36,7 +41,24 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    Записи
+                    <v-container
+                        grid-list-md
+                    >
+                        <v-layout
+                            wrap
+                        >
+                            <v-flex xs3 sm2 md1
+                                v-for="(item, index) in scale"
+                            >
+                                <v-icon
+                                    large
+                                    color="grey lighten-2"
+                                >
+                                    event
+                                </v-icon>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -47,6 +69,15 @@
     export default {
         name: 'SubscribeEvents',
         computed: {
+            customerName () {
+                return this.subscribe && this.subscribe.customer && this.subscribe.customer.full_name || ''
+            },
+            scale () {
+                return this.subscribe && this.subscribe.scale || []
+            },
+            nominal () {
+                return this.subscribe && this.subscribe.nominal || 0
+            },
             subName () {
                 return this.subscribe && this.subscribe.subscription &&this.subscribe.subscription.name || 'Абонемент'
             },
@@ -80,6 +111,10 @@
 </script>
 
 <style scoped>
+    .customer-name  {
+        color: orange;
+        font-weight: bolder;
+    }
     .subscribe-name {
         color: yellow;
         font-weight: bold;
@@ -87,5 +122,6 @@
     .start-date {
         color: orange;
         font-weight: bold;
+        font-style: italic;
     }
 </style>
