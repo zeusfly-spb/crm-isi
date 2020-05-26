@@ -87,6 +87,9 @@ export default {
                     return subscribe
                 }
                 let scale = new Array(subscribe.nominal)
+                subscribe.events.length ? subscribe.events.forEach((item, index) => {
+                    scale[index] = item
+                }) : null
                 return {... subscribe, scale: scale}
             }
             let base = !state.eventsOpenId ? null

@@ -63,10 +63,11 @@
                         >
                             <v-flex xs3 sm2 md1
                                 v-for="(item, index) in scale"
+                                :key="index"
                             >
                                 <v-icon
                                     large
-                                    color="grey lighten-2"
+                                    :color="eventColor(item)"
                                 >
                                     event
                                 </v-icon>
@@ -126,6 +127,23 @@
             }
         },
         methods: {
+            eventColor (event) {
+                if (!event) {
+                    return 'grey lighten-2'
+                }
+                switch (event.status) {
+                    case 'active':
+                        return 'blue'
+                    case 'completed':
+                        return 'green'
+                    case 'cancelled':
+                        return 'red'
+                    case 'postponed':
+                        return 'orange accent-4'
+                    case 'moderate':
+                        return 'amber darken-3'
+                }
+            },
             addModeOff () {
                 this.addMode = false
             },
