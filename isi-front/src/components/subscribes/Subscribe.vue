@@ -41,6 +41,11 @@
                 @click="openComments"
             >
                 {{ subscribe.last_comment.text || ''}}
+                <span
+                    v-if="commentsCount > 1"
+                >
+                    ({{ commentsCount }})
+                </span>
             </span>
             <v-icon
                 v-else
@@ -61,6 +66,10 @@
         name: 'Subscribe',
         props: ['index', 'subscribe'],
         computed: {
+            commentsCount () {
+                let comments = this.subscribe && this.subscribe.comments ? Object.values(this.subscribe.comments) : []
+                return comments.length
+            },
             eventsCount () {
                 return {
                     paid: this.subscribe.subscription.supply_amount || 0,
