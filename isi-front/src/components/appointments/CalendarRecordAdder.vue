@@ -26,6 +26,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Услуга</sub>
                         <v-select
+                            :disabled="!!subscribe"
                             v-model="editedAppointment.service_id"
                             :items="services"
                             item-text="description"
@@ -70,7 +71,7 @@
                         />
                     </v-flex>
                     <v-flex xs12 sm6 md4
-                            v-if="!dateProp && leadDate"
+                            v-if="!dateProp && leadDate || !dateProp && subscribeDate"
                     >
                         <sub>Дата</sub>
                         <v-menu
@@ -157,6 +158,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Клиент</sub>
                         <v-text-field
+                            :disabled="!!subscribe"
                             v-model="editedAppointment.client_name"
                             label="Имя"
                             data-vv-as="Имя клиента"
@@ -168,6 +170,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Телефон</sub>
                         <v-text-field
+                            :disabled="!!subscribe"
                             v-model="editedAppointment.client_phone"
                             label="Номер телефона"
                             data-vv-as="Номер телефона клиента"
@@ -234,6 +237,16 @@
             }
         }),
         computed: {
+            subscribeDate () {
+                if (!this.subscribe) {
+                    return null
+                }
+                let createdDate = this.subscribe && this.subscribe.date && this.subscribe.date.split(' ')[0] || null
+                let lastEventDate = this.subscribe && this.subscribe.last_event && this.subscribe.last_event.date && this.subscribe.last_event.created_at.split(' ')[0] || null
+                let realDate = this.$store.state.realDate || null
+                let dates = [createdDate, lastEventDate, realDate].filter(item => !!item)
+                return dates.sort((a, b) => a < b ? 1 : a > b ? -1 : 0)[0]
+            },
             leadDate () {
                 if (!this.lead) {
                     return null
@@ -348,7 +361,11 @@
                 this.editedAppointment.cabinet_id = this.presetCabinet.id
             }
             if (this.subscribe) {
-                this.editedAppointment.subscribe_id = this.subscribe.id || null
+                this.inputDate = this.subscribeDate
+                this.editedAppointment.service_id = this.subscribe.subscription.service_id
+                this.editedAppointment.client_name = this.subscribe.customer_name
+                this.editedAppointment.client_phone = this.subscribe.customer_phone
+                this.editedAppointment.subscribe_id = this.subscribe.id
             }
             this.editedAppointment.user_id = this.$store.state.authUser.id
             this.editedAppointment.island_id = this.workingIslandId

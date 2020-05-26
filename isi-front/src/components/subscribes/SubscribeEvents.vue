@@ -47,6 +47,14 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
+                    <v-btn
+                            flat
+                            dark
+                            color="primary"
+                            @click="addModeOn"
+                    >
+                        Назначить запись
+                    </v-btn>
                     <v-container
                         grid-list-md
                     >
@@ -68,12 +76,21 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <calendar-record-adder
+            v-if="addMode"
+            :subscribe="subscribe"
+            @reset="addModeOff"
+        />
     </v-flex>
 </template>
 
 <script>
+    import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
     export default {
         name: 'SubscribeEvents',
+        data: () => ({
+            addMode: false
+        }),
         computed: {
             customerName () {
                 return this.subscribe && this.subscribe.customer && this.subscribe.customer.full_name || ''
@@ -109,9 +126,18 @@
             }
         },
         methods: {
+            addModeOff () {
+                this.addMode = false
+            },
+            addModeOn () {
+                this.addMode = true
+            },
             hideDialog () {
                 this.active = false
             }
+        },
+        components: {
+            CalendarRecordAdder
         }
     }
 </script>

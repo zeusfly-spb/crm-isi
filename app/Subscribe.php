@@ -13,7 +13,14 @@ class Subscribe extends Model
     protected $casts = [
         'comments' => 'array'
     ];
-    protected $appends = ['finish_date', 'last_comment', 'nominal', 'customer_name'];
+    protected $appends = [
+        'finish_date',
+        'last_comment',
+        'nominal',
+        'customer_name',
+        'customer_phone',
+        'last_event'
+    ];
 
     public function subscription()
     {
@@ -28,6 +35,11 @@ class Subscribe extends Model
     public function getCustomerNameAttribute()
     {
         return $this->customer->full_name ?? '';
+    }
+
+    public function getCustomerPhoneAttribute()
+    {
+        return $this->customer->phones->last()->number ?? null;
     }
 
     public function user()
@@ -76,9 +88,9 @@ class Subscribe extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function addEvent(array $data)
+    public function getLastEventAttribute()
     {
-        return $this->events()->create($data);
+        return $this->events->last() || null;
     }
 
     public function getNominalAttribute()
