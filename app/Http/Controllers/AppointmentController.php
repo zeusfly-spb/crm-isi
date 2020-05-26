@@ -102,6 +102,7 @@ class AppointmentController extends Controller
                 $item->performer = Cache::get('users')->where('id', $item->performer_id)->first();
                 $item->service = Cache::get('services')->where('id', $item->service_id)->first();
                 $item->island = Cache::get('islands')->where('id', $item->island_id)->first();
+                $item->subscribe = Cache::get('subscribes')->where('id', $item->subscribe_id)->first();
             });
             $appointments = $appointments->values();
         } else {
@@ -120,9 +121,6 @@ class AppointmentController extends Controller
     public function create(Request $request)
     {
         $appointment = Appointment::create($request->all());
-        if ($request->lead_id) {
-            AddEventToLead::dispatch($request->lead_id, $appointment->id);
-        }
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
     }

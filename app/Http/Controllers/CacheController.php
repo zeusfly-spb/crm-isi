@@ -16,7 +16,7 @@ class CacheController extends Controller
     protected $appModels = [
         'Access', 'CustomDoc', 'Customer', 'Deal', 'DealAction', 'DocumentPack', 'Expense', 'Forfeit', 'Group', 'HandOver',
         'Island', 'Lead', 'LeadComment', 'Phone', 'Postpone', 'Prepay', 'Prize', 'Setting', 'Sick', 'StartDay', 'TimeBreak',
-        'User', 'Vacation', 'WorkDay', 'Service', 'Appointment'
+        'User', 'Vacation', 'WorkDay', 'Service', 'Appointment', 'Subscribe'
     ];
 
     public  function cacheAll()

@@ -211,7 +211,8 @@
             free: {
                 type: Boolean,
                 default: false
-            }
+            },
+            subscribe: Object
         },
         data: () => ({
             active: true,
@@ -228,7 +229,8 @@
                 client_phone: null,
                 date: null,
                 client_name: null,
-                cabinet_id: null
+                cabinet_id: null,
+                subscribe_id: null
             }
         }),
         computed: {
@@ -282,7 +284,8 @@
                     client_phone: null,
                     date: null,
                     time: null,
-                    client_name: null
+                    client_name: null,
+                    subscribe_id: null
                 }
             }
         },
@@ -343,6 +346,9 @@
             }
             if (this.presetCabinet) {
                 this.editedAppointment.cabinet_id = this.presetCabinet.id
+            }
+            if (this.subscribe) {
+                this.editedAppointment.subscribe_id = this.subscribe.id || null
             }
             this.editedAppointment.user_id = this.$store.state.authUser.id
             this.editedAppointment.island_id = this.workingIslandId

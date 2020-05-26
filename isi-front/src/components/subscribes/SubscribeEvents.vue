@@ -13,12 +13,18 @@
                     <span
                         class="white--text title"
                     >
-                        Записи абонемента
+                        <v-icon
+                            color="white"
+                        >
+                            event_note
+                        </v-icon>
+                        Записи абонента
                         <span
                             class="customer-name"
                         >
                             {{ customerName }}
                         </span>
+                        по абонементу
                         <span
                             class="subscribe-name"
                         >
