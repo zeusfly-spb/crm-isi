@@ -36,6 +36,7 @@
                     add_circle_outline
                 </v-icon>
                 <v-text-field
+                    v-blur="updating"
                     autofocus
                     label="Новый комментарий"
                     v-if="active && addMode"
@@ -60,6 +61,7 @@
                                 v-if="canDelete(props.item)"
                                 color="red"
                                 class="clickable"
+                                title="Удалить комментарий"
                                 @click="confirmDelete(props.item)"
                             >
                                 close
