@@ -61,6 +61,9 @@ export default {
         }
     },
     mutations: {
+        SET_SUBSCRIBE_EVENTS_OPEN_ID (state, val) {
+            state.eventsOpenId = val
+        },
         SET_DESCRIBE_COMMENTS_UPDATING (state, val) {
             state.commentsUpdating = val
         },
@@ -76,5 +79,10 @@ export default {
         SET_SUBSCRIBES (state, subscribes) {
             state.subscribes = subscribes
         }
+    },
+    getters: {
+        eventsOpenSubscribe: state => !state.eventsOpenId ? null
+            : !state.subscribes.length ? null
+            : state.subscribes.find(item => +item.id === +state.eventsOpenId)
     }
 }

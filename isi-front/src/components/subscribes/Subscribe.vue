@@ -24,7 +24,10 @@
             {{ subscribe.finish_date |  moment('D MMMM YYYY г.') }}
         </td>
         <td>
-            <span>
+            <span
+                class="clickable"
+                @click="openEvents"
+            >
                 Оплачено: <strong>{{ eventsCount.paid }}</strong>
                 Назначено: <strong>{{ eventsCount.appointed }}</strong>
                 Выполнено: <strong>{{ eventsCount.completed }}</strong>
@@ -76,6 +79,9 @@
             }
         },
         methods: {
+            openEvents () {
+                this.$store.commit('SET_SUBSCRIBE_EVENTS_OPEN_ID', this.subscribe.id)
+            },
             openComments () {
                 this.$store.commit('SET_SUBSCRIBE_COMMENTS_OPEN_ID', this.subscribe.id)
             }

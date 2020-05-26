@@ -213,7 +213,6 @@
                 }
                 return this.$store.getters.isSuperadmin ? true : +comment.user_id === +this.$store.state.authUser.id
             },
-
             saveNewComment () {
                 this.$store.dispatch('addSubscribeComment', {
                     subscribe_id: this.subscribe.id,
@@ -248,6 +247,3 @@
     }
 </script>
 
-<style scoped>
-
-</style>

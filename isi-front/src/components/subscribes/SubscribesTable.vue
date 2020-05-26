@@ -19,11 +19,13 @@
             </template>
         </v-data-table>
         <subscribe-comments/>
+        <subscribe-events/>
     </v-flex>
 </template>
 <script>
     import Subscribe from './Subscribe'
     import SubscribeComments from './SubscribeComments'
+    import SubscribeEvents from './SubscribeEvents'
     export default {
         name: 'SubscribesTable',
         data: () => ({
@@ -51,7 +53,8 @@
         },
         components: {
             Subscribe,
-            SubscribeComments
+            SubscribeComments,
+            SubscribeEvents
         }
     }
 </script>

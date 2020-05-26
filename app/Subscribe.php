@@ -13,7 +13,7 @@ class Subscribe extends Model
     protected $casts = [
         'comments' => 'array'
     ];
-    protected $appends = ['finish_date', 'last_comment'];
+    protected $appends = ['finish_date', 'last_comment', 'nominal'];
 
     public function subscription()
     {
@@ -74,5 +74,10 @@ class Subscribe extends Model
     public function addEvent(array $data)
     {
         return $this->events()->create($data);
+    }
+
+    public function getNominalAttribute()
+    {
+        return $this->subscription->supply_amount ?? 0;
     }
 }
