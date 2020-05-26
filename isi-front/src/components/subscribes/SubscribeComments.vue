@@ -31,6 +31,7 @@
                     v-if="!addMode"
                     color="green"
                     class="clickable"
+                    title="Добавить комментарий"
                     @click="addModeOn"
                 >
                     add_circle_outline
