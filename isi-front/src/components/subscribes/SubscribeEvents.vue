@@ -52,6 +52,8 @@
                             flat
                             dark
                             color="primary"
+                            title="Назначить запись по абонементу"
+                            :disabled="!canAdd"
                             @click="addModeOn"
                     >
                         Назначить запись
@@ -102,6 +104,9 @@
             addMode: false
         }),
         computed: {
+            canAdd () {
+                return this.events.length < this.nominal
+            },
             loading () {
                 return this.$store.state.subscribes.subscribesLoading
             },
