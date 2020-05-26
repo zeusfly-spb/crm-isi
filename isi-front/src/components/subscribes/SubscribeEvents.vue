@@ -69,6 +69,8 @@
                                 <v-icon
                                     large
                                     :color="eventColor(item)"
+                                    :title="eventTitle(item)"
+                                    @click="eventAction(item)"
                                 >
                                     event
                                 </v-icon>
@@ -83,11 +85,17 @@
             :subscribe="subscribe"
             @reset="addModeOff"
         />
+        <event-editor
+            v-if="!!$store.state.appointment.editedEvent"
+            :event="$store.state.appointment.editedEvent"
+            @close="$store.commit('SET_EDITED_EVENT', null)"
+        />
     </v-flex>
 </template>
 
 <script>
     import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
+    import EventEditor from '../appointments/EventEditor'
     export default {
         name: 'SubscribeEvents',
         data: () => ({
@@ -131,6 +139,15 @@
             }
         },
         methods: {
+            editEvent (event) {
+                this.$store.commit('SET_EDITED_EVENT', event)
+            },
+            eventTitle (event) {
+                return !event ? 'Добавить запись' : 'Редактировать запись'
+            },
+            eventAction (event) {
+                return !event ? this.addModeOn() : this.editEvent(event)
+            },
             eventColor (event) {
                 if (!event) {
                     return 'grey lighten-2'
@@ -159,7 +176,8 @@
             }
         },
         components: {
-            CalendarRecordAdder
+            CalendarRecordAdder,
+            EventEditor
         }
     }
 </script>

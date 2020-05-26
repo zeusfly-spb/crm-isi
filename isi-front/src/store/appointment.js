@@ -65,6 +65,9 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
+                        if (res.data.subscribe_id) {
+                            dispatch('setSubscribes')
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -88,6 +91,9 @@ export default {
                         commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
                         commit('UNSET_DRAG_EVENT')
                         commit('UNSET_DRAG_TARGET')
+                        if (res.data.subscribe_id) {
+                            dispatch('setSubscribes')
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -123,6 +129,9 @@ export default {
                 Vue.axios.post('/api/update_appointment', {... data})
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
+                        if (res.data.subscribe_id) {
+                            dispatch('setSubscribes')
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
