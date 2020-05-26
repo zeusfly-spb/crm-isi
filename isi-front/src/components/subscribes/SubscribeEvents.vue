@@ -143,7 +143,18 @@
                 this.$store.commit('SET_EDITED_EVENT', event)
             },
             eventTitle (event) {
-                return !event ? 'Добавить запись' : 'Редактировать запись'
+                let base = !event ? 'Добавить запись' : 'Редактировать запись'
+                if (event && event.date) {
+                    let date = this.$moment(event.date).format('D MMMM YYYY г. H:m')
+                    base = `${base} на ${date}`
+                }
+                if (event && event.performer_id) {
+                    let performer = this.$store.state.users.find(item => +item.id === +event.performer_id)
+                    if (performer) {
+                        base = `${base}, исполнитель: ${performer.full_name}`
+                    }
+                }
+                return base
             },
             eventAction (event) {
                 return !event ? this.addModeOn() : this.editEvent(event)
