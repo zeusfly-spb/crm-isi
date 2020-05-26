@@ -342,6 +342,12 @@
                         mode: 'events'
                     })
                 }
+                if (this.subscribe) {
+                    this.$store.commit('SET_SIDE_PANEL_STATUS', {
+                        status: true,
+                        mode: 'events'
+                    })
+                }
             }
         },
         mounted () {
@@ -372,7 +378,7 @@
             this.editedAppointment.date = this.date
         },
         destroyed () {
-            if (this.$store.getters.currentPage !== 'appointments' && !this.free) {
+            if (this.$store.getters.currentPage !== 'appointments' && !this.free || this.subscribe) {
                 this.$store.commit('SET_SIDE_PANEL_STATUS', {
                     status: false,
                     mode: null

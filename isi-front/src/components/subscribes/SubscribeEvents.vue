@@ -5,6 +5,7 @@
             max-width="1000px"
         >
             <v-card
+                v-blur="loading "
                 class="round-corner"
             >
                 <v-card-title
@@ -93,6 +94,9 @@
             addMode: false
         }),
         computed: {
+            loading () {
+                return this.$store.state.subscribes.subscribesLoading
+            },
             customerName () {
                 return this.subscribe && this.subscribe.customer && this.subscribe.customer.full_name || ''
             },
