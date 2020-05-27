@@ -29,7 +29,7 @@
                         <span
                             class="subscribe-name"
                         >
-                            "{{ subName }}"
+                            {{ subName }}
                         </span> от
                         <span
                             class="start-date"

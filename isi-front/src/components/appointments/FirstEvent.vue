@@ -6,7 +6,7 @@
             outline
             v-if="!display"
             :draggable="event.draggable"
-            title="Показать подробности"
+            :title="mainTitle"
             :style="{
                 'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab',
                 'min-width': compact ? 0 : '88px'
@@ -114,6 +114,10 @@
             }
         }),
         computed: {
+            mainTitle () {
+                let details = `Запись на ${this.$moment(this.event.date).format('D MMMM YYYY г. H:m')}`
+                return this.compact ? details : 'Показать подробности'
+            },
             displayedEvent: {
                 get () {
                     return this.$store.state.appointment.displayedEvent
