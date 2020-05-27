@@ -97,6 +97,7 @@ export default {
         }
     },
     getters: {
+        allSubscribes: state => state.subscribes,
         truncate: state => state.truncate,
         eventsOpenSubscribe: state => {
             const attachScale = subscribe => {
