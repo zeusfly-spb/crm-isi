@@ -23,13 +23,13 @@
                         <span
                             class="customer-name"
                         >
-                            {{ customerName }}
+                            {{ $store.getters.truncate(customerName, 20) }}
                         </span>
                         по абонементу
                         <span
                             class="subscribe-name"
                         >
-                            {{ subName }}
+                            {{ $store.getters.truncate(subName, 19)  }}
                         </span> от
                         <span
                             class="start-date"
@@ -83,7 +83,7 @@
         </v-dialog>
         <calendar-record-adder
             v-if="addMode"
-            :subscribe="subscribe"
+            :preset-subscribe="subscribe"
             @reset="addModeOff"
         />
     </v-flex>

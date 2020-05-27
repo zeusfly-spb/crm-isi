@@ -215,9 +215,10 @@
                 type: Boolean,
                 default: false
             },
-            subscribe: Object
+            presetSubscribe: Object
         },
         data: () => ({
+            subscribe: null,
             active: true,
             menu: false,
             inputDate: null,
@@ -303,6 +304,13 @@
             }
         },
         methods: {
+            applySubscribe () {
+                this.inputDate = this.subscribeDate
+                this.editedAppointment.service_id = this.subscribe.subscription.service_id
+                this.editedAppointment.client_name = this.subscribe.customer_name
+                this.editedAppointment.client_phone = this.subscribe.customer_phone
+                this.editedAppointment.subscribe_id = this.subscribe.id
+            },
             setHour (hour) {
                 this.$store.commit('SET_ADDING_HOUR', hour)
             },
@@ -350,6 +358,9 @@
                 }
             }
         },
+        created () {
+            !!this.presetSubscribe ? this.subscribe = this.presetSubscribe : null
+        },
         mounted () {
             this.sidePanelControl()
             if (this.lead) {
@@ -367,11 +378,7 @@
                 this.editedAppointment.cabinet_id = this.presetCabinet.id
             }
             if (this.subscribe) {
-                this.inputDate = this.subscribeDate
-                this.editedAppointment.service_id = this.subscribe.subscription.service_id
-                this.editedAppointment.client_name = this.subscribe.customer_name
-                this.editedAppointment.client_phone = this.subscribe.customer_phone
-                this.editedAppointment.subscribe_id = this.subscribe.id
+                this.applySubscribe()
             }
             this.editedAppointment.user_id = this.$store.state.authUser.id
             this.editedAppointment.island_id = this.workingIslandId

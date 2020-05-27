@@ -6,7 +6,10 @@ export default {
         commentsOpenId: null,
         eventsOpenId: null,
         subscribesLoading: false,
-        subscribes: []
+        subscribes: [],
+        truncate: (text, stop, clamp) => {
+            return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
+        }
     },
     actions: {
         deleteSubscribeComment ({commit, dispatch}, data) {
@@ -94,6 +97,7 @@ export default {
         }
     },
     getters: {
+        truncate: state => state.truncate,
         eventsOpenSubscribe: state => {
             const attachScale = subscribe => {
                 if (!subscribe) {
