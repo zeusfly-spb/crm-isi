@@ -52,12 +52,15 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
+                        if (res.data.subscribe_id) {
+                            dispatch('setSubscribes')
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        changeEventStatus ({commit, rootState}, data) {
+        changeEventStatus ({commit, rootState, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/appointment_change_status', {
                     ...data,

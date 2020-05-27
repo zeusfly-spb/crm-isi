@@ -45,10 +45,12 @@ export default {
             })
         },
         setSubscribes ({commit, rootState, getters}) {
-            const attachPerformer = events => {
+            const attachProperties = events => {
                 return events.map(event => ({
                     ... event,
-                    performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'}
+                    performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'},
+                    service: getters.allServices.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
+                    island: getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
                 }))
             }
             commit('SET_SUBSCRIBES_LOADING', true)
@@ -61,7 +63,7 @@ export default {
                         let subscribes = res.data
                             .map(item => item.events.length ? {
                                 ... item,
-                                events: attachPerformer(item.events)
+                                events: attachProperties(item.events)
                             } : item)
                         commit('SET_SUBSCRIBES', subscribes)
                         resolve(res)

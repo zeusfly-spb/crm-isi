@@ -126,5 +126,8 @@ export default {
             state.services = data.services
             state.subscriptions = data.subscriptions
         }
+    },
+    getters: {
+        allServices: state => state.services
     }
 }

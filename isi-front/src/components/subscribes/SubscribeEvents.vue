@@ -62,9 +62,9 @@
                                 <v-icon
                                     v-if="!item"
                                     large
-                                    :color="eventColor(item)"
-                                    :title="eventTitle(item)"
-                                    @click="eventAction(item)"
+                                    color="grey lighten-2"
+                                    title="Добавить запись по абонементу"
+                                    @click="addModeOn"
                                 >
                                     event
                                 </v-icon>
@@ -84,17 +84,11 @@
             :subscribe="subscribe"
             @reset="addModeOff"
         />
-        <event-editor
-            v-if="!!$store.state.appointment.editedEvent"
-            :event="$store.state.appointment.editedEvent"
-            @close="$store.commit('SET_EDITED_EVENT', null)"
-        />
     </v-flex>
 </template>
 
 <script>
     import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
-    import EventEditor from '../appointments/EventEditor'
     import FirstEvent from '../appointments/FirstEvent'
     export default {
         name: 'SubscribeEvents',
@@ -142,40 +136,6 @@
             }
         },
         methods: {
-            editEvent (event) {
-                this.$store.commit('SET_EDITED_EVENT', event)
-            },
-            eventTitle (event) {
-                let base = !event ? 'Добавить запись' : 'Редактировать запись'
-                if (event && event.date) {
-                    let date = this.$moment(event.date).format('D MMMM YYYY г. H:m')
-                    base = `${base} на ${date}`
-                }
-                if (event && event.performer) {
-                    base = `${base}, исполнитель: ${event.performer.full_name}`
-                }
-                return base
-            },
-            eventAction (event) {
-                return !event ? this.addModeOn() : this.editEvent(event)
-            },
-            eventColor (event) {
-                if (!event) {
-                    return 'grey lighten-2'
-                }
-                switch (event.status) {
-                    case 'active':
-                        return 'blue'
-                    case 'completed':
-                        return 'green'
-                    case 'cancelled':
-                        return 'red'
-                    case 'postponed':
-                        return 'orange accent-4'
-                    case 'moderate':
-                        return 'amber darken-3'
-                }
-            },
             addModeOff () {
                 this.addMode = false
             },
@@ -188,7 +148,6 @@
         },
         components: {
             CalendarRecordAdder,
-            EventEditor,
             FirstEvent
         }
     }
