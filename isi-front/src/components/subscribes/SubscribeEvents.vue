@@ -15,6 +15,7 @@
                     >
                         <v-icon
                             color="white"
+                            class="pr-2"
                         >
                             event_note
                         </v-icon>
@@ -61,6 +62,7 @@
                             >
                                 <v-icon
                                     v-if="!item"
+                                    class="clickable"
                                     large
                                     color="grey lighten-2"
                                     title="Добавить запись по абонементу"

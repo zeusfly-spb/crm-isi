@@ -11,6 +11,12 @@
             <v-card-title
                 class="light-blue darken-3"
             >
+                <v-icon
+                    color="white"
+                    class="pr-2"
+                >
+                    comment
+                </v-icon>
                 <span
                     class="white--text title"
                 >
