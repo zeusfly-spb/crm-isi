@@ -171,6 +171,7 @@
                                     style="width: 100%; height: 100%"
                             >
                                 <calendar-record-adder
+                                        can-subscribe
                                         v-if="date === openDate && ['week', 'day'].includes(mode)"
                                         :date-prop="openDate"
                                         @reset="resetOpenDate"

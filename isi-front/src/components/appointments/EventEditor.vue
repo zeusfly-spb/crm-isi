@@ -26,7 +26,7 @@
                         <v-flex xs12 sm6 md4>
                             <sub>Услуга</sub>
                             <v-select
-                                :disabled="subscribe"
+                                :disabled="!!subscribe"
                                 v-model="editedEvent.service_id"
                                 :items="services"
                                 item-text="description"
@@ -154,7 +154,7 @@
                         <v-flex xs12 sm6 md4>
                             <sub>Клиент</sub>
                             <v-text-field
-                                :disabled="subscribe"
+                                :disabled="!!subscribe"
                                 v-model="editedEvent.client_name"
                                 label="Имя"
                                 data-vv-as="Имя клиента"
@@ -166,7 +166,7 @@
                         <v-flex xs12 sm6 md4>
                             <sub>Телефон</sub>
                             <v-text-field
-                                :disabled="subscribe"
+                                :disabled="!!subscribe"
                                 v-model="editedEvent.client_phone"
                                 prepend-inner-icon="phone"
                                 data-vv-as="Номер телефона клиента"

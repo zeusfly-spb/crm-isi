@@ -43,8 +43,9 @@
                 {{ subscribe.last_comment.text || ''}}
                 <span
                     v-if="commentsCount > 1"
+                    class="green--text"
                 >
-                    ({{ commentsCount }})
+                    <strong>({{ commentsCount }})</strong>
                 </span>
             </span>
             <v-icon

@@ -22,6 +22,23 @@
         </v-card-title>
         <v-card-text>
             <v-container grid-list-md>
+                <v-layout
+                    v-if="canSubscribe"
+                >
+                    <v-switch
+                        v-model="useSubscribe"
+                        label="Запись по абонементу"
+                    />
+                    <v-spacer/>
+                    <v-select
+                        v-if="useSubscribe"
+                        v-model="selectedSubscribeId"
+                        :items="allSubscribes"
+                        item-text="info"
+                        item-value="id"
+                        single-line
+                    />
+                </v-layout>
                 <v-layout wrap>
                     <v-flex xs12 sm6 md4>
                         <sub>Услуга</sub>
@@ -215,9 +232,15 @@
                 type: Boolean,
                 default: false
             },
-            presetSubscribe: Object
+            presetSubscribe: Object,
+            canSubscribe: {
+                type: Boolean,
+                default: false
+            }
         },
         data: () => ({
+            selectedSubscribeId: null,
+            useSubscribe: false,
             subscribe: null,
             active: true,
             menu: false,
@@ -238,6 +261,19 @@
             }
         }),
         computed: {
+            selectedSubscribe () {
+                if (!this.selectedSubscribeId || !this.allSubscribes.length) {
+                    return null
+                }
+                return this.allSubscribes.find(item => +item.id === +this.selectedSubscribeId) || null
+            },
+            allSubscribes () {
+                let base = this.$store.state.subscribes.subscribes
+                return base.map(item => ({
+                    ...item,
+                    info: `${this.$store.getters.truncate(item.customer_name, 20)} - ${this.$store.getters.truncate(item.subscription.name, 20)} от ${this.$moment(item.start_date).format('D MMMM YYYY г.')}`
+                }))
+            },
             subscribeDate () {
                 if (!this.subscribe) {
                     return null
@@ -360,6 +396,7 @@
         },
         created () {
             !!this.presetSubscribe ? this.subscribe = this.presetSubscribe : null
+            this.canSubscribe ? this.$store.dispatch('setSubscribes') : null
         },
         mounted () {
             this.sidePanelControl()
@@ -395,6 +432,29 @@
             this.$store.commit('UNSET_ADDING_CABINET_ID')
         },
         watch: {
+            subscribe (val) {
+                val ? this.applySubscribe() : null
+            },
+            useSubscribe (val) {
+                const reset = () => {
+                    this.subscribe = null
+                    this.editedAppointment = JSON.parse(JSON.stringify(this.blankAppointment))
+                }
+                const set = () => {
+                    this.subscribe = this.selectedSubscribe
+                }
+                !val ? reset() : this.selectedSubscribe ? set() : null
+            },
+            selectedSubscribe (val) {
+                if (val && this.useSubscribe) {
+                    this.subscribe = val
+                } else {
+                    this.subscribe = null
+                }
+            },
+            allSubscribes (val) {
+                !!val.length ? this.selectedSubscribeId = val[0].id : null
+            },
             'editedAppointment.cabinet_id': function (val) {
                 val ? this.$store.commit('SET_ADDING_CABINET_ID', val) : null
             },

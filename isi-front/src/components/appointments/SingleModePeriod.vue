@@ -17,6 +17,7 @@
             @drag-enter="dragEnter"
         />
         <calendar-record-adder
+            can-subscribe
             v-if="addMode"
             :date-prop="date"
             :preset-hour="hour"
