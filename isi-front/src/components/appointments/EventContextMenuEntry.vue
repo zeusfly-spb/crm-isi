@@ -126,7 +126,7 @@
                         break
                     default: break
                 }
-                this.visible = false
+                this.$emit('changed')
             },
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')

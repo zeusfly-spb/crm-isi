@@ -34,7 +34,7 @@ export default {
         })
     },
     actions: {
-        deleteEventComment ({commit}, data) {
+        deleteEventComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_appointment_comment', {... data})
                     .then(res => {
@@ -76,7 +76,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        moveEvent ({commit, state, rootState}) {
+        moveEvent ({commit, state, rootState, dispatch}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
                     user_id: rootState.authUser.id,
@@ -116,18 +116,21 @@ export default {
                 }
             })
         },
-        deleteAppointment ({commit}, data) {
+        deleteAppointment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_appointment', {... data})
                     .then(res => {
                         commit('DELETE_APPOINTMENT', data.id)
+                        if (res.data.with_subscribe) {
+                            dispatch('setSubscribes')
+                        }
                         resolve(res)
                     })
                     .catch(e => reject(e))
 
             })
         },
-        updateAppointment ({commit}, data) {
+        updateAppointment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_appointment', {... data})
                     .then(res => {

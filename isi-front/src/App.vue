@@ -33,6 +33,9 @@ export default {
         timerId: null
     }),
     computed: {
+        allServices () {
+            return this.$store.state.catalog.services
+        },
         currentPage () {
             return this.$store.getters.currentPage
         },

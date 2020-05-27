@@ -5,7 +5,6 @@
             max-width="1000px"
         >
             <v-card
-                v-blur="loading "
                 class="round-corner"
             >
                 <v-card-title
@@ -55,6 +54,7 @@
                             wrap
                         >
                             <v-flex xs3 sm2 md1
+                                v-blur="loading "
                                 class="cell"
                                 v-for="(item, index) in scale"
                                 :key="index"

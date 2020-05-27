@@ -49,7 +49,7 @@ export default {
                 return events.map(event => ({
                     ... event,
                     performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'},
-                    service: getters.allServices.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
+                    service: getters.workingIsland.services.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
                     island: getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
                 }))
             }

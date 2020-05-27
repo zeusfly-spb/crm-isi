@@ -140,7 +140,9 @@ class AppointmentController extends Controller
 
     public function delete(Request $request)
     {
-        $result = Appointment::destroy($request->id);
-        return response()->json(['result' => $result]);
+        $event = Appointment::find($request->id);
+        $withSubscribe = !!$event->subscribe_id;
+        $result = $event->delete();
+        return response()->json(['result' => $result, 'with_subscribe' => $withSubscribe]);
     }
 }
