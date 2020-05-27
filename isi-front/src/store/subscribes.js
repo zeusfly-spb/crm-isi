@@ -45,6 +45,12 @@ export default {
             })
         },
         setSubscribes ({commit, rootState, getters}) {
+            const attachPerformer = events => {
+                return events.map(event => ({
+                    ... event,
+                    performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'}
+                }))
+            }
             commit('SET_SUBSCRIBES_LOADING', true)
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_subscribes', {
@@ -52,7 +58,12 @@ export default {
                     date: getters.eventsDate
                 })
                     .then(res => {
-                        commit('SET_SUBSCRIBES', res.data)
+                        let subscribes = res.data
+                            .map(item => item.events.length ? {
+                                ... item,
+                                events: attachPerformer(item.events)
+                            } : item)
+                        commit('SET_SUBSCRIBES', subscribes)
                         resolve(res)
                     })
                     .catch(e => reject(e))

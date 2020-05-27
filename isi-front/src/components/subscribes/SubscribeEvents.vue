@@ -48,16 +48,6 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    <v-btn
-                            flat
-                            dark
-                            color="primary"
-                            title="Назначить запись по абонементу"
-                            :disabled="!canAdd"
-                            @click="addModeOn"
-                    >
-                        Назначить запись
-                    </v-btn>
                     <v-container
                         grid-list-md
                     >
@@ -65,10 +55,12 @@
                             wrap
                         >
                             <v-flex xs3 sm2 md1
+                                class="cell"
                                 v-for="(item, index) in scale"
                                 :key="index"
                             >
                                 <v-icon
+                                    v-if="!item"
                                     large
                                     :color="eventColor(item)"
                                     :title="eventTitle(item)"
@@ -76,6 +68,11 @@
                                 >
                                     event
                                 </v-icon>
+                                <first-event
+                                    compact
+                                    v-if="item"
+                                    :event="item"
+                                />
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -98,6 +95,7 @@
 <script>
     import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
     import EventEditor from '../appointments/EventEditor'
+    import FirstEvent from '../appointments/FirstEvent'
     export default {
         name: 'SubscribeEvents',
         data: () => ({
@@ -153,11 +151,8 @@
                     let date = this.$moment(event.date).format('D MMMM YYYY г. H:m')
                     base = `${base} на ${date}`
                 }
-                if (event && event.performer_id) {
-                    let performer = this.$store.state.users.find(item => +item.id === +event.performer_id)
-                    if (performer) {
-                        base = `${base}, исполнитель: ${performer.full_name}`
-                    }
+                if (event && event.performer) {
+                    base = `${base}, исполнитель: ${event.performer.full_name}`
                 }
                 return base
             },
@@ -193,12 +188,18 @@
         },
         components: {
             CalendarRecordAdder,
-            EventEditor
+            EventEditor,
+            FirstEvent
         }
     }
 </script>
 
 <style scoped>
+    .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
     .customer-name  {
         color: orange;
         font-weight: bolder;

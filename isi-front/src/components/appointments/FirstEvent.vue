@@ -7,7 +7,10 @@
             v-if="!display"
             :draggable="event.draggable"
             title="Показать подробности"
-            :style="{'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab'}"
+            :style="{
+                'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab',
+                'min-width': compact ? 0 : '88px'
+            }"
             :ripple="false"
             :id="`first-${event.id}`"
             @click="show"
@@ -27,11 +30,13 @@
                 {{ icons[event.status] }}
             </v-icon>
             <span
+                v-if="!compact"
                 class="green--text"
             >
                     {{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}
                 </span>
             <span
+                v-if="!compact"
                 class="blue--text ml-1 mr-1"
             >
                     {{ event.client_name }}
@@ -81,7 +86,13 @@
     import Event from './Event'
     export default {
         name: 'FirstEvent',
-        props: ['event'],
+        props: {
+            event: Object,
+            compact: {
+                type: Boolean,
+                default: false
+            }
+        },
         data: () => ({
             menu: false,
             display: false,
@@ -126,6 +137,9 @@
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
             show () {
+                if (this.compact) {
+                    return
+                }
                 this.$store.commit('SET_DISPLAYED_EVENT', this.event)
                 this.display = true
             },
