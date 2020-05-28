@@ -86,7 +86,7 @@ class Appointment extends Model
 
     public function getLastCommentAttribute()
     {
-        if (!$this->attributes['comments']) {
+        if (!$this->comments) {
             return null;
         }
         return $this->comments[count($this->comments) - 1]['text'] ?? null;
