@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        archiveCommentsOpenId: null,
         displayedEvent: null,
         editedEvent: null,
         addingCabinetId: null,
@@ -199,6 +200,9 @@ export default {
         }
     },
     mutations: {
+        SET_ARCHIVE_COMMENTS_OPEN_ID (state, id) {
+            state.archiveCommentsOpenId = id
+        },
         UNSET_DISPLAYED_EVENT (state) {
             state.displayedEvent = null
         },
@@ -277,6 +281,7 @@ export default {
         }
     },
     getters: {
+        commentsOpenEvent: state => state.appointments.find(item => item.id === state.archiveCommentsOpenId),
         eventStatusIcon: state => state.statusIcon,
         eventStatusColor: state => state.statusColor,
         moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id),

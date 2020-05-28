@@ -9,7 +9,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 class Appointment extends Model
 {
     protected $guarded = [];
-    protected $appends = ['status'];
+    protected $appends = ['status', 'last_comment'];
     protected $casts = [
         'comments' => 'array'
     ];
@@ -82,6 +82,14 @@ class Appointment extends Model
             }
         }
         $this->update(['comments' => $result]);
+    }
+
+    public function getLastCommentAttribute()
+    {
+        if (!$this->attributes['comments']) {
+            return null;
+        }
+        return $this->comments[count($this->comments) - 1]['text'] ?? null;
     }
 
 }

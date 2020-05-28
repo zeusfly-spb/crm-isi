@@ -55,9 +55,14 @@
                                 />
                             </td>
                             <td>
-                                <event-comments
-                                        :event="props.item"
-                                />
+                                <span
+                                    v-if="props.item.last_comment"
+                                    class="last-comment clickable"
+                                    title="Открыть панель комментариев к записи"
+                                    @click="openComments(props.item)"
+                                >
+                                    {{ props.item.last_comment }}
+                                </span>
                             </td>
                             <td>
                                 <user-avatar
@@ -80,6 +85,9 @@
                 </v-tab-item>
             </v-tabs-items>
         </v-tabs>
+        <event-comments
+            v-if="!!commentsOpenEvent"
+        />
     </v-flex>
 </template>
 <script>
@@ -110,6 +118,9 @@
             ]
         }),
         computed: {
+            commentsOpenEvent () {
+                return this.$store.getters.commentsOpenEvent
+            },
             sliderColor () {
                 return {0: 'orange', 1: 'amber', 2: 'red', 3: 'green'}[this.currentIndex]
             },
@@ -121,6 +132,9 @@
             }
         },
         methods: {
+            openComments (event) {
+                this.$store.commit('SET_ARCHIVE_COMMENTS_OPEN_ID', event.id)
+            },
             setCurrentIndex (val) {
                 this.currentIndex = val
             },
@@ -137,3 +151,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .last-comment:HOVER {
+        color: #03A9F4;
+    }
+</style>

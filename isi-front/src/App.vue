@@ -33,8 +33,14 @@ export default {
         timerId: null
     }),
     computed: {
-        allServices () {
-            return this.$store.state.catalog.services
+        appointments () {
+            return this.$store.state.appointment.appointments
+        },
+        archiveCommentsOpenId () {
+            return this.$store.state.appointment.archiveCommentsOpenId
+        },
+        commentsOpenEvent () {
+            return this.$store.getters.commentsOpenEvent
         },
         currentPage () {
             return this.$store.getters.currentPage

@@ -1,28 +1,5 @@
 <template>
     <div>
-        <v-icon
-            color="green"
-            class="clickable"
-            v-if="!comments.length"
-            @click="list = true"
-        >
-            add_circle_outline
-        </v-icon>
-        <span
-            v-if="lastComment"
-            class="clickable"
-            :class="{'system': lastComment && lastComment.user_id === 0}"
-            :title="!comments.length ? 'Нет комментариев' : 'Показать список комментариев'"
-            @click="showList"
-        >
-            {{ lastComment.text }}
-        </span>
-        <span
-            v-if="comments.length > 1"
-            class="count"
-        >
-            ({{ comments.length }})
-        </span>
         <v-dialog
             v-if="list"
             v-model="list"
@@ -122,12 +99,14 @@
     import EventCommentRemover from "./EventCommentRemover";
     export default {
         name: 'EventComments',
-        props: ['event'],
         data: () => ({
             addMode: false,
-            list: false
+            list: true
         }),
         computed: {
+            event () {
+                return this.$store.getters.commentsOpenEvent
+            },
             basePath () {
                 return this.$store.state.basePath
             },
@@ -184,7 +163,8 @@
             }
         },
         watch: {
-            list () {
+            list (val) {
+                !val ? this.$store.commit('SET_ARCHIVE_COMMENTS_OPEN_ID', null) : null
                 this.addMode = false
             },
             addMode (val) {
