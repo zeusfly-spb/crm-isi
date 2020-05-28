@@ -10,7 +10,7 @@
             height="1.2em"
             v-for="(item, index) in scale"
             :key="index"
-            :elevation="eventsOpenId === subscribe.id ? 0 : item ? 2 : 1"
+            :elevation="eventsOpenId === subscribe.id ? 0 : item ? 3 : 0"
         >
             <v-icon
                 small
