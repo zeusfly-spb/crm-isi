@@ -26,6 +26,8 @@
                     v-if="canSubscribe"
                 >
                     <v-switch
+                        :disabled="!allSubscribes.length"
+                        title="Добавить запись по абонементу"
                         v-model="useSubscribe"
                         label="Запись по абонементу"
                     />
@@ -277,6 +279,7 @@
             },
             allSubscribes () {
                 let base = this.$store.state.subscribes.subscribes
+                base = base.filter(item => item.start_date <= this.date && item.finish_date >= this.date)
                 return base.map(item => ({
                     ...item,
                     info: `${this.$store.getters.truncate(item.customer_name, 20)} - ${this.$store.getters.truncate(item.subscription.name, 20)} от ${this.$moment(item.start_date).format('D MMMM YYYY г.')}`
