@@ -113,6 +113,8 @@
                                 no-title
                                 scrollable
                                 v-model="inputDate"
+                                :min="dateMin"
+                                :max="dateMax"
                                 @change="datePicked"
                                 locale="ru"
                                 first-day-of-week="1"
@@ -261,6 +263,12 @@
             }
         }),
         computed: {
+            dateMax () {
+                return this.subscribe ? this.subscribe.finish_date : null
+            },
+            dateMin () {
+                return this.subscribe ? this.subscribe.start_date : null
+            },
             selectedSubscribe () {
                 if (!this.selectedSubscribeId || !this.allSubscribes.length) {
                     return null
