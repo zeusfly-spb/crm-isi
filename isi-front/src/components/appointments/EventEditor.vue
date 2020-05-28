@@ -60,10 +60,13 @@
                                     />
                                 </template>
                                 <v-date-picker
-                                    v-model="date" no-title scrollable
-                                    @change="datePicked"
                                     locale="ru"
                                     first-day-of-week="1"
+                                    v-model="date" no-title scrollable
+                                    :min="dateMin"
+                                    :max="dateMax"
+                                    @change="datePicked"
+
                                 />
                             </v-menu>
                         </v-flex>
@@ -213,6 +216,12 @@
             menu: false
         }),
         computed: {
+            dateMax () {
+                return this.subscribe ? this.subscribe.finish_date : null
+            },
+            dateMin () {
+                return this.subscribe ? this.subscribe.start_date : null
+            },
             subscribe () {
                 return this.event.subscribe_id && this.$store.getters.allSubscribes.find(sub => +sub.id === +this.event.subscribe_id) || null
             },
