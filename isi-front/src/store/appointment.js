@@ -31,7 +31,33 @@ export default {
             ...event,
             hour: +event.date.split(' ')[1].split(':')[0],
             minutes: +event.date.split(' ')[1].split(':')[1]
-        })
+        }),
+        statusColor: status => {
+            const colors = {
+                active: 'blue',
+                postponed: 'orange',
+                moderate: 'amber',
+                cancelled: 'red',
+                completed: 'green'
+            }
+            if (!status) {
+                return 'grey lighten-1'
+            }
+            return colors[status]
+        },
+        statusIcon: status => {
+            const icons = {
+                active: 'event',
+                postponed: 'timelapse',
+                moderate: 'assignment_late',
+                cancelled: 'event_busy',
+                completed: 'event_available'
+            }
+            if (!status) {
+                return 'event'
+            }
+            return icons[status]
+        }
     },
     actions: {
         deleteEventComment ({commit, dispatch}, data) {
@@ -251,6 +277,8 @@ export default {
         }
     },
     getters: {
+        eventStatusIcon: state => state.statusIcon,
+        eventStatusColor: state => state.statusColor,
         moveReady: state => state.draggedEvent && state.dragTarget && (state.dragTarget.hour !== state.draggedEvent.hour || state.dragTarget.cabinet_id !== state.draggedEvent.cabinet_id),
         todayEvents: (state, getters, rootState) => state.appointments.filter(event => event.date.split(' ')[0] === rootState.realDate),
         eventsDate: state => state.date

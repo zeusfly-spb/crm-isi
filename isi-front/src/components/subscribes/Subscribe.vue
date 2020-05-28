@@ -24,14 +24,10 @@
             {{ subscribe.finish_date |  moment('D MMMM YYYY г.') }}
         </td>
         <td>
-            <span
-                class="clickable"
-                @click="openEvents"
-            >
-                Оплачено: <strong>{{ eventsCount.paid }}</strong>
-                Назначено: <strong>{{ eventsCount.appointed }}</strong>
-                Выполнено: <strong>{{ eventsCount.completed }}</strong>
-            </span>
+            <scale-indicator
+                :subscribe="subscribe"
+                @fire="openEvents"
+            />
         </td>
         <td>
             <span
@@ -63,6 +59,7 @@
 
 <script>
     import UserAvatar from '../main/UserAvatar'
+    import ScaleIndicator from './ScaleIndicator'
     export default {
         name: 'Subscribe',
         props: ['index', 'subscribe'],
@@ -70,13 +67,6 @@
             commentsCount () {
                 let comments = this.subscribe && this.subscribe.comments ? Object.values(this.subscribe.comments) : []
                 return comments.length
-            },
-            eventsCount () {
-                return {
-                    paid: this.subscribe.subscription.supply_amount || 0,
-                    appointed: this.events.length || 0,
-                    completed: this.events.filter(item => item.status === 'completed').length || 0
-                }
             },
             commentsOpenId () {
                 return this.$store.state.subscribes.commentsOpenId
@@ -97,7 +87,8 @@
             }
         },
         components: {
-            UserAvatar
+            UserAvatar,
+            ScaleIndicator
         }
     }
 </script>

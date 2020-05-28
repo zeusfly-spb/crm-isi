@@ -60,5 +60,10 @@
 </script>
 
 <style scoped>
-
+    tr:hover {
+        background-color: transparent !important;
+    }
+    td:hover {
+        background-color: transparent !important;
+    }
 </style>

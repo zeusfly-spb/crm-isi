@@ -19,7 +19,8 @@ class Subscribe extends Model
         'nominal',
         'customer_name',
         'customer_phone',
-        'last_event'
+        'last_event',
+        'scale'
     ];
 
     public function subscription()
@@ -96,5 +97,19 @@ class Subscribe extends Model
     public function getNominalAttribute()
     {
         return $this->subscription->supply_amount ?? 0;
+    }
+
+    public function getScaleAttribute()
+    {
+        $scale = [];
+        $eventsCount = $this->events->count() ?? 0;
+        for ($i = 0; $i < $this->nominal; $i++) {
+            $step = null;
+            if ($i <= ($eventsCount - 1)) {
+                $step = $this->events[$i]->status;
+            }
+            $scale[] = $step;
+        }
+        return $scale;
     }
 }
