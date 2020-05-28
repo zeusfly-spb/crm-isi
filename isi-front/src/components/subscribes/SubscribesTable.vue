@@ -36,7 +36,7 @@
                 {text: 'Абонемент', value: 'subscription_id'},
                 {text: 'Начало периода', value: 'start_date'},
                 {text: 'Окончание периода', value: 'finish_date'},
-                {text: 'Записи', value: null, sortable: false},
+                {text: 'Записи', value: 'rate'},
                 {text: 'Комментарии', value: null, sortable: false}
             ]
         }),

@@ -93,7 +93,12 @@ export default {
             state.subscribesLoading = val
         },
         SET_SUBSCRIBES (state, subscribes) {
-            state.subscribes = subscribes
+            const attachRate = subscribe => {
+                let completed = subscribe.events.filter(event => event.status === 'completed').length || 0
+                let rate = completed === 0 ? 0 : (completed / subscribe.nominal) * 100
+                return {... subscribe, rate: rate}
+            }
+            state.subscribes = subscribes.map(item => attachRate(item))
         }
     },
     getters: {
