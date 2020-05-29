@@ -9,6 +9,11 @@
         <div class="mb-2"
              v-if="!todayPostpones"
         >
+            <div
+                class="left"
+            >
+                <sms-sender/>
+            </div>
             <v-text-field
                     class="right"
                     style="width: 23em"
@@ -55,6 +60,7 @@
     import LeadEventAdder from './LeadEventAdder'
     import IslandSwitcher from '../IslandSwitcher'
     import EventEditor from '../appointments/EventEditor'
+    import SmsSender from './SmsSender'
 
     const sortByTime = (a, b) => {
         let timeA = a.time
@@ -142,7 +148,8 @@
             LeadRemover,
             LeadEventAdder,
             IslandSwitcher,
-            EventEditor
+            EventEditor,
+            SmsSender
         }
     }
 </script>

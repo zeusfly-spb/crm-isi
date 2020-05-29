@@ -29,7 +29,7 @@
             showMessage () {
                 this.$store.dispatch('pullMessage')
                     .then(res => {
-                        [this.snackColor, this.snackText, this.snackbar] = [res.color, res.text, true]
+                        [this.snackColor, this.snackText, this.snackbar] = [res.color || 'green', res.text, true]
                     })
             }
         },
