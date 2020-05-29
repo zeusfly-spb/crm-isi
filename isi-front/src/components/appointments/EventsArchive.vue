@@ -25,7 +25,10 @@
                     ({{ statusEvents(tab.status).length }})
                 </span>
             </v-tab>
-            <v-tabs-items touchless>
+            <v-tabs-items
+                touchless
+                @change="resetPagination"
+            >
                 <v-tab-item
                     v-for="tab in tabs"
                     :key="tab.status"
@@ -33,12 +36,14 @@
                     <v-data-table
                         :headers="headers"
                         :items="statusEvents(tab.status)"
-                        hide-actions
+                        :rows-per-page-items="rowOptions"
+                        rows-per-page-text="Записей на странице"
                         class="elevation-1"
+                        @update:pagination="updatePagination"
                     >
                         <template v-slot:items="props">
                             <td>
-                                {{ props.index + 1 }}
+                                {{ paginator.page === 1 ? props.index + 1 : props.index + 1 + (paginator.page - 1) * paginator.rowsPerPage }}
                             </td>
                             <td>
                                 {{ props.item.service.description }}
@@ -105,6 +110,10 @@
         export default {
         name: 'EventsArchive',
         data: () => ({
+            paginator: {
+                page: 1,
+                rowsPerPage: 15
+            },
             currentIndex: 0,
             tabs: [
                 {title: 'Отложенные', status: 'postponed', color: 'orange', icon: 'timelapse'},
@@ -121,6 +130,12 @@
                 {text: 'Исполнитель', value: 'performer_id'},
                 {text: 'Дата/Время', value: 'date'},
                 {text: 'Действия', value: null}
+            ],
+            rowOptions: [
+                15,
+                30,
+                50,
+                { text: "Все", value: -1 }
             ]
         }),
         computed: {
@@ -138,6 +153,12 @@
             }
         },
         methods: {
+            resetPagination () {
+                [this.paginator.page, this.paginator.rowsPerPage] = [1, this.rowOptions[0]]
+            },
+            updatePagination (data) {
+                [this.paginator.page, this.paginator.rowsPerPage] = [data.page, data.rowsPerPage]
+            },
             openComments (event) {
                 this.$store.commit('SET_ARCHIVE_COMMENTS_OPEN_ID', event.id)
             },
