@@ -28,7 +28,8 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text
-                        class="list-entry"
+                    v-blur="$store.state.appointment.archiveCommentsLoading"
+                    class="list-entry"
                 >
                     <event-comment-adder
                             v-model="addMode"

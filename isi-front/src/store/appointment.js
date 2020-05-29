@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        archiveCommentsLoading: false,
         archiveCommentsOpenId: null,
         displayedEvent: null,
         editedEvent: null,
@@ -63,16 +64,19 @@ export default {
     actions: {
         deleteEventComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
+                commit('SET_ARCHIVE_COMMENTS_LOADING', true)
                 Vue.axios.post('/api/delete_appointment_comment', {... data})
                     .then(res => {
                         commit('UPDATE_APPOINTMENT', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('SET_ARCHIVE_COMMENTS_LOADING', false))
             })
         },
         addEventComment ({dispatch, commit, rootState}, data) {
             return new Promise((resolve, reject) => {
+                commit('SET_ARCHIVE_COMMENTS_LOADING', true)
                 Vue.axios.post('/api/add_appointment_comment', {
                     ...data,
                     user_id: rootState.authUser.id
@@ -85,6 +89,7 @@ export default {
                         resolve(res)
                     })
                     .catch(e => reject(e))
+                    .finally(() => commit('SET_ARCHIVE_COMMENTS_LOADING',  false))
             })
         },
         changeEventStatus ({commit, rootState, dispatch}, data) {
@@ -200,6 +205,9 @@ export default {
         }
     },
     mutations: {
+        SET_ARCHIVE_COMMENTS_LOADING (state, val) {
+            state.archiveCommentsLoading = val
+        },
         SET_ARCHIVE_COMMENTS_OPEN_ID (state, id) {
             state.archiveCommentsOpenId = id
         },

@@ -63,10 +63,16 @@
                                 >
                                     {{ props.item.last_comment }}
                                 </span>
+                                <span
+                                    v-if="props.item.comments.length > 1"
+                                    class="green--text"
+                                >
+                                    <strong>({{ props.item.comments.length }})</strong>
+                                </span>
                             </td>
                             <td>
                                 <user-avatar
-                                        :user="props.item.performer"
+                                    :user="props.item.performer"
                                 />
                             </td>
                             <td>
