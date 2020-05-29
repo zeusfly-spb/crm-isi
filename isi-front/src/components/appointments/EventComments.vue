@@ -10,12 +10,29 @@
                 class="round-corner"
             >
                 <v-card-title
-                        class="light-blue darken-3"
+                        class="light-blue darken-3 white--text title"
                 >
+                    <v-icon
+                            color="white"
+                            class="pr-2"
+                    >
+                        comment
+                    </v-icon>
                     <span
                         class="title white--text"
                     >
                         {{ listTitle }}
+                    </span>
+                    <span
+                        class="orange--text pl-1"
+                    >
+                        {{ event.date | moment('D MMMM YYYY г. HH:mm') }}
+                    </span>
+                    <span class="pl-1">клиента</span>
+                    <span
+                        class="yellow--text title pl-1"
+                    >
+                        {{ event.client_name }}
                     </span>
                     <v-spacer/>
                     <v-icon
@@ -115,7 +132,7 @@
                 return this.$store.state.users
             },
             listTitle () {
-                return `Комментарии к записи от ${this.$moment(this.event.date).format('D MMMM YYYY г. HH:mm')} клиента  ${this.event.client_name}`
+                return `Комментарии к записи от`
             },
             lastComment () {
                 return this.comments[0]
