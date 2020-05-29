@@ -94,13 +94,6 @@
                 return this.$store.state.loader.postpones
             },
             todayLeads () {
-                // return this.leads.filter(item => item.status === 'process' && item.last_postpone && item.last_postpone.date.split(' ')[0] === this.$store.state.realDate)
-                // let array = Object.values(this.postpones)
-                /**
-                let array = this.postpones
-                return array.length ? array.map(item => item.lead) : []
-                 *
-                 **/
                 return this.$store.state.loader.callTodayLeads || []
             },
             active () {

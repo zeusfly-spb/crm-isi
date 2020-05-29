@@ -42,8 +42,19 @@
                         data-vv-as="Номер телефона"
                         data-vv-name="phone"
                         :error-messages="errors.collect('phone')"
-                        v-validate="'digits:10'"
+                        v-validate="'required|digits:10'"
                         mask="(###) ### - ####"
+                    />
+                    <v-textarea
+                        class="pt-2"
+                        solo
+                        outline
+                        v-model="inputText"
+                        label="Текст сообщения"
+                        data-vv-as="Текст"
+                        data-vv-name="text"
+                        :error-messages="errors.collect('text')"
+                        v-validate="'required'"
                     />
                 </v-card-text>
                 <v-card-actions>
@@ -68,7 +79,7 @@
         data: () => ({
             dialog: false,
             inputNumber: '',
-            inputText: 'test!! super'
+            inputText: ''
         }),
         computed: {
             telNumber () {
@@ -84,28 +95,40 @@
                 this.dialog = true
             },
             sendSMS () {
-                this.$validator.validate()
-                    .then(res => {
-                        if (!res) {
-                            return
-                        }
-                        this.axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {
-                            base_type: 'isi',
-                            user_id: 1,
-                            extension: this.$store.getters.currentVpbxExtension,
-                            phone: this.telNumber,
-                            text: this.inputText
+                const send = () => this.axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {
+                    base_type: 'isi',
+                    user_id: 1,
+                    extension: this.$store.getters.currentVpbxExtension,
+                    phone: this.telNumber,
+                    text: this.inputText
+                })
+                    .then(() => this.dialog = false)
+                    .finally(() => this.$store.dispatch('pushMessage', {
+                        text: `СМС отправлено`
+                    }))
+                if (!this.phone) {
+                    this.$validator.validate()
+                        .then(res => {
+                            if (!res) {
+                                return
+                            }
+                            send()
                         })
-                            .then(() => this.dialog = false)
-                            .finally(() => this.$store.dispatch('pushMessage', {
-                                text: `СМС отправлено на номер ${this.telNumber}`
-                            }))
-                    })
+                } else {
+                    send()
+                }
             }
         },
         watch: {
             dialog (val) {
-                !val ? this.inputNumber = '' : null
+                this.$validator.pause()
+                this.$nextTick(() => {
+                    this.$validator.errors.clear()
+                    this.$validator.fields.items.forEach(field => field.reset())
+                    this.$validator.fields.items.forEach(field => this.errors.remove(field))
+                    this.$validator.resume()
+                })
+                !val ? [this.inputNumber, this.inputText] = ['', ''] : null
             }
         }
     }
