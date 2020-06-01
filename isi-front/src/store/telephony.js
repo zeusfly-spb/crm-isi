@@ -14,8 +14,8 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_sms_report', {
                     ... data,
-                    user_id: rootState.authUser.id,
-                    island_id: rootState.workingIslandId
+                    user_id: rootState.authUser.id || 0,
+                    island_id: rootState.workingIslandId || 0
                 })
                     .then(res => resolve(res))
                     .catch(e => reject(e))
