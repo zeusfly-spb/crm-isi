@@ -71,6 +71,7 @@
         name: 'CallReminder',
         computed: {
             nowEvents () {
+                // return [] // for develop
                 const limit = 0.01
                 return this.todayEvents.filter(event => (new Date(event.date) - new Date()) / 6000 < limit)
             },
@@ -85,6 +86,7 @@
                 return true
             },
             nowLeads () {
+                // return [] // for develop
                 const limit = 0.01
                 let base = this.todayLeads.length && this.todayLeads.filter(item => (new Date(item.last_postpone.date) - new Date()) / 60000 < limit)
                     .filter(item => item.status === 'process') || []

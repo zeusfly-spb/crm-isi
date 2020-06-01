@@ -3,6 +3,7 @@
         <v-btn
             icon
             title="Отправить SMS"
+            :disabled="!enabled"
             @click="showDialog"
         >
             <v-icon
@@ -88,6 +89,9 @@
                 } else {
                     return '+7' + this.inputNumber
                 }
+            },
+            enabled () {
+                return !!this.$store.getters.workingIsland
             }
         },
         methods: {
@@ -104,7 +108,7 @@
                 })
                     .then(() => this.dialog = false)
                     .finally(() => this.$store.dispatch('pushMessage', {
-                        text: `СМС отправлено`
+                        text: `СМС отправлено на номер ${this.telNumber}`
                     }))
                 if (!this.phone) {
                     this.$validator.validate()
@@ -128,7 +132,7 @@
                     this.$validator.fields.items.forEach(field => this.errors.remove(field))
                     this.$validator.resume()
                 })
-                !val ? [this.inputNumber, this.inputText] = ['', ''] : null
+                val ? [this.inputNumber, this.inputText] = ['', ''] : null
             }
         }
     }
