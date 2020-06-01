@@ -98,18 +98,17 @@
             showDialog () {
                 this.dialog = true
             },
+            hideDialog () {
+                this.dialog = false
+            },
             sendSMS () {
-                const send = () => this.axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {
-                    base_type: 'isi',
-                    user_id: 1,
-                    extension: this.$store.getters.currentVpbxExtension,
-                    phone: this.telNumber,
-                    text: this.inputText
-                })
-                    .then(() => this.dialog = false)
-                    .finally(() => this.$store.dispatch('pushMessage', {
-                        text: `СМС отправлено на номер ${this.telNumber}`
-                    }))
+                const send = () => {
+                    this.$store.dispatch('sendSMS', {
+                        number: this.telNumber,
+                        text: this.inputText
+                    })
+                        .then(() => this.hideDialog())
+                }
                 if (!this.phone) {
                     this.$validator.validate()
                         .then(res => {
