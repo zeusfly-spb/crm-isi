@@ -1,8 +1,16 @@
 import Vue from 'vue'
 
 export default {
+    state: {
+        phoneFilter: number => {
+            String.prototype.replaceAt = function(index, replacement) {
+                return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+            }
+            return number.replaceAt(8, '*').replaceAt(9, '*').replaceAt(10, '*').replaceAt(11, '*')
+        }
+    },
     actions: {
-        sendSMS ({dispatch, getters, rootState}, data) {
+        sendSMS ({dispatch, getters, state, rootState}, data) {
             return new Promise((resolve, reject) => {
             Vue.axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {
                     base_type: 'isi',
@@ -14,7 +22,7 @@ export default {
 
                     .then(res => {
                         dispatch('pushMessage', {
-                            text: `СМС отправлено на номер ${data.number}`
+                            text: `СМС отправлено на номер ${state.phoneFilter(data.number)}`
                         })
                         resolve(res)
                     })
