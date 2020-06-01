@@ -71,6 +71,9 @@
                 :lead="props.item"
                 :blinked="false"
             />
+            <sms-sender
+                :phone="props.item.phone"
+            />
         </td>
         <td
             :class="{'mini': mini}"
@@ -183,6 +186,7 @@
     import LeadContextMenuEntry from './LeadContextMenuEntry'
     import PhoneViewer from '../main/PhoneViewer'
     import UserAvatar from '../main/UserAvatar'
+    import SmsSender from './SmsSender'
     export default {
         name: 'Lead',
         props: ['props'],
@@ -288,7 +292,8 @@
             InteractionsCard,
             LeadContextMenuEntry,
             PhoneViewer,
-            UserAvatar
+            UserAvatar,
+            SmsSender
         }
     }
 </script>

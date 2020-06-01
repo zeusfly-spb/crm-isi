@@ -2,11 +2,12 @@
     <v-btn
         icon
         title="Позвонить"
-        @click="makeCall"
+        class="p-0 m-0"
         :small="mini"
         :disabled="!currentVpxExtension"
         :color="flash ? 'white' : null"
         :large="flash && scalable"
+        @click="makeCall"
     >
         <v-icon
             :small="mini"

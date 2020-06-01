@@ -1,12 +1,16 @@
 <template>
-    <div>
+    <span>
         <v-btn
             icon
+            class="p-0 m-0"
             title="Отправить SMS"
             :disabled="!enabled"
             @click="showDialog"
         >
             <v-icon
+                title="Отправить SMS"
+                :disabled="!enabled"
+                @click="showDialog"
                 color="green"
             >
                 sms
@@ -47,6 +51,7 @@
                         mask="(###) ### - ####"
                     />
                     <v-textarea
+                        flat
                         class="pt-2"
                         solo
                         outline
@@ -65,7 +70,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </div>
+    </span>
 </template>
 
 <script>
@@ -109,17 +114,13 @@
                     })
                         .then(() => this.hideDialog())
                 }
-                if (!this.phone) {
-                    this.$validator.validate()
-                        .then(res => {
-                            if (!res) {
-                                return
-                            }
-                            send()
-                        })
-                } else {
-                    send()
-                }
+                this.$validator.validate()
+                    .then(res => {
+                        if (!res) {
+                            return
+                        }
+                        send()
+                    })
             }
         },
         watch: {

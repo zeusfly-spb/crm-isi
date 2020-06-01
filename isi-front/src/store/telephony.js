@@ -19,7 +19,6 @@ export default {
                     phone: data.number,
                     text: data.text
                 })
-
                     .then(res => {
                         dispatch('pushMessage', {
                             text: `СМС отправлено на номер ${state.phoneFilter(data.number)}`
