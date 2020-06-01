@@ -25,4 +25,12 @@ class Customer extends Model
     {
         return $this->hasMany(Deal::class);
     }
+
+    public function getSentMessagesAttribute()
+    {
+        $numbersArray = $this->phones->pluck('number')->transform(function ($item) {
+            return '+7' . $item;
+        })->all();
+        return SmsReport::whereIn('number', $numbersArray)->get();
+    }
 }
