@@ -9,11 +9,6 @@
         <div class="mb-2"
              v-if="!todayPostpones"
         >
-            <div
-                class="left"
-            >
-                <sms-sender/>
-            </div>
             <v-text-field
                     class="right"
                     style="width: 23em"
