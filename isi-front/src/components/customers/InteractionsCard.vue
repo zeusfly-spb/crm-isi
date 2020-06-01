@@ -41,6 +41,9 @@
                     <deals-row
                         :deals="deals"
                     />
+                    <messages-row
+                        :messages="messages"
+                    />
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -54,6 +57,7 @@
     import CustomerRow from './CustomerRow'
     import DealsRow from './DealsRow'
     import InteractionsTitle from './InteractionsTitle'
+    import MessagesRow from "./MessagesRow"
 
     const clone = arr => JSON.parse(JSON.stringify(arr))
 
@@ -71,6 +75,9 @@
             }
         },
         computed: {
+            messages () {
+                return this.customer.sent_messages || []
+            },
             iconColor () {
                 return this.customer ? 'green' : 'yellow darken-3'
             },
@@ -137,7 +144,8 @@
             CallsRow,
             CustomerRow,
             DealsRow,
-            InteractionsTitle
+            InteractionsTitle,
+            MessagesRow
         }
     }
 </script>

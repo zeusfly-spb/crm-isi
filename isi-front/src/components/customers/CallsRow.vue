@@ -22,7 +22,6 @@
                 <td align="right">{{ props.item.timestamp | moment('DD MMMM YYYY г. HH:mm') }}</td>
             </template>
         </v-data-table>
-
     </div>
 </template>
 <script>

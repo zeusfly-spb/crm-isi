@@ -8,7 +8,8 @@ class Customer extends Model
 {
     protected $guarded = [];
     protected $appends = [
-        'full_name'
+        'full_name',
+        'sent_messages'
     ];
 
     public function phones()
