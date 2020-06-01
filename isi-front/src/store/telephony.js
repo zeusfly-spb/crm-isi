@@ -10,6 +10,17 @@ export default {
         }
     },
     actions: {
+        createSmsReport ({rootState}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_sms_report', {
+                    ... data,
+                    user_id: rootState.authUser.id,
+                    island_id: rootState.workingIslandId
+                })
+                    .then(res => resolve(res))
+                    .catch(e => reject(e))
+            })
+        },
         sendSMS ({dispatch, getters, state, rootState}, data) {
             return new Promise((resolve, reject) => {
             Vue.axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {
@@ -19,13 +30,17 @@ export default {
                     phone: data.number,
                     text: data.text
                 })
-                    .then(res => {
-                        dispatch('pushMessage', {
-                            text: `СМС отправлено на номер ${state.phoneFilter(data.number)}`
-                        })
-                        resolve(res)
+                .then(res => {
+                    dispatch('pushMessage', {
+                        text: `СМС отправлено на номер ${state.phoneFilter(data.number)}`
                     })
-                    .catch(e => reject(e))
+                    resolve(res)
+                })
+                .catch(e => reject(e))
+                .finally(() => dispatch('createSmsReport', {
+                    number: data.number,
+                    text: data.text
+                }))
             })
         }
     }

@@ -180,4 +180,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('add_subscribe_comment', 'SubscribeController@addComment');
     Route::post('delete_subscribe_comment', 'SubscribeController@deleteComment');
 
+    //SMS REPORTS
+    Route::post('create_sms_report', 'SmsReportController@create');
+
 });
