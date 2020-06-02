@@ -22,18 +22,6 @@ use Illuminate\Support\Facades\Cache;
 
 class LoaderController extends Controller
 {
-    public function getCatalogs()
-    {
-        $services = Cache::rememberForever('services', function () {
-            return Service::all();
-        });
-        $subscriptions = Subscription::with('service')->get();
-        return response()->json([
-            'services' => $services->toArray(),
-            'subscriptions' => $subscriptions->toArray()
-        ]);
-    }
-
     public function loadStockPage(Request $request)
     {
         $reserveBuilder = Reserve::with('product', 'type', 'size')->whereDate('created_at', $request->date);

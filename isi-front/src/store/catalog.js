@@ -2,12 +2,23 @@ import Vue from 'vue'
 
 export default {
     state: {
+        notifyTemplates: [],
         services: [],
         subscriptions: [],
         subscriptionToDelete: null,
         subscriptionToEdit: null
     },
     actions: {
+        createNotifyTemplate ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/create_notify_template', {... data})
+                    .then(res => {
+                        commit('ADD_NOTIFY_TEMPLATE', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateSubscription ({commit, dispatch}, subscription) {
             return new Promise ((resolve, reject) => {
                 Vue.axios.post('/api/update_subscription', {...subscription})
@@ -92,6 +103,9 @@ export default {
         }
     },
     mutations: {
+        ADD_NOTIFY_TEMPLATE (state, template) {
+            state.notifyTemplates.push(template)
+        },
         UPDATE_SUBSCRIPTION (state, subscription) {
             state.subscriptions = state.subscriptions.map(item => +item.id === +subscription.id ? subscription : item)
         },
@@ -125,6 +139,7 @@ export default {
         SET_CATALOGS (state, data) {
             state.services = data.services
             state.subscriptions = data.subscriptions
+            state.notifyTemplates = data.notify_templates
         }
     },
     getters: {

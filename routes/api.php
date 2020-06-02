@@ -157,13 +157,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_setting', 'SettingsController@updateSetting');
 
     //CATALOGS
-    Route::post('get_catalogs', 'LoaderController@getCatalogs');
+    Route::post('get_catalogs', 'CatalogController@getCatalogs');
     Route::post('create_service', 'CatalogController@createService');
     Route::post('update_service', 'CatalogController@updateService');
     Route::post('delete_service', 'CatalogController@deleteService');
     Route::post('create_subscription', 'CatalogController@createSubscription');
     Route::post('delete_subscription', 'CatalogController@deleteSubscription');
     Route::post('update_subscription', 'CatalogController@updateSubscription');
+    Route::post('create_notify_template', 'CatalogController@createNotifyTemplate');
+
 
     //APPOINTMENTS
     Route::post('get_appointments', 'AppointmentController@index');

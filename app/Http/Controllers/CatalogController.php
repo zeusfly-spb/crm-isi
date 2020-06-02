@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\NotifyTemplate;
 use App\Service;
 use App\Subscription;
 use Illuminate\Http\Request;
@@ -10,6 +11,26 @@ use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
+    public function createNotifyTemplate(Request $request)
+    {
+        $template = NotifyTemplate::create($request->all());
+        return response()->json($template->toArray());
+    }
+
+    public function getCatalogs()
+    {
+        $services = Cache::rememberForever('services', function () {
+            return Service::all();
+        });
+        $subscriptions = Subscription::with('service')->get();
+        $notifyTemplates = NotifyTemplate::all();
+        return response()->json([
+            'services' => $services->toArray(),
+            'subscriptions' => $subscriptions->toArray(),
+            'notify_templates' => $notifyTemplates->toArray()
+        ]);
+    }
+
     public function createService(Request $request)
     {
         $service = Service::create($request->all());

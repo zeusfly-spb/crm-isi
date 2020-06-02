@@ -17,7 +17,6 @@ class CreateNotifyTemplatesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('text');
-            $table->bigInteger('island_id')->unsigned()->index();
             $table->timestamps();
         });
     }
