@@ -74,6 +74,17 @@
             :items="templates"
             hide-actions
         >
+            <template v-slot:items="props">
+                <td>
+                    {{ props.index + 1 }}
+                </td>
+                <td>
+                    {{ props.item.name }}
+                </td>
+                <td>
+                    {{ $store.getters.truncate(props.item.text, 15) }}
+                </td>
+            </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет шаблонов</span>
             </template>
@@ -109,7 +120,8 @@
             },
             save () {
                 const save = () => {
-                    console.log('Saving template')
+                    this.$store.dispatch('createNotifyTemplate', this.editedTemplate)
+                        .then(() => this.hideDialog())
                 }
                 this.$validator.validate()
                     .then(res => {
