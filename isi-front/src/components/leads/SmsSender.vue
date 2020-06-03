@@ -85,7 +85,12 @@
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn color="darken-1" flat @click="dialog = false">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="sendSMS">Отправить</v-btn>
+                    <v-btn color="green darken-1" flat
+                           :disabled="process"
+                           @click="sendSMS"
+                    >
+                        Отправить
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -106,6 +111,7 @@
             }
         },
         data: () => ({
+            process: false,
             selectedTemplateId: null,
             useTemplate: false,
             dialog: false,
@@ -145,11 +151,13 @@
             },
             sendSMS () {
                 const send = () => {
+                    this.process = true
                     this.$store.dispatch('sendSMS', {
                         number: this.telNumber,
                         text: this.inputText
                     })
                         .then(() => this.hideDialog())
+                        .finally(() => this.process = false)
                 }
                 this.$validator.validate()
                     .then(res => {
@@ -193,6 +201,7 @@
                     this.$validator.resume()
                 })
                 val ? [this.inputNumber, this.inputText] = ['', ''] : null
+                !val ? this.useTemplate = false : null
             }
         }
     }
