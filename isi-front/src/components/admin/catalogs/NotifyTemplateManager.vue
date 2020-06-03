@@ -1,71 +1,112 @@
 <template>
-    <v-dialog
-            v-model="dialog"
-            max-width="1000px"
-            @update:returnValue="hideDialog"
-    >
-        <v-card
-                class="round-corner"
+    <v-flex>
+        <v-dialog
+                v-model="dialog"
+                max-width="1000px"
+                @update:returnValue="hideDialog"
         >
-            <v-card-title
-                    class="light-blue darken-3 title"
+            <v-card
+                    class="round-corner"
             >
-                <v-icon
-                        class="pl-1"
-                        color="white"
+                <v-card-title
+                        class="light-blue darken-3 title"
                 >
-                    notification_important
-                </v-icon>
-                <span
-                        class="white--text"
-                >
+                    <v-icon
+                            class="pl-1"
+                            color="white"
+                    >
+                        notification_important
+                    </v-icon>
+                    <span
+                            class="white--text"
+                    >
                         Новый шаблон оповещения
                     </span>
-                <v-spacer/>
-                <v-icon
-                        color="white"
-                        class="clickable"
-                        @click="hideDialog"
+                    <v-spacer/>
+                    <v-icon
+                            color="white"
+                            class="clickable"
+                            @click="hideDialog"
+                    >
+                        clear
+                    </v-icon>
+                </v-card-title>
+                <v-card-text>
+                    <div style="width: 24em">
+                        <v-text-field
+                                v-if="dialog"
+                                maxlength="30"
+                                autofocus
+                                v-model="editedTemplate.name"
+                                label="Название"
+                                data-vv-as="Название"
+                                data-vv-name="name"
+                                :error-messages="errors.collect('name')"
+                                v-validate="'required'"
+                        />
+                    </div>
+                    <div>
+                        <v-textarea
+                                flat
+                                outline
+                                class="pb-0 mb-0"
+                                v-model="editedTemplate.text"
+                                label="Текст"
+                                data-vv-as="Текст"
+                                data-vv-name="text"
+                                :error-messages="errors.collect('text')"
+                                :messages="textAreaMessages"
+                                v-validate="'required'"
+                        />
+                    </div>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="darken-1" flat @click="hideDialog">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="save">Сохранить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog
+                v-model="prompt"
+                max-width="600px"
+                @update:returnValue="hidePrompt"
+        >
+            <v-card
+                    class="round-corner"
+            >
+                <v-card-title
+                        class="red darken-3 title"
                 >
-                    clear
-                </v-icon>
-            </v-card-title>
-            <v-card-text>
-                <div style="width: 24em">
-                    <v-text-field
-                            v-if="dialog"
-                            maxlength="30"
-                            autofocus
-                            v-model="editedTemplate.name"
-                            label="Название"
-                            data-vv-as="Название"
-                            data-vv-name="name"
-                            :error-messages="errors.collect('name')"
-                            v-validate="'required'"
-                    />
-                </div>
-                <div>
-                    <v-textarea
-                            flat
-                            outline
-                            class="pb-0 mb-0"
-                            v-model="editedTemplate.text"
-                            label="Текст"
-                            data-vv-as="Текст"
-                            data-vv-name="text"
-                            :error-messages="errors.collect('text')"
-                            :messages="textAreaMessages"
-                            v-validate="'required'"
-                    />
-                </div>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer/>
-                <v-btn color="darken-1" flat @click="hideDialog">Отмена</v-btn>
-                <v-btn color="green darken-1" flat @click="save">Сохранить</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+                    <v-icon
+                        color="white"
+                        class="pr-1"
+                    >
+                        delete
+                    </v-icon>
+                    <span
+                            class="white--text"
+                    >
+                        Подтверждение удаления
+                    </span>
+                </v-card-title>
+                <v-card-text>
+                    <span
+                        class="title"
+                    >
+                        Удалить шаблон оповещений <strong>"{{ deletingTemplate && deletingTemplate.name || ''}}"</strong>?
+                    </span>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="hidePrompt">Отмена</v-btn>
+                    <v-btn color="red darken-1" flat @click="$store.dispatch('deleteNotifyTemplate')">Удалить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+    </v-flex>
+
 </template>
 
 <script>
@@ -74,6 +115,7 @@
         data: () => ({
             perSms: 70,
             dialog: false,
+            prompt: false,
             editedTemplate: null,
             blankTemplate: {
                 name: '',
@@ -81,6 +123,14 @@
             }
         }),
         computed: {
+            deletingTemplate: {
+                get () {
+                    return this.$store.state.catalog.deletingNotifyTemplate
+                },
+                set (val) {
+                    this.$store.commit('SET_DELETING_NOTIFY_TEMPLATE', val)
+                }
+            },
             editedNotifyTemplate: {
                 get () {
                     return this.$store.state.catalog.editedNotifyTemplate
@@ -105,6 +155,12 @@
             }
         },
         methods: {
+            hidePrompt () {
+                this.prompt = false
+            },
+            showPrompt () {
+                this.prompt = true
+            },
             prepareToEdit () {
                 this.editedTemplate = JSON.parse(JSON.stringify(this.editedNotifyTemplate))
                 this.showDialog()
@@ -141,6 +197,9 @@
             this.resetEditedTemplate()
         },
         watch: {
+            deletingTemplate (val) {
+                val ? this.showPrompt() : this.hidePrompt()
+            },
             dialog (val) {
                 this.$validator.pause()
                 this.$nextTick(() => {

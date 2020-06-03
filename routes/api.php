@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('update_subscription', 'CatalogController@updateSubscription');
     Route::post('create_notify_template', 'CatalogController@createNotifyTemplate');
     Route::post('update_notify_template', 'CatalogController@updateNotifyTemplate');
+    Route::post('delete_notify_template', 'CatalogController@deleteNotifyTemplate');
 
 
     //APPOINTMENTS

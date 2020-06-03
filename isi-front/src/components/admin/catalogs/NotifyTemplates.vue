@@ -3,6 +3,7 @@
         <v-btn
             flat
             color="primary"
+            title="Добавить шаблон текстовых оповещений"
             @click="$store.commit('SET_ATTEMPT_TO_ADD_NOTIFY_TEMPLATE', true)"
         >
             Добавить шаблон

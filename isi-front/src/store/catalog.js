@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        deletingNotifyTemplate: null,
         editedNotifyTemplate: null,
         attemptToAddNotifyTemplate: false,
         notifyTemplates: [],
@@ -11,21 +12,35 @@ export default {
         subscriptionToEdit: null
     },
     actions: {
-        updateNotifyTemplate ({commit}, data) {
+        deleteNotifyTemplate ({commit, dispatch, state}) {
             return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_notify_template', {... data})
+                let template = state.deletingNotifyTemplate
+                Vue.axios.post('/api/delete_notify_template', {id: template.id})
                     .then(res => {
-                        commit('UPDATE_NOTIFY_TEMPLATE', res.data)
+                        commit('DELETE_NOTIFY_TEMPLATE', template.id)
+                        dispatch('pushMessage', {text: `Удален шаблон оповещений "${template.name}"`})
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        createNotifyTemplate ({commit}, data) {
+        updateNotifyTemplate ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_notify_template', {... data})
+                    .then(res => {
+                        commit('UPDATE_NOTIFY_TEMPLATE', res.data)
+                        dispatch('pushMessage', {text: `Изменен шаблон оповещений "${res.data.name}"`})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        createNotifyTemplate ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_notify_template', {... data})
                     .then(res => {
                         commit('ADD_NOTIFY_TEMPLATE', res.data)
+                        dispatch('pushMessage', {text: `Добавлен шаблон оповещений "${res.data.name}"`})
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -115,6 +130,14 @@ export default {
         }
     },
     mutations: {
+        SET_DELETING_NOTIFY_TEMPLATE (state, template) {
+            state.deletingNotifyTemplate = template
+        },
+        DELETE_NOTIFY_TEMPLATE (state, id) {
+            state.notifyTemplates = state.notifyTemplates
+                .filter(item => +item.id !== +id)
+            state.deletingNotifyTemplate = null
+        },
         UPDATE_NOTIFY_TEMPLATE (state, template) {
             state.notifyTemplates = state.notifyTemplates.map(item => +item.id === +template.id ? template : item)
         },

@@ -16,6 +16,7 @@
             color="red"
             class="clickable"
             title="Удалить шаблон"
+            @click="$store.commit('SET_DELETING_NOTIFY_TEMPLATE', template)"
         >
             delete
         </v-icon>

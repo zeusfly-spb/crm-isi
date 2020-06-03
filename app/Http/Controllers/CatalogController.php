@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
+    public function deleteNotifyTemplate(Request $request)
+    {
+        $template = NotifyTemplate::find($request->id);
+        return response()->json(['result ' => $template->delete()]);
+    }
+
     public function updateNotifyTemplate(Request $request)
     {
         $template = NotifyTemplate::find($request->id);
