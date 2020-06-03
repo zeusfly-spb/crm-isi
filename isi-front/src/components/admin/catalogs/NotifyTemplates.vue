@@ -38,9 +38,10 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    <div style="width: 25em">
+                    <div style="width: 24em">
                         <v-text-field
                             v-if="dialog"
+                            maxlength="30"
                             autofocus
                             v-model="editedTemplate.name"
                             label="Название"
@@ -54,11 +55,13 @@
                         <v-textarea
                             flat
                             outline
+                            class="pb-0 mb-0"
                             v-model="editedTemplate.text"
                             label="Текст"
                             data-vv-as="Текст"
                             data-vv-name="text"
                             :error-messages="errors.collect('text')"
+                            :messages="textAreaMessages"
                             v-validate="'required'"
                         />
                     </div>
@@ -75,13 +78,19 @@
             hide-actions
         >
             <template v-slot:items="props">
-                <td>
+                <td
+                    class="index"
+                >
                     {{ props.index + 1 }}
                 </td>
-                <td>
+                <td
+                    class="name"
+                >
                     {{ props.item.name }}
                 </td>
-                <td>
+                <td
+                    class="text"
+                >
                     {{ $store.getters.truncate(props.item.text, 15) }}
                 </td>
             </template>
@@ -93,9 +102,11 @@
 </template>
 
 <script>
+
     export default {
         name: 'NotifyTemplates',
         data: () => ({
+            perSms: 70,
             dialog: false,
             editedTemplate: null,
             blankTemplate: {
@@ -104,6 +115,17 @@
             }
         }),
         computed: {
+            textAreaMessages () {
+                return `${this.charCount}/${this.smsCount}`
+            },
+            charCount () {
+                let entered = this.editedTemplate.text.length || 0
+                return entered <= this.perSms ? entered : entered % this.perSms
+            },
+            smsCount () {
+                let entered = this.editedTemplate.text.length || 0
+                return Math.ceil(entered / this.perSms)
+            },
             templates () {
                 return this.$store.state.catalog.notifyTemplates
             }
@@ -151,5 +173,17 @@
 </script>
 
 <style scoped>
+    .v-input {
+        text-align: right!important;
+    }
+    .index {
+        max-width: 3em;
+    }
+    .name {
+        max-width: 30em;
+    }
+    .text {
+
+    }
 
 </style>
