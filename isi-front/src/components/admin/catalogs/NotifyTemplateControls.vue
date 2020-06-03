@@ -7,6 +7,7 @@
             color="blue"
             class="clickable"
             title="Редактировать шаблон"
+            @click="$store.commit('SET_EDITED_NOTIFY_TEMPLATE', template)"
         >
             edit
         </v-icon>

@@ -11,6 +11,16 @@ export default {
         subscriptionToEdit: null
     },
     actions: {
+        updateNotifyTemplate ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_notify_template', {... data})
+                    .then(res => {
+                        commit('UPDATE_NOTIFY_TEMPLATE', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         createNotifyTemplate ({commit}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_notify_template', {... data})
@@ -105,6 +115,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_NOTIFY_TEMPLATE (state, template) {
+            state.notifyTemplates = state.notifyTemplates.map(item => +item.id === +template.id ? template : item)
+        },
         SET_EDITED_NOTIFY_TEMPLATE (state, val) {
             state.editedNotifyTemplate = val
         },

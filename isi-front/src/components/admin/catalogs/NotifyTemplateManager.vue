@@ -81,6 +81,14 @@
             }
         }),
         computed: {
+            editedNotifyTemplate: {
+                get () {
+                    return this.$store.state.catalog.editedNotifyTemplate
+                },
+                set (val) {
+                    this.$store.commit('SET_EDITED_NOTIFY_TEMPLATE', val)
+                }
+            },
             textAreaMessages () {
                 return this.charCount ? `${this.charCount}/${this.smsCount}` : ''
             },
@@ -97,18 +105,21 @@
             }
         },
         methods: {
+            prepareToEdit () {
+                this.editedTemplate = JSON.parse(JSON.stringify(this.editedNotifyTemplate))
+                this.showDialog()
+            },
             save () {
-                const save = () => {
-                    this.$store.dispatch('createNotifyTemplate', this.editedTemplate)
-                        .then(() => this.hideDialog())
-                }
+                const save = () => this.$store.dispatch('createNotifyTemplate', this.editedTemplate)
+                const update = () => this.$store.dispatch('updateNotifyTemplate', this.editedTemplate)
                 this.$validator.validate()
                     .then(res => {
                         if (!res) {
                             return
                         }
-                        save()
+                        this.editedNotifyTemplate ? update() : save()
                     })
+                    .finally(() => this.hideDialog())
             },
             prepareToAdd () {
                 this.resetEditedTemplate()
@@ -123,6 +134,7 @@
             hideDialog () {
                 this.dialog = false
                 this.attemptToAdd ? this.$store.commit('SET_ATTEMPT_TO_ADD_NOTIFY_TEMPLATE', false) : null
+                this.editedNotifyTemplate ? this.editedNotifyTemplate = null : null
             }
         },
         created () {
@@ -137,10 +149,13 @@
                     this.$validator.fields.items.forEach(field => this.errors.remove(field))
                     this.$validator.resume()
                 })
-                val ? this.resetEditedTemplate() : null
+                val && !this.editedNotifyTemplate ? this.resetEditedTemplate() : null
             },
             attemptToAdd (val) {
                 val ? this.prepareToAdd() : null
+            },
+            editedNotifyTemplate (val) {
+                val ? this.prepareToEdit() : null
             }
         }
     }

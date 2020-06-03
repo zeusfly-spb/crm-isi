@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
+    public function updateNotifyTemplate(Request $request)
+    {
+        $template = NotifyTemplate::find($request->id);
+        $template->update(Arr::except($request->all(), ['id']));
+        return response()->json($template->toArray());
+    }
+
     public function createNotifyTemplate(Request $request)
     {
         $template = NotifyTemplate::create($request->all());
