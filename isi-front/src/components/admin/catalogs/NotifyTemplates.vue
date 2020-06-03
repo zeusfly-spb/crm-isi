@@ -78,21 +78,23 @@
             hide-actions
         >
             <template v-slot:items="props">
-                <td
-                    class="index"
-                >
-                    {{ props.index + 1 }}
-                </td>
-                <td
-                    class="name"
-                >
-                    {{ props.item.name }}
-                </td>
-                <td
-                    class="text"
-                >
-                    {{ $store.getters.truncate(props.item.text, 15) }}
-                </td>
+                <tr>
+                    <td
+                            class="index"
+                    >
+                        {{ props.index + 1 }}
+                    </td>
+                    <td
+                            class="name"
+                    >
+                        {{ props.item.name }}
+                    </td>
+                    <td
+                            class="text"
+                    >
+                        {{ $store.getters.truncate(props.item.text, 30) }}
+                    </td>
+                </tr>
             </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет шаблонов</span>
@@ -116,7 +118,7 @@
         }),
         computed: {
             textAreaMessages () {
-                return `${this.charCount}/${this.smsCount}`
+                return this.charCount ? `${this.charCount}/${this.smsCount}` : ''
             },
             charCount () {
                 let entered = this.editedTemplate.text.length || 0
@@ -177,10 +179,10 @@
         text-align: right!important;
     }
     .index {
-        max-width: 3em;
+        width: 2em;
     }
     .name {
-        max-width: 30em;
+        width: 24em;
     }
     .text {
 
