@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        editedNotifyTemplate: null,
         attemptToAddNotifyTemplate: false,
         notifyTemplates: [],
         services: [],
@@ -104,6 +105,9 @@ export default {
         }
     },
     mutations: {
+        SET_EDITED_NOTIFY_TEMPLATE (state, val) {
+            state.editedNotifyTemplate = val
+        },
         SET_ATTEMPT_TO_ADD_NOTIFY_TEMPLATE (state, val) {
             state.attemptToAddNotifyTemplate = val
         },

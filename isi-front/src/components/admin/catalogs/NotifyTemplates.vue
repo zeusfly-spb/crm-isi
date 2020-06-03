@@ -24,10 +24,15 @@
                     >
                         {{ props.item.name }}
                     </td>
-                    <td
-                        class="text"
-                    >
+                    <td>
                         {{ $store.getters.truncate(props.item.text, 30) }}
+                    </td>
+                    <td
+                        align="right"
+                    >
+                        <notify-template-controls
+                            :template="props.item"
+                        />
                     </td>
                 </tr>
             </template>
@@ -41,6 +46,7 @@
 
 <script>
     import NotifyTemplateManager from './NotifyTemplateManager'
+    import NotifyTemplateControls from './NotifyTemplateControls'
     export default {
         name: 'NotifyTemplates',
         data: () => ({
@@ -48,6 +54,7 @@
                 {text: '#', sortable: false},
                 {text: 'Название', sortable: false},
                 {text: 'Текст', sortable: false},
+                {text: 'Действия', sortable: false, align: 'right'}
             ]
         }),
         computed: {
@@ -56,7 +63,8 @@
             }
         },
         components: {
-            NotifyTemplateManager
+            NotifyTemplateManager,
+            NotifyTemplateControls
         }
     }
 </script>
@@ -70,6 +78,8 @@
     }
     .text {
 
+    }
+    .actions {
     }
 
 </style>
