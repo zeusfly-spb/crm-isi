@@ -18,7 +18,14 @@
                         notification_important
                     </v-icon>
                     <span
-                            class="white--text"
+                        v-if="editedNotifyTemplate"
+                        class="white--text"
+                    >
+                        Редактировать шаблон оповещений "{{ editedNotifyTemplate && editedNotifyTemplate.name || '' }}"
+                    </span>
+                    <span
+                        v-else
+                        class="white--text"
                     >
                         Новый шаблон оповещения
                     </span>
@@ -157,6 +164,7 @@
         methods: {
             hidePrompt () {
                 this.prompt = false
+                this.deletingTemplate = null
             },
             showPrompt () {
                 this.prompt = true

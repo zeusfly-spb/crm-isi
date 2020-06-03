@@ -35,10 +35,28 @@
                     <span
                         class="white--text"
                     >
-                        Отправить СМС
+                        Отправить СМС <span v-if="lead">по заявке от клиента <strong>{{ $store.getters.truncate(lead.name, 12) }}</strong></span>
                     </span>
                 </v-card-title>
                 <v-card-text>
+                    <v-layout
+                        v-if="canUseTemplate"
+                    >
+                        <v-switch
+                            class="left"
+                            v-model="useTemplate"
+                            label="Из шаблона"
+                        />
+                        <v-select
+                            v-if="useTemplate"
+                            class="right"
+                            v-model="selectedTemplateId"
+                            item-text="name"
+                            item-value="id"
+                            single-line
+                            :items="templates"
+                        />
+                    </v-layout>
                     <v-text-field
                         autofocus
                         v-if="!phone && dialog"
@@ -59,6 +77,7 @@
                         label="Текст сообщения"
                         data-vv-as="Текст"
                         data-vv-name="text"
+                        :readonly="useTemplate"
                         :error-messages="errors.collect('text')"
                         v-validate="'required'"
                     />
@@ -80,14 +99,32 @@
             phone: {
                 type: String,
                 required: false
+            },
+            lead: {
+                type: Object,
+                required: false
             }
         },
         data: () => ({
+            selectedTemplateId: null,
+            useTemplate: false,
             dialog: false,
             inputNumber: '',
             inputText: ''
         }),
         computed: {
+            selectedTemplate () {
+                return this.templates.find(item => +item.id === +this.selectedTemplateId) || null
+            },
+            canUseTemplate () {
+                return this.leadHasEvent && this.templates.length
+            },
+            leadHasEvent () {
+                return this.lead && this.lead.event
+            },
+            templates () {
+                return this.$store.state.catalog.notifyTemplates
+            },
             telNumber () {
                 if (this.phone) {
                     return this.phone[0] === '+' && this.phone[1] === '7' ? this.phone : '+7' + this.phone
@@ -123,7 +160,30 @@
                     })
             }
         },
+        created () {
+            this.lead && !this.$store.state.catalog.notifyTemplates.length ? this.$store.dispatch('setCatalogs') : null
+        },
         watch: {
+            useTemplate (val) {
+                if (val) {
+                    if (!!this.selectedTemplate) {
+                        this.inputText = this.selectedTemplate.text
+                    }
+                    !this.selectedTemplateId ? this.selectedTemplateId = this.templates[0].id : null
+                } else {
+                    this.selectedTemplateId = null
+                }
+            },
+            selectedTemplate (val) {
+                if (!!val) {
+                    this.inputText = val.text
+                } else {
+                    this.inputText = ''
+                }
+            },
+            templates (val) {
+                val.length ? this.selectedTemplateId = val[0].id : null
+            },
             dialog (val) {
                 this.$validator.pause()
                 this.$nextTick(() => {

@@ -73,6 +73,7 @@
             />
             <sms-sender
                 :phone="props.item.phone"
+                :lead="props.item"
             />
         </td>
         <td
