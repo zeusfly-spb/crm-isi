@@ -9,7 +9,21 @@ export default {
         services: [],
         subscriptions: [],
         subscriptionToDelete: null,
-        subscriptionToEdit: null
+        subscriptionToEdit: null,
+        templateSubstitute: ({text, type, entity}) => {
+            let result = text
+            switch (type) {
+                case 'lead':
+                    let timeArr = entity.event.date.split(' ')[1].split(':')
+                    timeArr.pop()
+                    let time = timeArr.join(':')
+                    result = text.replace('||TIME||', time)
+                    break
+                default:
+                    break
+            }
+            return result
+        }
     },
     actions: {
         deleteNotifyTemplate ({commit, dispatch, state}) {
@@ -187,6 +201,7 @@ export default {
         }
     },
     getters: {
+        templateSubstitute: state => state.templateSubstitute,
         allServices: state => state.services
     }
 }

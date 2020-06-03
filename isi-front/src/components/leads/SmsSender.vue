@@ -175,7 +175,13 @@
             useTemplate (val) {
                 if (val) {
                     if (!!this.selectedTemplate) {
-                        this.inputText = this.selectedTemplate.text
+                        this.inputText = this.$store.getters
+                            .templateSubstitute({
+                                text: this.selectedTemplate.text,
+                                type: 'lead',
+                                entity: this.lead
+                            })
+                        // this.inputText = this.selectedTemplate.text
                     }
                     !this.selectedTemplateId ? this.selectedTemplateId = this.templates[0].id : null
                 } else {
@@ -184,7 +190,13 @@
             },
             selectedTemplate (val) {
                 if (!!val) {
-                    this.inputText = val.text
+                    this.inputText = this.$store.getters
+                        .templateSubstitute({
+                            text: val.text,
+                            type: 'lead',
+                            entity: this.lead
+                        })
+                    // this.inputText = val.text, 'lead', this.lead
                 } else {
                     this.inputText = ''
                 }
