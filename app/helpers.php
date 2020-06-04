@@ -2,6 +2,21 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
+use GuzzleHttp\Client;
+
+function sendSms (array $data) {
+    $client = new Client();
+    $res = $client->request('POST', 'https://crmkin.ru/tel/api/vpbx/sms/send', [
+        'form_params' => [
+            'base_type' => 'isi',
+            'user_id' => $data['user_id'],
+            'extension' => $data['extension'],
+            'phone' => $data['phone'],
+            'text' => $data['text']
+        ]
+    ]);
+    return $res->getStatusCode();
+}
 
 function clearPostponesCache () {
     Cache::forget('call_today_' . today()->toDateString());
