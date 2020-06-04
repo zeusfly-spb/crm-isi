@@ -57,7 +57,10 @@
                 :islandId="island.id"
                 @success="deliverSuccess"
             />
-
+            <island-notify-control
+                v-if="extended"
+                :island="island"
+            />
         </v-layout>
         <v-layout justify-center>
             <span
@@ -72,6 +75,7 @@
 </template>
 <script>
     import CabinetControl from './CabinetControl'
+    import IslandNotifyControl from './IslandNotifyControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -143,7 +147,8 @@
             this.$store.dispatch('setCatalogs')
         },
         components: {
-            CabinetControl
+            CabinetControl,
+            IslandNotifyControl
         }
     }
 </script>

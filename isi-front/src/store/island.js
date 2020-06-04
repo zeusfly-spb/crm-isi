@@ -2,6 +2,16 @@ import Vue from 'vue'
 
 export default {
     actions: {
+        setIslandOption ({commit}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/set_island_option', {... data})
+                    .then(res => {
+                        commit('UPDATE_ISLAND', res.data)
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         cabinetsReduced ({}, islandId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/island_cabinets_reduced', {

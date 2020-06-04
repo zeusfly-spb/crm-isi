@@ -249,4 +249,16 @@ class Island extends Model
         ];
         return $result;
     }
+
+    public function getEventReminderAttribute()
+    {
+        return $this->options['EventReminder'] ?? null;
+    }
+
+    public function setOption($key, $val)
+    {
+        $options = $this->options;
+        $options[$key] = $val;
+        return $this->update(['options' => $options]);
+    }
 }
