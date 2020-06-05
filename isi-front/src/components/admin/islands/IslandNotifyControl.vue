@@ -35,7 +35,7 @@
                 v-if="eventReminder"
                 v-model="eventReminderTemplateId"
                 :items="notifyTemplates"
-                style="max-width: 20em"
+                style="max-width: 15em"
                 item-text="name_short"
                 item-value="id"
                 class="p-0 m-0 reminder-select"
@@ -60,7 +60,7 @@
                 let base = JSON.parse(JSON.stringify(this.$store.state.catalog.notifyTemplates))
                 return base.map(item => ({
                     ... item,
-                    name_short: this.$store.getters.truncate(item.name, 20)
+                    name_short: this.$store.getters.truncate(item.name, 15)
                 }))
             },
             eventReminderOptions () {
