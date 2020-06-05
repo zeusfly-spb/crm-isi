@@ -20,6 +20,7 @@ import customer from './customer'
 import subscribes from './subscribes'
 import paginator from './paginator'
 import telephony from './telephony'
+import informer from './informer'
 
 Vue.use(Vuex)
 
@@ -39,7 +40,8 @@ export const store = new Vuex.Store({
         customer,
         subscribes,
         paginator,
-        telephony
+        telephony,
+        informer
     },
     state: {
         loading: 0,

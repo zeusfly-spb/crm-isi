@@ -254,8 +254,8 @@
                                 <v-select
                                     v-model="editedUser.group_id"
                                     :items="groups"
-                                    item-text="name"
-                                    item-value="id"
+                                    item-text="title"
+                                    item-value="value"
                                     single-line
                                     data-vv-name="group"
                                     data-vv-as="Группа"

@@ -33,6 +33,9 @@ export default {
         timerId: null
     }),
     computed: {
+        islands () {
+            return this.$store.state.islands
+        },
         appointments () {
             return this.$store.state.appointment.appointments
         },

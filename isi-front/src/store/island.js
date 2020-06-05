@@ -2,11 +2,12 @@ import Vue from 'vue'
 
 export default {
     actions: {
-        setIslandOption ({commit}, data) {
+        setIslandOption ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/set_island_option', {... data})
                     .then(res => {
                         commit('UPDATE_ISLAND', res.data)
+                        dispatch('pushMessage', {text: 'Настройки службы оповещений островка изменены'})
                         resolve(res)
                     })
                     .catch(e => reject(e))

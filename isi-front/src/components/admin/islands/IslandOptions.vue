@@ -59,7 +59,7 @@
             />
             <island-notify-control
                 v-if="extended"
-                :island="island"
+                :island_id="island.id"
             />
         </v-layout>
         <v-layout justify-center>
