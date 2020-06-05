@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Island;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\MakeNotifyList;
@@ -28,6 +29,12 @@ class Kernel extends ConsoleKernel
     {
 
 //        $schedule->job(new MakeNotifyList)->everyMinute();
+        $schedule->call(function () {
+            $islands = Island::all();
+            foreach ($islands as $island) {
+                $island->sendReminders();
+            }
+        })->everyMinute();
 
     }
 

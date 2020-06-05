@@ -293,4 +293,22 @@ class Island extends Model
         }
         return $this->eventsAfter($this->event_reminder);
     }
+
+    public function sendReminders()
+    {
+        $reminders = $this->remindNow();
+        if (!$reminders->count()) {
+            return;
+        }
+        $template = NotifyTemplate::find($this->event_reminder_template_id);
+        foreach ($reminders as $event) {
+            sendSms([
+                'extension' => 951,
+                'user_id' => 0,
+                'island_id' => $this->id,
+                'phone' => '+7' . $event->client_phone,
+                'text' => $template->text
+            ]);
+        }
+    }
 }
