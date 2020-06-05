@@ -266,4 +266,31 @@ class Island extends Model
         $options[$key] = $val;
         return $this->update(['options' => $options]);
     }
+
+    public function eventsAfter(int $minutes)
+    {
+        $target = now()->addMinutes($minutes);
+        $start = $target->setSecond(00)->toDateTimeString();
+        $finish = $target->setSecond(59)->toDateTimeString();
+        return $this->events->where('status_id', 1)->filter(function ($item) use ($start, $finish) {
+            return $item->date >= $start && $item->date <= $finish;
+        });
+    }
+
+    public function eventsToday()
+    {
+        $start = today()->setTime(00, 00)->toDateTimeString();
+        $finish = today()->setTime(23, 59)->toDateTimeString();
+        return $this->events->where('status_id', 1)->filter(function ($item) use ($start, $finish) {
+            return $item->date >= $start && $item->date <= $finish;
+        });
+    }
+
+    public function remindNow()
+    {
+        if (!$this->event_reminder || $this->event_reminder === 'morning') {
+            return [];
+        }
+        return $this->eventsAfter($this->event_reminder);
+    }
 }
