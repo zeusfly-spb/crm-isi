@@ -98,6 +98,7 @@
         name: 'TotalDataRow',
         props: ['dates'],
         computed: {
+
             busy () {
                 return this.$store.getters.busy
             },
