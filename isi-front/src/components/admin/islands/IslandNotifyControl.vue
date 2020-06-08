@@ -41,7 +41,15 @@
                 class="p-0 m-0 reminder-select"
                 single-line
             />
-
+        </v-layout>
+        <v-layout
+            class="option-layout p-0 m-0"
+        >
+            <div
+                class="left option-label"
+            >
+                Уведомление записи
+            </div>
         </v-layout>
     </v-flex>
 </template>
@@ -65,6 +73,34 @@
             },
             eventReminderOptions () {
                 return this.$store.state.informer.eventReminderOptions
+            },
+            eventNotifyList: {
+                get () {
+                    const value = () => this.island.options.EventNotifyList || []
+                    return this.island && this.island.options ? value() : []
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island_id,
+                        key: 'EventNotifyList',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
+            },
+            eventNotifyTemplateId: {
+                get () {
+                    const value = () => this.island.options.EventNotifyTemplateId || null
+                    return this.island && this.island.options ? value() : null
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island_id,
+                        key: 'EventNotifyTemplateId',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
             },
             eventReminder: {
                 get () {
