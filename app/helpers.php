@@ -1,17 +1,28 @@
 <?php
 
 use App\Appointment;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 use App\Jobs\CreateSmsReport;
 
-function substituteEventText (string $text, Appointment $event) {
+function rusDate (string $dateString)
+{
+    $dateArr = explode('-', explode(' ', $dateString)[0]);
+    $date = Carbon::create($dateString);
+    return "$dateArr[2] {$date->locale('ru')->shortMonthName}. $dateArr[0]г.";
+}
+
+function substituteEventText (string $text, Appointment $event)
+{
     $timeArr = explode(':', explode(' ', $event->date)[1]);
     array_pop($timeArr);
     $time = implode(':', $timeArr);
+    $date = explode(' ', $event->date)[0];
     $result = str_replace('||TIME||', $time, $text);
+    $result = str_replace('||DATE||', rusDate($date), $result);
     return $result;
 }
 
@@ -22,7 +33,8 @@ function substituteEventText (string $text, Appointment $event) {
  * @throws \GuzzleHttp\Exception\GuzzleException
  */
 
-function sendSms (array $data) {
+function sendSms (array $data)
+{
     $client = new Client();
     $res = $client->request('POST', 'https://crmkin.ru/tel/api/vpbx/sms/send', [
         'form_params' => [
@@ -45,7 +57,8 @@ function sendSms (array $data) {
     return $status;
 }
 
-function clearPostponesCache () {
+function clearPostponesCache ()
+{
     Cache::forget('call_today_' . today()->toDateString());
 }
 
