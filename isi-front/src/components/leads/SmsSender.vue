@@ -160,12 +160,7 @@
                         .finally(() => this.process = false)
                 }
                 this.$validator.validate()
-                    .then(res => {
-                        if (!res) {
-                            return
-                        }
-                        send()
-                    })
+                    .then(res => res ? send() : null)
             }
         },
         created () {

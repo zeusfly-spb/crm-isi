@@ -54,11 +54,12 @@
     import TotalDataRow from './TotalDataRow'
     import UserRow from './UserRow'
     import IslandSwitcher from '../IslandSwitcher'
+    import MonthSparkline from "./MonthSparkline";
 
     export default {
         name: 'SalaryPanel',
         data: () => ({
-            dragMode: false,
+            dragMode: false
         }),
         computed: {
             workingIslandId () {
@@ -151,7 +152,8 @@
         components: {
             UserRow,
             TotalDataRow,
-            IslandSwitcher
+            IslandSwitcher,
+            MonthSparkline
         }
     }
 </script>
