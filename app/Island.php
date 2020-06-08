@@ -10,7 +10,6 @@ use App\Stock\Type;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use phpDocumentor\Reflection\Types\Object_;
 
 class Island extends Model
 {
@@ -23,6 +22,7 @@ class Island extends Model
     ];
 
     protected $appends = ['services', 'cabinets'];
+    public $morningNotifyTime = '08:00';
 
     public function workDays()
     {
@@ -294,8 +294,33 @@ class Island extends Model
         return $this->eventsAfter($this->event_reminder);
     }
 
+    public function sendMorningReminders()
+    {
+        $now = now()->toTimeString();
+        if ($this->morningNotifyTime . ':00' <= $now && $now <= $this->morningNotifyTime . ':59') {
+            $template = NotifyTemplate::find($this->event_reminder_template_id);
+            $reminders = $this->eventsToday();
+            if (!$template || !$reminders->count()) {
+                return;
+            }
+            foreach ($reminders as $event) {
+                sendSms([
+                    'extension' => 951,
+                    'user_id' => 0,
+                    'island_id' => $this->id,
+                    'phone' => '+7' . $event->client_phone,
+                    'text' => substituteEventText($template->text, $event)
+                ]);
+            }
+        }
+    }
+
     public function sendReminders()
     {
+        if ($this->event_reminder == 'morning') {
+            $this->sendMorningReminders();
+            return;
+        }
         $reminders = $this->remindNow();
         if (!$reminders->count()) {
             return;
@@ -307,7 +332,7 @@ class Island extends Model
                 'user_id' => 0,
                 'island_id' => $this->id,
                 'phone' => '+7' . $event->client_phone,
-                'text' => $template->text
+                'text' => substituteEventText($template->text, $event)
             ]);
         }
     }

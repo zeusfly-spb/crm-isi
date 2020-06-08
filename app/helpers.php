@@ -1,9 +1,19 @@
 <?php
+
+use App\Appointment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Client;
 use App\Jobs\CreateSmsReport;
+
+function substituteEventText (string $text, Appointment $event) {
+    $timeArr = explode(':', explode(' ', $event->date)[1]);
+    array_pop($timeArr);
+    $time = implode(':', $timeArr);
+    $result = str_replace('||TIME||', $time, $text);
+    return $result;
+}
 
 /**
  * @param array $data
