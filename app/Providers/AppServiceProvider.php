@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Appointment;
 use App\DocumentPack;
 use App\Observers\UserObserver;
 use App\User;
@@ -26,6 +27,7 @@ use App\Postpone;
 use App\Observers\PostponeObserver;
 use App\LeadComment;
 use App\Observers\LeadCommentObserver;
+use App\Observers\AppointmentObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -59,5 +61,6 @@ class AppServiceProvider extends ServiceProvider
         Lead::observe(LeadObserver::class);
         Postpone::observe(PostponeObserver::class);
         LeadComment::observe(LeadCommentObserver::class);
+        Appointment::observe(AppointmentObserver::class);
     }
 }

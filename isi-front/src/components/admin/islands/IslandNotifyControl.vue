@@ -48,8 +48,17 @@
             <div
                 class="left option-label"
             >
-                Уведомление записи
+                Уведомление о назначении записи
             </div>
+            <v-select
+                v-model="createNotifyTemplateId"
+                :items="[...notifyTemplates, {name_short: 'Не уведомлять', id: null}]"
+                style="max-width: 15em"
+                item-text="name_short"
+                item-value="id"
+                class="p-0 m-0 reminder-select"
+                single-line
+            />
         </v-layout>
     </v-flex>
 </template>
@@ -74,29 +83,15 @@
             eventReminderOptions () {
                 return this.$store.state.informer.eventReminderOptions
             },
-            eventNotifyList: {
+            createNotifyTemplateId: {
                 get () {
-                    const value = () => this.island.options.EventNotifyList || []
-                    return this.island && this.island.options ? value() : []
-                },
-                set (val) {
-                    this.$store.dispatch('setIslandOption', {
-                        island_id: this.island_id,
-                        key: 'EventNotifyList',
-                        value: val
-                    })
-                        .finally(() => this.setIsland())
-                }
-            },
-            eventNotifyTemplateId: {
-                get () {
-                    const value = () => this.island.options.EventNotifyTemplateId || null
+                    const value = () => this.island.options.CreateNotifyTemplateId || null
                     return this.island && this.island.options ? value() : null
                 },
                 set (val) {
                     this.$store.dispatch('setIslandOption', {
-                        island_id: this.island_id,
-                        key: 'EventNotifyTemplateId',
+                        island_id: this.island.id,
+                        key: 'CreateNotifyTemplateId',
                         value: val
                     })
                         .finally(() => this.setIsland())

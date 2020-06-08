@@ -336,4 +336,9 @@ class Island extends Model
             ]);
         }
     }
+
+    public function getCreateNotifyTemplateIdAttribute()
+    {
+        return $this->options['CreateNotifyTemplateId'] ?? null;
+    }
 }
