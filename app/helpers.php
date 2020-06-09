@@ -12,14 +12,14 @@ function rusDate (string $dateString)
 {
     $dateArr = explode('-', explode(' ', $dateString)[0]);
     $date = Carbon::create($dateString);
-    return "$dateArr[2] {$date->locale('ru')->shortMonthName}. $dateArr[0]г.";
+    $day = (int) $dateArr[2];
+    return "$day {$date->locale('ru')->shortMonthName}. $dateArr[0]г.";
 }
 
 function substituteEventText (string $text, Appointment $event)
 {
     $timeArr = explode(':', explode(' ', $event->date)[1]);
-    array_pop($timeArr);
-    $time = implode(':', $timeArr);
+    $time = "{$timeArr[0]}:{$timeArr[1]}";
     $date = explode(' ', $event->date)[0];
     $result = str_replace('||TIME||', $time, $text);
     $result = str_replace('||DATE||', rusDate($date), $result);
