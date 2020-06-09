@@ -298,7 +298,7 @@ class Island extends Model
     {
         $now = now()->toTimeString();
         if ($this->morningNotifyTime . ':00' <= $now && $now <= $this->morningNotifyTime . ':59') {
-            $template = NotifyTemplate::find($this->event_reminder_template_id);
+            $template = NotifyTemplate::find($this->day_start_notify_template_id);
             $reminders = $this->eventsToday();
             if (!$template || !$reminders->count()) {
                 return;
@@ -317,7 +317,7 @@ class Island extends Model
 
     public function sendReminders()
     {
-        if ($this->event_reminder == 'morning') {
+        if ($this->day_start_notify_template_id) {
             $this->sendMorningReminders();
             return;
         }
@@ -340,5 +340,10 @@ class Island extends Model
     public function getCreateNotifyTemplateIdAttribute()
     {
         return $this->options['CreateNotifyTemplateId'] ?? null;
+    }
+
+    public function getDayStartNotifyTemplateId()
+    {
+        return $this->options['DayStartNotifyTemplateId'] ?? null;
     }
 }

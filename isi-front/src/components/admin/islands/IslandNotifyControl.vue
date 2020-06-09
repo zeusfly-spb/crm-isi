@@ -13,7 +13,43 @@
             <div
                 class="left option-label"
             >
-                Напоминание о записи
+                Напоминание в начале дня
+            </div>
+            <v-select
+                    v-model="dayStartNotifyTemplateId"
+                    :items="[...notifyTemplates, {name_short: 'Нет', id: null}]"
+                    style="max-width: 15em"
+                    item-text="name_short"
+                    item-value="id"
+                    class="p-0 m-0 reminder-select"
+                    single-line
+            >
+                <template v-slot:item="{item}">
+                    <span
+                        :class="{'red--text': item.id === null}"
+                    >
+                        {{ item.name_short}}
+                    </span>
+                </template>
+                <template v-slot:selection="{item}">
+                    <span
+                        :class="{
+                            'purple--text accent-4': !!item.id,
+                            'grey--text': !item.id
+                        }"
+                    >
+                        <strong>{{ item.name_short }}</strong>
+                    </span>
+                </template>
+            </v-select>
+        </v-layout>
+        <v-layout
+            class="option-layout p-0 m-0"
+        >
+            <div
+                class="left option-label"
+            >
+                Предварительное напоминание
             </div>
             <v-select
                 v-model="eventReminder"
@@ -24,7 +60,25 @@
                 item-value="value"
                 class="p-0 m-0 reminder-select"
                 single-line
-            />
+            >
+                <template v-slot:item="{item}">
+                    <span
+                            :class="{'red--text': item.value === null}"
+                    >
+                        {{ item.title }}
+                    </span>
+                </template>
+                <template v-slot:selection="{item}">
+                    <span
+                            :class="{
+                            'green--text': !!item.value,
+                            'grey--text': !item.value
+                        }"
+                    >
+                        <strong>{{ item.title }}</strong>
+                    </span>
+                </template>
+            </v-select>
             <span
                 v-if="eventReminder"
                 class="pl-1"
@@ -40,7 +94,25 @@
                 item-value="id"
                 class="p-0 m-0 reminder-select"
                 single-line
-            />
+            >
+                <template v-slot:item="{item}">
+                    <span
+                            :class="{'red--text': item.id === null}"
+                    >
+                        {{ item.name_short}}
+                    </span>
+                </template>
+                <template v-slot:selection="{item}">
+                    <span
+                            :class="{
+                                'purple--text accent-4': !!item.id,
+                                'grey--text': !item.id
+                            }"
+                    >
+                        <strong>{{ item.name_short }}</strong>
+                    </span>
+                </template>
+            </v-select>
         </v-layout>
         <v-layout
             class="option-layout p-0 m-0"
@@ -52,13 +124,31 @@
             </div>
             <v-select
                 v-model="createNotifyTemplateId"
-                :items="[...notifyTemplates, {name_short: 'Не уведомлять', id: null}]"
+                :items="[...notifyTemplates, {name_short: 'Нет', id: null}]"
                 style="max-width: 15em"
                 item-text="name_short"
                 item-value="id"
                 class="p-0 m-0 reminder-select"
                 single-line
-            />
+            >
+                <template v-slot:item="{item}">
+                    <span
+                            :class="{'red--text': item.id === null}"
+                    >
+                        {{ item.name_short}}
+                    </span>
+                </template>
+                <template v-slot:selection="{item}">
+                    <span
+                            :class="{
+                            'purple--text accent-4': !!item.id,
+                            'grey--text': !item.id
+                        }"
+                    >
+                        <strong>{{ item.name_short }}</strong>
+                    </span>
+                </template>
+            </v-select>
         </v-layout>
     </v-flex>
 </template>
@@ -82,6 +172,20 @@
             },
             eventReminderOptions () {
                 return this.$store.state.informer.eventReminderOptions
+            },
+            dayStartNotifyTemplateId: {
+                get () {
+                    const value = () => this.island.options.DayStartNotifyTemplateId || null
+                    return this.island && this.island.options ? value() : null
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'DayStartNotifyTemplateId',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
             },
             createNotifyTemplateId: {
                 get () {

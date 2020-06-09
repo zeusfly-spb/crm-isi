@@ -18,11 +18,13 @@ function rusDate (string $dateString)
 
 function substituteEventText (string $text, Appointment $event)
 {
+    $service = $event->service->description ? '"' . $event->service->description . '"' : '';
     $timeArr = explode(':', explode(' ', $event->date)[1]);
     $time = "{$timeArr[0]}:{$timeArr[1]}";
     $date = explode(' ', $event->date)[0];
     $result = str_replace('||TIME||', $time, $text);
     $result = str_replace('||DATE||', rusDate($date), $result);
+    $result = str_replace('||SERVICE||', $service, $result);
     return $result;
 }
 
