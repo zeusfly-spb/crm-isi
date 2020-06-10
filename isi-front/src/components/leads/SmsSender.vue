@@ -184,7 +184,7 @@
                 }
             },
             selectedTemplate (val) {
-                if (!!val) {
+                if (!!val && this.lead) {
                     this.inputText = this.$store.getters
                         .templateSubstitute({
                             text: val.text,

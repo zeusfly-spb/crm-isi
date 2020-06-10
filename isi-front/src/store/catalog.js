@@ -11,6 +11,9 @@ export default {
         subscriptionToDelete: null,
         subscriptionToEdit: null,
         templateSubstitute: ({text, type, entity}) => {
+            if (!entity.event) {
+                return text
+            }
             let result = text
             switch (type) {
                 case 'lead':

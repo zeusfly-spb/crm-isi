@@ -19,6 +19,9 @@ function rusDate (string $dateString)
 
 function substituteEventText (string $text, Appointment $event)
 {
+    if (!$event) {
+        return $text;
+    }
     $timeArr = explode(':', explode(' ', $event->date)[1]);
     $time = "{$timeArr[0]}:{$timeArr[1]}";
     $date = explode(' ', $event->date)[0];

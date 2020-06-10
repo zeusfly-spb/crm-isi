@@ -76,7 +76,7 @@
         },
         computed: {
             messages () {
-                return this.customer.sent_messages || []
+                return this.customer && this.customer.sent_messages || []
             },
             iconColor () {
                 return this.customer ? 'green' : 'yellow darken-3'
