@@ -12,9 +12,10 @@ use App\Jobs\CreateSmsReport;
 function rusDate (string $dateString)
 {
     $dateArr = explode('-', explode(' ', $dateString)[0]);
-    $date = Carbon::create($dateString);
-    $day = (int) $dateArr[2];
-    return "$day {$date->locale('ru')->shortMonthName}. $dateArr[0]г.";
+    return $dateArr[2] . '.' . $dateArr[1];
+   // $date = Carbon::create($dateString);
+   // $day = (int) $dateArr[2];
+   // return "$day {$date->locale('ru')->shortMonthName}. $dateArr[0]г.";
 }
 
 function substituteEventText (string $text, Appointment $event)
