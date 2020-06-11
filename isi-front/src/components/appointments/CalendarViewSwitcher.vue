@@ -31,6 +31,7 @@
         props: ['value'],
         data: () => ({
             modes: [
+                {name: 'notifications', description: 'Оповещения'},
                 {name: 'subscriptions', description: 'Абонементы'},
                 {name: 'archive', description: 'Архив'},
                 {name: 'calendar', description: 'Календарь'},

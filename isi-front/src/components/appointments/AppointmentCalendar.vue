@@ -212,6 +212,9 @@
                     <subscribes-table
                         v-if="viewMode === 'subscriptions'"
                     />
+                    <notification-table
+                        v-if="viewMode === 'notifications'"
+                    />
                 </v-sheet>
             </v-flex>
         </v-layout>
@@ -269,6 +272,8 @@
     import EventEditor from './EventEditor'
     import CalendarViewSwitcher from './CalendarViewSwitcher'
     import SubscribesTable from '../subscribes/SubscribesTable'
+    import NotificationTable from './NotificationTable'
+
     export default {
         name: 'AppointmentCalendar',
         data: () => ({
@@ -395,9 +400,19 @@
         },
         watch: {
             viewMode (val, oldVal) {
-                if (oldVal === 'calendar') {
+                if (oldVal === 'calendar' ) {
                     this.backupMode = this.mode
-                    this.mode = 'month'
+                }
+                switch (val) {
+                    case 'notifications':
+                        this.mode = 'day'
+                        break
+                    case 'subscriptions':
+                        this.mode = 'month'
+                        break
+                    case 'archive':
+                        this.mode = 'month'
+                        break
                 }
                 if (val === 'calendar' && !!oldVal) {
                     this.mode = this.backupMode
@@ -425,7 +440,8 @@
             EventsArchive,
             EventEditor,
             CalendarViewSwitcher,
-            SubscribesTable
+            SubscribesTable,
+            NotificationTable
         }
     }
 </script>

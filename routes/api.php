@@ -187,5 +187,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     //SMS REPORTS
     Route::post('create_sms_report', 'SmsReportController@create');
+    Route::post('get_sms_reports', 'SmsReportController@index');
+
 
 });
