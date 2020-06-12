@@ -10,8 +10,12 @@
                 <td
                     align="left"
                 >
+                    <user-avatar
+                        v-if="props.item.user"
+                        :user="props.item.user"
+                    />
                     <v-avatar
-                        v-if="!props.item.user"
+                        v-else
                         size="36px"
                         title="Системное сообщение"
                     >
@@ -19,9 +23,6 @@
                             :src="`${basePath}/img/logo.png`"
                         />
                     </v-avatar>
-                    <user-avatar
-                        :user="props.item.user"
-                    />
                 </td>
                 <td>
                     {{ props.item.text }}
