@@ -1,66 +1,74 @@
 <template>
     <v-layout column>
-        <v-layout justify-center>
-            <v-flex
-                    v-if="extended"
-            >
+        <v-layout
+            justify-center
+            :column="extended"
+        >
+            <v-layout>
+                <v-flex
+                        v-if="extended"
+                >
                 <span class="text-center body-2">
                     Показывать на странице Зарплата
                 </span>
-                <v-radio-group
-                    column
-                    v-model="salaryDisplay"
+                    <v-radio-group
+                            column
+                            v-model="salaryDisplay"
+                    >
+                        <v-radio
+                                v-for="(item, index) in salaryDisplayOptions"
+                                :key="index"
+                                :label="item.description"
+                                :value="item.value"
+                        />
+                    </v-radio-group>
+                    <div
+                            class="teal lighten-5"
+                            v-if="salaryDisplay === 'selected'"
+                    >
+                        <v-checkbox
+                                v-for="user in users"
+                                :key="user.id"
+                                :label="user.full_name"
+                                v-model="user.accepted"
+                                @change="submitUsersList"
+                        />
+                    </div>
+                </v-flex>
+                <v-flex
+                        v-if="extended"
                 >
-                    <v-radio
-                        v-for="(item, index) in salaryDisplayOptions"
-                        :key="index"
-                        :label="item.description"
-                        :value="item.value"
-                    />
-                </v-radio-group>
-                <div
-                    class="teal lighten-5"
-                    v-if="salaryDisplay === 'selected'"
-                >
-                    <v-checkbox
-                        v-for="user in users"
-                        :key="user.id"
-                        :label="user.full_name"
-                        v-model="user.accepted"
-                        @change="submitUsersList"
-                    />
-                </div>
-
-            </v-flex>
-            <v-flex
-                v-if="extended"
-            >
                 <span
-                    class="text-center body-2"
+                        class="text-center body-2"
                 >
                     Сервисы
                 </span>
-                <div>
-                    <v-checkbox
-                        height=".5em"
-                        v-for="service in servicesCatalog"
-                        :key="service.id"
-                        :label="service.description"
-                        v-model="service.accepted"
-                        hide-details
-                        @change="submitServiceList"
-                    />
-                </div>
-            </v-flex>
-            <cabinet-control
+                    <div>
+                        <v-checkbox
+                                height=".5em"
+                                v-for="service in servicesCatalog"
+                                :key="service.id"
+                                :label="service.description"
+                                v-model="service.accepted"
+                                hide-details
+                                @change="submitServiceList"
+                        />
+                    </div>
+                </v-flex>
+                <cabinet-control
+                        v-if="extended"
+                        :islandId="island.id"
+                        @success="deliverSuccess"
+                />
+            </v-layout>
+
+            <v-layout
                 v-if="extended"
-                :islandId="island.id"
-                @success="deliverSuccess"
-            />
-            <island-notify-control
-                v-if="extended"
-                :island_id="island.id"
-            />
+            >
+                <island-notify-control
+                        :island_id="island.id"
+                />
+            </v-layout>
         </v-layout>
         <v-layout justify-center>
             <span

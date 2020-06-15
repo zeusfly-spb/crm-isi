@@ -1,20 +1,21 @@
 <template>
-    <v-flex
-        class="p-0 m-0"
+    <v-sheet
+        class="p-0 m-0 mb-1 round-corner"
+        elevation="2"
     >
          <span
-             class="text-center body-2"
+             class="pl-2 text-center body-2"
          >
             Оповещения
         </span>
         <v-layout
             class="option-layout p-0 m-0"
         >
-            <div
-                class="left option-label"
+            <span
+                class="pl-2 left option-label"
             >
                 Напоминание в начале дня
-            </div>
+            </span>
             <v-select
                     v-model="dayStartNotifyTemplateId"
                     :items="[...notifyTemplates, {name_short: 'Нет', id: null}]"
@@ -28,7 +29,7 @@
                     <span
                         :class="{'red--text': item.id === null}"
                     >
-                        {{ item.name_short}}
+                        {{ item.name_short }}
                     </span>
                 </template>
                 <template v-slot:selection="{item}">
@@ -44,10 +45,10 @@
             </v-select>
         </v-layout>
         <v-layout
-            class="option-layout p-0 m-0"
+            class="option-layout pr-2 m-0"
         >
             <div
-                class="left option-label"
+                class="pl-2 left option-label"
             >
                 Предварительное напоминание
             </div>
@@ -118,7 +119,7 @@
             class="option-layout p-0 m-0"
         >
             <div
-                class="left option-label"
+                class="pl-2 left option-label"
             >
                 Уведомление о назначении записи
             </div>
@@ -150,7 +151,7 @@
                 </template>
             </v-select>
         </v-layout>
-    </v-flex>
+    </v-sheet>
 </template>
 
 <script>
