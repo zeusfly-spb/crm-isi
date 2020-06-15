@@ -1,11 +1,11 @@
 <template>
     <v-flex>
         <v-snackbar
-                v-model="snackbar"
-                auto-height
-                top
-                :timeout="3000"
-                :color="snackColor"
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="3000"
+            :color="snackColor"
         >
             <span>{{ snackText }}</span>
         </v-snackbar>

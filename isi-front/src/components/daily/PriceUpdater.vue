@@ -63,6 +63,9 @@
             this.getBaseValue()
         },
         watch: {
+            deal () {
+                this.getBaseValue()
+            },
             editMode (val) {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, deals: !val})
                 if (!val) {
