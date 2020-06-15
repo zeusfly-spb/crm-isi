@@ -40,16 +40,16 @@
                     @dragleave="dragEnter"
                 >
                     <v-icon
-                        color="blue"
+                        :color="firstEventIcon.color"
                         ref="firstIcon"
                     >
-                        event
+                        {{ firstEventIcon.icon }}
                     </v-icon>
                     <span
                         class="green--text"
                     >
                     {{ displayTime(firstEvent.date.split(' ')[1]) }}
-                </span>
+                    </span>
                     <span
                         class="blue--text ml-1"
                     >
@@ -145,9 +145,26 @@
             canDrop: false,
             firstDragging: false,
             firstDisplayed: false,
-            listDisplayed: false
+            listDisplayed: false,
+            statsRaw: [
+                {status: 'active', color: 'blue', icon: 'event', title: 'Сменить статус на "Активно"'},
+                {status: 'completed', color: 'green', icon: 'event_available', title: 'Сменить статус на "Выполнено"'},
+                {status: 'cancelled', color: 'red', icon: 'event_busy', title: 'Сменить статус на "Отказ"'},
+                {status: 'moderate', color: 'amber darken-3', icon: 'assignment_late', title: 'Сменить статус на "Модерация"'},
+                {status: 'postponed', color: 'orange accent-4', icon: 'timelapse', title: 'Сменить статус на "Отложена"'}
+            ]
         }),
         computed: {
+            firstEventIcon () {
+                if (!this.firstEvent) {
+                    return null
+                }
+                let target = this.statsRaw.find(item => item.status === this.firstEvent.status)
+                return {
+                    icon: target.icon,
+                    color: target.color
+                }
+            },
             moveReady () {
                 return this.$store.getters.moveReady
             },

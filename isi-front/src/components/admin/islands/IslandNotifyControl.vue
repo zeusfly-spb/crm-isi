@@ -9,10 +9,10 @@
             Оповещения
         </span>
         <v-layout
-            class="option-layout p-0 m-0"
+            class="pl-2 pr-2 option-layout p-0 m-0"
         >
             <span
-                class="pl-2 left option-label"
+                class="left option-label"
             >
                 Напоминание в начале дня
             </span>
@@ -45,10 +45,10 @@
             </v-select>
         </v-layout>
         <v-layout
-            class="option-layout pr-2 m-0"
+            class="option-layout pr-2 pl-2 m-0"
         >
             <div
-                class="pl-2 left option-label"
+                class="left option-label"
             >
                 Предварительное напоминание
             </div>
