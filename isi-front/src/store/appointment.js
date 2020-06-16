@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
-        openCabinetWidth: 1000,
+        openCabinetWidth: 1400,
         openCabinetId: null,
         archiveCommentsLoading: false,
         archiveCommentsOpenId: null,
@@ -218,6 +218,7 @@ export default {
         },
         UNSET_DISPLAYED_EVENT (state) {
             state.displayedEvent = null
+            state.openCabinetId = null
         },
         SET_DISPLAYED_EVENT (state, event) {
             state.displayedEvent = event

@@ -4,12 +4,12 @@
         ref="mainTr"
     >
     <div
-        v-for="(name, index) in names"
-        :style="{'width': `${columnWidth}px`}"
+        v-for="(cabinet, index) in cabinets"
+        :style="{'width': `${cabinetWidth(cabinet)}px`}"
         class="cabinets-header"
         :key="index"
     >
-        <strong>{{ name }}</strong>
+        <strong>{{ cabinet.name }}</strong>
     </div>
 
     </v-flex>
@@ -22,12 +22,16 @@
             fullWidth: null
         }),
         computed: {
-
             columnWidth () {
                 return this.fullWidth && this.fullWidth / this.cabinets.length || null
             },
             names () {
                 return this.cabinets.map(item => item.name)
+            }
+        },
+        methods: {
+            cabinetWidth (cabinet) {
+                return cabinet.id === this.$store.state.appointment.openCabinetId ? this.$store.state.appointment.openCabinetWidth : this.columnWidth
             }
         },
         mounted () {
