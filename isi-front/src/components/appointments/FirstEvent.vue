@@ -91,6 +91,10 @@
             compact: {
                 type: Boolean,
                 default: false
+            },
+            withinCabinet: {
+                type: Boolean,
+                default: false
             }
         },
         data: () => ({
@@ -141,7 +145,7 @@
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
             show () {
-                if (this.compact) {
+                if (this.compact && !this.withinCabinet) {
                     return
                 }
                 this.$store.commit('SET_DISPLAYED_EVENT', this.event)

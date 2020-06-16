@@ -52,7 +52,12 @@
                 return this.cabinets.map(item => item.name)
             },
             appointments () {
+                const extend = (base) => {
+                    base.draggable = base.status !== 'completed'
+                    return base
+                }
                 return this.$store.state.appointment.appointments
+                    .map(item => extend(item))
             },
             periodAppointments () {
                 let base =  this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []

@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        openCabinetWidth: 1000,
+        openCabinetId: null,
         archiveCommentsLoading: false,
         archiveCommentsOpenId: null,
         displayedEvent: null,
@@ -205,6 +207,9 @@ export default {
         }
     },
     mutations: {
+        SET_OPEN_CABINET_ID (state, id) {
+            state.openCabinetId = id
+        },
         SET_ARCHIVE_COMMENTS_LOADING (state, val) {
             state.archiveCommentsLoading = val
         },
@@ -216,6 +221,7 @@ export default {
         },
         SET_DISPLAYED_EVENT (state, event) {
             state.displayedEvent = event
+            state.openCabinetId = event.cabinet_id
         },
         SET_EDITED_EVENT (state, event) {
             state.editedEvent = event
