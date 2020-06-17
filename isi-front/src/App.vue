@@ -33,6 +33,9 @@ export default {
         timerId: null
     }),
     computed: {
+        activeCabinetId () {
+            return this.$store.state.appointment.activeCabinetId
+        },
         islands () {
             return this.$store.state.islands
         },

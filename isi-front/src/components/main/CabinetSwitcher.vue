@@ -1,26 +1,49 @@
 <template>
     <div
-        class="cabinet-switcher text-md-center"
+        class="cabinet-switcher flex-center"
     >
-        <v-btn
-            v-for="(cabinet, index) in cabinets"
-            :key="index"
+        <v-radio-group
+            row
+            v-model="activeCabinetId"
         >
-            {{ cabinet.name }}
-        </v-btn>
+            <v-radio
+                v-for="(cabinet, index) in cabinets"
+                :key="index"
+                :label="cabinet.name"
+                :value="cabinet.id"
+            >
+
+            </v-radio>
+        </v-radio-group>
     </div>
 </template>
 
 <script>
     export default {
         name: 'CabinetSwitcher',
+        data: () => ({
+            val: null
+        }),
         computed: {
+            activeCabinetId: {
+                get () {
+                    return this.$store.state.appointment.activeCabinetId
+                },
+                set (val) {
+                    this.$store.commit('SET_ACTIVE_CABINET_ID', val)
+                }
+            },
             cabinets () {
                 return this.workingIsland && this.workingIsland.cabinets
             },
             workingIsland () {
                 return this.$store.getters.workingIsland
             },
+        },
+        methods: {
+            switchTo (cabinet) {
+                this.$store.commit('SET_ACTIVE_CABINET_ID', cabinet.id)
+            }
         }
     }
 </script>
@@ -29,5 +52,14 @@
     .cabinet-switcher {
         width: 100%;
         height: 100%;
+    }
+    .active-cabinet {
+        font-weight: bold;
+        color: #03a9f4;
+    }
+    .flex-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

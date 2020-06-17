@@ -66,8 +66,12 @@ export default {
         }
     },
     actions: {
-        setTabMode ({commit}, val) {
+        setTabMode ({commit, getters}, val) {
             commit('SET_TAB_MODE', val)
+            let hasCabinets = getters.workingIsland && getters.workingIsland.cabinets && getters.workingIsland.cabinets.length || false
+            if (val && hasCabinets) {
+                commit('SET_ACTIVE_CABINET_ID', getters.workingIsland.cabinets[0].id)
+            }
         },
         deleteEventComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
