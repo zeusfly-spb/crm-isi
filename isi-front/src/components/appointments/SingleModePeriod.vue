@@ -31,7 +31,14 @@
     import FirstEvent from './FirstEvent'
     export default {
         name: 'SingleModePeriod',
-        props: ['date', 'hour'],
+        props: {
+            date: String,
+            hour: Number,
+            cabinetId: {
+                type: String,
+                default: null
+            }
+        },
         data: () => ({
             draggingOver: false,
             addMode: false,
@@ -79,6 +86,9 @@
                 }
                 let base = this.appointments && this.appointments
                     .filter(item => compareHour(item)) || []
+                if (this.cabinetId) {
+                    base = base.filter(item => item.cabinet_id === this.cabinetId)
+                }
                 return base
                     .sort(this.$store.state.appointment.sortByDateTime)
                     .map(item => extend(item))
@@ -110,7 +120,7 @@
                 this.draggingOver = true
                 this.$store.commit('SET_DRAG_TARGET', {
                     cabinet: null,
-                    cabinet_id: null,
+                    cabinet_id: this.cabinetId,
                     date: this.date,
                     hour: this.hour
                 })

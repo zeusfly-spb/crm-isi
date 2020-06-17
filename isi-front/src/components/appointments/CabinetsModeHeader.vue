@@ -36,9 +36,6 @@
             activeCabinetName () {
                 return this.cabinets.find(item => item.id === this.$store.state.appointment.activeCabinetId).name || ''
             },
-            cabinets () {
-                return this.workingIsland && this.workingIsland.cabinets
-            },
             workingIsland () {
                 return this.$store.getters.workingIsland
             },
