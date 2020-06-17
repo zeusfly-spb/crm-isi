@@ -230,15 +230,7 @@
                     />
                 </v-sheet>
             </v-flex>
-            <v-bottom-nav
-                    shift
-                    v-if="tabMode && mode==='day'"
-                    :value="tabMode"
-                    absolute
-                    color="blue lighten-5"
-            >
-                <cabinet-switcher/>
-            </v-bottom-nav>
+
         </v-layout>
         <v-dialog
             :value="!!eventToDelete"
@@ -281,7 +273,15 @@
             :event="editedEvent"
             @close="$store.commit('SET_EDITED_EVENT', null)"
         />
-
+        <v-bottom-nav
+                shift
+                v-if="tabMode && mode==='day'"
+                :value="tabMode"
+                absolute
+                color="blue lighten-5"
+        >
+            <cabinet-switcher/>
+        </v-bottom-nav>
     </v-flex>
 </template>
 <script>

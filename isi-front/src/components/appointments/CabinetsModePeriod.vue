@@ -4,6 +4,7 @@
         style="width: 100%"
     >
         <cabinet-entry
+            v-if="!tabMode"
             v-for="cabinet in cabinets"
             :key="cabinet.id"
             :cabinet="cabinet"
@@ -36,6 +37,9 @@
             activeCabinetId: null
         }),
         computed: {
+            tabMode () {
+                return this.$store.state.appointment.tabMode
+            },
             dialogLocked () {
                 return this.$store.state.appointment.dialogLocked
             },

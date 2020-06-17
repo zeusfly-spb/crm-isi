@@ -11,9 +11,7 @@
                 :key="index"
                 :label="cabinet.name"
                 :value="cabinet.id"
-            >
-
-            </v-radio>
+            />
         </v-radio-group>
     </div>
 </template>

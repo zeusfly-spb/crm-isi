@@ -3,15 +3,26 @@
         style="width: 100%; display: flex;"
         ref="mainTr"
     >
-    <div
-        v-for="(cabinet, index) in cabinets"
-        :style="{'width': `${cabinetWidth(cabinet)}px`}"
-        class="cabinets-header"
-        :key="index"
-    >
-        <strong>{{ cabinet.name }}</strong>
-    </div>
-
+        <div
+            v-if="tabMode"
+            class="text-md-center"
+            style="width: 100%"
+        >
+            <span
+                class="tab-mode-header title"
+            >
+                <strong>{{ activeCabinetName }}</strong>
+            </span>
+        </div>
+        <div
+            v-else
+            v-for="(cabinet, index) in cabinets"
+            :style="{'width': `${cabinetWidth(cabinet)}px`}"
+            class="cabinets-header"
+            :key="index"
+        >
+            <strong>{{ cabinet.name }}</strong>
+        </div>
     </v-flex>
 </template>
 <script>
@@ -22,6 +33,18 @@
             fullWidth: null
         }),
         computed: {
+            activeCabinetName () {
+                return this.cabinets.find(item => item.id === this.$store.state.appointment.activeCabinetId).name || ''
+            },
+            cabinets () {
+                return this.workingIsland && this.workingIsland.cabinets
+            },
+            workingIsland () {
+                return this.$store.getters.workingIsland
+            },
+            tabMode () {
+                return this.$store.state.appointment.tabMode
+            },
             columnWidth () {
                 return this.fullWidth && this.fullWidth / this.cabinets.length || null
             },
@@ -45,6 +68,9 @@
     }
 </script>
 <style>
+    .tab-mode-header {
+        color: #03a9f4;
+    }
     .cabinets-header {
         text-align: center;
         padding: 0!important;
