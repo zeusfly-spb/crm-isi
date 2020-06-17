@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        tabMode: false,
         openCabinetWidth: 1400,
         openCabinetId: null,
         archiveCommentsLoading: false,
@@ -207,6 +208,9 @@ export default {
         }
     },
     mutations: {
+        SET_TAB_MODE (state, val) {
+            state.tabMode = val
+        },
         SET_OPEN_CABINET_ID (state, id) {
             state.openCabinetId = id
         },

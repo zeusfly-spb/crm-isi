@@ -27,6 +27,19 @@
                         </v-icon>
                     </v-btn>
                 </v-btn-toggle>
+                <v-switch
+                    v-if="cabinets.length"
+                    v-model="tabMode"
+                    class="m-0 p-0 ml-2"
+                >
+                    <template v-slot:label>
+                        <span
+                            :class="{'tab-mode-label': tabMode}"
+                        >
+                           Режим вкладок
+                        </span>
+                    </template>
+                </v-switch>
             </v-flex>
             <v-flex
                 class="text-sm-right"
@@ -296,6 +309,14 @@
             ]
         }),
         computed: {
+            tabMode: {
+                get () {
+                    return this.$store.state.appointment.tabMode
+                },
+                set (val) {
+                    this.$store.commit('SET_TAB_MODE', val)
+                }
+            },
             editedEvent () {
                 return this.$store.state.appointment.editedEvent
             },
@@ -458,5 +479,9 @@
     }
     .v-btn {
         padding: 0!important;
+    }
+    .tab-mode-label {
+        font-weight: bold;
+        color: green;
     }
 </style>
