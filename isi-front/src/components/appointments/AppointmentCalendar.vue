@@ -28,7 +28,7 @@
                     </v-btn>
                 </v-btn-toggle>
                 <v-switch
-                    v-if="cabinets.length"
+                    v-if="cabinets.length && mode === 'day'"
                     v-model="tabMode"
                     class="m-0 p-0 ml-2"
                 >
@@ -230,6 +230,15 @@
                     />
                 </v-sheet>
             </v-flex>
+            <v-bottom-nav
+                    shift
+                    v-if="tabMode && mode==='day'"
+                    :value="tabMode"
+                    absolute
+                    color="blue lighten-5"
+            >
+                <cabinet-switcher/>
+            </v-bottom-nav>
         </v-layout>
         <v-dialog
             :value="!!eventToDelete"
@@ -272,6 +281,7 @@
             :event="editedEvent"
             @close="$store.commit('SET_EDITED_EVENT', null)"
         />
+
     </v-flex>
 </template>
 <script>
@@ -286,6 +296,7 @@
     import CalendarViewSwitcher from './CalendarViewSwitcher'
     import SubscribesTable from '../subscribes/SubscribesTable'
     import NotificationTable from './NotificationTable'
+    import CabinetSwitcher from '../main/CabinetSwitcher'
 
     export default {
         name: 'AppointmentCalendar',
@@ -314,7 +325,7 @@
                     return this.$store.state.appointment.tabMode
                 },
                 set (val) {
-                    this.$store.commit('SET_TAB_MODE', val)
+                    this.$store.dispatch('setTabMode', val)
                 }
             },
             editedEvent () {
@@ -462,7 +473,8 @@
             EventEditor,
             CalendarViewSwitcher,
             SubscribesTable,
-            NotificationTable
+            NotificationTable,
+            CabinetSwitcher
         }
     }
 </script>

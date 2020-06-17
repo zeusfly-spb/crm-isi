@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        activeCabinetId: null,
         tabMode: false,
         openCabinetWidth: 1400,
         openCabinetId: null,
@@ -65,6 +66,9 @@ export default {
         }
     },
     actions: {
+        setTabMode ({commit}, val) {
+            commit('SET_TAB_MODE', val)
+        },
         deleteEventComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 commit('SET_ARCHIVE_COMMENTS_LOADING', true)
@@ -208,6 +212,9 @@ export default {
         }
     },
     mutations: {
+        SET_ACTIVE_CABINET_ID (state, id) {
+            state.activeCabinetId = id
+        },
         SET_TAB_MODE (state, val) {
             state.tabMode = val
         },
