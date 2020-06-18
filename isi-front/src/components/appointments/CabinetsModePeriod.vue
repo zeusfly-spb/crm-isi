@@ -3,14 +3,7 @@
         ref="mainLayout"
         style="width: 100%"
     >
-        <single-mode-period
-            v-if="tabMode"
-            :cabinet-id="$store.state.appointment.activeCabinetId"
-            :hour="hour"
-            :date="date"
-        />
         <cabinet-entry
-            v-if="!tabMode"
             v-for="cabinet in cabinets"
             :key="cabinet.id"
             :cabinet="cabinet"
@@ -23,7 +16,7 @@
             @addAttempt="addAttempt"
         />
         <calendar-record-adder
-            v-if="addMode && !tabMode"
+            v-if="addMode"
             :date-prop="date"
             :preset-cabinet="activeCabinet"
             :preset-hour="hour"
@@ -34,7 +27,6 @@
 <script>
     import CalendarRecordAdder from './CalendarRecordAdder'
     import CabinetEntry from './CabinetEntry'
-    import SingleModePeriod from './SingleModePeriod'
     export default {
         name: 'CabinetsModePeriod',
         props: ['cabinets', 'hour', 'date'],
@@ -44,9 +36,6 @@
             activeCabinetId: null
         }),
         computed: {
-            tabMode () {
-                return this.$store.state.appointment.tabMode
-            },
             dialogLocked () {
                 return this.$store.state.appointment.dialogLocked
             },
@@ -102,8 +91,7 @@
         },
         components: {
             CabinetEntry,
-            CalendarRecordAdder,
-            SingleModePeriod
+            CalendarRecordAdder
         }
     }
 </script>

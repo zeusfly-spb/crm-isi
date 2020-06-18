@@ -198,14 +198,15 @@
                         </template>
                         <template v-slot:interval="{ hour, date, weekday }">
                             <cabinets-mode-period
-                                v-if="displayMode === 'cabinets'"
+                                v-if="displayMode === 'cabinets' && !tabMode"
                                 :cabinets="cabinets"
                                 :hour="hour"
                                 :date="date"
                                 @delete="showDeleteConfirm"
                             />
                             <single-mode-period
-                                v-if="displayMode === 'single'"
+                                v-if="displayMode === 'single' || displayMode === 'cabinets' && tabMode"
+                                :cabinet-id="activeCabinetId"
                                 :hour="hour"
                                 :date="date"
                                 @delete="showDeleteConfirm"
@@ -320,6 +321,9 @@
             ]
         }),
         computed: {
+            activeCabinetId () {
+                return this.$store.state.appointment.activeCabinetId
+            },
             tabMode: {
                 get () {
                     return this.$store.state.appointment.tabMode
