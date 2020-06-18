@@ -4,42 +4,48 @@
             class="ml-2 mr-2"
             align-center
         >
-            <v-flex xs12 sm6 md4>
-                <v-btn-toggle
-                    v-show="viewMode === 'calendar'"
-                    mandatory
-                    v-model="mode"
-                    class="ml-2 mt-2"
-                >
-                    <v-btn
-                        flat
-                        v-for="(icon, index) in icons"
-                        :key="index"
-                        color="blue-grey darken-2"
-                        :value="icon.mode"
-                        :title="icon.mode !== mode ? `Переключить на режим ${icon.caption}` : ''"
-                    >
-                        <v-icon
-                            large
-                            class="pl-0 pr-0"
+            <v-flex xs12 sm6 md4
+                style="display: inline"
+            >
+                <v-layout>
+                    <div>
+                        <v-btn-toggle
+                                v-show="viewMode === 'calendar'"
+                                mandatory
+                                v-model="mode"
+                                class="ml-2 mt-2"
                         >
-                            {{ icon.type }}
-                        </v-icon>
-                    </v-btn>
-                </v-btn-toggle>
-                <v-switch
-                    v-if="cabinets.length && mode === 'day'"
-                    v-model="tabMode"
-                    class="m-0 p-0 ml-2"
-                >
-                    <template v-slot:label>
+                            <v-btn
+                                    flat
+                                    v-for="(icon, index) in icons"
+                                    :key="index"
+                                    color="blue-grey darken-2"
+                                    :value="icon.mode"
+                                    :title="icon.mode !== mode ? `Переключить на режим ${icon.caption}` : ''"
+                            >
+                                <v-icon
+                                        large
+                                        class="pl-0 pr-0"
+                                >
+                                    {{ icon.type }}
+                                </v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
+                    <v-switch
+                            v-if="cabinets.length && mode === 'day' && viewMode === 'calendar'"
+                            v-model="tabMode"
+                            class="m-0 p-0 ml-2"
+                    >
+                        <template v-slot:label>
                         <span
-                            :class="{'tab-mode-label': tabMode}"
+                                :class="{'tab-mode-label': tabMode}"
                         >
                            Режим вкладок
                         </span>
-                    </template>
-                </v-switch>
+                        </template>
+                    </v-switch>
+                </v-layout>
             </v-flex>
             <v-flex
                 class="text-sm-right"
@@ -276,7 +282,7 @@
         />
         <v-bottom-nav
                 shift
-                v-if="tabMode && mode==='day'"
+                v-if="tabMode && mode==='day' && viewMode === 'calendar'"
                 :value="tabMode"
                 absolute
                 color="blue lighten-5"
