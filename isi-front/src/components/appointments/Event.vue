@@ -12,6 +12,7 @@
         >
             <v-icon
                 :color="`${ colors[event.status] }`"
+                :title="`Статус: ${ {active: 'Активна', postponed: 'Отложена', moderate: 'На модерации', completed: 'Завершена', cancelled: 'Отказ'}[event.status] }`"
             >
                 {{   `${ icons[event.status]}` }}
             </v-icon>
@@ -23,20 +24,33 @@
             </span>
             {{ event.client_phone | phone }}
             <caller :phone="event.client_phone"/>
-            <span>
-                <strong>Исполнитель:</strong>
-            </span>
             &nbsp;
             &nbsp;
             &nbsp;
-
-            <v-avatar
-                size="36px"
-                :title="event.performer.full_name"
+            <div
+                class="mr-2"
             >
-                <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
-            </v-avatar>
+                <v-avatar
+                        size="36px"
+                        :title="`Исполнитель: ${event.performer.full_name}`"
+                >
+                    <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar"
+                         :draggable="false"
+                    >
+                    <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
+                </v-avatar>
+            </div>
+            <div>
+                <v-avatar
+                        size="36px"
+                        :title="`Администратор: ${event.user.full_name}`"
+                >
+                    <img :src="basePath + event.user.avatar" alt="Фото" v-if="event.user.avatar"
+                         :draggable="false"
+                    >
+                    <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
+                </v-avatar>
+            </div>
             <v-spacer/>
             <event-control-chip
                 :event="{...event, first: first}"

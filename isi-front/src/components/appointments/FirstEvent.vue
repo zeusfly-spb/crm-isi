@@ -26,6 +26,7 @@
             <v-icon
                 :color="colors[event.status]"
                 class="ml-1"
+                :title="`Статус: ${ {active: 'Активна', postponed: 'Отложена', moderate: 'На модерации', completed: 'Завершена', cancelled: 'Отказ'}[event.status] }`"
             >
                 {{ icons[event.status] }}
             </v-icon>
@@ -44,13 +45,26 @@
             <v-avatar
                 size="28px"
                 class="mr-1"
-                :title="event.performer && event.performer.full_name || ''"
+                :title="`Исполнитель: ${event.performer && event.performer.full_name || ''}`"
             >
                 <img
                         v-if="event.performer && event.performer.avatar"
                         :src="basePath + event.performer.avatar" alt="Фото"
+                        :draggable="false"
                 >
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
+                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
+            </v-avatar>
+            <v-avatar
+                    size="28px"
+                    class="mr-1"
+                    :title="`Администратор: ${event.user && event.user.full_name || ''}`"
+            >
+                <img
+                        v-if="event.user && event.user.avatar"
+                        :src="basePath + event.user.avatar" alt="Фото"
+                        :draggable="false"
+                >
+                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
             </v-avatar>
         </v-btn>
         <v-expand-x-transition>
