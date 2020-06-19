@@ -1,7 +1,7 @@
 <template>
         <div
             class="mb-0 pb-0 event"
-            draggable="true"
+            :draggable="event.status !== 'completed'"
             style="cursor: grab"
             :class="{'teal lighten-4': mouseOver && !first, 'ml-2': first}"
             :title="caption"
