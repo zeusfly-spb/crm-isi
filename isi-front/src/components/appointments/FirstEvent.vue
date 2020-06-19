@@ -44,7 +44,7 @@
             <v-avatar
                 size="28px"
                 class="mr-1"
-                :title="event.performer.full_name"
+                :title="event.performer && event.performer.full_name || ''"
             >
                 <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer.avatar">
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
