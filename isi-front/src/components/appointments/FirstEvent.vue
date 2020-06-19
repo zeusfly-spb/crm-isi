@@ -46,7 +46,10 @@
                 class="mr-1"
                 :title="event.performer && event.performer.full_name || ''"
             >
-                <img :src="basePath + event.performer.avatar" alt="Фото" v-if="event.performer && event.performer.avatar">
+                <img
+                        v-if="event.performer && event.performer.avatar"
+                        :src="basePath + event.performer.avatar" alt="Фото"
+                >
                 <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else>
             </v-avatar>
         </v-btn>
