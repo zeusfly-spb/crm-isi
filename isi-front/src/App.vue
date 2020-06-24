@@ -102,6 +102,21 @@ export default {
                 }
             }, 2000)
         });
+        const isJson = str => {
+            try {
+                JSON.parse(str)
+            } catch (e) {
+                return false
+            }
+            return true
+        }
+        const extData = evt => {
+            console.dir(evt)
+            if (evt.data && isJson(evt.data)) {
+                console.dir(JSON.parse(evt.data))
+            }
+        }
+        this.$options.sockets.onmessage = (event) => extData(event)
     },
     watch: {
         access (val) {

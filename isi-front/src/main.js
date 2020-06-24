@@ -7,6 +7,15 @@ import App from './App.vue'
 
 import {store} from './store'
 
+import VueNativeSock from 'vue-native-websocket'
+Vue.use(VueNativeSock, 'ws://localhost:8118', {
+    // store: store,
+    format: 'json',
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+})
+
 import {createRouter} from './router'
 const router = createRouter()
 
