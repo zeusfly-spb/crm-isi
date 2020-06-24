@@ -21,6 +21,7 @@ import subscribes from './subscribes'
 import paginator from './paginator'
 import telephony from './telephony'
 import informer from './informer'
+import ws from './ws'
 
 Vue.use(Vuex)
 
@@ -41,7 +42,8 @@ export const store = new Vuex.Store({
         subscribes,
         paginator,
         telephony,
-        informer
+        informer,
+        ws
     },
     state: {
         loading: 0,
@@ -337,9 +339,9 @@ export const store = new Vuex.Store({
                 if (this.state.scanMode.deals && getters.isToday) {
                     dispatch('setDeals')
                 }
-                if (this.state.scanMode.leads) {
-                    dispatch('setLeadsOnTimer')
-                }
+                // if (this.state.scanMode.leads) {
+                //     dispatch('setLeadsOnTimer')
+                // }
             }, 5000)
         },
         resumeUserDay ({commit}) {
@@ -471,6 +473,7 @@ export const store = new Vuex.Store({
 
             dispatch('priorPrepare')
                 .then(() => {
+                    dispatch('setLeads')
                     dispatch('startScanTimer')
                     switch (getters.currentPage) {
                         case 'daily':
