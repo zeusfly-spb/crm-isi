@@ -10,7 +10,8 @@ const broadcast = data => {
 
 wss.on('connection', ws => {
     ws.on('message', message => {
-        // console.log(`Received message => ${message}`)
+        console.log(`Received message => ${message}`)
+        console.log(ws)
         // broadcast('А теперь я говорю вам, здравствуйте!' + message)
     })
     ws.send('Connected')

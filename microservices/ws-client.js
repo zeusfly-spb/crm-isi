@@ -2,7 +2,7 @@ const WebSocket = require('ws')
 const connection = new WebSocket('http://localhost:8118')
 
 connection.onopen = () => {
-    connection.send('hey')
+    connection.send('token')
 }
 
 connection.onerror = (error) => {
