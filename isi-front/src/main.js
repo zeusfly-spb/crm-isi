@@ -8,12 +8,9 @@ import App from './App.vue'
 import {store} from './store'
 
 import VueNativeSock from 'vue-native-websocket'
-Vue.use(VueNativeSock, 'ws://localhost:8118', {
+Vue.use(VueNativeSock, process.env.VUE_APP_WS_URL, {
     format: 'json',
-    connectManually: true,
-    // reconnection: true,
-    // reconnectionAttempts: 5,
-    // reconnectionDelay: 1000,
+    connectManually: true
 })
 
 import {createRouter} from './router'

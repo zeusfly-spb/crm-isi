@@ -8,7 +8,18 @@ const broadcast = data => {
 }
 
 
-wss.on('connection', ws => {
+wss.on('connection', (ws, req) => {
+    const parseCookie = str => {
+        return {
+            key: str.split('=')[0],
+            value: str.split('=')[1]
+        }
+    }
+    let cookies = req.headers.cookie.split(';')
+    cookies = cookies.map(item => parseCookie(item))
+    console.log(cookies)
+
+    console.log('Connected from: ' + req.socket.remoteAddress)
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
         console.log(ws)

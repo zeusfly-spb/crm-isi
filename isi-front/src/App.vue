@@ -33,6 +33,9 @@ export default {
         timerId: null
     }),
     computed: {
+        authAllowed () {
+            return this.$store.getters.isAllowed
+        },
         activeCabinetId () {
             return this.$store.state.appointment.activeCabinetId
         },
@@ -102,13 +105,15 @@ export default {
                 }
             }, 2000)
         });
-        this.$connect()
         const extData = evt => {
             this.$store.dispatch('handleSqlEvent', evt)
         }
         this.$options.sockets.onmessage = (event) => extData(event)
     },
     watch: {
+        authAllowed (val) {
+            val ? this.$connect() : this.$disconnect()
+        },
         access (val) {
             let userIslandIds = this.authUser && this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
             if (val.status && val.status !== 'allowed' || !userIslandIds.includes(val.island_id) || !val) {
