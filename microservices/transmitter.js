@@ -1,3 +1,4 @@
+const passport = require('./passport')
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({port: 8118})
 
@@ -17,9 +18,9 @@ wss.on('connection', (ws, req) => {
     }
     let cookies = req.headers.cookie.split(';')
     cookies = cookies.map(item => parseCookie(item))
-    console.log(cookies)
 
-    console.log('Connected from: ' + req.socket.remoteAddress)
+    !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
+
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
         console.log(ws)

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/zeusfly-spb/playground#readme",
   "dependencies": {
     "@rodrigogs/mysql-events": "^0.6.0",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "mysql": "^2.18.1",
     "ws": "^7.3.0"
