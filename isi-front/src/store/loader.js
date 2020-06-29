@@ -15,6 +15,11 @@ export default {
         savedPage: null
     },
     actions: {
+        changeCount ({state, commit}, data) {
+            let counts = state.counts
+            counts[data.status] += data.value
+            commit('SET_COUNTS', counts)
+        },
         setLeadsOnTimer ({commit, rootState, state, getters}) {
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {

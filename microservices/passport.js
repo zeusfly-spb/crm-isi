@@ -10,7 +10,7 @@ const verifyToken = async (cookies) => {
     }
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
     try {
-        await axios.post('/api/details').data
+        await axios.post('/api/details')
         return true
     } catch (e) {
         return false

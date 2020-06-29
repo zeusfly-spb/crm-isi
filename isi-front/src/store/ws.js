@@ -11,9 +11,21 @@ const isJson = str => {
 
 export default {
     actions: {
-        handleSqlEvent ({commit}, event) {
-            const insertLead = lead => commit('ADD_LEAD', lead)
-            const deleteLead = lead => commit('DELETE_LEAD', lead)
+        handleSqlEvent ({dispatch, commit}, event) {
+            const insertLead = lead => {
+                commit('ADD_LEAD', lead)
+                dispatch('changeCount', {
+                    status: 'wait',
+                    value: 1
+                })
+            }
+            const deleteLead = lead => {
+                commit('DELETE_LEAD', lead)
+                dispatch('changeCount', {
+                    status: lead.status,
+                    value: -1
+                })
+            }
             const updateLead = lead => commit('UPDATE_LEAD', lead)
             /*
             Lead comments
