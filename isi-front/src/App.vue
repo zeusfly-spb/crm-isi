@@ -102,7 +102,7 @@ export default {
                 }
             }, 2000)
         });
-
+        this.$connect()
         const extData = evt => {
             this.$store.dispatch('handleSqlEvent', evt)
         }
