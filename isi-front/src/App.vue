@@ -6,10 +6,6 @@
           <messages-panel/>
           <call-reminder/>
           <query-inspector/>
-<!--          <v-progress-linear-->
-<!--              indeterminate-->
-<!--              v-if="loading"-->
-<!--          />-->
           <app-menu v-if="authUser"/>
           <router-view
                   v-blur="loading"

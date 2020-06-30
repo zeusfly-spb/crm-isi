@@ -20,6 +20,12 @@ export default {
                     status: lead.status,
                     value: 1
                 })
+                    .then(() => {
+                        if (lead.status === 'wait') {
+                            commit('BEEP')
+                        }
+                    })
+
             }
             const deleteLead = lead => {
                 commit('DELETE_LEAD', lead)

@@ -382,6 +382,10 @@ export default {
         }
     },
     mutations: {
+        BEEP (state) {
+            state.beep = true
+            setTimeout(() => state.beep = false, 2000)
+        },
         SET_CALL_TODAY_LEADS (state, leads) {
             let base = Object.values(leads)
             state.callTodayLeads = base
