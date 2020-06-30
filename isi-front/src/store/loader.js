@@ -417,7 +417,7 @@ export default {
             state.withDone = done
         },
         ADD_LEAD (state, lead) {
-            state.leads.unshift(lead)
+            state.leads.push(lead)
         },
         UPDATE_LEAD (state, lead) {
             state.leads = state.leads.map(item => +item.id === +lead.id ? lead : item)

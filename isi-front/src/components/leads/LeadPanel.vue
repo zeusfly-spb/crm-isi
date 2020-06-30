@@ -121,6 +121,7 @@
                     }))
                     .sort(sortByTime)
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
+                this.$store.getters.currentLeadStatus === 'wait' ? base = base.reverse() : null
                 return this.todayPostpones ? callToday : base
             }
         },
