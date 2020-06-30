@@ -18,6 +18,9 @@
             snackColor: ''
         }),
         computed: {
+            wsOutbox () {
+                return this.$store.state.ws.wsOutbox
+            },
             messageTime () {
                 return this.$store.state.layout.messageTime
             },
@@ -34,6 +37,17 @@
             }
         },
         watch: {
+            wsOutbox: async function(val) {
+                if (!val.length) {
+                    return
+                }
+                try {
+                    let frame = await this.$store.dispatch('popFrame')
+                    this.$socket.send(JSON.stringify(frame))
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+            },
             messages (val) {
                 val.length ? this.showMessage() : null
             }

@@ -9,10 +9,54 @@ const isJson = str => {
     return true
 }
 
-
-
 export default {
+    state: {
+        wsOutbox: []
+    },
     actions: {
+        handleWsFrame ({dispatch}, frame) {
+            const insertLead = lead => {
+                dispatch('changeCount', {
+                    status: lead.status,
+                    value: 1
+                })
+                    .then(() => {
+                        lead.status === 'wait' ? commit('BEEP') : null
+                        lead.status === getters.currentLeadStatus ? commit('ADD_LEAD', lead) : null
+                    })
+            }
+            return new Promise((resolve, reject) => {
+                try {
+                    if (!isJson(frame)) {
+                        return
+                    }
+                    let obj = JSON.parse(frame)
+                    switch (obj.type) {
+                        case 'add_lead':
+                            insertLead(obj.entity)
+                            console.log('Inserted lead')
+                            break
+                        default: break
+                    }
+                } catch (e) {
+                    reject(e)
+                }
+            })
+        },
+        popFrame ({state, commit}) {
+            return new Promise((resolve, reject) => {
+                try {
+                    let lastFrame = state.wsOutbox[state.wsOutbox.length - 1]
+                    commit('POP_WS_OUTBOX')
+                    resolve(lastFrame)
+                } catch (e) {
+                    reject(e)
+                }
+            })
+        },
+        pushFrame ({commit}, frame) {
+            commit('PUSH_WS_OUTBOX', frame)
+        },
         handleSqlEvent ({dispatch, getters, commit}, event) {
             const insertLead = lead => {
                 dispatch('changeCount', {
@@ -79,6 +123,14 @@ export default {
             if (event.data && isJson(event.data)) {
                 parseEvent(JSON.parse(event.data))
             }
+        }
+    },
+    mutations: {
+        PUSH_WS_OUTBOX (state, data) {
+            state.wsOutbox.push(data)
+        },
+        POP_WS_OUTBOX(state) {
+            state.wsOutbox.pop()
         }
     }
 }

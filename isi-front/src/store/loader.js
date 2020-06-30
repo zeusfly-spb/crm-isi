@@ -260,7 +260,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addLead ({commit, rootState}, data) {
+        addLead ({commit, rootState, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead', {
                     ... data,
@@ -268,6 +268,10 @@ export default {
                 })
                     .then(res => {
                         // commit('ADD_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_lead',
+                            entity: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
