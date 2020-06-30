@@ -15,7 +15,6 @@ export default {
     actions: {
         handleSqlEvent ({dispatch, getters, commit}, event) {
             const insertLead = lead => {
-                commit('ADD_LEAD', lead)
                 dispatch('changeCount', {
                     status: lead.status,
                     value: 1
@@ -24,8 +23,10 @@ export default {
                         if (lead.status === 'wait') {
                             commit('BEEP')
                         }
+                        if (lead.status === getters.currentLeadStatus) {
+                            commit('ADD_LEAD', lead)
+                        }
                     })
-
             }
             const deleteLead = lead => {
                 commit('DELETE_LEAD', lead)
@@ -34,7 +35,7 @@ export default {
                     value: -1
                 })
             }
-            const updateLead = lead => commit('UPDATE_LEAD', lead)
+            const updateLead = lead => lead.status === getters.currentLeadStatus ? commit('UPDATE_LEAD', lead) : null
             const changeLeadStatus = data => {
                 dispatch('changeCount', {
                     status: data.before.status,
