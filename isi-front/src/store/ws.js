@@ -20,20 +20,16 @@ export default {
                     value: 1
                 })
                     .then(() => {
-                        if (lead.status === 'wait') {
-                            commit('BEEP')
-                        }
-                        if (lead.status === getters.currentLeadStatus) {
-                            commit('ADD_LEAD', lead)
-                        }
+                        lead.status === 'wait' ? commit('BEEP') : null
+                        lead.status === getters.currentLeadStatus ? commit('ADD_LEAD', lead) : null
                     })
             }
             const deleteLead = lead => {
-                commit('DELETE_LEAD', lead)
                 dispatch('changeCount', {
                     status: lead.status,
                     value: -1
                 })
+                    .then(() => lead.status === getters.currentLeadStatus ? commit('DELETE_LEAD', lead) : null)
             }
             const updateLead = lead => lead.status === getters.currentLeadStatus ? commit('UPDATE_LEAD', lead) : null
             const changeLeadStatus = data => {
@@ -45,9 +41,8 @@ export default {
                     status: data.after.status,
                     value: 1
                 })
-                if (getters.currentLeadStatus === data.before.status) {
-                    commit('DELETE_LEAD', data.before)
-                }
+                data.before.status ===  getters.currentLeadStatus ? commit('DELETE_LEAD', data.before) : null
+                data.after.status ===  getters.currentLeadStatus ? commit('ADD_LEAD', data.after) : null
             }
 
             /**
