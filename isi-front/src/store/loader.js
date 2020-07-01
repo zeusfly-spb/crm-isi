@@ -270,7 +270,7 @@ export default {
                         // commit('ADD_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead',
-                            entity: res.data
+                            model: res.data
                         })
                         resolve(res)
                     })
