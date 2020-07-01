@@ -313,11 +313,15 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        deleteLead ({commit}, leadId) {
+        deleteLead ({commit, dispatch}, leadId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
                     .then(res => {
                         commit('DELETE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'delete_lead',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -440,6 +444,7 @@ export default {
         }
     },
     getters: {
+        currentLeads: state => state.leads,
         currentLeadStatus: state => state.leadStatus,
         waitingLeadsCount: state => state.leads.filter(item => item.status === 'wait').length
     }

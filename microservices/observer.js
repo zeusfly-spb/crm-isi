@@ -14,7 +14,7 @@ const handleEvent = event => {
     if (event.schema !== CONFIG.db_name) {
         return
     }
-    broadcast(JSON.stringify(event))
+    // broadcast(JSON.stringify(event))
 }
 
 const program = async () => {

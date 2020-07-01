@@ -82,7 +82,12 @@ class LeadController extends Controller
 
     public function delete(Request $request)
     {
-        return response()->json(['result' => Lead::destroy($request->lead_id), 'id' => $request->lead_id]);
+        $status = Lead::find($request->lead_id)->status;
+        return response()->json([
+            'result' => Lead::destroy($request->lead_id),
+            'id' => $request->lead_id,
+            'status' => $status
+        ]);
     }
 
     public function updateStatus(Request $request)

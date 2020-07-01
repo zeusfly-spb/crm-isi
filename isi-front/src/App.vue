@@ -101,10 +101,10 @@ export default {
                 }
             }, 2000)
         });
-        const extData = evt => {
-            this.$store.dispatch('handleSqlEvent', evt)
+        const extData = frame => {
+            this.$store.dispatch('handleFrame', frame)
         }
-        this.$options.sockets.onmessage = (event) => extData(event)
+        this.$options.sockets.onmessage = (frame) => extData(frame)
     },
     watch: {
         authAllowed (val) {

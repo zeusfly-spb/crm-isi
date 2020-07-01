@@ -14,7 +14,10 @@ export default {
         wsOutbox: []
     },
     actions: {
-        handleWsFrame ({dispatch}, frame) {
+        handleFrame ({dispatch, getters, commit}, frame) {
+            const displayed = lead => {
+                return getters.currentLeads.map(item => +item.id).includes(lead.id)
+            }
             const insertLead = lead => {
                 dispatch('changeCount', {
                     status: lead.status,
@@ -25,17 +28,25 @@ export default {
                         lead.status === getters.currentLeadStatus ? commit('ADD_LEAD', lead) : null
                     })
             }
+            const deleteLead = lead => {
+                dispatch('changeCount', {
+                    status: lead.status,
+                    value: -1
+                })
+                    .then(() => displayed(lead) ? commit('DELETE_LEAD', lead) : null)
+            }
             return new Promise((resolve, reject) => {
                 try {
-                    if (!isJson(frame)) {
+                    if (!isJson(frame.data)) {
                         return
                     }
-                    let obj = JSON.parse(frame)
+                    let obj = JSON.parse(frame.data)
                     switch (obj.type) {
                         case 'add_lead':
-                            insertLead(obj.entity)
-                            console.log('Inserted lead')
+                            insertLead(obj.model)
                             break
+                        case 'delete_lead':
+                            deleteLead(obj.model)
                         default: break
                     }
                 } catch (e) {

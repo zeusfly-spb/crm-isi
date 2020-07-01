@@ -23,16 +23,9 @@ wss.on('connection', (ws, req) => {
 
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
-        try {
-            let frame = JSON.parse(message)
-            if (frame.type) {
-                broadcast(message)
-            }
-        } catch (e) {
-            return Promise.reject(e)
-        }
+        broadcast(message)
     })
-    ws.send('Connected')
+    // ws.send('Connected')
 })
 
 exports.broadcast = broadcast
