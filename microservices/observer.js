@@ -14,7 +14,13 @@ const handleEvent = event => {
     if (event.schema !== CONFIG.db_name) {
         return
     }
-    // broadcast(JSON.stringify(event))
+    if (event.table === 'leads' && event.type === 'INSERT') {
+        let frame = {
+            type: 'add_lead',
+            model: event.affectedRows[0].after
+        }
+        broadcast(frame)
+    }
 }
 
 const program = async () => {

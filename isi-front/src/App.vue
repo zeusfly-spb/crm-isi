@@ -102,6 +102,8 @@ export default {
             }, 2000)
         });
         const extData = frame => {
+            console.log('Received ws frame')
+            console.dir(frame)
             this.$store.dispatch('handleFrame', frame)
         }
         this.$options.sockets.onmessage = (frame) => extData(frame)
