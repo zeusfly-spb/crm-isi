@@ -49,6 +49,9 @@ export default {
                 getters.currentLeadStatus === oldStatus && displayed(lead) ? commit('DELETE_LEAD', lead) : null
                 getters.currentLeadStatus === lead.status ? commit('ADD_LEAD', lead) : null
             }
+            const addLeadCall = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
+            const addLeadComment = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
+
             return new Promise((resolve, reject) => {
                 try {
                     if (!isJson(frame.data)) {
@@ -64,6 +67,12 @@ export default {
                             break
                         case 'change_lead_status':
                             changeLeadStatus(obj.model)
+                            break
+                        case 'add_lead_call':
+                            addLeadCall(obj.model)
+                            break
+                        case 'add_lead_comment':
+                            addLeadComment(obj.model)
                             break
                         default: break
                     }

@@ -173,7 +173,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addLeadCall ({commit, rootState}, leadId) {
+        addLeadCall ({commit, rootState, dispatch}, leadId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead_call', {
                     user_id: rootState.authUser.id,
@@ -181,6 +181,10 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_lead_call',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -287,7 +291,7 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        addLeadComment ({commit, rootState}, data) {
+        addLeadComment ({commit, rootState, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead_comment', {
                     ... data,
@@ -295,6 +299,10 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_lead_comment',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
