@@ -241,17 +241,21 @@ export default {
                     .then(() => commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true}))
             }
         },
-        deleteLeadPostpone ({commit}, data) {
+        deleteLeadPostpone ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_postpone', {... data})
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'delete_lead_postpone',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        addLeadPostpone ({commit, rootState}, data) {
+        addLeadPostpone ({commit, rootState, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_lead_postpone', {
                     ... data,
@@ -259,6 +263,10 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_lead_postpone',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -281,11 +289,15 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        deleteLeadComment ({commit}, commentId) {
+        deleteLeadComment ({commit, dispatch}, commentId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_comment', {comment_id: commentId})
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'delete_lead_comment',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))

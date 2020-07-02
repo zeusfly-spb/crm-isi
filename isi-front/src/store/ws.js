@@ -49,8 +49,7 @@ export default {
                 getters.currentLeadStatus === oldStatus && displayed(lead) ? commit('DELETE_LEAD', lead) : null
                 getters.currentLeadStatus === lead.status ? commit('ADD_LEAD', lead) : null
             }
-            const addLeadCall = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
-            const addLeadComment = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
+            const updateLead = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
 
             return new Promise((resolve, reject) => {
                 try {
@@ -69,10 +68,19 @@ export default {
                             changeLeadStatus(obj.model)
                             break
                         case 'add_lead_call':
-                            addLeadCall(obj.model)
+                            updateLead(obj.model)
                             break
                         case 'add_lead_comment':
-                            addLeadComment(obj.model)
+                            updateLead(obj.model)
+                            break
+                        case 'delete_lead_comment':
+                            updateLead(obj.model)
+                            break
+                        case 'add_lead_postpone':
+                            updateLead(obj.model)
+                            break
+                        case 'delete_lead_postpone':
+                            updateLead(obj.model)
                             break
                         default: break
                     }
