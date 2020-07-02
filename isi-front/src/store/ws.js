@@ -35,6 +35,20 @@ export default {
                 })
                     .then(() => displayed(lead) ? commit('DELETE_LEAD', lead) : null)
             }
+            const changeLeadStatus = lead => {
+                let oldStatus = lead.old_status
+                delete lead.old_status
+                dispatch('change_count', {
+                    status: oldStatus,
+                    value: -1
+                })
+                dispatch('change_count', {
+                    status: lead.status,
+                    value: 1
+                })
+                getters.currentLeadStatus === oldStatus && displayed(lead) ? commit('DELETE_LEAD', lead) : null
+                getters.currentLeadStatus === lead.status ? commit('ADD_LEAD', lead) : null
+            }
             return new Promise((resolve, reject) => {
                 try {
                     if (!isJson(frame.data)) {
@@ -47,6 +61,10 @@ export default {
                             break
                         case 'delete_lead':
                             deleteLead(obj.model)
+                            break
+                        case 'change_lead_status':
+                            changeLeadStatus(obj.model)
+                            break
                         default: break
                     }
                 } catch (e) {

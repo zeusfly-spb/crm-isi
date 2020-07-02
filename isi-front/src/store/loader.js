@@ -300,7 +300,8 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        updateLeadStatus ({commit, rootState}, data) {
+        updateLeadStatus ({commit, rootState, getters, dispatch}, data) {
+            let oldStatus = getters.currentLeads.find(item => +item.id === +data.lead_id).status || null
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_lead_status', {
                     ... data,
@@ -308,6 +309,13 @@ export default {
                 })
                     .then(res => {
                         commit('UPDATE_LEAD', res.data)
+                        dispatch('pushFrame', {
+                            type: 'change_lead_status',
+                            model: {
+                                ...res.data,
+                                old_status: oldStatus
+                            }
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
