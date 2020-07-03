@@ -16,10 +16,14 @@ wss.on('connection', (ws, req) => {
             value: str.split('=')[1]
         }
     }
-    let cookies = req.headers.cookie.split(';')
-    cookies = cookies.map(item => parseCookie(item))
-
-    !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
+    if (!req || !req.headers || !req.headers.cookie) {
+        ws.send('Access denied')
+        ws.close()
+    } else {
+        let cookies = req.headers.cookie.split(';')
+        cookies = cookies.map(item => parseCookie(item))
+        !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
+    }
 
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
