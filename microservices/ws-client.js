@@ -1,5 +1,5 @@
 const WebSocket = require('ws')
-const connection = new WebSocket('http://crmkin.com:8118')
+const connection = new WebSocket('ws://crmkin.com:8118')
 
 connection.onopen = () => {
     connection.send('token')

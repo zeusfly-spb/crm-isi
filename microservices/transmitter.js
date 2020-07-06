@@ -1,35 +1,50 @@
 const passport = require('./passport')
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({port: 8118})
-
-const broadcast = data => {
-    wss.clients.forEach(client => {
-        client.readyState === WebSocket.OPEN ? client.send(data) : null
-    })
+const fs = require('fs')
+const options = {
+    key: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.key'),
+    cert: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.crt')
 }
 
 
-wss.on('connection', (ws, req) => {
+const {createServer} = require('https')
+const {createServerFrom} = require('wss')
+const https = createServer(options)
+
+const wss = createServerFrom(https, ws => {
+    ws.on('message', message => {
+        console.log(`Received message => ${message}`)
+        broadcast(message)
+    })
+})
+https.listen(8118)
+
+
+wss.on('connection', ws => {
     const parseCookie = str => {
         return {
             key: str.split('=')[0],
             value: str.split('=')[1]
         }
     }
-    if (!req || !req.headers || !req.headers.cookie) {
+    if (!ws.upgradeReq.headers.cookie) {
         ws.send('Access denied')
         ws.close()
     } else {
-        let cookies = req.headers.cookie.split(';')
+        let cookies = ws.upgradeReq.headers.cookie.split(';')
         cookies = cookies.map(item => parseCookie(item))
         !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
     }
 
-    ws.on('message', message => {
-        console.log(`Received message => ${message}`)
-        broadcast(message)
-    })
-    // ws.send('Connected')
 })
+
+
+const broadcast = data => {
+    wss.clients.forEach(client => {
+        client.readyState === 1 ? client.send(data) : null
+    })
+}
+
+
+
 
 exports.broadcast = broadcast
