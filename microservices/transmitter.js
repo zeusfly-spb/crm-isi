@@ -32,9 +32,8 @@ wss.on('connection', ws => {
     } else {
         let cookies = ws.upgradeReq.headers.cookie.split(';')
         cookies = cookies.map(item => parseCookie(item))
-        !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
+        !passport.verifyToken(cookies) ? ws.close() : console.log('Connected')
     }
-
 })
 
 
