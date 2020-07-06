@@ -51,6 +51,16 @@ export default {
             }
             const updateLead = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
 
+            const refreshCallToday = lead => {
+                if (!getters.callTodayLeads.map(item => +item.id).includes(+lead.id)) {
+                    return
+                }
+                let data = JSON.parse(JSON.stringify(getters.callTodayLeads))
+                data = data.map(item => +item.id === +lead.id ? lead : item)
+                    .filter(item => item.last_postpone.date.split(' ')[0] === getters.realDate)
+                commit('SET_CALL_TODAY_LEADS', data)
+            }
+
             return new Promise((resolve, reject) => {
                 try {
                     if (!isJson(frame.data)) {
@@ -78,9 +88,11 @@ export default {
                             break
                         case 'add_lead_postpone':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'delete_lead_postpone':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         default: break
                     }

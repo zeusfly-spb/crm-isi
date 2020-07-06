@@ -472,6 +472,7 @@ export default {
         }
     },
     getters: {
+        callTodayLeads: state => state.callTodayLeads,
         currentLeads: state => state.leads,
         currentLeadStatus: state => state.leadStatus,
         waitingLeadsCount: state => state.leads.filter(item => item.status === 'wait').length

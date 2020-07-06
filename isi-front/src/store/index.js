@@ -1120,6 +1120,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        realDate: state => state.realDate,
         allIslands: state => state.islands,
         allUsers: state => state.users,
         currentVpbxExtension: (state, getters) => state.authUser && state.authUser.vpbx_extension || getters.workingIsland && getters.workingIsland.vpbx_extension || null,
