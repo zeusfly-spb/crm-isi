@@ -19,7 +19,7 @@ const handleEvent = event => {
             type: 'add_lead',
             model: event.affectedRows[0].after
         }
-        broadcast(frame)
+        broadcast(JSON.stringify(frame))
     }
 }
 
