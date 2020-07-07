@@ -321,7 +321,8 @@ export default {
             })
         },
         updateLeadStatus ({commit, rootState, getters, dispatch}, data) {
-            let oldStatus = getters.currentLeads.find(item => +item.id === +data.lead_id).status || null
+            let before = getters.currentLeads.find(item => +item.id === +data.lead_id)
+            let oldStatus = before && before.status || null
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_lead_status', {
                     ... data,
