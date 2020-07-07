@@ -172,7 +172,7 @@
             },
             comments () {
                 let base = JSON.parse(JSON.stringify(this.lead))
-                return base && base.comments && base.comments.reverse() || []
+                return base && base.comments || []
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate
