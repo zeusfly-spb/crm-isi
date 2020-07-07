@@ -76,6 +76,7 @@ export default {
                             break
                         case 'change_lead_status':
                             changeLeadStatus(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_call':
                             updateLead(obj.model)
