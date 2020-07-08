@@ -80,12 +80,15 @@ export default {
                             break
                         case 'add_lead_call':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_comment':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'delete_lead_comment':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_postpone':
                             updateLead(obj.model)
