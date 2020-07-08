@@ -19,11 +19,17 @@ export default {
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
+            /**
+             * Frame handlers
+             */
+            const updateDeal = deal => {
+                getters.currentPage === 'daily' ? commit('UPDATE_DEAL', deal) : null
+            }
             const deleteDeal = deal => {
-                getters.currentPage === 'daily' && dealDate(deal) === getters.accountingDate ? commit('DELETE_DEAL', deal.id) : null
+                getters.currentPage === 'daily' ? commit('DELETE_DEAL', deal.id) : null
             }
             const insertDeal = deal => {
-                getters.currentPage === 'daily' && dealDate(deal) === getters.accountingDate ? commit('ADD_DEAL', deal) : null
+                getters.currentPage === 'daily' ? commit('ADD_DEAL', deal) : null
             }
 
             const insertLead = lead => {
@@ -76,11 +82,14 @@ export default {
                     }
                     let obj = JSON.parse(frame.data)
                     switch (obj.type) {
+                        case 'update_deal':
+                            getters.accountingDate === dealDate(obj.model) ? updateDeal(obj.model) : null
+                            break
                         case 'delete_deal':
-                            deleteDeal(obj.model)
+                            getters.accountingDate === dealDate(obj.model) ? deleteDeal(obj.model) : null
                             break
                         case 'add_deal':
-                            insertDeal(obj.model)
+                            getters.accountingDate === dealDate(obj.model) ? insertDeal(obj.model) : null
                             break
                         case 'add_lead':
                             insertLead(obj.model)

@@ -235,11 +235,15 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        updateDeal ({commit}, deal) {
+        updateDeal ({commit, dispatch}, deal) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_deal', {...deal})
                     .then(res => {
-                        commit('UPDATE_DEAL', res.data)
+                        // commit('UPDATE_DEAL', res.data)
+                        dispatch('pushFrame', {
+                            type: 'update_deal',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
