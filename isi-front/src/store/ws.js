@@ -18,6 +18,9 @@ export default {
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
+            const deleteDeal = deal => getters.currentPage === 'daily' ? commit('DELETE_DEAL', deal.id) : null
+            const insertDeal = deal => getters.currentPage === 'daily' ? commit('ADD_DEAL', deal) : null
+
             const insertLead = lead => {
                 dispatch('changeCount', {
                     status: lead.status,
@@ -68,6 +71,12 @@ export default {
                     }
                     let obj = JSON.parse(frame.data)
                     switch (obj.type) {
+                        case 'delete_deal':
+                            deleteDeal(obj.model)
+                            break
+                        case 'add_deal':
+                            insertDeal(obj.model)
+                            break
                         case 'add_lead':
                             insertLead(obj.model)
                             break
