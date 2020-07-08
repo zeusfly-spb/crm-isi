@@ -186,10 +186,11 @@ export default {
                     lead_id: leadId
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead_call',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -251,10 +252,11 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_postpone', {... data})
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_postpone',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -268,10 +270,11 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead_postpone',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -337,11 +340,12 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'change_lead_status',
                             model: {
-                                ...res.data,
+                                ...data,
                                 old_status: oldStatus
                             }
                         })
@@ -354,7 +358,7 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
                     .then(res => {
-                        commit('DELETE_LEAD', res.data)
+                        // commit('DELETE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead',
                             model: res.data
