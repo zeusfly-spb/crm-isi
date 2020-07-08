@@ -15,11 +15,16 @@ export default {
     },
     actions: {
         handleFrame ({dispatch, getters, commit}, frame) {
+            const dealDate = deal => deal.created_at.split(' ')[0]
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
-            const deleteDeal = deal => getters.currentPage === 'daily' ? commit('DELETE_DEAL', deal.id) : null
-            const insertDeal = deal => getters.currentPage === 'daily' ? commit('ADD_DEAL', deal) : null
+            const deleteDeal = deal => {
+                getters.currentPage === 'daily' && dealDate(deal) === getters.accountingDate ? commit('DELETE_DEAL', deal.id) : null
+            }
+            const insertDeal = deal => {
+                getters.currentPage === 'daily' && dealDate(deal) === getters.accountingDate ? commit('ADD_DEAL', deal) : null
+            }
 
             const insertLead = lead => {
                 dispatch('changeCount', {

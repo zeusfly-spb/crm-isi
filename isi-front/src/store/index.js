@@ -1128,6 +1128,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        accountingDate: state => state.accountingDate,
         realDate: state => state.realDate,
         allIslands: state => state.islands,
         allUsers: state => state.users,
