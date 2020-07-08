@@ -1,6 +1,12 @@
 const Cookies = require('js-cookie')
 import Vue from 'vue'
 
+const reverseLeadRelations = lead => ({
+    ...lead,
+    comments: lead.comments && lead.comments.reverse() || [],
+    postpones: lead.postpones && lead.postpones.reverse() || []
+})
+
 export default {
     state: {
         callTodayLeads: [],
@@ -293,7 +299,8 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_comment', {comment_id: commentId})
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_comment',
                             model: res.data
@@ -310,10 +317,11 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', data)
                         dispatch('pushFrame', {
                             type: 'add_lead_comment',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
