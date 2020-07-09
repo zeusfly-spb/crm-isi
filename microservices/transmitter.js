@@ -41,6 +41,7 @@ const broadcast = data => {
     wss.clients.forEach(client => {
         client.readyState === 1 ? client.send(data) : null
     })
+    console.log(`Delivered to ${[... wss.clients].filter(client => client.readyState === 1).length} clients`)
 }
 
 
