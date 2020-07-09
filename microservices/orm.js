@@ -18,4 +18,19 @@ const query = querystring => {
     })
 }
 
-exports.query = query
+const serialize = rdp => {
+    try {
+        let result = []
+        for (let key in rdp) {
+            result[key] = rdp[key]
+        }
+        return result
+    } catch (e) {
+        throw e
+    }
+}
+
+module.exports = {
+    query: query,
+    serialize: serialize
+}

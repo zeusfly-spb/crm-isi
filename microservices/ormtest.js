@@ -3,7 +3,7 @@ const readline = require('readline').createInterface({
     output: process.stdout,
     prompt: '>> '
 })
-const {query} = require('./orm')
+const {query, serialize} = require('./orm')
 const user = require('./models/user')
 const handleCommand = async command => {
     if (['exit', 'quit', 'close', 'Exit', 'Close', 'Quit'].includes(command)) {
@@ -20,11 +20,7 @@ const handleCommand = async command => {
             let users = await user.getUsers()
             let arr = Object.values(users)
             let model = arr[0]
-            let arrModel = []
-            for (let key in model) {
-                arrModel[key] = model[key]
-            }
-            console.log(arrModel)
+            console.log(serialize(model))
             // console.log(users)
             readline.prompt()
             break
