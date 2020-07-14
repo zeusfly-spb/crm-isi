@@ -1,6 +1,12 @@
 const Cookies = require('js-cookie')
 import Vue from 'vue'
 
+const reverseLeadRelations = lead => ({
+    ...lead,
+    comments: lead.comments && lead.comments.reverse() || [],
+    postpones: lead.postpones && lead.postpones.reverse() || []
+})
+
 export default {
     state: {
         callTodayLeads: [],
@@ -33,7 +39,10 @@ export default {
                     .then(res => {
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-                        res.data.call_today ? commit('SET_CALL_TODAY_LEADS', res.data.call_today) : null
+
+                        let callTodayLeads = Object.values(res.data.call_today)
+                            .map(item => reverseLeadRelations(item))
+                        res.data.call_today ? commit('SET_CALL_TODAY_LEADS', callTodayLeads) : null
 
                         let leads = res.data.leads
                             .map(lead => ({
@@ -180,10 +189,11 @@ export default {
                     lead_id: leadId
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead_call',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -245,10 +255,11 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_postpone', {... data})
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_postpone',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -262,10 +273,11 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead_postpone',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -293,7 +305,8 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead_comment', {comment_id: commentId})
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_comment',
                             model: res.data
@@ -310,10 +323,11 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', data)
                         dispatch('pushFrame', {
                             type: 'add_lead_comment',
-                            model: res.data
+                            model: data
                         })
                         resolve(res)
                     })
@@ -321,18 +335,20 @@ export default {
             })
         },
         updateLeadStatus ({commit, rootState, getters, dispatch}, data) {
-            let oldStatus = getters.currentLeads.find(item => +item.id === +data.lead_id).status || null
+            let before = getters.currentLeads.find(item => +item.id === +data.lead_id)
+            let oldStatus = before && before.status || null
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_lead_status', {
                     ... data,
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        commit('UPDATE_LEAD', res.data)
+                        let data = reverseLeadRelations(res.data)
+                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'change_lead_status',
                             model: {
-                                ...res.data,
+                                ...data,
                                 old_status: oldStatus
                             }
                         })
@@ -345,7 +361,7 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
                     .then(res => {
-                        commit('DELETE_LEAD', res.data)
+                        // commit('DELETE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead',
                             model: res.data
@@ -423,16 +439,7 @@ export default {
             setTimeout(() => state.beep = false, 2000)
         },
         SET_CALL_TODAY_LEADS (state, leads) {
-            let base = Object.values(leads)
-            state.callTodayLeads = base
-                .map(item => ({
-                    ...item,
-                    comments: item.comments.length ? item.comments.reverse() : []
-                }))
-                .map(item => ({
-                    ...item,
-                    last_comment: item.comments.length ? item.comments[0] : null
-                }))
+            state.callTodayLeads = leads
         },
         SET_TODAY_POSTPONES (state, val) {
             state.showTodayPostpones = val

@@ -145,11 +145,15 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        updateDealWithStock ({commit}, data) {
+        updateDealWithStock ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_deal_with_stock', {...data})
                     .then(res => {
-                        commit('UPDATE_DEAL', res.data)
+                        // commit('UPDATE_DEAL', res.data)
+                        dispatch('pushFrame', {
+                            type: 'update_deal',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -224,18 +228,26 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_deal', {...deal})
                     .then(res => {
-                        commit('DELETE_DEAL', deal.id)
+                        // commit('DELETE_DEAL', deal.id)
+                        dispatch('pushFrame', {
+                            type: 'delete_deal',
+                            model: deal
+                        })
                         dispatch('setStockActions')
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
         },
-        updateDeal ({commit}, deal) {
+        updateDeal ({commit, dispatch}, deal) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_deal', {...deal})
                     .then(res => {
-                        commit('UPDATE_DEAL', res.data)
+                        // commit('UPDATE_DEAL', res.data)
+                        dispatch('pushFrame', {
+                            type: 'update_deal',
+                            model: res.data
+                        })
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -306,7 +318,11 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_deal', {...deal})
                     .then(res => {
-                        commit('ADD_DEAL', res.data)
+                        // commit('ADD_DEAL', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_deal',
+                            model: res.data
+                        })
                         dispatch('setStockActions')
                         resolve(res)
                     })
@@ -336,9 +352,9 @@ export const store = new Vuex.Store({
                 if (this.state.scanMode.expenses && getters.isToday) {
                     dispatch('setExpenses')
                 }
-                if (this.state.scanMode.deals && getters.isToday) {
-                    dispatch('setDeals')
-                }
+                // if (this.state.scanMode.deals && getters.isToday) {
+                //     dispatch('setDeals')
+                // }
                 // if (this.state.scanMode.leads) {
                 //     dispatch('setLeadsOnTimer')
                 // }
@@ -1120,6 +1136,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        accountingDate: state => state.accountingDate,
         realDate: state => state.realDate,
         allIslands: state => state.islands,
         allUsers: state => state.users,

@@ -15,9 +15,23 @@ export default {
     },
     actions: {
         handleFrame ({dispatch, getters, commit}, frame) {
+            const dealDate = deal => deal.created_at.split(' ')[0]
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
+            /**
+             * Frame handlers
+             */
+            const updateDeal = deal => {
+                getters.currentPage === 'daily' ? commit('UPDATE_DEAL', deal) : null
+            }
+            const deleteDeal = deal => {
+                getters.currentPage === 'daily' ? commit('DELETE_DEAL', deal.id) : null
+            }
+            const insertDeal = deal => {
+                getters.currentPage === 'daily' ? commit('ADD_DEAL', deal) : null
+            }
+
             const insertLead = lead => {
                 dispatch('changeCount', {
                     status: lead.status,
@@ -68,6 +82,15 @@ export default {
                     }
                     let obj = JSON.parse(frame.data)
                     switch (obj.type) {
+                        case 'update_deal':
+                            getters.accountingDate === dealDate(obj.model) ? updateDeal(obj.model) : null
+                            break
+                        case 'delete_deal':
+                            getters.accountingDate === dealDate(obj.model) ? deleteDeal(obj.model) : null
+                            break
+                        case 'add_deal':
+                            getters.accountingDate === dealDate(obj.model) ? insertDeal(obj.model) : null
+                            break
                         case 'add_lead':
                             insertLead(obj.model)
                             break
@@ -76,15 +99,19 @@ export default {
                             break
                         case 'change_lead_status':
                             changeLeadStatus(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_call':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_comment':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'delete_lead_comment':
                             updateLead(obj.model)
+                            refreshCallToday(obj.model)
                             break
                         case 'add_lead_postpone':
                             updateLead(obj.model)
@@ -114,73 +141,6 @@ export default {
         },
         pushFrame ({commit}, frame) {
             commit('PUSH_WS_OUTBOX', frame)
-        },
-        handleSqlEvent ({dispatch, getters, commit}, event) {
-            const insertLead = lead => {
-                dispatch('changeCount', {
-                    status: lead.status,
-                    value: 1
-                })
-                    .then(() => {
-                        lead.status === 'wait' ? commit('BEEP') : null
-                        lead.status === getters.currentLeadStatus ? commit('ADD_LEAD', lead) : null
-                    })
-            }
-            const deleteLead = lead => {
-                dispatch('changeCount', {
-                    status: lead.status,
-                    value: -1
-                })
-                    .then(() => lead.status === getters.currentLeadStatus ? commit('DELETE_LEAD', lead) : null)
-            }
-            const updateLead = lead => lead.status === getters.currentLeadStatus ? commit('UPDATE_LEAD', lead) : null
-            const changeLeadStatus = data => {
-                dispatch('changeCount', {
-                    status: data.before.status,
-                    value: -1
-                })
-                dispatch('changeCount', {
-                    status: data.after.status,
-                    value: 1
-                })
-                data.before.status ===  getters.currentLeadStatus ? commit('DELETE_LEAD', data.before) : null
-                data.after.status ===  getters.currentLeadStatus ? commit('ADD_LEAD', data.after) : null
-            }
-
-            /**
-             *
-             * @param event
-             */
-
-            const handleLead = event => {
-                if (event.type === 'INSERT' && event.affectedRows[0].after) {
-                    insertLead(event.affectedRows[0].after)
-                }
-                if (event.type === 'UPDATE' && event.affectedRows[0].after) {
-                    updateLead(event.affectedRows[0].after)
-                    if (event.affectedRows[0].before.status !== event.affectedRows[0].after.status) {
-                        changeLeadStatus({
-                            before: event.affectedRows[0].before,
-                            after: event.affectedRows[0].after,
-                        })
-                    }
-                }
-                if (event.type === 'DELETE' && event.affectedRows[0].before) {
-                    deleteLead(event.affectedRows[0].before)
-                }
-            }
-
-            const parseEvent = event => {
-                switch (event.table) {
-                    case 'leads':
-                        handleLead(event)
-                        break
-                }
-            }
-
-            if (event.data && isJson(event.data)) {
-                parseEvent(JSON.parse(event.data))
-            }
         }
     },
     mutations: {
