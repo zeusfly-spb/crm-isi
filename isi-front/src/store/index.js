@@ -1136,6 +1136,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        callCenter: (state, getters) => getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,
         accountingDate: state => state.accountingDate,
         realDate: state => state.realDate,
         allIslands: state => state.islands,

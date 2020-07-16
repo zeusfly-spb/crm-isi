@@ -45,6 +45,9 @@
             ]
         }),
         computed: {
+            callCenter () {
+                return this.$store.getters.callCenter
+            },
             salaryVisible () {
                 return this.$store.state.settings.data.salaryPage.visible
             },
@@ -55,7 +58,11 @@
                 return this.$store.getters.waitingLeadsCount
             },
             regularTabs () {
-                return this.salaryVisible ? this.adminTabs.filter(item => item.href !== '/admin') : this.adminTabs.filter(item => item.href !== '/salary' && item.href !== '/admin')
+                let base = this.salaryVisible ? this.adminTabs.filter(item => item.href !== '/admin') : this.adminTabs.filter(item => item.href !== '/salary' && item.href !== '/admin')
+                if (this.callCenter) {
+                    return base.filter(item => item.href !== '/customers' && item.href !== '/stock')
+                }
+                return base
             },
             tabs () {
                 return this.isSuperadmin ? this.adminTabs : this.regularTabs
