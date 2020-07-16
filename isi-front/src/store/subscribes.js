@@ -59,7 +59,7 @@ export default {
             commit('SET_SUBSCRIBES_LOADING', true)
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_subscribes', {
-                    island_id: rootState.workingIslandId,
+                    island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
                     date: getters.eventsDate
                 })
                     .then(res => {
