@@ -310,21 +310,33 @@
                 return this.dateProp || null
             },
             cabinets () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets || []
+                }
                 return this.workingIsland && this.workingIsland.cabinets || []
             },
             singleCabinet () {
                 return this.hasCabinets && this.cabinets.length === 1
             },
             hasCabinets () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets.length
+                }
                 return this.workingIsland && this.workingIsland.cabinets.length
             },
             users () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.users || []
+                }
                 return this.workingIsland && this.workingIsland.users || []
             },
             singleService () {
                 return this.services && this.services.length === 1
             },
             services () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.services || []
+                }
                 return this.workingIsland && this.workingIsland.services || []
             },
             workingIsland () {
