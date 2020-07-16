@@ -22,6 +22,7 @@ import paginator from './paginator'
 import telephony from './telephony'
 import informer from './informer'
 import ws from './ws'
+import callcenter from './callcenter'
 
 Vue.use(Vuex)
 
@@ -43,7 +44,8 @@ export const store = new Vuex.Store({
         paginator,
         telephony,
         informer,
-        ws
+        ws,
+        callcenter
     },
     state: {
         loading: 0,
@@ -1136,7 +1138,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
-        callCenter: (state, getters) => getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,
+        callCenter: (state, getters) => !getters.isSuperadmin && getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,
         accountingDate: state => state.accountingDate,
         realDate: state => state.realDate,
         allIslands: state => state.islands,

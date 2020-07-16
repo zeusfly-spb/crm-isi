@@ -10,6 +10,9 @@
             <span>{{ snackText }}</span>
         </v-snackbar>
         <island-switcher/>
+        <inspecting-island-switcher
+            v-if="callCenter && !$store.state.authUser.is_superadmin"
+        />
         <appointment-calendar
             v-if="workingIslandId && workingIsland"
             :mode="currentViewMode"
@@ -24,6 +27,7 @@
 <script>
     import IslandSwitcher from '../IslandSwitcher'
     import AppointmentCalendar from './AppointmentCalendar'
+    import InspectingIslandSwitcher from '../main/InspectingIslandSwitcher'
     export default {
         name: 'AppointmentPanel',
         data: () => ({
@@ -38,6 +42,9 @@
             ]
         }),
         computed: {
+            callCenter () {
+                return this.$store.getters.callCenter
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
@@ -67,7 +74,8 @@
         },
         components: {
             IslandSwitcher,
-            AppointmentCalendar
+            AppointmentCalendar,
+            InspectingIslandSwitcher
         }
     }
 </script>

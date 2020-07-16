@@ -33,7 +33,7 @@
                         </v-btn-toggle>
                     </div>
                     <v-switch
-                            v-if="cabinets.length && mode === 'day' && viewMode === 'calendar'"
+                            v-if="cabinets && cabinets.length && mode === 'day' && viewMode === 'calendar'"
                             v-model="tabMode"
                             class="m-0 p-0 ml-2"
                     >
@@ -351,11 +351,17 @@
                 return this.$refs.calendar && this.$refs.calendar.intervalHeight
             },
             cabinets () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets
+                }
                 return this.workingIsland && this.workingIsland.cabinets
             },
             displayMode () {
                 if (this.mode === 'day') {
-                    return !!this.workingIsland && this.workingIsland.cabinets.length ? 'cabinets' : 'single'
+                    if (this.$store.getters.callCenter) {
+                        return !!this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets && this.$store.getters.inspectingIsland.cabinets.length ? 'cabinets' : 'single'
+                    }
+                    return !!this.workingIsland && this.workingIsland.cabinets && this.workingIsland.cabinets.length ? 'cabinets' : 'single'
                 } else {
                     return this.mode
                 }

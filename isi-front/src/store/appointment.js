@@ -68,9 +68,10 @@ export default {
     actions: {
         setTabMode ({commit, getters}, val) {
             commit('SET_TAB_MODE', val)
-            let hasCabinets = getters.workingIsland && getters.workingIsland.cabinets && getters.workingIsland.cabinets.length || false
+            let island = getters.callCenter ? getters.inspectingIsland : getters.workingIsland
+            let hasCabinets = island && island.cabinets && island.cabinets.length || false
             if (val && hasCabinets) {
-                commit('SET_ACTIVE_CABINET_ID', getters.workingIsland.cabinets[0].id)
+                commit('SET_ACTIVE_CABINET_ID', island.cabinets[0].id)
             }
         },
         deleteEventComment ({commit, dispatch}, data) {
@@ -199,12 +200,12 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setAppointments ({commit, rootState, state}) {
+        setAppointments ({commit, rootState, state, getters}) {
             return new Promise((resolve, reject) => {
                 commit('ADD_TASK', 'appointments')
                 Vue.axios.post('/api/get_appointments', {
                     date: state.date,
-                    island_id: rootState.workingIslandId
+                    island_id: getters.callCenter ? getters.inspectingIslandId : rootState.workingIslandId
                 })
                     .then(res => {
                         commit('SET_APPOINTMENTS', res.data)
