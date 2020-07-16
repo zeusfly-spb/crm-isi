@@ -159,6 +159,7 @@
                                         <div v-on="on"></div>
                                     </template>
                                     <calendar-record-adder
+                                            can-subscribe
                                             v-if="date === openDate && mode === 'month'"
                                             :date-prop="openDate"
                                             @reset="resetOpenDate"

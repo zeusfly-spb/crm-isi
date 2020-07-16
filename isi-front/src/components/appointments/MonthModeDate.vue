@@ -63,6 +63,13 @@
             events () {
                 let base = this.$store.state.appointment.appointments
                     .filter(item => item.date.split(' ')[0] === this.date)
+                if (this.$store.getters.callCenter) {
+                    if (this.$store.getters.inspectingIsland.cabinets.length) {
+                        return base.filter(item => this.$store.getters.inspectingIsland.cabinets.map(cab => +cab.id).includes(+item.cabinet_id))
+                    } else {
+                        return base.filter(item => item.cabinet_id === null)
+                    }
+                }
                 if (this.workingIsland && this.workingIsland.cabinets.length) {
                     return base.filter(item => this.workingIsland.cabinets.map(cab => cab.id).includes(item.cabinet_id))
                 } else {

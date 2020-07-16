@@ -36,6 +36,9 @@
                 return this.$store.getters.workingIsland
             },
             cabinets () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets || []
+                }
                 return this.workingIsland && this.workingIsland.cabinets || []
             },
             appointments () {
