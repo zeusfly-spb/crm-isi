@@ -226,18 +226,27 @@
                 return this.event.subscribe_id && this.$store.getters.allSubscribes.find(sub => +sub.id === +this.event.subscribe_id) || null
             },
             users () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.users || []
+                }
                 return this.workingIsland && this.workingIsland.users || []
             },
             singleService () {
                 return this.services.length === 1
             },
             services () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.services || []
+                }
                 return this.workingIsland && this.workingIsland.services || []
             },
             singleCabinet () {
                 return this.cabinets.length === 1
             },
             cabinets () {
+                if (this.$store.getters.callCenter) {
+                    return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets || []
+                }
                 return this.workingIsland && this.workingIsland.cabinets || []
             },
             workingIsland () {

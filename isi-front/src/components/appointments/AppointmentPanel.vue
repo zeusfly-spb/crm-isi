@@ -11,7 +11,7 @@
         </v-snackbar>
         <island-switcher/>
         <inspecting-island-switcher
-            v-if="callCenter && !$store.state.authUser.is_superadmin"
+            v-if="callCenter"
         />
         <appointment-calendar
             v-if="workingIslandId && workingIsland"
