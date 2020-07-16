@@ -18,10 +18,7 @@ const handleCommand = async command => {
             break
         case 'get-users':
             let users = await user.getUsers()
-            let arr = Object.values(users)
-            let model = arr[0]
-            console.log(serialize(model))
-            // console.log(users)
+            console.log(users)
             readline.prompt()
             break
         default:
