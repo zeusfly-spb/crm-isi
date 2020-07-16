@@ -7,7 +7,7 @@ export default {
                 Vue.axios.post('/api/set_island_option', {... data})
                     .then(res => {
                         commit('UPDATE_ISLAND', res.data)
-                        dispatch('pushMessage', {text: 'Настройки службы оповещений островка изменены'})
+                        dispatch('pushMessage', {text: 'Настройки островка изменены'})
                         resolve(res)
                     })
                     .catch(e => reject(e))

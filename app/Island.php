@@ -21,7 +21,7 @@ class Island extends Model
         'cabinets' => 'array'
     ];
 
-    protected $appends = ['services', 'cabinets'];
+    protected $appends = ['services', 'cabinets', 'is_call_center'];
     public $morningNotifyTime = '08:00';
 
     public function workDays()
@@ -345,5 +345,10 @@ class Island extends Model
     public function getDayStartNotifyTemplateId()
     {
         return $this->options['DayStartNotifyTemplateId'] ?? null;
+    }
+
+    public function getIsCallCenterAttribute()
+    {
+        return $this->options['callCenter'] ?? false;
     }
 }

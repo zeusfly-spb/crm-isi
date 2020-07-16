@@ -4,6 +4,10 @@
             justify-center
             :column="extended"
         >
+            <call-center-switcher
+                v-if="extended"
+                :island_id="island.id"
+            />
             <v-layout>
                 <v-flex
                         v-if="extended"
@@ -84,6 +88,7 @@
 <script>
     import CabinetControl from './CabinetControl'
     import IslandNotifyControl from './IslandNotifyControl'
+    import CallCenterSwitcher from './CallCenterSwitcher'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -156,7 +161,8 @@
         },
         components: {
             CabinetControl,
-            IslandNotifyControl
+            IslandNotifyControl,
+            CallCenterSwitcher
         }
     }
 </script>

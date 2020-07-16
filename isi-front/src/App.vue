@@ -29,6 +29,9 @@ export default {
         timerId: null
     }),
     computed: {
+        workingIsland () {
+            return this.$store.getters.workingIsland
+        },
         authAllowed () {
             return this.$store.getters.isAllowed
         },
