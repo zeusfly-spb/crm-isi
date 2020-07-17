@@ -22,15 +22,9 @@ export default {
             /**
              * Frame handlers
              */
-            const updateDeal = deal => {
-                getters.currentPage === 'daily' ? commit('UPDATE_DEAL', deal) : null
-            }
-            const deleteDeal = deal => {
-                getters.currentPage === 'daily' ? commit('DELETE_DEAL', deal.id) : null
-            }
-            const insertDeal = deal => {
-                getters.currentPage === 'daily' ? commit('ADD_DEAL', deal) : null
-            }
+            const updateDeal = deal => commit('UPDATE_DEAL', deal)
+            const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
+            const insertDeal = deal => commit('ADD_DEAL', deal)
 
             const insertLead = lead => {
                 dispatch('changeCount', {
@@ -71,8 +65,15 @@ export default {
                 }
                 let data = JSON.parse(JSON.stringify(getters.callTodayLeads))
                 data = data.map(item => +item.id === +lead.id ? lead : item)
-                    .filter(item => item.last_postpone.date.split(' ')[0] === getters.realDate)
+                    .filter(item => item.last_postpone && item.last_postpone.date && item.last_postpone.date.split(' ')[0] === getters.realDate)
                 commit('SET_CALL_TODAY_LEADS', data)
+            }
+
+            const mustHandle = obj => {
+                if (obj.type.split('_')[1] === 'deal' && (+obj.model.island_id !== +getters.workingIslandId || getters.currentPage !== 'daily')) {
+                    return false
+                }
+                return true
             }
 
             return new Promise((resolve, reject) => {
@@ -81,6 +82,9 @@ export default {
                         return
                     }
                     let obj = JSON.parse(frame.data)
+                    if (!mustHandle(obj)) {
+                        return
+                    }
                     switch (obj.type) {
                         case 'update_deal':
                             getters.accountingDate === dealDate(obj.model) ? updateDeal(obj.model) : null
@@ -123,6 +127,7 @@ export default {
                             break
                         default: break
                     }
+                    resolve(frame)
                 } catch (e) {
                     reject(e)
                 }
