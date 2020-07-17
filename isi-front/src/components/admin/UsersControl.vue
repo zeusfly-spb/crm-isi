@@ -50,9 +50,9 @@
                 <td align="center">
                     <doc-pack :user="props.item" @updated="showSuccess" @alert="showError"/>
                 </td>
-<!--                <td>{{ islandName(props.item.island_id) }}</td>-->
                 <td><user-islands-column :user="props.item" @success="showSuccess"/></td>
                 <td>{{ groupName(props.item.group_id) }}</td>
+                <td>{{`${props.item.vpbx_extension || '-'}`}}</td>
                 <td v-if="currentViewMode !== 'all'">
                     <date-updater :user="props.item" field="created_at" @updated="showSuccess"/>
                 </td>
@@ -104,7 +104,7 @@
             </template>
         </v-data-table>
 
-            <v-dialog v-model="dialog" max-width="600px">
+            <v-dialog v-model="dialog" max-width="1000px">
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2"
                        @click="addUser"
@@ -190,7 +190,6 @@
                                     />
                                 </v-menu>
                                 <sup>Дата рождения </sup>
-
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field
@@ -261,6 +260,16 @@
                                     data-vv-as="Группа"
                                     :error-messages="errors.collect('group')"
                                     v-validate="'required'"
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <v-text-field
+                                    v-model="editedUser.vpbx_extension"
+                                    label="Персональный код манго"
+                                    data-vv-as="Код манго"
+                                    data-vv-name="vpbx"
+                                    :error-messages="errors.collect('vpbx')"
+                                    v-validate="'numeric'"
                                 />
                             </v-flex>
                         </v-layout>
@@ -356,7 +365,8 @@
                 group_id: '',
                 island_id: '',
                 email: '',
-                avatar: null
+                avatar: null,
+                vpbx_extension: ''
             },
             snackbar: false,
             dialog: false
@@ -438,6 +448,10 @@
                     {
                         text: 'Группа',
                         value: null
+                    },
+                    {
+                        text: 'Код манго',
+                        value: 'vpbx_extension'
                     },
                     {
                         text: 'Дата приема',
@@ -539,28 +553,32 @@
             saveUser (user) {
                 let data = new FormData
                 for (let key in user) {
-                    if (user[key] || key === 'phone' || key === 'first_name' || key === 'last_name' || key === 'patronymic') {
+                    if (user[key] || key === 'phone' || key === 'first_name' || key === 'last_name' || key === 'patronymic' || key === 'vpbx_extension') {
                         data.append(key, user[key])
                     }
                 }
                 if (this.mode === 'edit') {
-
-                    this.$store.dispatch('updateUser', data)
-                        .then(() => {
-                            this.dialog = false
-                            this.showSuccess('Данные сотрудника обновлены')
-                        })
-                        .catch(e => {
-                            if (e.error) {
-                                this.showError(e.error)
-                            }
-                            console.error(e)
+                    const update = () => {
+                        this.$store.dispatch('updateUser', data)
+                            .then(() => {
+                                this.dialog = false
+                                this.showSuccess('Данные сотрудника обновлены')
+                            })
+                            .catch(e => {
+                                if (e.error) {
+                                    this.showError(e.error)
+                                }
+                                console.error(e)
+                            })
+                    }
+                    this.$validator.validate()
+                        .then(res => {
+                            res ? update() : null
                         })
                 } else {
                     this.$validator.validate()
                         .then(res => {
                             if (res) {
-
                                 this.$store.dispatch('addUser', data)
                                     .then(() => {
                                         this.dialog = false

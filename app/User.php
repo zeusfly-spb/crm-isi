@@ -41,13 +41,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return collect([
-            $this->last_name,
-            $this->first_name,
-            $this->patronymic,
-        ])->filter(static function($str) {
-            return mb_strlen($str) > 0;
-        })->implode(' ');
+        return $this->last_name . ' ' . $this->first_name . ' ' . $this->patronymic;
     }
 
     public static function getUserByNameAndPassword($name, $password)
