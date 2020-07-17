@@ -322,7 +322,7 @@ class Island extends Model
             return;
         }
         $reminders = $this->remindNow();
-        if (!$reminders->count()) {
+        if (!count($reminders)) {
             return;
         }
         $template = NotifyTemplate::find($this->event_reminder_template_id);
