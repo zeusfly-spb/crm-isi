@@ -138,7 +138,7 @@ class UserController extends Controller
     public function startDay(Request $request)
     {
         $user = User::find($request->user_id);
-        $currentWorkDay = $user->workdays()->whereDate('created_at', now()->toDateString())->first();
+        $currentWorkDay = $user->workdays()->whereDate('date', now()->toDateString())->first();
 
         if ($currentWorkDay) {
             $currentWorkDay->load('user');
