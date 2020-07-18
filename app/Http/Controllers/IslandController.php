@@ -46,7 +46,7 @@ class IslandController extends Controller
         }
         $island = Island::find($request->id);
         $oldCabinetsCount = $island->cabinets->count();
-        $inputs = Arr::except($request->all(), ['users', 'chief', 'services', 'cabinets']);
+        $inputs = Arr::except($request->all(), ['users', 'chief', 'services', 'cabinets', 'is_call_center']);
         $island->update($inputs);
         $newCabinetsCount = $island->cabinets->count();
         $mode = mode($oldCabinetsCount, $newCabinetsCount);
