@@ -18,6 +18,7 @@ export default {
         }
     },
     getters: {
+        inspectingIslandId: state => state.inspectingIslandId,
         inspectingIsland: (state, getters) => getters.allIslands.find(item => +item.id === +state.inspectingIslandId)
     }
 }

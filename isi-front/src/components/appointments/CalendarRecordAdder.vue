@@ -265,6 +265,9 @@
             }
         }),
         computed: {
+            targetIslandId () {
+                return this.$store.getters.callCenter && this.$store.getters.inspectingIslandId || this.$store.getters.workingIslandId
+            },
             dateMax () {
                 return this.subscribe ? this.subscribe.finish_date : null
             },
@@ -353,7 +356,7 @@
                     performer_id: null,
                     service_id: null,
                     lead_id: null,
-                    island_id: this.$store.state.workingIslandId,
+                    island_id: this.targetIslandId,
                     client_phone: null,
                     date: null,
                     time: null,
@@ -441,7 +444,7 @@
                 this.applySubscribe()
             }
             this.editedAppointment.user_id = this.$store.state.authUser.id
-            this.editedAppointment.island_id = this.workingIslandId
+            this.editedAppointment.island_id = this.targetIslandId
             this.editedAppointment.date = this.date
         },
         destroyed () {
