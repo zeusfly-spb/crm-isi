@@ -19,9 +19,12 @@ export default {
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
+            const month = date => date.split(' ')[0].split('-')[1]
             /**
              * Frame handlers
              */
+            const insertAppointment = event => commit('ADD_APPOINTMENT', event)
+
             const updateDeal = deal => commit('UPDATE_DEAL', deal)
             const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
             const insertDeal = deal => commit('ADD_DEAL', deal)
@@ -73,6 +76,12 @@ export default {
                 if (obj.type.split('_')[1] === 'deal' && (+obj.model.island_id !== +getters.workingIslandId || getters.currentPage !== 'daily')) {
                     return false
                 }
+                if (obj.type.split('_')[1] === 'appointment') {
+                    let targetIslandId = getters.callCenter && getters.inspectingIslandId || getters.workingIslandId
+                    if (getters.currentPage !== 'appointments' || obj.model.island_id !== targetIslandId) {
+                        return false
+                    }
+                }
                 return true
             }
 
@@ -86,6 +95,9 @@ export default {
                         return
                     }
                     switch (obj.type) {
+                        case 'add_appointment':
+                            month(getters.eventsDate) === month(obj.model.date) ? insertAppointment(obj.model) : null
+                            break
                         case 'update_deal':
                             getters.accountingDate === dealDate(obj.model) ? updateDeal(obj.model) : null
                             break

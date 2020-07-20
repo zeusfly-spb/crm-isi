@@ -191,7 +191,11 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_appointment', {... data})
                     .then(res => {
-                        commit('ADD_APPOINTMENT', res.data)
+                        // commit('ADD_APPOINTMENT', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_appointment',
+                            model: res.data
+                        })
                         if (res.data.subscribe_id) {
                             dispatch('setSubscribes')
                         }
