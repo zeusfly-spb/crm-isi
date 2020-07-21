@@ -58,6 +58,7 @@
                     case 'hours': return 'часовую ставку'
                     case 'sales': return 'ставку на оборот'
                     case 'chief': return 'руководящий коэффициент'
+                    case 'records': return 'ставку на запись'
                 }
             },
             targetField: {
@@ -73,6 +74,7 @@
                     case 'hours': return 'hour_rate'
                     case 'sales': return 'sales_rate'
                     case 'chief': return 'chief_rate'
+                    case 'records': return 'records_rate'
                 }
             }
         },
@@ -101,7 +103,7 @@
                     rates: updated
                 })
                     .then(() => {
-                        let text = `Изменена ${{hours: 'часовая ставка', sales: 'ставка на оборот', chief: 'ставка руководителя'}[this.type]} для сотрудника
+                        let text = `Изменена ${{hours: 'часовая ставка', sales: 'ставка на оборот', chief: 'ставка руководителя', records: 'ставка на запись'}[this.type]} для сотрудника
                                     ${this.user.full_name} за ${this.$moment(this.currentMonth + '-01').format('MMMM YYYY')} г. на островке "${this.$store.getters.workingIsland.name}"`
                         this.deactivate()
                         this.showSnack(text, 'green')

@@ -93,7 +93,12 @@
                             <td
                                 class="info-tab"
                             >
-                                {{ user.app_count}}
+                                <month-rate-editor
+                                        :user="user"
+                                        type="records"
+                                        v-if="isSuperadmin && workingIslandId"
+                                />
+                                <strong v-else>{{ user.records_rate }}</strong>
                             </td>
 
                         </tr>
