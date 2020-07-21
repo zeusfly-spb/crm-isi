@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
 use App\Deal;
 use App\Forfeit;
 use App\Island;
@@ -50,7 +51,7 @@ class SalaryController extends Controller
             $dealsBuilder = $dealsBuilder->where('island_id', $island_id);
         }
         $allDeals = $dealsBuilder->get();
-        $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations')
+        $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'group')
             ->where('is_superadmin', false);
         if ($island_id) {
             $island = Island::with('users')->find($island_id);
@@ -81,6 +82,14 @@ class SalaryController extends Controller
         $queryBuilder = $queryBuilder->whereNull('fired_at')
         ->orWhereBetween('fired_at', [$startDate, $endDate]);
         $users = $queryBuilder->get();
+        $users->each(function ($user) use ($startDate, $endDate) {
+            if ($user->group && $user->group->purpose === 'admin') {
+                $user->app_count = Appointment::where('user_id', $user->id)
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->where('status_id', 4) // <completed> defined in model
+                    ->count();
+            }
+        });
         return ['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()];
     }
 

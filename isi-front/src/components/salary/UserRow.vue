@@ -78,6 +78,26 @@
                             </td>
                         </tr>
                         <tr
+                            v-if="user.app_count"
+                        >
+                            <td
+                                class="info-tab"
+                            >
+                                Записи
+                            </td>
+                            <td
+                                class="info-tab"
+                            >
+                                <strong>{{ user.app_count }}</strong>
+                            </td>
+                            <td
+                                class="info-tab"
+                            >
+                                {{ user.app_count}}
+                            </td>
+
+                        </tr>
+                        <tr
                             v-if="isChief && showChiefInfo"
                             class="light-blue lighten-4"
                         >
