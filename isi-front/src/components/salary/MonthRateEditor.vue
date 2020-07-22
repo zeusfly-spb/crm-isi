@@ -89,7 +89,8 @@
                 let exists = this.rates && this.rates.find(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId) || null
                 let updated
                 if (exists) {
-                    updated = this.rates.map(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId ? {... item, value: value} : item)
+                    updated = this.rates
+                        .map(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId ? {... item, value: value} : item)
                 } else {
                     if (this.rates) {
                         this.rates.push({type: this.type, month: this.currentMonth, island_id: this.workingIslandId, value: value})
@@ -98,6 +99,8 @@
                         updated = [{type: this.type, month: this.currentMonth, island_id: this.workingIslandId, value: value}]
                     }
                 }
+                console.log('Sent to update', updated)
+
                 this.$store.dispatch('updateUserRates', {
                     user_id: this.user.id,
                     rates: updated
