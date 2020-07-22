@@ -29,6 +29,9 @@ export default {
         timerId: null
     }),
     computed: {
+        monthData () {
+            return this.$store.state.salary.monthData
+        },
         workingIsland () {
             return this.$store.getters.workingIsland
         },
