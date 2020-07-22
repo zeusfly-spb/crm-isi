@@ -23,6 +23,7 @@ import telephony from './telephony'
 import informer from './informer'
 import ws from './ws'
 import callcenter from './callcenter'
+import voice from './voice'
 
 Vue.use(Vuex)
 
@@ -45,7 +46,8 @@ export const store = new Vuex.Store({
         telephony,
         informer,
         ws,
-        callcenter
+        callcenter,
+        voice
     },
     state: {
         loading: 0,
