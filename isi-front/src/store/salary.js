@@ -175,6 +175,7 @@ export default {
             state.statData = data
         },
         UPDATE_MONTH_USER (state, user) {
+            console.log("updating month user", user)
             let firstDate = state.monthData.dates[0]
             let lastDate = state.monthData.dates[state.monthData.dates.length - 1]
             const getDate = (timestamp) => timestamp.split(' ')[0] || null
