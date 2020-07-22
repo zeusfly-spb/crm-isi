@@ -20,6 +20,7 @@ export default {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
             }
             const month = date => date.split(' ')[0].split('-')[1]
+            const targetIslandId = () => getters.callCenter && getters.inspectingIslandId || getters.workingIslandId
             /**
              * Frame handlers
              */
@@ -73,16 +74,18 @@ export default {
             }
 
             const mustHandle = obj => {
-                if (obj.type.split('_')[1] === 'deal' && (+obj.model.island_id !== +getters.workingIslandId || getters.currentPage !== 'daily')) {
-                    return false
+                let result = true
+                switch (obj.type.split('_')[1]) {
+                    case 'deal':
+                        getters.accountingDate !== dealDate(obj.model) ? result = false : null
+                        obj.model.island_id !== getters.workingIslandId || getters.currentPage !== 'daily' ? result = false : null
+                        break
+                    case 'appointment':
+                        month(getters.eventsDate) !== month(obj.model.date) ? result = false : null
+                        getters.currentPage !== 'appointments' || obj.model.island_id !== targetIslandId() ? result = false : null
+                        break
                 }
-                if (obj.type.split('_')[1] === 'appointment') {
-                    let targetIslandId = getters.callCenter && getters.inspectingIslandId || getters.workingIslandId
-                    if (getters.currentPage !== 'appointments' || obj.model.island_id !== targetIslandId) {
-                        return false
-                    }
-                }
-                return true
+                return result
             }
 
             return new Promise((resolve, reject) => {
@@ -96,16 +99,16 @@ export default {
                     }
                     switch (obj.type) {
                         case 'add_appointment':
-                            month(getters.eventsDate) === month(obj.model.date) ? insertAppointment(obj.model) : null
+                            insertAppointment(obj.model)
                             break
                         case 'update_deal':
-                            getters.accountingDate === dealDate(obj.model) ? updateDeal(obj.model) : null
+                            updateDeal(obj.model)
                             break
                         case 'delete_deal':
-                            getters.accountingDate === dealDate(obj.model) ? deleteDeal(obj.model) : null
+                            deleteDeal(obj.model)
                             break
                         case 'add_deal':
-                            getters.accountingDate === dealDate(obj.model) ? insertDeal(obj.model) : null
+                            insertDeal(obj.model)
                             break
                         case 'add_lead':
                             insertLead(obj.model)
