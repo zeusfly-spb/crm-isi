@@ -1140,6 +1140,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        currentDeals: state => state.deals,
         workingIslandId: state => state.workingIslandId,
         callCenter: (state, getters) => !getters.isSuperadmin && getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,
         accountingDate: state => state.accountingDate,

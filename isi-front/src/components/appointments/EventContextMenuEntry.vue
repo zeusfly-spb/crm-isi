@@ -132,6 +132,12 @@
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },
             performAction (action) {
+                if (action === 'completed') {
+                    this.$emit('changed')
+                    this.$store.commit('SET_EVENT_TO_DONE', this.event)
+                    this.$store.commit('SET_EVENT_DONE_CONFIRM', true)
+                    return
+                }
                 const info = {
                     active: 'Активна',
                     postponed: 'Отложена',

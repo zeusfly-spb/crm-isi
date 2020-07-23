@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        eventToDone: null,
+        eventDoneConfirm: false,
         activeCabinetId: null,
         tabMode: false,
         openCabinetWidth: 1400,
@@ -221,6 +223,12 @@ export default {
         }
     },
     mutations: {
+        SET_EVENT_TO_DONE (state, event) {
+            state.eventToDone = event
+        },
+        SET_EVENT_DONE_CONFIRM (state, value) {
+            state.eventDoneConfirm = value
+        },
         SET_ACTIVE_CABINET_ID (state, id) {
             state.activeCabinetId = id
         },
