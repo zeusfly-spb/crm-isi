@@ -86,7 +86,8 @@
             },
             updateRate () {
                 let value = +this.user[this.targetFieldName]
-                let exists = this.rates && this.rates.find(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId) || null
+                let exists = this.rates && this.rates
+                    .find(item => item.month === this.currentMonth && item.type === this.type && item.island_id === this.workingIslandId) || null
                 let updated
                 if (exists) {
                     updated = this.rates
@@ -106,8 +107,11 @@
                     rates: updated
                 })
                     .then(() => {
-                        let text = `Изменена ${{hours: 'часовая ставка', sales: 'ставка на оборот', chief: 'ставка руководителя', records: 'ставка на запись'}[this.type]} для сотрудника
-                                    ${this.user.full_name} за ${this.$moment(this.currentMonth + '-01').format('MMMM YYYY')} г. на островке "${this.$store.getters.workingIsland.name}"`
+                        let rateName = {hours: 'часовая ставка', sales: 'ставка на оборот', chief: 'ставка руководителя', records: 'ставка на запись'}[this.type]
+                        let monthName = this.$moment(this.currentMonth + '-01').format('MMMM YYYY')
+                        let text = `Изменена ${rateName} для сотрудника
+                                    ${this.user.full_name} за ${monthName} г. на островке "${this.$store.getters.workingIsland.name}"`
+
                         this.deactivate()
                         this.showSnack(text, 'green')
                     })

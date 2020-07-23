@@ -62,7 +62,7 @@
             }
         },
         mounted () {
-            this.testSpeak()
+            // this.testSpeak()
         },
         watch: {
             wsOutbox: async function(val) {
