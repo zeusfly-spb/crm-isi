@@ -75,7 +75,7 @@
                         <td
                             class="info-tab"
                         >
-
+                            <strong>{{ totalRecordsAmount }}</strong>
                         </td>
                     </tr>
                     <tr
@@ -169,8 +169,24 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            totalRecordsAmount () {
+                let allAppointments = this.$store.state.salary.monthData.allAppointments
+                let userAppointments = allAppointments.filter(event => +event.user_id === +this.user.id)
+                let appointmentsIslandIds = [... new Set(userAppointments.map(event => event.island_id))]
+                return appointmentsIslandIds.map(id => ({
+                    island_id: id,
+                    app_count: userAppointments.filter(app =>  +app.island_id === +id).length,
+                    record_rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'records'})
+                }))
+                    .map(item => ({
+                        island_id: item.island_id,
+                        amount: item.app_count * item.record_rate
+                    }))
+                    .reduce((a, b) => a + b.amount, 0)
+            },
             grandTotal () {
-                return this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount + this.totalSicksAmount + this.totalVacationsAmount
+                return this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount
+                    + this.totalSicksAmount + this.totalVacationsAmount + this.totalRecordsAmount
             },
             isChief () {
                 return this.user && this.user.controlled_islands && this.user.controlled_islands.length
