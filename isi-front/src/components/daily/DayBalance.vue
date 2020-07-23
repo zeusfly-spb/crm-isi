@@ -6,6 +6,7 @@
                 absolute
                 top
                 fab
+                style="left: 20px; top: 20px"
                 title="Прослушать аудио отчет системы"
                 @click="pushVoiceReport"
                 @touchend="pushVoiceReport"
@@ -138,7 +139,9 @@
         },
         methods: {
             pushVoiceReport () {
-                this.$store.dispatch('pushVoiceMessage', 'Тестовое сообщение')
+                let accountingDate = this.$moment(this.$store.state.accountingDate).format('D MMMM YYYY года.')
+                let report = `На ${accountingDate} приход всего ${this.$store.getters.totalDealIncome} рублей из ни ${this.cashlessAmount} безналичными платежами`
+                this.$store.dispatch('pushVoiceMessage', report)
             },
             saveHandover () {
                 this.$store.dispatch('addHandOver', this.amount)
