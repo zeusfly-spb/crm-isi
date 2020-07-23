@@ -175,7 +175,6 @@ export default {
             state.statData = data
         },
         UPDATE_MONTH_USER (state, user) {
-            console.log("updating month user", user)
             let firstDate = state.monthData.dates[0]
             let lastDate = state.monthData.dates[state.monthData.dates.length - 1]
             const getDate = (timestamp) => timestamp.split(' ')[0] || null
@@ -187,6 +186,7 @@ export default {
             user.monthSicks = user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || []
             user.monthPrepays = user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || []
             user.monthVacations = user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+            user.app_count = state.monthData.allAppointments.filter(item => +item.user_id === +user.id).length
             state.monthData.users = state.monthData.users.map(item => +item.id === +user.id ? user : item)
         },
         DELETE_USER_PREPAY (state, data) {
@@ -239,10 +239,10 @@ export default {
                 targetUser.monthPrizes.push(prize)
             }
         },
-        UPDATE_USER_RATE (state, data) {
-            let target = state.monthData.users.find(user => +user.id === +data.user.id)
-            target[data.field_name] = data.user[data.field_name]
-        },
+        // UPDATE_USER_RATE (state, data) {
+        //     let target = state.monthData.users.find(user => +user.id === +data.user.id)
+        //     target[data.field_name] = data.user[data.field_name]
+        // },
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
@@ -256,7 +256,8 @@ export default {
                     monthForfeits: user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
                     monthSicks: user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
                     monthPrepays: user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
-                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || [],
+                    app_count: data.allAppointments.filter(item => +item.user_id === +user.id).length
                 }))
                 return rawData
             }

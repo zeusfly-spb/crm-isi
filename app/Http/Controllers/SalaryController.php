@@ -86,15 +86,19 @@ class SalaryController extends Controller
             $queryBuilder = $queryBuilder->whereHas('islands');
         }
         $users = $queryBuilder->get();
-        $users->each(function ($user) use ($startDate, $endDate) {
-            if ($user->group && $user->group->purpose === 'admin') {
-                $user->app_count = Appointment::where('user_id', $user->id)
-                    ->whereBetween('date', [$startDate, $endDate])
-                    ->where('status_id', 4) // <completed> defined in model
-                    ->count();
-            }
-        });
-        return ['users' => $users->toArray(), 'dates' => $monthDates, 'allDeals' => $allDeals->toArray()];
+        $appBuilder = Appointment::where('status_id', 4);
+        if ($island_id) {
+            $appBuilder = $appBuilder->where('island_id', $island_id);
+        }
+        $allAppointments = $appBuilder
+            ->whereMonth('date', $month)
+            ->get();
+        return [
+            'users' => $users->toArray(),
+            'dates' => $monthDates,
+            'allDeals' => $allDeals->toArray(),
+            'allAppointments' => $allAppointments->toArray()
+        ];
     }
 
     public function updateUserRate(Request $request)

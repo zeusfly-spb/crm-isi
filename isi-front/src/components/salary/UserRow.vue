@@ -78,7 +78,7 @@
                             </td>
                         </tr>
                         <tr
-                            v-if="user.app_count"
+                            v-if="user.is_admin"
                         >
                             <td
                                 class="info-tab"
@@ -99,6 +99,11 @@
                                         v-if="isSuperadmin && workingIslandId"
                                 />
                                 <strong v-else>{{ user.records_rate }}</strong>
+                            </td>
+                            <td
+                                class="info-tab"
+                            >
+                                <strong>{{ +recordsRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
 
                         </tr>
@@ -284,6 +289,9 @@
             totalVacations: 0
         }),
         computed: {
+            recordsRateAmount () {
+                return this.user.app_count * this.user.records_rate || 0
+            },
             workingIslandId () {
                 return this.$store.state.workingIslandId
             },
@@ -329,7 +337,7 @@
                 return this.user && this.user.controlled_islands && this.user.controlled_islands.length  && !this.workingIslandId || this.user && this.user.controlled_islands && this.user.controlled_islands.length && this.user.controlled_islands.map(item => item.id).includes(this.workingIslandId)
             },
             grandTotal () {
-                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations
+                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations + this.recordsRateAmount
             },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome

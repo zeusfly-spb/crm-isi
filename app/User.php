@@ -31,7 +31,8 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'full_name'
+        'full_name',
+        'is_admin'
     ];
 
     protected $casts = [
@@ -245,6 +246,11 @@ class User extends Authenticatable
             return $val['month'] < $month;
         });
         return $last['value'] ?? 0;
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->group && $this->group->purpose === 'admin' ?? false;
     }
 
 }

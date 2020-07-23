@@ -26,7 +26,8 @@ import $ from 'jquery'
 export default {
     name: 'App',
     data: () => ({
-        timerId: null
+        timerId: null,
+        userRates: null
     }),
     computed: {
         monthData () {
@@ -113,6 +114,17 @@ export default {
         this.$options.sockets.onmessage = (frame) => extData(frame)
     },
     watch: {
+        monthData (val) {
+            const getRates = () => {
+                this.userRates = val.users.map(user => ({
+                    name: user.full_name,
+                    hour_rate: user.hour_rate,
+                    sales_rate: user.sales_rate,
+                    records_rate: user.records_rate
+                }))
+            }
+            val.users.length ? getRates() : null
+        },
         authAllowed (val) {
             val ? this.$connect() : this.$disconnect()
         },
