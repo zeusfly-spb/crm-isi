@@ -1,5 +1,17 @@
 <template>
     <v-flex xs12 md6 offset-md3 justify-center class="md2">
+        <v-btn
+                color="pink"
+                dark
+                absolute
+                top
+                fab
+                title="Прослушать аудио отчет системы"
+                @click="pushVoiceReport"
+                @touchend="pushVoiceReport"
+        >
+            <v-icon>hearing</v-icon>
+        </v-btn>
         <v-data-table
             :headers="headers"
             :items="items"
@@ -125,6 +137,9 @@
             }
         },
         methods: {
+            pushVoiceReport () {
+                this.$store.dispatch('pushVoiceMessage', 'Тестовое сообщение')
+            },
             saveHandover () {
                 this.$store.dispatch('addHandOver', this.amount)
                     .then(() => {

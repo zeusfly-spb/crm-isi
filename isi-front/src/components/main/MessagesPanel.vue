@@ -1,10 +1,10 @@
 <template>
     <v-snackbar
-        v-model="snackbar"
-        auto-height
-        top
-        :timeout="messageTime * 1000"
-        :color="snackColor"
+            v-model="snackbar"
+            auto-height
+            top
+            :timeout="messageTime * 1000"
+            :color="snackColor"
     >
         <span>{{ snackText }}</span>
     </v-snackbar>
@@ -41,18 +41,16 @@
                         [this.snackColor, this.snackText, this.snackbar] = [res.color || 'green', res.text, true]
                     })
             },
-            testSpeak () {
+            speak (message) {
                 try {
-                    const utterInstance = new SpeechSynthesisUtterance(`Приход на 22 июля 2020 года составляет 300000 рублей,
-             из них 35000 наличными, остальные безналом. В данный момент трое сотрудников онлайн, один отправляет сообщения,
-             один совершает звонок`)
+                    const utterInstance = new SpeechSynthesisUtterance(message)
                     let synth = window.speechSynthesis
                     let voices
                     setTimeout(() => {
                         voices = synth.getVoices()
                         console.log(synth)
                         console.log(voices)
-                        utterInstance.voice = voices[15]
+                        utterInstance.voice = voices[27]
                         synth.speak(utterInstance)
                     }, 50)
                 } catch (e) {
@@ -61,10 +59,18 @@
                 }
             }
         },
-        mounted () {
-            // this.testSpeak()
-        },
         watch: {
+            voiceMessages: async function (val) {
+                if (!val.length) {
+                    return
+                }
+                try {
+                    let message = await this.$store.dispatch('popVoiceMessage')
+                    this.speak(message)
+                } catch (e) {
+                    return Promise.reject(e)
+                }
+            },
             wsOutbox: async function(val) {
                 if (!val.length) {
                     return
