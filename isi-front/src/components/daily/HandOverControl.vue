@@ -4,7 +4,7 @@
               v-if="!editing"
               @click="turnEditMode(true)"
         >
-            {{ handover }}
+            {{ handover | pretty }}
         </span>
         <v-text-field
             v-else

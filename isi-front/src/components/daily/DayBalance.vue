@@ -1,18 +1,19 @@
 <template>
     <v-flex xs12 md6 offset-md3 justify-center class="md2">
-        <v-btn
-                color="pink"
-                dark
-                absolute
-                top
-                fab
-                style="left: 20px; top: 20px"
-                title="Прослушать аудио отчет системы"
-                @click="pushVoiceReport"
-                @touchend="pushVoiceReport"
-        >
-            <v-icon>hearing</v-icon>
-        </v-btn>
+<!--        <v-btn-->
+<!--                color="pink"-->
+<!--                dark-->
+<!--                absolute-->
+<!--                top-->
+<!--                fab-->
+<!--                style="left: 20px; top: 20px"-->
+<!--                title="Прослушать аудио отчет системы"-->
+<!--                v-if="!workingIslandId"-->
+<!--                @click="pushVoiceReport"-->
+<!--                @touchend="pushVoiceReport"-->
+<!--        >-->
+<!--            <v-icon>hearing</v-icon>-->
+<!--        </v-btn>-->
         <v-data-table
             :headers="headers"
             :items="items"
@@ -35,7 +36,7 @@
                     <span v-if="!handover && !isToday">0</span>
                 </td>
                 <td align="center">
-                    {{ props.item.expenses }}
+                    {{ props.item.expenses | pretty }}
                 </td>
 
                 <td align="center">{{ props.item.finish | pretty }}</td>
@@ -100,6 +101,9 @@
             ]
         }),
         computed: {
+            workingIslandId () {
+                return this.$store.getters.workingIslandId
+            },
             realDate () {
                 return this.$store.state.realDate
             },
