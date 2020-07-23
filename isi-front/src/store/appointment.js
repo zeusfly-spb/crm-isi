@@ -113,6 +113,14 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
+                        if (res.data.deal) {
+                            commit('UPDATE_APPOINTMENT', res.data.appointment)
+                            commit('UPDATE_DEAL', res.data.deal)
+                            if (res.data.deal.subscribe_id) {
+                                dispatch('setSubscribes')
+                            }
+                        resolve(res)
+                        }
                         commit('UPDATE_APPOINTMENT', res.data)
                         if (res.data.subscribe_id) {
                             dispatch('setSubscribes')

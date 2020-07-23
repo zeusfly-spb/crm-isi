@@ -55,7 +55,7 @@
                     <v-btn color="green darken-1"
                        flat
                        :disabled="!eventDoneDealId"
-                       @click=""
+                       @click="doneEvent"
                     >
                         Изменить
                     </v-btn>
@@ -85,6 +85,7 @@
         computed: {
             currentDeals () {
                 let base = this.$store.getters.currentDeals
+                    .filter(deal => !deal.has_appointment)
                 return base.map(deal => ({
                     ...deal,
                     info: `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${deal.insole.name}`
@@ -134,6 +135,22 @@
             }
         },
         methods: {
+            doneEvent () {
+                const makeAction = () => {
+                    this.$store.dispatch('changeEventStatus', {
+                        event_id: this.eventToDone.id,
+                        status: 'completed',
+                        deal_id: this.eventDoneDealId
+                    })
+                        .then(() => {
+                            this.confirm = false
+                            let text = `Статус записи изменен на "Завершена"`
+                            this.$store.commit('SEND_EVENT_MESSAGE', {color: 'green', text: text})
+                        })
+                }
+                this.$validator.validate()
+                    .then(res => res ? makeAction() : null)
+            },
             closeEventDoneConfirm () {
                 this.eventDoneDealId = null
                 this.$store.commit('SET_EVENT_TO_DONE', null)

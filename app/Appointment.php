@@ -92,4 +92,9 @@ class Appointment extends Model
         return $this->comments[count($this->comments) - 1]['text'] ?? null;
     }
 
+    public function setDealId($id)
+    {
+        $this->update(['deal_id' => $id]);
+    }
+
 }

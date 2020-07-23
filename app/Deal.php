@@ -14,7 +14,11 @@ class Deal extends Model
     protected $casts = [
         'is_cache' => 'boolean',
     ];
-    protected $appends = ['insole', 'action_type'];
+    protected $appends = [
+        'insole',
+        'action_type',
+        'has_appointment'
+    ];
 
     public function user()
     {
@@ -53,6 +57,11 @@ class Deal extends Model
         return $this->hasOne(StockAction::class);
     }
 
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class);
+    }
+
     public function getInsoleAttribute()
     {
         $product = $this->product->name ?? '';
@@ -75,5 +84,10 @@ class Deal extends Model
     public function getActionTypeAttribute()
     {
         return $this->action->type ?? null;
+    }
+
+    public function getHasAppointmentAttribute()
+    {
+        return !!$this->appointment;
     }
 }

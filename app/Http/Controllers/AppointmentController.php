@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Deal;
 use App\Jobs\AddEventToLead;
 use App\User;
 use Carbon\Carbon;
@@ -48,6 +49,12 @@ class AppointmentController extends Controller
         $event = Appointment::find($request->event_id);
         $event->setStatus($request->status);
         $event->addComment($actionComment);
+        if ($request->deal_id && $request->status === 'completed') {
+            $event->setDealId($request->deal_id);
+            $event->load('user', 'performer', 'service', 'lead', 'island');
+            $deal = Deal::with('user', 'customer', 'action')->find($request->deal_id)->toArray();
+            return response()->json(['appointment' => $event->toArray(), 'deal' => $deal]);
+        }
         $event->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($event->toArray());
     }
