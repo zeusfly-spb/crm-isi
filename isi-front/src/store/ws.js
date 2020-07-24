@@ -50,11 +50,11 @@ export default {
             const changeLeadStatus = lead => {
                 let oldStatus = lead.old_status
                 delete lead.old_status
-                dispatch('change_count', {
+                dispatch('changeCount', {
                     status: oldStatus,
                     value: -1
                 })
-                dispatch('change_count', {
+                dispatch('changeCount', {
                     status: lead.status,
                     value: 1
                 })

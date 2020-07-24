@@ -31,12 +31,13 @@
             <v-divider/>
             <v-list-tile
                 v-for="(item, index) in contextMenuItems"
+                :disabled="item.disabled"
                 :key="index"
                 :title="can(item.action) ? '' : 'Невозможно выполнить операцию'"
                 @click="can(item.action) ? performAction(item.action) : null"
             >
                 <v-list-tile-title
-                    :class="{disabled: !can(item.action) }"
+                    :class="{disabled: !can(item.action)}"
                 >
                     <span class="body-2 right">
                         {{ item.title }}
@@ -107,10 +108,15 @@
                 return this.$store.getters.isSuperadmin
             },
             contextMenuItems () {
+                const today = () => this.event && this.event.date.split(' ')[0] === this.$store.getters.realDate || false
                 let base = this.contextMenuRaw
                 if (!this.isSuperadmin) {
                     base = base.filter(item => item.action !== 'cancelled')
                 }
+                base = base.map(item => ({
+                    ...item,
+                    disabled: !today() && item.action === 'completed'
+                }))
                 base = base.filter(item => item.action !== this.event.status)
                 return base
             }
