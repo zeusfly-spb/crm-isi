@@ -17,6 +17,7 @@
                     label="Начните вводить данные для поиска..."
                     single-line
                     hide-details
+                    :readonly="busy || $store.state.paginator.loading"
                     @input="lazyQuerySelection"
             />
         </div>
@@ -66,6 +67,7 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            busy: false,
             searchString: '',
             rowOptions: [
                 15,
@@ -127,7 +129,9 @@
         },
         methods: {
             setLeadName () {
+                this.busy = true
                 this.$store.dispatch('setLeadName', this.searchString)
+                    .finally(() => this.busy = false)
             },
             updatePagination (data) {
                 this.$store.dispatch('updatePagination', data)
