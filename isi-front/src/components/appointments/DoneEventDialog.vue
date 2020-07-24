@@ -50,7 +50,7 @@
         computed: {
             currentDeals () {
                 let base = this.$store.getters.currentDeals
-                    .filter(deal => !deal.has_appointment && deal.action_type === 'produce')
+                    .filter(deal => !deal.has_appointment)
                 return base.map(deal => ({
                     ...deal,
                     info: `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${deal.insole.name}`
