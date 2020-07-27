@@ -110,7 +110,7 @@
                 return this.$store.state.loader.showTodayPostpones
             },
             lazyQuerySelection () {
-                return Lodash.debounce(this.setLeadName, 300)
+                return Lodash.debounce(this.setLeadName, 500)
             },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
