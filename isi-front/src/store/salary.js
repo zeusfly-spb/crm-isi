@@ -239,10 +239,6 @@ export default {
                 targetUser.monthPrizes.push(prize)
             }
         },
-        // UPDATE_USER_RATE (state, data) {
-        //     let target = state.monthData.users.find(user => +user.id === +data.user.id)
-        //     target[data.field_name] = data.user[data.field_name]
-        // },
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
