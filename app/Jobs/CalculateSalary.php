@@ -42,9 +42,9 @@ class CalculateSalary implements ShouldQueue
         $monthStr = implode('-', $dateArray);
         $cache_name = 'salary_' . $this->island_id . '_' . $monthStr;
         Cache::forget($cache_name);
-        Cache::put($cache_name, SalaryController::retrieveMonthData($this->date, $this->island_id));
+        Cache::forever($cache_name, SalaryController::retrieveMonthData($this->date, $this->island_id));
         $cache_name = 'salary_0_' . $monthStr;
         Cache::forget($cache_name);
-        Cache::put($cache_name, SalaryController::retrieveMonthData($this->date, 0));
+        Cache::forever($cache_name, SalaryController::retrieveMonthData($this->date, 0));
     }
 }

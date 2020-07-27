@@ -86,13 +86,13 @@ class SalaryController extends Controller
             $queryBuilder = $queryBuilder->whereHas('islands');
         }
         $users = $queryBuilder->get();
-        $appBuilder = Appointment::where('status_id', 4);
+
+        $appBuilder = Appointment::where('status_id', 4)->whereMonth('date', $month);
         if ($island_id) {
             $appBuilder = $appBuilder->where('island_id', $island_id);
         }
-        $allAppointments = $appBuilder
-            ->whereMonth('date', $month)
-            ->get();
+        $allAppointments = $appBuilder->get();
+
         return [
             'users' => $users->toArray(),
             'dates' => $monthDates,
