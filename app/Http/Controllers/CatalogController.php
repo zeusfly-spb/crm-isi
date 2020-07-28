@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
+    public function setServiceHighlight(Request $request)
+    {
+        $service = Service::find($request->service_id);
+        $service->setHiglight($request->color);
+        return response($service->toArray());
+    }
+
     public function deleteNotifyTemplate(Request $request)
     {
         $template = NotifyTemplate::find($request->id);
@@ -32,9 +39,10 @@ class CatalogController extends Controller
 
     public function getCatalogs()
     {
-        $services = Cache::rememberForever('services', function () {
-            return Service::all();
-        });
+//        $services = Cache::rememberForever('services', function () {
+//            return Service::all();
+//        });
+        $services = Service::all();
         $subscriptions = Subscription::with('service')->get();
         $notifyTemplates = NotifyTemplate::all();
         return response()->json([

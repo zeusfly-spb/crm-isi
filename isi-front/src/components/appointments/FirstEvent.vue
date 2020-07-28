@@ -9,7 +9,8 @@
             :title="mainTitle"
             :style="{
                 'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab',
-                'min-width': compact ? 0 : '88px'
+                'min-width': compact ? 0 : '88px',
+                'background-color': `${background}!important`
             }"
             :ripple="false"
             :id="`first-${event.id}`"
@@ -73,6 +74,7 @@
                 outline
                 text-color="black"
                 style="height: 40px; border: 1px solid lightgrey"
+                :style="{'background-color': `${background}!important`}"
                 v-if="display"
             >
                 <event
@@ -135,6 +137,9 @@
             }
         }),
         computed: {
+            background () {
+                return this.event && this.event.service && this.event.service.highlight && this.$store.getters.colorValue(this.event.service.highlight) || ''
+            },
             mainTitle () {
                 let details = `Запись на ${this.$moment(this.event.date).format('D MMMM YYYY г. H:m')}`
                 return this.compact ? details : 'Показать подробности'

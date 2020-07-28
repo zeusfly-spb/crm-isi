@@ -30,6 +30,9 @@ export default {
         userRates: null
     }),
     computed: {
+        colors () {
+            return this.$store.state.catalog.colors
+        },
         monthData () {
             return this.$store.state.salary.monthData
         },
