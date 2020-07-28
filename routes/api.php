@@ -168,6 +168,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('create_notify_template', 'CatalogController@createNotifyTemplate');
     Route::post('update_notify_template', 'CatalogController@updateNotifyTemplate');
     Route::post('delete_notify_template', 'CatalogController@deleteNotifyTemplate');
+    Route::post('set_service_highlight', 'CatalogController@setServiceHighlight');
 
 
     //APPOINTMENTS

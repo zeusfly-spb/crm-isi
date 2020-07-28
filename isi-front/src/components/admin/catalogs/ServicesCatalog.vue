@@ -1,5 +1,5 @@
 <template>
-    <v-flex xs12 sm6 md6>
+    <v-flex xs12 sm12 md12>
         <v-card class="round-corner">
             <v-card-title class="light-blue darken-3"
                           style="height: 2em; margin: 0; padding: 0"
@@ -30,13 +30,21 @@
                             <td>{{ props.index + 1 }}</td>
                             <td>{{ props.item.description }}</td>
                             <td>{{ props.item.price }}</td>
-                            <td align="center">
+                            <td
+                                align="center"
+                                class="colors-column"
+                            >
                                 <v-icon
                                     v-if="props.item.changeable_price"
                                     color="green darken-1"
                                 >
                                     check
                                 </v-icon>
+                            </td>
+                            <td align="right">
+                                <service-color-picker
+                                    :service="props.item"
+                                />
                             </td>
                             <td align="right">
                                 <v-icon
@@ -106,10 +114,8 @@
                                 label="Изменяемая цена"
                             />
                         </v-flex>
-
                     </v-layout>
                 </v-container>
-
             </v-card-text>
             <v-card-actions>
                 <v-spacer/>
@@ -161,6 +167,7 @@
 </v-flex>
 </template>
 <script>
+    import ServiceColorPicker from './ServicesColorPicker'
     export default {
         name: 'ServicesCatalog',
         data: () => ({
@@ -176,6 +183,7 @@
                 {text: 'Услуга', value: 'description'},
                 {text: 'Цена', value: 'price'},
                 {text: 'Изменяемая цена', sortable: false, value: 'changeable_price'},
+                {text: 'Подсветка', sortable: false, align: 'center', value: null},
                 {text: 'Действия', sortable: false, align: 'right', value: null}
             ],
             blankService: {
@@ -200,7 +208,6 @@
                     .then(() => {
                         this.confirm = false
                         let text = `Сервис ${this.serviceToDelete.description} с кодом ${this.serviceToDelete.name} удален`
-                        // this.showSnack({color: 'green', text: text})
                         this.$store.dispatch('pushMessage', {
                             text: text,
                             color: 'green'
@@ -210,11 +217,6 @@
             confirmDelete (service) {
                 this.serviceToDelete = service
                 this.confirm = true
-            },
-            showSnack ({color, text}) {
-                this.snackColor = color
-                this.snackText = text
-                this.snackbar = true
             },
             action () {
                 this.$validator.validate()
@@ -235,7 +237,6 @@
                 this.$store.dispatch('updateService', {... this.editedService})
                     .then((res) => {
                         let text = `Сервис ${res.data.description} изменен`
-                        // this.showSnack({color: 'green', text: text})
                         this.$store.dispatch('pushMessage', {
                             text: text,
                             color: 'green'
@@ -247,7 +248,6 @@
                 this.$store.dispatch('createService', {... this.editedService})
                     .then((res) => {
                         let text = `Сервис ${res.data.description} добавлен`
-                        // this.showSnack({color: 'green', text: text})
                         this.$store.dispatch('pushMessage', {
                             text: text,
                             color: 'green'
@@ -282,6 +282,14 @@
                 }
                 this.dialog = !!val
             }
+        },
+        components: {
+            ServiceColorPicker
         }
     }
 </script>
+<style>
+    .colors-column {
+        width: 5em!important;
+    }
+</style>
