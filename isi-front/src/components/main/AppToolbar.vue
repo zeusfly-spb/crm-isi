@@ -20,7 +20,6 @@
                         align-center
                     >
                         <v-avatar
-                            color="white"
                             style="box-shadow: black"
                             v-if="isAuth"
                             :size="isMobile ? 24 : 48"
