@@ -80,7 +80,7 @@
                                 </v-autocomplete>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <sub>Услуга</sub>
+                                <sub>Действие</sub>
                                 <v-select
                                     v-model="newDealData.deal_action_id"
                                     :items="actions"
@@ -89,6 +89,28 @@
                                     single-line
                                 />
                             </v-flex>
+                            <template
+                                v-if="service"
+                            >
+                                <v-flex
+                                    xs12 sm6 md4
+                                >
+                                    <sub>Услуга</sub>
+                                    <v-select
+                                        v-model="selectedServiceId"
+                                        :items="islandServices"
+                                        item-text="description"
+                                        item-value="id"
+                                        single-line
+                                        data-vv-name="service"
+                                        data-vv-as="Услуга"
+                                        :error-message="errors.collect('service')"
+                                        v-validate="service ? 'required' : ''"
+                                    />
+
+                                </v-flex>
+
+                            </template>
                             <template
                                 v-if="subscribe"
                             >
@@ -153,7 +175,7 @@
                             </template>
 
                             <v-flex xs12 sm6 md4
-                                    v-show="!subscribe"
+                                    v-show="!subscribe && !service"
                             >
                                 <sub>Продукция</sub>
                                 <v-select
@@ -169,7 +191,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale' && !subscribe"
+                                    v-show="newDealActionType !== 'sale' && !subscribe && !service"
                             >
                                 <sub>Материал</sub>
                                 <v-select
@@ -181,7 +203,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale' && !subscribe"
+                                    v-show="newDealActionType !== 'sale' && !subscribe && !service"
                             >
                                 <sub>Размер</sub>
                                 <v-select
@@ -206,7 +228,7 @@
                                     data-vv-as="Сумма"
                                     :error-messages="errors.collect('price')"
                                     v-validate="incomeValidate"
-                                ></v-text-field>
+                                />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <sub>Форма оплаты</sub>
@@ -217,7 +239,7 @@
                                     item-text="text"
                                     item-value="value"
                                     single-line
-                                ></v-select>
+                                />
                             </v-flex>
 
                         </v-layout>
@@ -279,6 +301,7 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            selectedServiceId: null,
             menu: false,
             newSubscribeStartDate: null,
             selectedSubscriptionId: null,
@@ -313,14 +336,20 @@
                 {text: '#', value: 'number', sortable: false},
                 {text: 'Сотрудник', value: 'id', sortable: false},
                 {text: 'Клиент', value: 'customer_id', sortable: false},
-                {text: 'Услуга', value: 'action_type', sortable: false},
-                {text: 'Продукция', value: 'insole', sortable: false},
+                {text: 'Тип', value: 'action_type', sortable: false},
+                {text: 'Продукция / Услуга', value: 'insole', sortable: false},
                 {text: 'Приход', value: 'income', sortable: false},
                 {text: 'Расход', value: 'expense', sortable: false},
                 {text: 'Форма оплаты', value: 'is_cache', sortable: false},
             ]
         }),
         computed: {
+            islandServices () {
+                return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services
+            },
+            service () {
+                return this.newDealActionType === 'service'
+            },
             selectedSubscription () {
                 return this.subscriptions && this.selectedSubscriptionId && this.subscriptions
                     .find(item => +item.id === +this.selectedSubscriptionId)  || null
@@ -529,7 +558,8 @@
                             expense: 0,
                             is_cache: this.selectedPaymentType,
                             subscription_id: this.selectedSubscriptionId,
-                            start_date: this.newSubscribeStartDate
+                            start_date: this.newSubscribeStartDate,
+                            service_id: this.selectedServiceId
                         })
                             .then(res => {
                                 this.$store.dispatch('pushMessage', {
