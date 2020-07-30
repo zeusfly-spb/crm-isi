@@ -45,7 +45,7 @@
                 <span
                         class="text-center body-2"
                 >
-                    Сервисы
+                    Услуги
                 </span>
                     <div>
                         <v-checkbox
@@ -72,6 +72,9 @@
                 <island-notify-control
                         :island_id="island.id"
                 />
+                <island-salary-options-control
+                        :island_id="island.id"
+                />
             </v-layout>
         </v-layout>
         <v-layout justify-center>
@@ -89,6 +92,7 @@
     import CabinetControl from './CabinetControl'
     import IslandNotifyControl from './IslandNotifyControl'
     import CallCenterSwitcher from './CallCenterSwitcher'
+    import IslandSalaryOptionsControl from './IslandSalaryOptionsControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -162,7 +166,8 @@
         components: {
             CabinetControl,
             IslandNotifyControl,
-            CallCenterSwitcher
+            CallCenterSwitcher,
+            IslandSalaryOptionsControl
         }
     }
 </script>
