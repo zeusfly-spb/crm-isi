@@ -14,7 +14,7 @@ class AddServiceIdColumnOnDealsTable extends Migration
     public function up()
     {
         Schema::table('deals', function (Blueprint $table) {
-            $table->bigInteger('service_id')->nullable()->default(null);
+            $table->bigInteger('service_id')->nullable()->default(null)->index();
         });
     }
 
