@@ -2,6 +2,7 @@
     <v-sheet
         class="p-0 m-0 mb-1 round-corner"
         elevation="2"
+        color="light-green lighten-5"
     >
          <span
              class="pl-2 text-center body-2"
@@ -126,10 +127,9 @@
             <v-select
                 v-model="createNotifyTemplateId"
                 :items="[...notifyTemplates, {name_short: 'Нет', id: null}]"
-                style="max-width: 15em"
                 item-text="name_short"
                 item-value="id"
-                class="p-0 m-0 reminder-select"
+                class="p-0 m-0 mr-2 reminder-select"
                 single-line
             >
                 <template v-slot:item="{item}">

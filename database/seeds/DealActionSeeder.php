@@ -18,7 +18,8 @@ class DealActionSeeder extends Seeder
         'alteration' => 'Переделка',
         'return' => 'Возврат',
         'sale' => 'Продажа',
-        'subscribe' => 'Оформление абонемента'
+        'subscribe' => 'Оформление абонемента',
+        'service' => 'Оказание услуги'
     ];
 
     public function run()
