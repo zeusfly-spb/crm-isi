@@ -1,13 +1,17 @@
 <template>
     <v-flex>
-        <span v-if="!active"
-              :class="{clickable: canUpdate && !loading}"
-              @click="activate"
-              :title="canUpdate && !loading ? 'Клик чтобы изменить продукцию по сделке' : ''"
-        >
-            {{ subscription ? subscription.name : deal.insole.name }}
-        </span>
-        <span v-else class="grey--text">{{ deal.insole.name }}</span>
+        <service-deal-updater :deal="deal" v-if="isService"/>
+        <div v-if="!isService">
+             <span v-if="!active"
+                   :class="{clickable: canUpdate && !loading}"
+                   @click="activate"
+                   :title="canUpdate && !loading ? 'Клик чтобы изменить продукцию по сделке' : ''"
+             >
+                {{ subscription ? subscription.name : deal.insole.name }}
+            </span>
+            <span v-else class="grey--text">{{ deal.insole.name }}</span>
+        </div>
+
         <v-dialog
             v-model="active"
             persistent
@@ -73,6 +77,7 @@
     </v-flex>
 </template>
 <script>
+    import ServiceDealUpdater from './ServiceDealUpdater'
     export default {
         name: 'DealUpdater',
         props: ['deal'],
@@ -83,6 +88,9 @@
             active: false
         }),
         computed: {
+            isService () {
+                return this.deal && this.deal.is_service || false
+            },
             subscription () {
                 return !this.deal.product && this.subscriptions.find(item => item.id === this.deal.subscription_id) || null
             },
@@ -200,6 +208,9 @@
         mounted () {
             this.updateCurrentProduct()
             this.updateCurrentType()
+        },
+        components: {
+            ServiceDealUpdater
         }
     }
 </script>

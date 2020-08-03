@@ -17,7 +17,8 @@ class Deal extends Model
     protected $appends = [
         'insole',
         'action_type',
-        'has_appointment'
+        'has_appointment',
+        'is_service'
     ];
 
     public function user()
@@ -89,5 +90,15 @@ class Deal extends Model
     public function getHasAppointmentAttribute()
     {
         return !!$this->appointment;
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function getIsServiceAttribute()
+    {
+        return !!$this->service;
     }
 }

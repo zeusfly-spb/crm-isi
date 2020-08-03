@@ -87,6 +87,10 @@
                                     item-text="text"
                                     item-value="id"
                                     single-line
+                                    data-vv-name="action"
+                                    data-vv-as="Действие"
+                                    :error-message="errors.collect('action')"
+                                    v-validate="'required'"
                                 />
                             </v-flex>
                             <template
@@ -95,7 +99,7 @@
                                 <v-flex
                                     xs12 sm6 md4
                                 >
-                                    <sub>Услуга</sub>
+                                    <sub>Наименование</sub>
                                     <v-select
                                         v-model="selectedServiceId"
                                         :items="islandServices"
@@ -103,9 +107,9 @@
                                         item-value="id"
                                         single-line
                                         data-vv-name="service"
-                                        data-vv-as="Услуга"
+                                        data-vv-as="Наименование"
                                         :error-message="errors.collect('service')"
-                                        v-validate="service ? 'required' : ''"
+                                        v-validate="'required'"
                                     />
 
                                 </v-flex>
@@ -336,7 +340,7 @@
                 {text: '#', value: 'number', sortable: false},
                 {text: 'Сотрудник', value: 'id', sortable: false},
                 {text: 'Клиент', value: 'customer_id', sortable: false},
-                {text: 'Тип', value: 'action_type', sortable: false},
+                {text: 'Действие', value: 'action_type', sortable: false},
                 {text: 'Продукция / Услуга', value: 'insole', sortable: false},
                 {text: 'Приход', value: 'income', sortable: false},
                 {text: 'Расход', value: 'expense', sortable: false},
@@ -344,8 +348,12 @@
             ]
         }),
         computed: {
+            selectedService () {
+                return this.islandServices.find(item => +item.id === +this.selectedServiceId) || null
+            },
             islandServices () {
-                return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services
+                const value = () => this.$store.getters.workingIsland.services.filter(item => item.description !== 'Стельки')
+                return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services && value() || []
             },
             service () {
                 return this.newDealActionType === 'service'
@@ -365,6 +373,9 @@
                 return ['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(this.newDealActionType)
             },
             incomeValidate () {
+                if (this.newDealActionType === 'service') {
+                    return 'required|integer'
+                }
                 return ['produce', 'return', 'subscribe'].includes(this.newDealActionType)
                     || this.newDealProduct && this.newDealProduct.changeable_price ? 'required|integer' : null
             },
@@ -512,9 +523,10 @@
                 return target && target.count || 0
             },
             setDefaultDealData () {
-                this.newDealData.deal_action_id = this.stockOptions.deal_actions[0].id
-                this.newDealData.product_id = this.stockOptions.products[0].id
-                this.newDealData.type_id = this.stockOptions.types.find(type => type.name === 'Кожа').id
+                this.selectedServiceId = this.islandServices && this.islandServices.length && this.islandServices[0].id || null
+                this.newDealData.deal_action_id = this.stockOptions.deal_actions && this.stockOptions.deal_actions[0] && this.stockOptions.deal_actions[0].id || null
+                this.newDealData.product_id = this.stockOptions.products && this.stockOptions.products[0] && this.stockOptions.products[0].id || null
+                this.newDealData.type_id = this.stockOptions && this.stockOptions.types && this.stockOptions.types.find(type => type.name === 'Кожа').id
             },
             deleteDeal () {
                 this.$store.dispatch('deleteDeal', this.dealToDelete)
@@ -547,6 +559,8 @@
                 }
                 this.$validator.validate()
                     .then(res => {
+                        console.log(res)
+                        console.dir(this.$validator.errors)
                         if (!res) return
                         this.pendingRequest = true
                         this.$store.dispatch('addDeal', {
@@ -607,6 +621,15 @@
             this.$store.dispatch('setCatalogs')
         },
         watch: {
+            'newDealData.deal_action_id': function () {
+                this.$validator.pause()
+                this.$nextTick(() => {
+                    this.$validator.errors.clear()
+                    this.$validator.fields.items.forEach(field => field.reset())
+                    this.$validator.fields.items.forEach(field => this.errors.remove(field))
+                    this.$validator.resume()
+                })
+            },
             selectedSubscriptionId (val) {
                 if (!val) {
                     return
