@@ -182,8 +182,8 @@
         computed: {
             serviceItem () {
                 if (!this.deal.is_service && ['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(this.deal.action_type)) {
-                    return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services.length
-                        && this.$store.getters.workingIsland.services.find(item => item.description === 'Стельки') || null
+                    return this.$store.getters.allServices.length
+                        && this.$store.getters.allServices.find(item => item.description === 'Стельки') || null
                 }
                 return this.deal.service
             },
@@ -191,8 +191,8 @@
                 return this.serviceItem && this.$store.getters.colorValue(this.serviceItem.highlight) || ''
             },
             islandServices () {
-                const value = () => this.$store.getters.workingIsland.services.filter(item => item.description !== 'Стельки')
-                return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services && value() || []
+                const value = () => this.$store.getters.allServices.filter(item => item.description !== 'Стельки')
+                return this.$store.getters.allServices.lengththis.$store.getters.workingIsland && value() || []
             },
             mini () {
                 return this.$store.getters.miniMode

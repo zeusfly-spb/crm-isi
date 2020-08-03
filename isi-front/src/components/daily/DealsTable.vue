@@ -559,8 +559,6 @@
                 }
                 this.$validator.validate()
                     .then(res => {
-                        console.log(res)
-                        console.dir(this.$validator.errors)
                         if (!res) return
                         this.pendingRequest = true
                         this.$store.dispatch('addDeal', {
