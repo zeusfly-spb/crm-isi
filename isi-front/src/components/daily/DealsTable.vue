@@ -571,7 +571,7 @@
                             is_cache: this.selectedPaymentType,
                             subscription_id: this.selectedSubscriptionId,
                             start_date: this.newSubscribeStartDate,
-                            service_id: this.selectedServiceId
+                            service_id: this.newDealActionType === 'service' ? this.selectedServiceId : null
                         })
                             .then(res => {
                                 this.$store.dispatch('pushMessage', {

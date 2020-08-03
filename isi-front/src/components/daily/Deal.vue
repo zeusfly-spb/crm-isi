@@ -185,7 +185,7 @@
                     return this.$store.getters.allServices.length
                         && this.$store.getters.allServices.find(item => item.description === 'Стельки') || null
                 }
-                return this.deal.service
+                return this.$store.getters.allServices.find(item => +item.id === +this.deal.service_id) || null
             },
             serviceColor () {
                 return this.serviceItem && this.$store.getters.colorValue(this.serviceItem.highlight) || ''
