@@ -182,7 +182,7 @@
         computed: {
             serviceItem () {
                 if (!this.deal.is_service && ['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(this.deal.action_type)) {
-                    return this.$store.getters.workingIsland.services.length
+                    return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services.length
                         && this.$store.getters.workingIsland.services.find(item => item.description === 'Стельки') || null
                 }
                 return this.deal.service
