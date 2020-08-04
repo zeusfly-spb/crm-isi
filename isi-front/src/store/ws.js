@@ -78,7 +78,8 @@ export default {
                 switch (obj.type.split('_')[1]) {
                     case 'deal':
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
-                        obj.model.island_id !== getters.workingIslandId || getters.currentPage !== 'daily' ? result = false : null
+                        getters.workingIslandId !== 0 && obj.model.island_id !== getters.workingIslandId ? result = false : null
+                        getters.currentPage !== 'daily' ? result = false : null
                         break
                     case 'appointment':
                         month(getters.eventsDate) !== month(obj.model.date) ? result = false : null
