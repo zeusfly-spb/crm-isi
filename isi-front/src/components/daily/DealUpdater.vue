@@ -24,7 +24,21 @@
                 <v-card-text>
                     <v-container grid-list-md>
                         <v-layout wrap>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm12 md12
+                                v-if="isSale"
+                            >
+                                <v-select
+                                        v-model="deal.product_id"
+                                        :items="products"
+                                        item-text="name"
+                                        item-value="id"
+                                        single-line
+                                        @change="updateCurrentProduct"
+                                />
+                            </v-flex>
+                            <v-flex xs12 sm6 md4
+                                v-else
+                            >
                                 <sub>Продукция</sub>
                                 <v-select
                                     v-model="deal.product_id"
@@ -35,7 +49,9 @@
                                     @change="updateCurrentProduct"
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                v-if="!isSale"
+                            >
                                 <sub>Материал</sub>
                                 <v-select
                                     v-model="deal.type_id"
@@ -46,7 +62,9 @@
                                     @change="updateCurrentType"
                                 />
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <v-flex xs12 sm6 md4
+                                v-if="!isSale"
+                            >
                                 <sub>Размер</sub>
                                 <v-select
                                     v-model="deal.size_id"
@@ -80,7 +98,12 @@
     import ServiceDealUpdater from './ServiceDealUpdater'
     export default {
         name: 'DealUpdater',
-        props: ['deal'],
+        props: {
+            deal: {
+                type: Object,
+                required: true
+            }
+        },
         data: () => ({
             loading: false,
             currentType: null,
@@ -88,6 +111,9 @@
             active: false
         }),
         computed: {
+            isSale () {
+                return this.deal.action_type === 'sale' || false
+            },
             isService () {
                 return this.deal && this.deal.is_service || false
             },
