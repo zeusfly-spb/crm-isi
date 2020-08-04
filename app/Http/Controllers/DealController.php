@@ -162,4 +162,12 @@ class DealController extends Controller
         }
         return response()->json(['result' => Deal::destroy($request->id)]);
     }
+
+    public function updateDealServiceId(Request $request)
+    {
+        $deal = Deal::find($request->deal_id);
+        $deal->update(['service_id' => $request->service_id]);
+        $deal->load('user', 'customer', 'action');
+        return response()->json($deal->toArray());
+    }
 }

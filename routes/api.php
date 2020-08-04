@@ -90,6 +90,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_deal', 'DealController@delete');
     Route::post('update_deal_customer', 'DealController@updateCustomerId');
     Route::post('update_deal_price', 'DealController@updatePrice');
+    Route::post('update_deal_service_id', 'DealController@updateDealServiceId');
+
 
 
     // EXPENSES
