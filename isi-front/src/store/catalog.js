@@ -511,6 +511,9 @@ export default {
     },
     getters: {
         colorValue: state => classname => {
+            if (!classname.length) {
+                return ''
+            }
             let baseColor = classname.split(' ')[0]
             if (baseColor.indexOf('-') !== -1) {
                 baseColor = baseColor.split('-')[0] + baseColor.split('-')[1]
