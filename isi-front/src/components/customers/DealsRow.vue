@@ -22,7 +22,15 @@
                         </v-avatar>
                         {{ props.item.action.text }}
                     </td>
-                    <td align="left">
+                    <td
+                        align="left"
+                        v-if="props.item.is_service"
+                    >
+                        {{ props.item.service.description || ''}}
+                    </td>
+                    <td align="left"
+                        v-else
+                    >
                         {{ props.item.subscription_id ? subscriptionName(props.item.subscription_id) : props.item.insole.name }}
                     </td>
                     <td align="right">{{ props.item.income | pretty }} &#8381;</td>
