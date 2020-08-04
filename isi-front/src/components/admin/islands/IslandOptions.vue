@@ -42,11 +42,11 @@
                 <v-flex
                         v-if="extended"
                 >
-                <span
-                        class="text-center body-2"
-                >
-                    Услуги
-                </span>
+                    <span
+                            class="text-center body-2"
+                    >
+                        Услуги
+                    </span>
                     <div>
                         <v-checkbox
                                 height=".5em"
@@ -67,6 +67,7 @@
             </v-layout>
 
             <v-layout
+                style="margin-top: 1em"
                 v-if="extended"
             >
                 <island-notify-control
