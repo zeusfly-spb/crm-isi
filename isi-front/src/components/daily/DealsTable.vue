@@ -269,7 +269,7 @@
         />
 
         <v-dialog v-model="confirm"
-                  max-width="600"
+                  max-width="800"
         >
             <v-card class="round-corner">
                 <v-card-title class="subheading light-blue darken-3">
@@ -537,7 +537,11 @@
             },
             deleteConfirm (deal) {
                 this.dealToDelete = deal
-                this.confirmText = `Удалить запись о сделке ${deal.insole.name} на ${deal.income}р. ?`
+                if (deal.is_service) {
+                    this.confirmText = `Удалить запись о сделке "${deal.service.description || ''}" на ${deal.income}р. ?`
+                } else {
+                    this.confirmText = `Удалить запись о сделке "${deal.insole.name}" на ${deal.income}р. ?`
+                }
                 this.confirm = true
             },
             setNewCustomer (customer) {
