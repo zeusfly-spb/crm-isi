@@ -569,7 +569,7 @@
                             income: this.newDealIncome,
                             expense: 0,
                             is_cache: this.selectedPaymentType,
-                            subscription_id: this.selectedSubscriptionId,
+                            subscription_id: this.subscribe ? this.selectedSubscriptionId : null,
                             start_date: this.newSubscribeStartDate,
                             service_id: this.newDealActionType === 'service' ? this.selectedServiceId : null
                         })
