@@ -8,11 +8,14 @@
             {{ description }}
         </span>
         <v-select
+            autofocus
             v-if="active"
             v-model="selectedServiceId"
             item-text="description"
             item-value="id"
             :items="islandServices"
+            @keyup.esc="deactivate"
+            @focus="activate"
             @blur="deactivate"
         />
     </v-flex>
