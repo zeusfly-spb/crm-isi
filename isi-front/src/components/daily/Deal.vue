@@ -188,7 +188,7 @@
                 return this.$store.getters.allServices.find(item => +item.id === +this.deal.service_id) || null
             },
             serviceColor () {
-                return this.serviceItem && this.$store.getters.colorValue(this.serviceItem.highlight) || ''
+                return this.serviceItem && this.serviceItem.highlight && this.$store.getters.colorValue(this.serviceItem.highlight) || ''
             },
             islandServices () {
                 const value = () => this.$store.getters.allServices.filter(item => item.description !== 'Стельки')
