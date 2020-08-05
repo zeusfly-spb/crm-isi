@@ -49,11 +49,15 @@
         }),
         computed: {
             currentDeals () {
+                const dealInfo = deal => {
+                    let product = deal.action.type === 'service' ? deal.service.description : deal.insole.name
+                    return `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${product}`
+                }
                 let base = this.$store.getters.currentDeals
                     .filter(deal => !deal.has_appointment)
                 return base.map(deal => ({
                     ...deal,
-                    info: `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${deal.insole.name}`
+                    info: dealInfo(deal)
                 }))
             },
             eventToDone () {
