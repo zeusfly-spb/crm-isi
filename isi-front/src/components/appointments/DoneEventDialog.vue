@@ -23,7 +23,16 @@
                             data-vv-as="Сделка"
                             :error-messages="errors.collect('deal')"
                             v-validate="'required'"
-                    />
+                    >
+                        <template v-slot:item="{ item }">
+                            <div
+                                class="select-item"
+                                :style="{backgroundColor: item.color && $store.getters.colorValue(item.color) || ''}"
+                            >
+                                <span>{{ item.info }}</span>
+                            </div>
+                        </template>
+                    </v-select>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -57,7 +66,8 @@
                     .filter(deal => !deal.has_appointment)
                 return base.map(deal => ({
                     ...deal,
-                    info: dealInfo(deal)
+                    info: dealInfo(deal),
+                    color: deal.service && deal.service.highlight || null
                 }))
             },
             eventToDone () {
@@ -127,4 +137,14 @@
         }
     }
 </script>
+<style scoped>
+    .select-item {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+    }
+</style>
 
