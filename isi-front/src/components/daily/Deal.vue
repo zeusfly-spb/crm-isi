@@ -307,7 +307,6 @@
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, deals: false})
             },
             switchEditMode (mode) {
-                console.log('switching ' + mode)
                 if (!this.canUpdate) return
                 for(let key in this.editMode) {
                     this.editMode[key] = false

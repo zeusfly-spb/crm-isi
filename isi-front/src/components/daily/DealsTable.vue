@@ -401,7 +401,7 @@
                     }
                     return a.id - b.id
                 }
-                return this.stockOptions.deal_actions && this.stockOptions.deal_actions
+                return this.stockOptions.deal_actions && JSON.parse(JSON.stringify(this.stockOptions.deal_actions))
                     .sort(sortAction)
                     .map(item => item.type === 'subscribe' && !this.subscriptions.length ? {...item, disabled: true} : item)
             },
