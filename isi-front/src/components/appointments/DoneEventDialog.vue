@@ -29,7 +29,11 @@
                                 class="select-item"
                                 :style="{backgroundColor: item.color && $store.getters.colorValue(item.color) || ''}"
                             >
-                                <span>{{ item.info }}</span>
+                                <span
+                                    class="pl-1"
+                                >
+                                    {{ item.info }}
+                                </span>
                             </div>
                         </template>
                     </v-select>
@@ -57,17 +61,28 @@
             eventDoneDealId: null
         }),
         computed: {
+            islandServices () {
+                return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services || []
+            },
             currentDeals () {
                 const dealInfo = deal => {
                     let product = deal.action.type === 'service' ? deal.service.description : deal.insole.name
                     return `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${product}`
+                }
+                const dealColor = deal => {
+                    let insolesService = this.islandServices.find(service => service.description === 'Стельки')
+                    let insolesColor = insolesService && insolesService.highlight || null
+                    if (['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(deal.action_type)) {
+                        return insolesColor
+                    }
+                    return deal.service && deal.service.highlight || null
                 }
                 let base = this.$store.getters.currentDeals
                     .filter(deal => !deal.has_appointment)
                 return base.map(deal => ({
                     ...deal,
                     info: dealInfo(deal),
-                    color: deal.service && deal.service.highlight || null
+                    color: dealColor(deal)
                 }))
             },
             eventToDone () {
