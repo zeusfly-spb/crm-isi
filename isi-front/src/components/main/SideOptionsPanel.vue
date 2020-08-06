@@ -14,12 +14,27 @@
             :true-value="true"
             :false-value="false"
         />
+        <v-switch
+            v-model="hideReminders"
+            label='Скрыть напоминания'
+            :true-value="true"
+            :false-value="false"
+        />
+
     </v-sheet>
 </template>
 <script>
     export default {
         name: 'SideOptionsPanel',
         computed: {
+            hideReminders: {
+                get () {
+                    return this.$store.getters.hideReminders
+                },
+                set (val) {
+                    return this.$store.commit('SET_HIDE_REMINDERS_VALUE', val)
+                }
+            },
             miniMode: {
                 get () {
                     return this.$store.getters.miniMode

@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        hideReminders: null,
         mini: null,
         data: {
             switcherPanel: {
@@ -32,6 +33,10 @@ export default {
         }
     },
     mutations: {
+        SET_HIDE_REMINDERS_VALUE (state, value) {
+            state.hideReminders = value
+            localStorage.setItem('isi-hideReminders', value)
+        },
         SET_MINI_MODE_VALUE (state, value) {
             state.mini = value
             localStorage.setItem('isi-miniMode', value)
@@ -41,6 +46,7 @@ export default {
         }
     },
     getters: {
+        hideReminders: state => state.hideReminders !== null && state.hideReminders || localStorage.getItem('isi-hideReminders') === 'true' || false,
         miniMode: (state) => state.mini !== null && state.mini || localStorage.getItem('isi-miniMode') === 'true' || false
     }
 }
