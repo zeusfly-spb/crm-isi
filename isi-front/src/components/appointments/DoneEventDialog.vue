@@ -36,6 +36,13 @@
                                 </span>
                             </div>
                         </template>
+                        <template v-slot:no-data>
+                            <span
+                                class="pl-1"
+                            >
+                                Нет соответствующих сделок на текущий день
+                            </span>
+                        </template>
                     </v-select>
                 </v-card-text>
                 <v-card-actions>
@@ -65,20 +72,31 @@
                 return this.$store.getters.workingIsland && this.$store.getters.workingIsland.services || []
             },
             currentDeals () {
+                let insolesService = this.islandServices.find(service => service.description === 'Стельки')
+                let insolesColor = insolesService && insolesService.highlight || null
+                const validateDeal = deal => {
+                    let dealService = null
+                    if (deal.service) {
+                        dealService = deal.service
+                    } else {
+                        if (['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(deal.action_type)) {
+                            dealService = insolesService
+                        }
+                    }
+                    return this.eventToDone && dealService && (dealService.id === this.eventToDone.service.id) || false
+                }
                 const dealInfo = deal => {
                     let product = deal.action.type === 'service' ? deal.service.description : deal.insole.name
                     return `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${product}`
                 }
                 const dealColor = deal => {
-                    let insolesService = this.islandServices.find(service => service.description === 'Стельки')
-                    let insolesColor = insolesService && insolesService.highlight || null
                     if (['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(deal.action_type)) {
                         return insolesColor
                     }
                     return deal.service && deal.service.highlight || null
                 }
                 let base = this.$store.getters.currentDeals
-                    .filter(deal => !deal.has_appointment)
+                    .filter(deal => !deal.has_appointment && validateDeal(deal))
                 return base.map(deal => ({
                     ...deal,
                     info: dealInfo(deal),
