@@ -67,6 +67,60 @@
                             />
                         </div>
                     </td>
+                    <td
+                            align="center"
+                    >
+                        <div
+                                class="checkbox-field"
+                        >
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'admin'"
+                                    v-model="adminSalesIncomeCount"
+                            />
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'spec'"
+                                    v-model="specSalesIncomeCount"
+                            />
+                        </div>
+                    </td>
+                    <td
+                            align="center"
+                    >
+                        <div
+                                class="checkbox-field"
+                        >
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'admin'"
+                                    v-model="adminServiceIncomeCount"
+                            />
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'spec'"
+                                    v-model="specServiceIncomeCount"
+                            />
+                        </div>
+                    </td>
+                    <td
+                            align="center"
+                    >
+                        <div
+                                class="checkbox-field"
+                        >
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'admin'"
+                                    v-model="adminSubServiceIncomeCount"
+                            />
+                            <v-checkbox
+                                    class="mt-3"
+                                    v-if="props.item.purpose === 'spec'"
+                                    v-model="specSubServiceIncomeCount"
+                            />
+                        </div>
+                    </td>
                 </tr>
             </template>
         </v-data-table>
@@ -94,6 +148,93 @@
             ]
         }),
         computed: {
+            specSubServiceIncomeCount: {
+                get () {
+                    const value = () => this.island.options.specSubServiceIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'specSubServiceIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
+            },
+            adminSubServiceIncomeCount: {
+                get () {
+                    const value = () => this.island.options.adminSubServiceIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'adminSubServiceIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
+            },
+            specServiceIncomeCount: {
+                get () {
+                    const value = () => this.island.options.specServiceIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'specServiceIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+                }
+            },
+            adminServiceIncomeCount: {
+                get () {
+                    const value = () => this.island.options.adminServiceIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'adminServiceIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+
+                }
+            },
+            specSalesIncomeCount: {
+                get () {
+                    const value = () => this.island.options.specSalesIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'specSalesIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+
+                }
+            },
+            adminSalesIncomeCount: {
+                get () {
+                    const value = () => this.island.options.adminSalesIncomeCount || false
+                    return this.island && this.island.options && value() || false
+                },
+                set (val) {
+                    this.$store.dispatch('setIslandOption', {
+                        island_id: this.island.id,
+                        key: 'adminSalesIncomeCount',
+                        value: val
+                    })
+                        .finally(() => this.setIsland())
+
+                }
+            },
             specAppointmentsCount: {
                 get () {
                     const value = () => this.island.options.specAppointmentsCount || false
