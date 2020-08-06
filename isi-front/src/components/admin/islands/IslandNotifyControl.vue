@@ -13,7 +13,7 @@
             class="pl-2 pr-2 option-layout p-0 m-0"
         >
             <span
-                class="left option-label"
+                class="left option-label ml-1"
             >
                 Напоминание в начале дня
             </span>
@@ -49,7 +49,7 @@
             class="option-layout pr-2 pl-2 m-0"
         >
             <div
-                class="left option-label"
+                class="left option-label ml-1"
             >
                 Предварительное напоминание
             </div>
@@ -120,7 +120,7 @@
             class="option-layout p-0 m-0"
         >
             <div
-                class="pl-2 left option-label"
+                class="pl-2 left option-label ml-1"
             >
                 Уведомление о назначении записи
             </div>
@@ -168,7 +168,7 @@
                 let base = JSON.parse(JSON.stringify(this.$store.state.catalog.notifyTemplates))
                 return base.map(item => ({
                     ... item,
-                    name_short: this.$store.getters.truncate(item.name, 15)
+                    name_short: this.$store.getters.truncate(item.name, 30)
                 }))
             },
             eventReminderOptions () {

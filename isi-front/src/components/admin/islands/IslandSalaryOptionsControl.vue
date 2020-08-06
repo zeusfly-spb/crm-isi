@@ -1,6 +1,6 @@
 <template>
     <v-sheet
-        class="p-0 ml-2 mb-1 round-corner"
+        class="p-0 mb-1 round-corner"
         elevation="2"
         :color="color"
     >
@@ -87,7 +87,10 @@
             headers: [
                 {text: 'Роль', value: null, sortable: false},
                 {text: 'Оборот по всем сделкам', value: null, sortable: false},
-                {text: 'Количество завершенных записей', value: null, sortable: false}
+                {text: 'Количество завершенных записей', value: null, sortable: false},
+                {text: 'Оборот по продажам', value: null, sortable: false},
+                {text: 'Оборот по услугам', value: null, sortable: false},
+                {text: 'Оборот по доп. услугам', value: null, sortable: false},
             ]
         }),
         computed: {

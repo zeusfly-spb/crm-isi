@@ -73,10 +73,17 @@
                 <island-notify-control
                         :island_id="island.id"
                 />
+            </v-layout>
+
+            <v-layout
+                style="margin-top: 1em"
+                v-if="extended"
+            >
                 <island-salary-options-control
                         :island_id="island.id"
                 />
             </v-layout>
+
         </v-layout>
         <v-layout justify-center>
             <span
