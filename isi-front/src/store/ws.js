@@ -24,6 +24,7 @@ export default {
             /**
              * Frame handlers
              */
+            const insertExpense = expense => commit('ADD_EXPENSE', expense)
             const insertAppointment = event => commit('ADD_APPOINTMENT', event)
 
             const updateDeal = deal => commit('UPDATE_DEAL', deal)
@@ -76,6 +77,9 @@ export default {
             const mustHandle = obj => {
                 let result = true
                 switch (obj.type.split('_')[1]) {
+                    case 'expense':
+                        getters.currentPage !== 'daily' ? result = false : null
+                        break
                     case 'deal':
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
                         getters.workingIslandId !== 0 && obj.model.island_id !== getters.workingIslandId ? result = false : null
@@ -99,6 +103,9 @@ export default {
                         return
                     }
                     switch (obj.type) {
+                        case 'add_expense':
+                            insertExpense(obj.model)
+                            break
                         case 'add_appointment':
                             insertAppointment(obj.model)
                             break

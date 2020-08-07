@@ -267,7 +267,7 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        addExpense ({commit}, data) {
+        addExpense ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_expense', {
                     ...data,
@@ -275,7 +275,11 @@ export const store = new Vuex.Store({
                     user_id: this.state.authUser.id
                 })
                     .then(res => {
-                        commit('ADD_EXPENSE', res.data)
+                        dispatch('pushFrame', {
+                            type: 'add_expense',
+                            model: res.data
+                        })
+                        // commit('ADD_EXPENSE', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -353,9 +357,9 @@ export const store = new Vuex.Store({
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')
                 }
-                if (this.state.scanMode.expenses && getters.isToday) {
-                    dispatch('setExpenses')
-                }
+                // if (this.state.scanMode.expenses && getters.isToday) {
+                //     dispatch('setExpenses')
+                // }
                 // if (this.state.scanMode.deals && getters.isToday) {
                 //     dispatch('setDeals')
                 // }
