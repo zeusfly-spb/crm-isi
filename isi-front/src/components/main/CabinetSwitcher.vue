@@ -31,6 +31,9 @@
                     this.$store.commit('SET_ACTIVE_CABINET_ID', val)
                 }
             },
+            cabinetIds () {
+                return this.cabinets && this.cabinets.map(cabinet => cabinet.id)
+            },
             cabinets () {
                 if (this.$store.getters.callCenter) {
                     return this.$store.getters.inspectingIsland && this.$store.getters.inspectingIsland.cabinets

@@ -122,6 +122,11 @@
                 />&nbsp;
             </v-flex>
         </v-layout>
+        <v-layout
+            v-if="tabMode && mode==='day' && viewMode === 'calendar'"
+        >
+            <cabinet-switcher/>
+        </v-layout>
         <v-layout>
             <v-flex
                 xs12
@@ -281,15 +286,14 @@
             :event="editedEvent"
             @close="$store.commit('SET_EDITED_EVENT', null)"
         />
-        <v-bottom-nav
-                shift
-                v-if="tabMode && mode==='day' && viewMode === 'calendar'"
-                :value="tabMode"
-                absolute
-                color="blue lighten-5"
-        >
-            <cabinet-switcher/>
-        </v-bottom-nav>
+<!--        <v-bottom-nav-->
+<!--                shift-->
+<!--                v-if="tabMode && mode==='day' && viewMode === 'calendar'"-->
+<!--                :value="tabMode"-->
+<!--                absolute-->
+<!--                color="blue lighten-5"-->
+<!--        >-->
+<!--        </v-bottom-nav>-->
     </v-flex>
 </template>
 <script>
@@ -329,7 +333,7 @@
         }),
         computed: {
             activeCabinetId () {
-                return this.$store.state.appointment.activeCabinetId
+                return this.$store.state.appointment.activeCabinetId || ''
             },
             tabMode: {
                 get () {
