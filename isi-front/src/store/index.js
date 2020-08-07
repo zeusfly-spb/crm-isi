@@ -257,11 +257,15 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        deleteExpense ({commit}, expenseId) {
+        deleteExpense ({commit, dispatch}, expenseId) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_expense', {expense_id: expenseId})
                     .then((res) => {
-                        commit('DELETE_EXPENSE', expenseId)
+                        dispatch('pushFrame', {
+                            type: 'delete_expense',
+                            model: {id: expenseId}
+                        })
+                        // commit('DELETE_EXPENSE', expenseId)
                         resolve(res)
                     })
                     .catch(e => reject(e))

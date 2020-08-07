@@ -103,6 +103,9 @@ export default {
                         return
                     }
                     switch (obj.type) {
+                        case 'delete_expense':
+                            commit('DELETE_EXPENSE', obj.model.id)
+                            break
                         case 'add_expense':
                             insertExpense(obj.model)
                             break
