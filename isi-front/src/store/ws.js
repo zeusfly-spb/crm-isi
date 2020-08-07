@@ -15,6 +15,7 @@ export default {
     },
     actions: {
         handleFrame ({dispatch, getters, commit}, frame) {
+            const modelDate = model => model.created_at.split(' ')[0]
             const dealDate = deal => deal.created_at.split(' ')[0]
             const displayed = lead => {
                 return getters.currentLeads.map(item => +item.id).includes(lead.id)
@@ -79,6 +80,7 @@ export default {
                 switch (obj.type.split('_')[1]) {
                     case 'expense':
                         getters.currentPage !== 'daily' ? result = false : null
+                        modelDate(obj.model) !== getters.currentWorkDay ? result = false : null
                         break
                     case 'deal':
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
