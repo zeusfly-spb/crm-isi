@@ -80,7 +80,7 @@ export default {
                 switch (obj.type.split('_')[1]) {
                     case 'expense':
                         getters.currentPage !== 'daily' ? result = false : null
-                        modelDate(obj.model) !== getters.currentWorkDay ? result = false : null
+                        !getters.isToday ? result = false : null
                         break
                     case 'deal':
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
