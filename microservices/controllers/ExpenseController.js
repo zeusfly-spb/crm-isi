@@ -1,15 +1,27 @@
 const models = require('../models')
 const Expense = models.Expense
 
-const getExpense = ({id, include = []}) => {
-    Expense.findByPk(id, {include: include})
-        .then(res => {
-            return res
-        })
-        .catch(e => throw e)
+const find = async (id, include = []) => {
+    try {
+        let expense = Expense.findByPk(id, {include: include})
+        if (expense) {
+            return expense
+        }
+    } catch (e) {
+        Promise.reject(e)
+    }
+}
+
+const create = async (inputs = {}) => {
+    try {
+        return await Expense.create(inputs)
+    } catch (e) {
+        Promise.reject(e)
+    }
 }
 
 module.exports = {
-    getExpense: getExpense
+    find,
+    create
 }
 

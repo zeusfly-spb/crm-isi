@@ -1,6 +1,7 @@
 const passport = require('./passport')
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({port: 8118})
+const router = require('./router')
 
 const broadcast = data => {
     wss.clients.forEach(client => {
@@ -27,9 +28,13 @@ wss.on('connection', (ws, req) => {
 
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
-        broadcast(message)
+        router.parse(message)
+            .then(res => {
+                res.response ? ws.send(res.response) : null
+                res.broadcast ? broadcast(res.broadcast) : null
+            })
+            .catch(e => console.error(e))
     })
-    // ws.send('Connected')
 })
 
 exports.broadcast = broadcast
