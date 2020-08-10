@@ -1,36 +1,12 @@
-const mysql = require('mysql')
+const { Sequelize, DataTypes } = require  ('sequelize')
 const CONFIG = require('./config')
-const connection = mysql.createConnection({
-    host: CONFIG.db_host,
-    user: CONFIG.db_user,
-    password: CONFIG.db_password,
-    database: CONFIG.db_name
+const sequelize = new Sequelize(CONFIG.db_name, CONFIG.db_user, CONFIG.db_password, {
+    host: 'localhost',
+    dialect: 'mysql'
 })
 
-const query = querystring => {
-    return new Promise((resolve, reject) => {
-        connection.query(querystring, (error, results, fields) => {
-            if (error) {
-                reject(error)
-            }
-            resolve(results)
-        })
-    })
-}
-
-const serialize = rdp => {
-    try {
-        let result = []
-        for (let key in rdp) {
-            result[key] = rdp[key]
-        }
-        return result
-    } catch (e) {
-        throw e
-    }
-}
-
 module.exports = {
-    query: query,
-    serialize: serialize
+    Sequelize: Sequelize,
+    sequelize: sequelize,
+    DataTypes: DataTypes
 }
