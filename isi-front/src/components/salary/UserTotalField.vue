@@ -60,7 +60,7 @@
                         </td>
                     </tr>
                     <tr
-                        v-if="user.is_admin"
+                        v-if="showRecords"
                     >
                         <td
                             class="info-tab"
@@ -169,6 +169,15 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            showRecords () {
+                let allAppointments = this.$store.state.salary.monthData.allAppointments || []
+                let islandIds = [... new Set(allAppointments.map(item => +item.island_id))]
+                if (!islandIds.length) {
+                    return false
+                }
+                return islandIds.map(id => ({id: id, show: this.countRecords(id)}))
+                    .reduce((a, b) => a + b.show, false)
+            },
             totalRecordsAmount () {
                 const countRecords = island_id => {
                     let island = this.$store.state.islands.find(island => +island.id === +island_id)
@@ -199,8 +208,12 @@
                     .reduce((a, b) => a + b.amount, 0)
             },
             grandTotal () {
-                return this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount
-                    + this.totalSicksAmount + this.totalVacationsAmount + this.totalRecordsAmount
+                let base = this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount
+                    + this.totalSicksAmount + this.totalVacationsAmount
+                if (this.showRecords) {
+                    base += this.totalRecordsAmount
+                }
+                return base
             },
             isChief () {
                 return this.user && this.user.controlled_islands && this.user.controlled_islands.length
@@ -282,6 +295,16 @@
             },
             basePath () {
                 return this.$store.state.basePath
+            }
+        },
+        methods: {
+            countRecords (island_id) {
+                let island = this.$store.state.islands.find(island => +island.id === +island_id)
+                if (this.user.is_admin) {
+                    return island.options.adminAppointmentsCount || false
+                } else {
+                    return island.options.specAppointmentsCount || false
+                }
             }
         }
     }

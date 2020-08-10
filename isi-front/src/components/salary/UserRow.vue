@@ -78,7 +78,7 @@
                             </td>
                         </tr>
                         <tr
-                            v-if="user.is_admin"
+                            v-if="user.is_admin && salaryOptions.adminAppointmentsCount || !user.is_admin && salaryOptions.specAppointmentsCount"
                         >
                             <td
                                 class="info-tab"
