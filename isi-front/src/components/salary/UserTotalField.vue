@@ -67,6 +67,19 @@
                             <strong>{{ +totalIncomeAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
+                    <tr v-if="showSalesIncome">
+                        <td class="info-tab">
+                            Оборот с продаж
+                        </td>
+                        <td class="info-tab">
+                            <strong >{{ +salesIncome.toFixed(2) | pretty }}</strong>
+                        </td>
+
+                        <td class="info-tab">
+<!--                            <strong>{{ +totalIncomeAmount.toFixed(2) | pretty }}</strong>-->
+                        </td>
+                    </tr>
+
                     <tr
                         v-if="showRecords"
                     >
@@ -177,6 +190,19 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            showSalesIncome () {
+                let allDeals = this.$store.state.salary.monthData.allDeals || []
+                let islandIds = [... new Set(allDeals.map(item => +item.island_id))]
+                if (!islandIds.length) {
+                    return false
+                }
+                return islandIds.map(id => ({id: id, show: this.showSales(id)}))
+                    .reduce((a, b) => a + b.show, false)
+            },
+            salesIncome () {
+                return this.deals.filter(deal => deal.action_type === 'sale')
+                    .reduce((a, b) => a + +b.income, 0)
+            },
             showDealsIncome () {
                 let allDeals = this.$store.state.salary.monthData.allDeals || []
                 let islandIds = [... new Set(allDeals.map(item => +item.island_id))]
@@ -318,6 +344,14 @@
             }
         },
         methods: {
+            showSales (island_id) {
+                let island = this.$store.state.islands.find(island => +island.id === +island_id)
+                if (this.user.is_admin) {
+                    return island.options.adminSalesIncomeCount || false
+                } else {
+                    return island.options.specSalesIncomeCount || false
+                }
+            },
             showDeals (island_id) {
                 let island = this.$store.state.islands.find(island => +island.id === +island_id)
                 if (this.user.is_admin) {
