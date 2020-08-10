@@ -103,10 +103,15 @@
                 const sortByTotalIncome = (a, b) => {
                     return b.totalIncome - a.totalIncome
                 }
+                const adminUp = (a, b) => {
+                    return a.is_admin && !b.is_admin ? -1 : !a.is_admin && b.is_admin ? 1 : 0
+                }
                 if (this.workingIslandId) {
                     base = base.map(user => setUserRates(user))
                 }
-                return base.sort(sortByTotalIncome)
+                return base
+                    .sort(sortByTotalIncome)
+                    .sort(adminUp)
             },
             monthData () {
                 const leaveSelected = (user) => {

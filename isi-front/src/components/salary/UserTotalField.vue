@@ -20,6 +20,14 @@
                 <div class="pl-2">
                     <strong>{{ user.full_name }}</strong>
                 </div>
+                <v-icon
+                    v-if="user.is_admin"
+                    class="pl-2"
+                    color="red lighten-4"
+                    title="Администратор"
+                >
+                    supervisor_account
+                </v-icon>
             </v-card-title>
             <v-card-text
                 class="p-0 pt-0"
@@ -47,7 +55,7 @@
                             <strong>{{ +totalHourAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-if="showDealsIncome">
                         <td class="info-tab">
                             Оборот
                         </td>
@@ -169,6 +177,15 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            showDealsIncome () {
+                let allDeals = this.$store.state.salary.monthData.allDeals || []
+                let islandIds = [... new Set(allDeals.map(item => +item.island_id))]
+                if (!islandIds.length) {
+                    return false
+                }
+                return islandIds.map(id => ({id: id, show: this.showDeals(id)}))
+                    .reduce((a, b) => a + b.show, false)
+            },
             showRecords () {
                 let allAppointments = this.$store.state.salary.monthData.allAppointments || []
                 let islandIds = [... new Set(allAppointments.map(item => +item.island_id))]
@@ -208,8 +225,11 @@
                     .reduce((a, b) => a + b.amount, 0)
             },
             grandTotal () {
-                let base = this.totalHourAmount + this.totalIncomeAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount
+                let base = this.totalHourAmount + this.totalPrizesAmount + this.controlledIslandsAmount - this.totalForfeitsAmount
                     + this.totalSicksAmount + this.totalVacationsAmount
+                if (this.showDealsIncome) {
+                    base += this.totalIncomeAmount
+                }
                 if (this.showRecords) {
                     base += this.totalRecordsAmount
                 }
@@ -298,6 +318,14 @@
             }
         },
         methods: {
+            showDeals (island_id) {
+                let island = this.$store.state.islands.find(island => +island.id === +island_id)
+                if (this.user.is_admin) {
+                    return island.options.adminDealsIncome || false
+                } else {
+                    return island.options.specDealsIncome || false
+                }
+            },
             countRecords (island_id) {
                 let island = this.$store.state.islands.find(island => +island.id === +island_id)
                 if (this.user.is_admin) {

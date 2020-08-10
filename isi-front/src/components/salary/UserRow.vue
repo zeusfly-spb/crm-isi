@@ -22,6 +22,14 @@
                     <div class="pl-2">
                         <strong>{{ user.full_name }}</strong>
                     </div>
+                    <v-icon
+                            v-if="user.is_admin"
+                            class="pl-2"
+                            color="red lighten-4"
+                            title="Администратор"
+                    >
+                        supervisor_account
+                    </v-icon>
                 </v-card-title>
                 <v-card-text class="p-0 pt-0">
                     <table>
@@ -58,7 +66,7 @@
                                 <strong>{{ +hourRateAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
-                        <tr>
+                        <tr v-if="user.is_admin && salaryOptions.adminDealsIncome || !user.is_admin && salaryOptions.specDealsIncome">
                             <td class="info-tab">
                                 Оборот
                             </td>
@@ -290,7 +298,13 @@
         }),
         computed: {
             salaryOptions () {
+                const adminDealsIncome = () => this.$store.getters.workingIsland.options.adminDealsIncome || false
+                const specDealsIncome = () => this.$store.getters.workingIsland.options.specDealsIncome || false
                 return  {
+                    specDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && specDealsIncome() || false,
+                    adminDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && adminDealsIncome() || false,
                     adminAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
                         && this.$store.getters.workingIsland.options.adminAppointmentsCount || false,
                     specAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
@@ -349,7 +363,11 @@
                 return this.user && this.user.controlled_islands && this.user.controlled_islands.length  && !this.workingIslandId || this.user && this.user.controlled_islands && this.user.controlled_islands.length && this.user.controlled_islands.map(item => item.id).includes(this.workingIslandId)
             },
             grandTotal () {
-                return this.hourRateAmount + this.salesRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations + this.recordsRateAmount
+                let base = this.hourRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations + this.recordsRateAmount
+                if (this.user.is_admin && this.salaryOptions.adminDealsIncome || !this.user.is_admin && this.salaryOptions.specDealsIncome) {
+                    base  += this.salesRateAmount
+                }
+                return base
             },
             salesRateAmount () {
                 return this.user.sales_rate * this.totalIncome
