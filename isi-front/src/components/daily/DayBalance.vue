@@ -131,7 +131,7 @@
                 return this.$store.state.deals.reduce(calculate, 0)
             },
             items () {
-                const add = (a, b)=> a + b.amount
+                const add = (a, b)=> a + +b.amount
                 return [
                     {
                         start: this.$store.state.startBalance,
