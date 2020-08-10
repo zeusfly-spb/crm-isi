@@ -289,8 +289,20 @@
             totalVacations: 0
         }),
         computed: {
+            salaryOptions () {
+                return  {
+                    adminAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && this.$store.getters.workingIsland.options.adminAppointmentsCount || false,
+                    specAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && this.$store.getters.workingIsland.options.specAppointmentsCount || false
+                }
+            },
             recordsRateAmount () {
-                return this.user.app_count * this.user.records_rate || 0
+                let user = this.user
+                if (user.is_admin && this.salaryOptions.adminAppointmentsCount || !user.is_admin && this.salaryOptions.specAppointmentsCount) {
+                    return this.user.app_count * this.user.records_rate || 0
+                }
+                return 0
             },
             workingIslandId () {
                 return this.$store.state.workingIslandId

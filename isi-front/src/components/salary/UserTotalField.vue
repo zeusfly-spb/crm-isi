@@ -170,14 +170,28 @@
         props: ['user'],
         computed: {
             totalRecordsAmount () {
+                const countRecords = island_id => {
+                    let island = this.$store.state.islands.find(island => +island.id === +island_id)
+                    if (this.user.is_admin) {
+                        return island.options.adminAppointmentsCount || false
+                    } else {
+                        return island.options.specAppointmentsCount || false
+                    }
+                }
                 let allAppointments = this.$store.state.salary.monthData.allAppointments
-                let userAppointments = allAppointments.filter(event => +event.user_id === +this.user.id)
+                let userAppointments
+                if (this.user.is_admin) {
+                    userAppointments = allAppointments.filter(event => +event.user_id === +this.user.id)
+                } else {
+                    userAppointments = allAppointments.filter(event => +event.performer_id === +this.user.id)
+                }
                 let appointmentsIslandIds = [... new Set(userAppointments.map(event => event.island_id))]
                 return appointmentsIslandIds.map(id => ({
                     island_id: id,
                     app_count: userAppointments.filter(app =>  +app.island_id === +id).length,
                     record_rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'records'})
                 }))
+                    .filter(item => countRecords(item.island_id))
                     .map(item => ({
                         island_id: item.island_id,
                         amount: item.app_count * item.record_rate

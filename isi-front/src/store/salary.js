@@ -186,7 +186,8 @@ export default {
             user.monthSicks = user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || []
             user.monthPrepays = user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || []
             user.monthVacations = user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
-            user.app_count = state.monthData.allAppointments.filter(item => +item.user_id === +user.id).length
+            user.app_count = user.is_admin ? state.monthData.allAppointments.filter(item => +item.user_id === +user.id).length :
+                state.monthData.allAppointments.filter(item => +item.performer_id === +user.id).length
             state.monthData.users = state.monthData.users.map(item => +item.id === +user.id ? user : item)
         },
         DELETE_USER_PREPAY (state, data) {
