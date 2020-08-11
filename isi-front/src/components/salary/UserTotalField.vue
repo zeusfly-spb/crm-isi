@@ -26,7 +26,7 @@
                     color="red lighten-4"
                     title="Администратор"
                 >
-                    supervisor_account
+                    star
                 </v-icon>
             </v-card-title>
             <v-card-text
@@ -76,7 +76,7 @@
                         </td>
 
                         <td class="info-tab">
-<!--                            <strong>{{ +totalIncomeAmount.toFixed(2) | pretty }}</strong>-->
+                            <strong>{{ +salesIncomeAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
 
@@ -198,6 +198,20 @@
                 }
                 return islandIds.map(id => ({id: id, show: this.showSales(id)}))
                     .reduce((a, b) => a + b.show, false)
+            },
+            salesIncomeAmount () {
+               return this.deals
+                    .filter(deal => deal.action_type === 'sale')
+                    .map(item => +item.island_id)
+                    .map(id => ({
+                        id: id,
+                        income: this.deals
+                            .filter(deal => +deal.island_id === +id && deal.action_type === 'sale')
+                            .reduce((a, b) => a + +b.income, 0),
+                        rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'sales'})
+                    }))
+                    .map(item => ({...item, amount: item.rate * item.income}))
+                    .reduce((a, b) => a + b.amount, 0)
             },
             salesIncome () {
                 return this.deals.filter(deal => deal.action_type === 'sale')

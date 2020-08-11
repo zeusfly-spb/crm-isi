@@ -28,7 +28,7 @@
                             color="red lighten-4"
                             title="Администратор"
                     >
-                        supervisor_account
+                        star
                     </v-icon>
                 </v-card-title>
                 <v-card-text class="p-0 pt-0">
@@ -83,6 +83,25 @@
                             </td>
                             <td class="info-tab">
                                 <strong>{{ +salesRateAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
+                        <tr v-if="user.is_admin && salaryOptions.adminSalesIncomeCount || !user.is_admin && salaryOptions.specSalesIncomeCount">
+                            <td class="info-tab">
+                                Оборот с продаж
+                            </td>
+                            <td class="info-tab">
+                                <strong >{{ +salesIncome.toFixed(2) | pretty }}</strong>
+                            </td>
+                            <td class="info-tab">
+                                <month-rate-editor
+                                        :user="user"
+                                        type="sales"
+                                        v-if="isSuperadmin && workingIslandId"
+                                />
+                                <strong v-else>{{ user.sales_rate }}</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ +salesIncomeAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
                         <tr
@@ -297,10 +316,27 @@
             totalVacations: 0
         }),
         computed: {
+            salesIncomeAmount () {
+                return this.user.sales_rate * this.salesIncome
+            },
+            salesIncome () {
+                const add = (a, b) => a + +b.income
+                let deals = this.user && this.user.monthDeals
+                if (this.workingIslandId) {
+                    deals = deals.filter(item => +item.island_id === +this.workingIslandId && item.action_type === 'sale')
+                }
+                return deals.reduce(add, 0)
+            },
             salaryOptions () {
+                const adminSalesIncomeCount = () => this.$store.getters.workingIsland.options.adminSalesIncomeCount || false
+                const specSalesIncomeCount = () => this.$store.getters.workingIsland.options.specSalesIncomeCount || false
                 const adminDealsIncome = () => this.$store.getters.workingIsland.options.adminDealsIncome || false
                 const specDealsIncome = () => this.$store.getters.workingIsland.options.specDealsIncome || false
                 return  {
+                    specSalesIncomeCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && specSalesIncomeCount() || false,
+                    adminSalesIncomeCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                        && adminSalesIncomeCount() || false,
                     specDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
                         && specDealsIncome() || false,
                     adminDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
@@ -366,6 +402,9 @@
                 let base = this.hourRateAmount + this.totalPrizes + this.subDealsTotal - this.totalForfeits + this.totalSicks + this.totalVacations + this.recordsRateAmount
                 if (this.user.is_admin && this.salaryOptions.adminDealsIncome || !this.user.is_admin && this.salaryOptions.specDealsIncome) {
                     base  += this.salesRateAmount
+                }
+                if (this.user.is_admin && this.salaryOptions.adminSalesIncomeCount || !this.user.is_admin && this.salaryOptions.specSalesIncomeCount) {
+                    base  += this.salesIncomeAmount
                 }
                 return base
             },

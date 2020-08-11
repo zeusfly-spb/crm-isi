@@ -100,7 +100,6 @@
                         updated = [{type: this.type, month: this.currentMonth, island_id: this.workingIslandId, value: value}]
                     }
                 }
-                console.log('Sent to update', updated)
 
                 this.$store.dispatch('updateUserRates', {
                     user_id: this.user.id,
