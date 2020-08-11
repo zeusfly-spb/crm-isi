@@ -74,12 +74,21 @@
                         <td class="info-tab">
                             <strong >{{ +salesIncome.toFixed(2) | pretty }}</strong>
                         </td>
-
                         <td class="info-tab">
                             <strong>{{ +salesIncomeAmount.toFixed(2) | pretty }}</strong>
                         </td>
                     </tr>
-
+                    <tr v-if="showServicesIncome">
+                        <td class="info-tab">
+                            Оборот с услуг
+                        </td>
+                        <td class="info-tab">
+                            <strong >{{ +servicesIncome.toFixed(2) | pretty }}</strong>
+                        </td>
+                        <td class="info-tab">
+                            <strong>{{ +servicesIncomeAmount.toFixed(2) | pretty }}</strong>
+                        </td>
+                    </tr>
                     <tr
                         v-if="showRecords"
                     >
@@ -190,6 +199,33 @@
         name: 'UserTotalField',
         props: ['user'],
         computed: {
+            servicesIncomeAmount () {
+                return this.deals
+                    .filter(deal => deal.action_type === 'service')
+                    .map(deal => +deal.island_id)
+                    .map(id => ({
+                        id: id,
+                        income: this.deals
+                            .filter(deal => +deal.island_id === id && deal.action_type === 'service')
+                            .reduce((a, b) => a + +b.income, 0),
+                        rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'services'})
+                    }))
+                    .map(item => ({...item, amount: item.rate * item.income}))
+                    .reduce((a, b) => a + b.amount, 0)
+            },
+            servicesIncome () {
+                return this.deals.filter(deal => deal.action_type === 'service')
+                    .reduce((a, b) => a + +b.income, 0)
+            },
+            showServicesIncome () {
+                let allDeals = this.$store.state.salary.monthData.allDeals || []
+                let islandIds = [... new Set(allDeals.map(item => +item.island_id))]
+                if (!islandIds.length) {
+                    return false
+                }
+                return islandIds.map(id => ({id: id, show: this.showServices(id)}))
+                    .reduce((a, b) => a + b.show, false)
+            },
             showSalesIncome () {
                 let allDeals = this.$store.state.salary.monthData.allDeals || []
                 let islandIds = [... new Set(allDeals.map(item => +item.island_id))]
@@ -272,6 +308,9 @@
                 }
                 if (this.showRecords) {
                     base += this.totalRecordsAmount
+                }
+                if (this.showServices) {
+                    base += this.servicesIncomeAmount
                 }
                 return base
             },
@@ -358,6 +397,14 @@
             }
         },
         methods: {
+            showServices (island_id) {
+                let island = this.$store.state.islands.find(island => +island.id === +island_id)
+                if (this.user.is_admin) {
+                    return island.options.adminServiceIncomeCount || false
+                } else {
+                    return island.options.specServiceIncomeCount || false
+                }
+            },
             showSales (island_id) {
                 let island = this.$store.state.islands.find(island => +island.id === +island_id)
                 if (this.user.is_admin) {
