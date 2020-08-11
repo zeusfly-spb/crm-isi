@@ -104,6 +104,27 @@
                                 <strong>{{ +salesIncomeAmount.toFixed(2) | pretty }}</strong>
                             </td>
                         </tr>
+                        <tr v-if="user.is_admin && salaryOptions.adminServicesIncomeCount || !user.is_admin && salaryOptions.specServicesIncomeCount">
+                            <td class="info-tab">
+                                Оборот с услуг
+                            </td>
+                            <td class="info-tab">
+                                <strong >{{ +servicesIncome.toFixed(2) | pretty }}</strong>
+                            </td>
+                            <td
+                                class="info-tab"
+                            >
+                                <month-rate-editor
+                                        :user="user"
+                                        type="services"
+                                        v-if="isSuperadmin && workingIslandId"
+                                />
+                                <strong v-else>{{ user.services_rate }}</strong>
+                            </td>
+                            <td class="info-tab">
+                                <strong>{{ +servicesIncomeAmount.toFixed(2) | pretty }}</strong>
+                            </td>
+                        </tr>
                         <tr
                             v-if="user.is_admin && salaryOptions.adminAppointmentsCount || !user.is_admin && salaryOptions.specAppointmentsCount"
                         >
@@ -316,6 +337,17 @@
             totalVacations: 0
         }),
         computed: {
+            servicesIncomeAmount () {
+                return this.servicesIncome * this.user.services_rate
+            },
+            workingIsland () {
+                return this.$store.getters.workingIsland
+            },
+            servicesIncome () {
+                let deals = this.user && this.user.monthDeals
+                return deals.filter(deal => deal.action_type === 'service')
+                    .reduce((a, b) => a + +b.income, 0)
+            },
             salesIncomeAmount () {
                 return this.user.sales_rate * this.salesIncome
             },
@@ -328,23 +360,29 @@
                 return deals.reduce(add, 0)
             },
             salaryOptions () {
-                const adminSalesIncomeCount = () => this.$store.getters.workingIsland.options.adminSalesIncomeCount || false
-                const specSalesIncomeCount = () => this.$store.getters.workingIsland.options.specSalesIncomeCount || false
-                const adminDealsIncome = () => this.$store.getters.workingIsland.options.adminDealsIncome || false
-                const specDealsIncome = () => this.$store.getters.workingIsland.options.specDealsIncome || false
+                const adminServicesIncomeCount = () => this.workingIsland.options.adminServiceIncomeCount || false
+                const specServicesIncomeCount = () => this.workingIsland.options.specServiceIncomeCount || false
+                const adminSalesIncomeCount = () => this.workingIsland.options.adminSalesIncomeCount || false
+                const specSalesIncomeCount = () => this.workingIsland.options.specSalesIncomeCount || false
+                const adminDealsIncome = () => this.workingIsland.options.adminDealsIncome || false
+                const specDealsIncome = () => this.workingIsland.options.specDealsIncome || false
                 return  {
-                    specSalesIncomeCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                    specServicesIncomeCount: this.workingIsland && this.workingIsland.options
+                        && specServicesIncomeCount() || false,
+                    adminServicesIncomeCount: this.workingIsland && this.workingIsland.options
+                        && adminServicesIncomeCount() || false,
+                    specSalesIncomeCount: this.workingIsland && this.workingIsland.options
                         && specSalesIncomeCount() || false,
-                    adminSalesIncomeCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                    adminSalesIncomeCount: this.workingIsland && this.workingIsland.options
                         && adminSalesIncomeCount() || false,
-                    specDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                    specDealsIncome: this.workingIsland && this.workingIsland.options
                         && specDealsIncome() || false,
-                    adminDealsIncome: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
+                    adminDealsIncome: this.workingIsland && this.workingIsland.options
                         && adminDealsIncome() || false,
-                    adminAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
-                        && this.$store.getters.workingIsland.options.adminAppointmentsCount || false,
-                    specAppointmentsCount: this.$store.getters.workingIsland && this.$store.getters.workingIsland.options
-                        && this.$store.getters.workingIsland.options.specAppointmentsCount || false
+                    adminAppointmentsCount: this.workingIsland && this.workingIsland.options
+                        && this.workingIsland.options.adminAppointmentsCount || false,
+                    specAppointmentsCount: this.workingIsland && this.workingIsland.options
+                        && this.workingIsland.options.specAppointmentsCount || false
                 }
             },
             recordsRateAmount () {
@@ -405,6 +443,9 @@
                 }
                 if (this.user.is_admin && this.salaryOptions.adminSalesIncomeCount || !this.user.is_admin && this.salaryOptions.specSalesIncomeCount) {
                     base  += this.salesIncomeAmount
+                }
+                if (this.user.is_admin && this.salaryOptions.adminServicesIncomeCount || !this.user.is_admin && this.salaryOptions.specServicesIncomeCount) {
+                    base  += this.servicesIncomeAmount
                 }
                 return base
             },

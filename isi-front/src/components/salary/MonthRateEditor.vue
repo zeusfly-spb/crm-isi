@@ -1,14 +1,5 @@
 <template>
     <v-flex>
-        <v-snackbar
-            v-model="snackbar"
-            auto-height
-            top
-            :timeout="3000"
-            :color="snackColor"
-        >
-            <span>{{ snackText }}</span>
-        </v-snackbar>
         <strong
             v-if="!active"
             @click="activate"
@@ -39,9 +30,6 @@
         props: ['user', 'type'],
         data: () => ({
             active: false,
-            snackbar: false,
-            snackText: '',
-            snackColor: 'green'
         }),
         computed: {
             workingIslandId () {
@@ -59,6 +47,7 @@
                     case 'sales': return 'ставку на оборот'
                     case 'chief': return 'руководящий коэффициент'
                     case 'records': return 'ставку на запись'
+                    case 'services': return 'ставку на услуги'
                 }
             },
             targetField: {
@@ -75,15 +64,11 @@
                     case 'sales': return 'sales_rate'
                     case 'chief': return 'chief_rate'
                     case 'records': return 'records_rate'
+                    case 'services': return 'services_rate'
                 }
             }
         },
         methods: {
-            showSnack (text, color) {
-                this.snackText = text
-                this.snackColor = color
-                this.snackbar = true
-            },
             updateRate () {
                 let value = +this.user[this.targetFieldName]
                 let exists = this.rates && this.rates
@@ -101,18 +86,26 @@
                     }
                 }
 
+                const getRateName = type => ({
+                    hours: 'часовая ставка',
+                    sales: 'ставка на оборот',
+                    chief: 'ставка руководителя',
+                    records: 'ставка на запись',
+                    services: 'ставка на услуги'
+                }[type])
+
                 this.$store.dispatch('updateUserRates', {
                     user_id: this.user.id,
                     rates: updated
                 })
                     .then(() => {
-                        let rateName = {hours: 'часовая ставка', sales: 'ставка на оборот', chief: 'ставка руководителя', records: 'ставка на запись'}[this.type]
+                        let rateName = getRateName(this.type)
                         let monthName = this.$moment(this.currentMonth + '-01').format('MMMM YYYY')
                         let text = `Изменена ${rateName} для сотрудника
                                     ${this.user.full_name} за ${monthName} г. на островке "${this.$store.getters.workingIsland.name}"`
 
                         this.deactivate()
-                        this.showSnack(text, 'green')
+                        this.$store.dispatch('pushMessage', {text: text})
                     })
             },
             activate () {

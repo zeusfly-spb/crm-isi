@@ -94,6 +94,7 @@
                     user.sales_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'sales'})
                     user.chief_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'chief'})
                     user.records_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'records'})
+                    user.services_rate = this.$store.state.userRate({user: user, island_id: this.workingIslandId, month: this.currentMonth, rate: 'services'})
                     return user
                 }
 
