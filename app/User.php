@@ -253,4 +253,9 @@ class User extends Authenticatable
         return $this->group && $this->group->purpose === 'admin' ?? false;
     }
 
+    public function getVpbxExtensionAttribute()
+    {
+        return $this->attributes['vpbx_extension'] ?? '';
+    }
+
 }
