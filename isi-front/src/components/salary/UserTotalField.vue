@@ -200,31 +200,20 @@
         props: ['user'],
         computed: {
             servicesIncomeAmount () {
-              const uniq = array => [... new Set(array)]
-          return serviceIslandIds = uniq(deals.filter(deal => dela.actions_type === 'service'))
-                  .map(deal => +deal.island_id)
-                  .map(id => ({
-                    id: id,
-                    income: this.deals
-                        .filter(deal => +deal.island_id === id && deal.action_type === 'service')
-                        .reduce((a, b) => a + +b.income, 0),
-                    rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'services'})
-                  }))
-                  .map(item => ({...item, amount: item.rate * item.income}))
-                  .reduce((a, b) => a + b.amount, 0)
-              // return serviceIslansIds
-                // return this.deals
-                //     .filter(deal => deal.action_type === 'service')
-                //     .map(deal => +deal.island_id)
-                //     .map(id => ({
-                //         id: id,
-                //         income: this.deals
-                //             .filter(deal => +deal.island_id === id && deal.action_type === 'service')
-                //             .reduce((a, b) => a + +b.income, 0),
-                //         rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'services'})
-                //     }))
-                //     .map(item => ({...item, amount: item.rate * item.income}))
-                //     .reduce((a, b) => a + b.amount, 0)
+                let islandIds = this.deals
+                    .filter(deal => deal.action_type === 'service')
+                    .map(deal => +deal.island_id)
+                let uniqIslandIds = [... new Set(islandIds)]
+                return uniqIslandIds
+                    .map(id => ({
+                        id: id,
+                        income: this.deals
+                            .filter(deal => +deal.island_id === id && deal.action_type === 'service')
+                            .reduce((a, b) => a + +b.income, 0),
+                        rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'services'})
+                    }))
+                    .map(item => item.income * item.rate)
+                    .reduce((a, b) => a + b, 0)
             },
             servicesIncome () {
                 return this.deals.filter(deal => deal.action_type === 'service')
@@ -249,18 +238,25 @@
                     .reduce((a, b) => a + b.show, false)
             },
             salesIncomeAmount () {
-               return this.deals
+                let islandIds = this.deals
                     .filter(deal => deal.action_type === 'sale')
-                    .map(item => +item.island_id)
+                    .map(deal => +deal.island_id)
+                let uniqIslandIds = [... new Set(islandIds)]
+                return uniqIslandIds
                     .map(id => ({
                         id: id,
                         income: this.deals
-                            .filter(deal => +deal.island_id === +id && deal.action_type === 'sale')
+                            .filter(deal => deal.action_type === 'sale' && +deal.island_id === id)
                             .reduce((a, b) => a + +b.income, 0),
-                        rate: this.$store.state.userRate({user: this.user, island_id: id, month: this.currentMonth, rate: 'sales'})
+                        rate: this.$store.state.userRate({
+                            user: this.user,
+                            island_id: id,
+                            month: this.currentMonth,
+                            rate: 'sales'
+                        })
                     }))
-                    .map(item => ({...item, amount: item.rate * item.income}))
-                    .reduce((a, b) => a + b.amount, 0)
+                    .map(item => item.rate * item.income)
+                    .reduce((a, b) => a + b, 0)
             },
             salesIncome () {
                 return this.deals.filter(deal => deal.action_type === 'sale')
