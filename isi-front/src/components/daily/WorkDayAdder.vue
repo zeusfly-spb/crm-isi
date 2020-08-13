@@ -1,4 +1,4 @@
-<template>
+    <template>
     <v-flex>
         <v-btn
             flat

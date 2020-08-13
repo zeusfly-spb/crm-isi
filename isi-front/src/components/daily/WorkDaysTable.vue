@@ -112,11 +112,13 @@
                     Закончить перерыв
                 </v-btn>
             </div>
+        <workdays-admin-panel v-if="isAdmin"/>
     </v-flex>
 
 </template>
 <script>
     import UserAvatar from '../main/UserAvatar'
+    import WorkdaysAdminPanel from './WorkdaysAdminPanel'
     export default {
         name: 'WorkDaysTable',
         data: () => ({
@@ -132,6 +134,9 @@
             ]
         }),
         computed: {
+            isAdmin () {
+                return this.$store.state.authUser && this.$store.state.authUser.is_admin
+            },
             mini () {
                 return this.$store.getters.miniMode
             },
@@ -239,7 +244,8 @@
             }
         },
         components: {
-            UserAvatar
+            UserAvatar,
+            WorkdaysAdminPanel
         }
     }
 </script>
