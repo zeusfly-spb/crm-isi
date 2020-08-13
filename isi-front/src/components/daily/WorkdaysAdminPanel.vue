@@ -8,12 +8,13 @@
                     item-value="id"
                     single-line
                     outline
+                    color="green"
             />
         </v-flex>
         <v-flex>
             <v-btn color="primary" flat dark
                    v-if="selectedUserId"
-                   @click=""
+                   @click="startAnotherUserDay"
                    :title="`Начать рабочий день для сотрудника ${selectedUser && selectedUser.full_name || ''}`"
             >
                 Начать рабочий день
@@ -51,6 +52,14 @@
                     id: null
                 }
                 return [empty, ...base]
+            }
+        },
+        methods: {
+            startAnotherUserDay () {
+                this.$store.dispatch('startAnotherUserDay', {
+                    user_id: this.selectedUserId,
+                    island_id: this.$store.getters.workingIslandId
+                })
             }
         }
     }

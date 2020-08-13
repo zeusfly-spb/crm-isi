@@ -21,6 +21,20 @@ export default {
         savedPage: null
     },
     actions: {
+        startAnotherUserDay ({dispatch}, data) {
+            try {
+                let frame = {
+                    type: 'request_add_workday',
+                    model: {
+                        island_id: data.island_id,
+                        user_id: data.user_id
+                    }
+                }
+                dispatch('pushFrame', frame)
+            } catch (e) {
+                return Promise.reject(e)
+            }
+        },
         changeCount ({state, commit}, data) {
             let counts = state.counts
             counts[data.status] += data.value

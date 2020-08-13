@@ -2,12 +2,6 @@ import Vue from 'vue'
 
 export default {
     actions: {
-        addFreeWorkday ({dispatch}, data) {
-            return new Promise((resolve, reject) => {
-
-            })
-
-        },
         setIslandOption ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/set_island_option', {... data})
