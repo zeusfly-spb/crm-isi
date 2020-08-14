@@ -3,7 +3,7 @@ const parse = async message => {
     try {
         const frame = JSON.parse(message)
         switch (frame.type) {
-            case 'request_add_workday':
+            case 'request_start_workday':
                 let workday = await WorkDayController.create({...frame.model})
                 let responseFrame = {
                     type: 'add_workday',

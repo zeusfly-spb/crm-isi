@@ -29,7 +29,7 @@ export default {
                     title: 'Начало рабочего дня'
                 }
                 let frame = {
-                    type: 'request_add_workday',
+                    type: 'request_start_workday',
                     model: {
                         island_id: data.island_id,
                         user_id: data.user_id
