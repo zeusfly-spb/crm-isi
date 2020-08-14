@@ -1,5 +1,6 @@
 const Cookies = require('js-cookie')
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 
 const reverseLeadRelations = lead => ({
     ...lead,
@@ -23,12 +24,17 @@ export default {
     actions: {
         startAnotherUserDay ({dispatch}, data) {
             try {
+                let request = {
+                    id: uuidv4(),
+                    title: 'Начало рабочего дня'
+                }
                 let frame = {
                     type: 'request_add_workday',
                     model: {
                         island_id: data.island_id,
                         user_id: data.user_id
-                    }
+                    },
+                    request
                 }
                 dispatch('pushFrame', frame)
             } catch (e) {

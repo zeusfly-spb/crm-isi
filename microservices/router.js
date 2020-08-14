@@ -9,6 +9,15 @@ const parse = async message => {
                     type: 'add_workday',
                     model: workday
                 }
+                if (frame.request) {
+                    responseFrame = {
+                        ...responseFrame,
+                        response : {
+                            id: frame.request.id,
+                            info: `Начат рабочий день для сотрудника ${workday.user.full_name || ''}`
+                        }
+                    }
+                }
                 return Promise.resolve({
                     response: null,
                     broadcast: JSON.stringify(responseFrame)

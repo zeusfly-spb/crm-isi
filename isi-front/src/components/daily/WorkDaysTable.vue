@@ -112,7 +112,7 @@
                     Закончить перерыв
                 </v-btn>
             </div>
-        <workdays-admin-panel v-if="isAdmin && isToday"/>
+        <workdays-admin-panel v-if="isAdmin && isToday && isDayOpen"/>
     </v-flex>
 
 </template>

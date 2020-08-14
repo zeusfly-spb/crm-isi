@@ -11,9 +11,23 @@ const isJson = str => {
 
 export default {
     state: {
+        requests: [],
         wsOutbox: []
     },
     actions: {
+        processResponse ({dispatch, commit, state}, response) {
+            return new Promise((resolve, reject) => {
+                try {
+                    let awaitingIds = state.requests.map(item => item.id)
+                    if (awaitingIds.includes(response.id)) {
+                        dispatch('pushMessage', {text: response.info})
+                            .then(() => commit('REMOVE_REQUEST', response.id))
+                    }
+                } catch (e) {
+                    reject(e)
+                }
+            })
+        },
         handleFrame ({dispatch, getters, commit}, frame) {
             const modelDate = model => model.created_at.split(' ')[0]
             const dealDate = deal => deal.created_at.split(' ')[0]
@@ -107,6 +121,9 @@ export default {
                     if (!mustHandle(obj)) {
                         return
                     }
+                    if (obj.response) {
+                        dispatch('processResponse', obj.response)
+                    }
                     switch (obj.type) {
                         case 'add_workday':
                             commit('ADD_WORK_DAY', obj.model)
@@ -179,10 +196,19 @@ export default {
             })
         },
         pushFrame ({commit}, frame) {
+            if (frame.request) {
+                commit('PUSH_REQUEST', frame.request)
+            }
             commit('PUSH_WS_OUTBOX', frame)
         }
     },
     mutations: {
+        REMOVE_REQUEST (state, id) {
+            state.requests = state.requests.filter(item => item.id !== id)
+        },
+        PUSH_REQUEST (state, request) {
+            state.requests.push(request)
+        },
         PUSH_WS_OUTBOX (state, data) {
             state.wsOutbox.push(data)
         },
