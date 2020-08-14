@@ -30,6 +30,7 @@ wss.on('connection', (ws, req) => {
         console.log(`Received message => ${message}`)
         router.parse(message)
             .then(res => {
+                console.log(res)
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })

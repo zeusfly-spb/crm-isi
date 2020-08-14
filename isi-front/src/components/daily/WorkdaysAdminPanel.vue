@@ -60,6 +60,7 @@
                     user_id: this.selectedUserId,
                     island_id: this.$store.getters.workingIslandId
                 })
+                    .then(() => this.selectedUserId = null)
             }
         }
     }

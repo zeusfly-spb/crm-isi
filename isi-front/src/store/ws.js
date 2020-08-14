@@ -78,6 +78,9 @@ export default {
             const mustHandle = obj => {
                 let result = true
                 switch (obj.type.split('_')[1]) {
+                    case 'workday':
+                        getters.currentPage !== 'daily' || !getters.isToday ? result = false : null
+                        break
                     case 'expense':
                         getters.currentPage !== 'daily' ? result = false : null
                         !getters.isToday ? result = false : null
@@ -105,6 +108,9 @@ export default {
                         return
                     }
                     switch (obj.type) {
+                        case 'add_workday':
+                            commit('ADD_WORK_DAY', obj.model)
+                            break
                         case 'delete_expense':
                             commit('DELETE_EXPENSE', obj.model.id)
                             break

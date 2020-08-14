@@ -355,9 +355,9 @@ export const store = new Vuex.Store({
         },
         startScanTimer ({dispatch, getters}) {
             setInterval(() => {
-                if (this.state.scanMode.workdays && getters.isToday) {
-                    dispatch('setWorkDays')
-                }
+                // if (this.state.scanMode.workdays && getters.isToday) {
+                //     dispatch('setWorkDays')
+                // }
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')
                 }
