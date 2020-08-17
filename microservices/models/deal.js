@@ -22,6 +22,22 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'deal_action_id',
         as: 'action'
       })
+      Deal.belongsTo(models.Product, {
+        foreignKey: 'product_id',
+        as: 'product'
+      })
+      Deal.belongsTo(models.Type, {
+        foreignKey: 'type_id',
+        as: 'type'
+      })
+      Deal.belongsTo(models.Size, {
+        foreignKey: 'size_id',
+        as: 'size'
+      })
+      Deal.belongsTo(models.Service, {
+        foreignKey: 'service_id',
+        as: 'service'
+      })
     }
   }
   Deal.init({
@@ -31,11 +47,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    user_id: DataTypes.BIGINT,
-    island_id: DataTypes.BIGINT,
-    customer_id: DataTypes.BIGINT,
-    income: DataTypes.INTEGER,
-    expense: DataTypes.INTEGER,
+    user_id: {type: DataTypes.BIGINT, allowNull: false},
+    island_id: {type: DataTypes.BIGINT, allowNull: false},
+    customer_id: {type: DataTypes.BIGINT, allowNull: false},
+    income: {type: DataTypes.INTEGER, allowNull: false},
+    expense: {type: DataTypes.INTEGER, allowNull: false},
+    service_id: DataTypes.BIGINT,
     action_type: {
       type: DataTypes.VIRTUAL,
       get () {
@@ -43,6 +60,31 @@ module.exports = (sequelize, DataTypes) => {
       },
       set (val) {
         throw new Error('Do not try to set the `action_type` value!')
+      }
+    },
+    insole: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        let product = this.product && this.product.name || ''
+        let type = this.type && this.type.name || ''
+        let size = this.size && this.size.name || ''
+        if (this.product && this.product.description === 'good') {
+          return {name: product}
+        } else {
+          return {name: `${product} ${type} ${size}`}
+        }
+      },
+      set (val) {
+        throw new Error('Do not try to set the `insole` value!')
+      }
+    },
+    is_service: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return !!this.service
+      },
+      set (val) {
+        throw new Error('Do not try to set the `service` value!')
       }
     }
   }, {

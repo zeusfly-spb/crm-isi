@@ -9,7 +9,7 @@ const index = async data => {
             where = {[Op.and]: [{created_at: {[Op.startsWith]: data.date}}, {island_id: data.island_id}]}
         :
             where = {created_at: {[Op.startsWith]: data.date}}
-        return Promise.resolve(await Deal.findAll({where: where, include: ['action', 'customer', 'user']}))
+        return Promise.resolve(await Deal.findAll({where: where,include: {all: true}}))
     } catch (e) {
         return Promise.reject(e)
     }
