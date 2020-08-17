@@ -18,17 +18,28 @@ export default {
         processResponse ({dispatch, commit, state}, response) {
             return new Promise((resolve, reject) => {
                 try {
-                    let awaitingIds = state.requests.map(item => item.id)
-                    if (awaitingIds.includes(response.id)) {
-                        dispatch('pushMessage', {text: response.info})
-                            .then(() => commit('REMOVE_REQUEST', response.id))
+                    const handle = () => {
+                        response.info ? dispatch('pushMessage', {text: response.info}) : null
+                        commit('REMOVE_REQUEST', response.id)
                     }
+                    let awaitingIds = state.requests.map(item => item.id)
+                    awaitingIds.includes(response.id) ? handle() : null
+                    resolve()
                 } catch (e) {
                     reject(e)
                 }
             })
         },
         handleFrame ({dispatch, getters, commit}, frame) {
+            const handleInstruction = model => {
+                console.log('Received instruction')
+                if (model.mutations && model.mutations.length) {
+                    model.mutations.forEach(item => {
+                        console.dir(item)
+                        commit(item.name, item.data)
+                    })
+                }
+            }
             const modelDate = model => model.created_at.split(' ')[0]
             const dealDate = deal => deal.created_at.split(' ')[0]
             const displayed = lead => {
@@ -125,6 +136,9 @@ export default {
                         dispatch('processResponse', obj.response)
                     }
                     switch (obj.type) {
+                        case 'instruction':
+                            handleInstruction(obj.model)
+                            break
                         case 'add_workday':
                             commit('ADD_WORK_DAY', obj.model)
                             break

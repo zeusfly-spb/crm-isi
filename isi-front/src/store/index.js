@@ -341,17 +341,21 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setDeals ({commit}) {
-            return new Promise((resolve,reject) => {
-                Vue.axios.post('/api/get_deals', {
-                    date: this.state.accountingDate,
-                    island_id: this.state.workingIslandId
-                })
-                    .then(res => {
-                        commit('SET_DEALS', res.data)
-                    })
-                    .catch(e => reject(e))
+        setDeals ({commit, dispatch, state}) {
+            dispatch('pushFrame', {
+                type: 'request_get_deals',
+                island_id: state.workingIslandId || null
             })
+            // return new Promise((resolve,reject) => {
+            //     Vue.axios.post('/api/get_deals', {
+            //         date: this.state.accountingDate,
+            //         island_id: this.state.workingIslandId
+            //     })
+            //         .then(res => {
+            //             commit('SET_DEALS', res.data)
+            //         })
+            //         .catch(e => reject(e))
+            // })
         },
         startScanTimer ({dispatch, getters}) {
             setInterval(() => {
@@ -992,7 +996,7 @@ export const store = new Vuex.Store({
         },
         SET_DAILY_PAGE (state, data) {
             state.workdays = data.workdays
-            state.deals = data.deals
+            // state.deals = data.deals
             state.expenses = data.expenses
             state.handover = data.handover
         },
