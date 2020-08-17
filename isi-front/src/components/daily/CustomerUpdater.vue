@@ -14,11 +14,15 @@
                 contacts
             </v-icon>
             <span
+                v-if="deal.customer"
                 :title="canUpdate ? 'Чтобы изменить клиента - клик мышкой' : ''"
                 :class="{clickable: canUpdate}"
                 @click="canUpdate ? active = true : null"
             >
-                {{ deal.customer.full_name }}
+                {{ deal.customer && deal.customer.full_name || '' }}
+            </span>
+            <span v-else>
+                Аноним
             </span>
              <interactions-card
                  no-activator

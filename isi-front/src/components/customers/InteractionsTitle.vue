@@ -11,7 +11,7 @@
         <span class="title white--text">
             История взаимодействия
             <span v-if="lead && !customer">по заявке с номера {{ lead.phone  | phone}}</span>
-            <span v-else>с клиентом {{ customer.full_name }}</span>
+            <span v-else>с клиентом {{ customer && customer.full_name || '' }}</span>
         </span>
         <v-spacer/>
         <v-icon

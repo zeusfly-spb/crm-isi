@@ -70,7 +70,7 @@ class LoaderController extends Controller
         if ($island_id) {
             $dealsBuilder = $dealsBuilder->where('island_id', $island_id);
         }
-        $deals = $dealsBuilder->get()->toArray();
+//        $deals = $dealsBuilder->get()->toArray();
 
         $expensesBuilder = Expense::with('user', 'island')->whereDate('created_at', $date);
         if ($island_id) {
@@ -90,7 +90,12 @@ class LoaderController extends Controller
         }
         $handoverAmount = $amount;
 
-        return response()->json(['workdays' => $workdays, 'deals' => $deals, 'expenses' => $expenses, 'handover' => $handoverAmount]);
+        return response()->json([
+            'workdays' => $workdays,
+//            'deals' => $deals,
+            'expenses' => $expenses,
+            'handover' => $handoverAmount
+        ]);
     }
 
     public function loadSetting()
