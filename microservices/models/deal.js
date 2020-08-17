@@ -18,8 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'customer_id',
         as: 'customer'
       })
+      Deal.belongsTo(models.DealAction, {
+        foreignKey: 'deal_action_id',
+        as: 'action'
+      })
     }
-  };
+  }
   Deal.init({
     id: {
       type: DataTypes.BIGINT,
@@ -31,7 +35,16 @@ module.exports = (sequelize, DataTypes) => {
     island_id: DataTypes.BIGINT,
     customer_id: DataTypes.BIGINT,
     income: DataTypes.INTEGER,
-    expense: DataTypes.INTEGER
+    expense: DataTypes.INTEGER,
+    action_type: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return !!this.action && this.action.type || ''
+      },
+      set (val) {
+        throw new Error('Do not try to set the `action_type` value!')
+      }
+    }
   }, {
     sequelize,
     modelName: 'Deal',

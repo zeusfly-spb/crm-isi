@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         return !!this.group && this.group.purpose && this.group.purpose === 'admin' || false
       },
       set (val) {
-
+        throw new Error('Do not try to set the `is_admin` value!');
       }
     }
   }, {
