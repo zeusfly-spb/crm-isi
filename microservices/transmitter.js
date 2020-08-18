@@ -1,5 +1,7 @@
 const passport = require('./passport')
 const fs = require('fs')
+const router = require('./router')
+
 const options = {
     key: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.key'),
     cert: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.crt')
@@ -13,7 +15,13 @@ const https = createServer(options)
 const wss = createServerFrom(https, ws => {
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
-        broadcast(message)
+        router.parse(message)
+            .then(res => {
+                console.log(res)
+                res.response ? ws.send(res.response) : null
+                res.broadcast ? broadcast(res.broadcast) : null
+            })
+            .catch(e => console.error(e))
     })
 })
 https.listen(8118)
