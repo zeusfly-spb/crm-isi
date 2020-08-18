@@ -19,6 +19,7 @@ const router = createRouter()
 import VeeValidate from 'vee-validate';
 import VeeValidate_RU from 'vee-validate/dist/locale/ru';
 Vue.use(VeeValidate, {
+    events: '',
     locale:     'ru',
     dictionary: {
         ru: VeeValidate_RU,
