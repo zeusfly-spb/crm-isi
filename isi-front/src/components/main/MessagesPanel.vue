@@ -77,7 +77,7 @@
                 }
                 try {
                     let frame = await this.$store.dispatch('popFrame')
-                    this.$socket ? this.$socket.send(JSON.stringify(frame)) : null
+                    this.$socket.readyState ? this.$socket.send(JSON.stringify(frame)) : setTimeout(() => this.$socket.send(JSON.stringify(frame)), 100)
                 } catch (e) {
                     return Promise.reject(e)
                 }
