@@ -168,16 +168,19 @@
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <sub>Телефон</sub>
-                            <v-text-field
-                                :disabled="!!subscribe"
-                                v-model="editedEvent.client_phone"
-                                prepend-inner-icon="phone"
-                                data-vv-as="Номер телефона клиента"
-                                data-vv-name="client_phone"
-                                :error-messages="errors.collect('client_phone')"
-                                v-validate="'required|digits:10'"
-                                mask="(###) ### - ####"
-                            />
+<!--                            <v-text-field-->
+<!--                                :disabled="!!subscribe"-->
+<!--                                v-model="editedEvent.client_phone"-->
+<!--                                prepend-inner-icon="phone"-->
+<!--                                data-vv-as="Номер телефона клиента"-->
+<!--                                data-vv-name="client_phone"-->
+<!--                                :error-messages="errors.collect('client_phone')"-->
+<!--                                v-validate="'required|digits:10'"-->
+<!--                                mask="(###) ### - ####"-->
+<!--                            />-->
+                          <div>
+                            {{ editedEvent.client_phone | phone }}
+                          </div>
                         </v-flex>
                     </v-layout>
                 </v-container>
