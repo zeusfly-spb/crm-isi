@@ -180,6 +180,9 @@
             }
         }),
         computed: {
+            isAdmin () {
+                return this.$store.state.authUser.is_admin
+            },
             serviceItem () {
                 if (!this.deal.is_service && ['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(this.deal.action_type)) {
                     return this.$store.getters.allServices.length
@@ -307,7 +310,8 @@
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, deals: false})
             },
             switchEditMode (mode) {
-                if (!this.canUpdate) return
+                if (!this.canUpdate && !this.isAdmin) return
+                if (this.isAdmin && !this.isToday) return
                 for(let key in this.editMode) {
                     this.editMode[key] = false
                 }
