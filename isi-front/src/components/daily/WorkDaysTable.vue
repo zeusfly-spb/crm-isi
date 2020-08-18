@@ -57,7 +57,16 @@
                         <td
                             :class="{'mini': mini}"
                         >
-                            {{ displayTime(props.item.time_finish) || '' }}
+                            <v-icon
+                                class="clickable"
+                                v-if="isAdmin && !props.item.time_finish && +props.item.user.id !== +authUser.id"
+                                color="blue"
+                                :title="`Закончить рабочий день сотрудника ${props.item.user.full_name}`"
+                                @click="setClosingUser(props.item.user)"
+                            >
+                                directions_walk
+                            </v-icon>
+                            <span>{{ displayTime(props.item.time_finish) || '' }}</span>
                         </td>
                         <td align="center"
                             :class="{'mini': mini}"
@@ -113,6 +122,38 @@
                 </v-btn>
             </div>
         <workdays-admin-panel v-if="isAdmin && isToday && isDayOpen"/>
+        <v-dialog
+            v-model="adminClosing"
+            max-width="800px"
+            @update:returnValue="closeDialog"
+        >
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title
+                        class="light-blue darken-3"
+                >
+                    <span
+                            class="white--text title"
+                    >
+                        {{ `Закончить рабочий день сотрудника ${closingUser && closingUser.full_name || ''}` }}
+                    </span>
+                    <v-spacer/>
+                    <v-icon
+                            class="clickable"
+                            color="white"
+                            @click="closeDialog"
+                    >
+                        close
+                    </v-icon>
+                </v-card-title>
+                <v-card-text>
+                    ntcn
+                </v-card-text>
+
+
+            </v-card>
+        </v-dialog>
     </v-flex>
 
 </template>
@@ -122,6 +163,8 @@
     export default {
         name: 'WorkDaysTable',
         data: () => ({
+            adminClosing: false,
+            closingUser: null,
             snackbar: false,
             snackColor: 'green',
             snackText: '',
@@ -192,6 +235,13 @@
             }
         },
         methods: {
+            closeDialog () {
+                this.closingUser = null
+            },
+            setClosingUser (user) {
+                console.log('Setting user ' + user)
+                this.closingUser = user
+            },
             displayTime (fullTime) {
                 if (!fullTime || !fullTime.length) {
                     return ''
@@ -241,6 +291,11 @@
             startDay () {
                 this.$store.dispatch('startUserDay')
                     .then(() => this.showSnack(`Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
+            }
+        },
+        watch: {
+            closingUser (val) {
+                this.adminClosing = !!val
             }
         },
         components: {
