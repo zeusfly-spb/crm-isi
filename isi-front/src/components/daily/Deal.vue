@@ -211,8 +211,13 @@
             },
             users () {
                 let base = this.$store.state.users
-                base = base.map(user => ({...user, full_name: user.is_superadmin ? 'Суперадмин' : user.full_name }))
-                return base
+                if (this.isAdmin) {
+                    let currentWorkingUserIds = this.$store.state.workdays
+                        .filter(item => !item.time_finish)
+                        .map(wd => +wd.user_id)
+                    return base.filter(user => currentWorkingUserIds.includes(+user.id))
+                }
+                return base.map(user => ({...user, full_name: user.is_superadmin ? 'Суперадмин' : user.full_name }))
             },
             customers () {
                 return [

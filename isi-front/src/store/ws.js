@@ -32,10 +32,8 @@ export default {
         },
         handleFrame ({dispatch, getters, commit}, frame) {
             const handleInstruction = model => {
-                console.log('Received instruction')
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
-                        console.dir(item)
                         commit(item.name, item.data)
                     })
                 }
