@@ -130,9 +130,6 @@ export default {
                     if (!mustHandle(obj)) {
                         return
                     }
-                    if (obj.response) {
-                        dispatch('processResponse', obj.response)
-                    }
                     switch (obj.type) {
                         case 'instruction':
                             handleInstruction(obj.model)
@@ -189,6 +186,9 @@ export default {
                             refreshCallToday(obj.model)
                             break
                         default: break
+                    }
+                    if (obj.response) {
+                        dispatch('processResponse', obj.response)
                     }
                     resolve(frame)
                 } catch (e) {
