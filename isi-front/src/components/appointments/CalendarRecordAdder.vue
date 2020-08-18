@@ -7,7 +7,7 @@
     <v-card class="round-corner" width="1000px">
         <v-card-title class="light-blue darken-3">
             <span class="subheading white--text" style="font-weight: bold">
-                Добавить запись {{ this.date ? 'на' : ''}}
+                Добавить запись {{ this.date ? 'на' : ''}} {{ this.lead ? 'по заявке' : ''}}
                 {{ date | moment('DD MMM YYYY г.')}}
             </span>
             <v-spacer/>
@@ -179,6 +179,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Клиент</sub>
                         <v-text-field
+                            :readonly="!!lead"
                             :disabled="!!subscribe"
                             v-model="editedAppointment.client_name"
                             label="Имя"
@@ -191,15 +192,19 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Телефон</sub>
                         <v-text-field
+                            v-if="!lead"
                             :disabled="!!subscribe"
                             v-model="editedAppointment.client_phone"
                             label="Номер телефона"
                             data-vv-as="Номер телефона клиента"
                             data-vv-name="client_phone"
                             :error-messages="errors.collect('client_phone')"
-                            v-validate="'required|digits:10'"
+                            v-validate="!!lead ? null : 'required|digits:10'"
                             mask="(###) ### - ####"
                         />
+                        <div v-else>
+                          {{ lead && lead.phone | phone }}
+                        </div>
                     </v-flex>
                 </v-layout>
             </v-container>
