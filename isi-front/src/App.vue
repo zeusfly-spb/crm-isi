@@ -67,7 +67,7 @@ export default {
             return this.$store.state.access
         },
         loading () {
-            return this.$store.getters.busy
+            return this.$store.getters.busy || this.$store.state.ws.requests.length > 0
         },
         authUser () {
             return this.$store.state.authUser
