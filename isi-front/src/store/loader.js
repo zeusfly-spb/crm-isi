@@ -440,7 +440,7 @@ export default {
         loadDailyPage ({commit, rootState, dispatch}) {
             let request = {
                 id: uuidv4(),
-                title: 'Начало рабочего дня'
+                title: 'Загрузка сделок текущей даты'
             }
             dispatch('pushFrame', {
                 type: 'request_get_deals',
