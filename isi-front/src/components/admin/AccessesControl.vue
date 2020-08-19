@@ -1,15 +1,5 @@
 <template>
     <v-flex align-center>
-        <v-snackbar
-            v-model="snackbar"
-            auto-height
-            top
-            :timeout="3000"
-            :color="snackColor"
-        >
-            <span>{{ snackText }}</span>
-        </v-snackbar>
-
         <v-data-table
             hide-actions
             class="elevation-1"
@@ -22,7 +12,7 @@
                 <td>{{ props.item.user_info }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
-                <td><access-island-changer :access="props.item" @success="showSuccess"/></td>
+                <td><access-island-changer :access="props.item"/></td>
                 <td :class="{'blue--text': props.item.status === 'requested', 'green--text': props.item.status === 'allowed', 'red--text': props.item.status === 'denied'}">
                         {{ {requested: 'Ожидает', allowed: 'Разрешен', denied: 'Запрещен'}[props.item.status] }}
                 </td>
@@ -115,10 +105,17 @@
         <v-dialog v-model="deleteConfirm"
                   max-width="500"
         >
-            <v-card>
-                <v-card-title class="subheading">
-                    Удалить выбранный доступ "<strong>{{ accessToDelete && accessToDelete.comment || '' }}</strong>"
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title class="title red white--text">
+                    Удаление доступа
                 </v-card-title>
+                <v-card-text>
+                    Удалить выбранный доступ от
+                    <strong class="ml-1 mr-1">{{ accessToDelete && accessToDelete.created_at | moment('D MMMM YYYY г.') }}</strong>
+                    отправителя <strong class="ml-1">{{ accessToDelete && userName(accessToDelete.user_id) || '' }}</strong>?
+                </v-card-text>
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -181,17 +178,12 @@
                 this.$store.dispatch('deleteAccess', this.accessToDelete.id)
                     .then(() => {
                         this.deleteConfirm = false
-                        this.showSuccess('Доступ удален')
+                        this.$store.dispatch('pushMessage', {text: 'Доступ удален'})
                     })
             },
             showDeleteConfirm (access) {
                 this.accessToDelete = access
                 this.deleteConfirm = true
-            },
-            showSuccess (text) {
-                this.snackColor = 'green'
-                this.snackText = text
-                this.snackbar = true
             },
             setAccessToIsland () {
                 this.axios.post('/api/set_access_status', {
@@ -203,10 +195,9 @@
                         this.$store.dispatch('setAccessRequests')
                         let island = this.islands.find(island => +island.id === +this.selectedIslandId)
                         let islandName = island && island.name || ''
-                        this.showSuccess(`Статус доступа изменент на Разрешен с привязкой к островку "${islandName}"`)
                         this.confirm = false
+                        this.$store.dispatch('pushMessage', {text: `Статус доступа изменент на Разрешен с привязкой к островку "${islandName}"`})
                     })
-
             },
             setStatus (access, val) {
                 if (val === 'allowed') {
@@ -220,8 +211,9 @@
                 })
                     .then(() => {
                         this.$store.dispatch('setAccessRequests')
-                            .then(() => this.showSuccess(`Статус доступа изменен на ${{allowed: 'Разрешен', denied: 'Запрещен', requested: 'На ожидании'}[val]}`))
-
+                            .then(() => this.$store.dispatch('pushMessage', {
+                                text: `Статус доступа изменен на ${{allowed: 'Разрешен', denied: 'Запрещен', requested: 'На ожидании'}[val]}`
+                            }))
                     })
 
             },

@@ -56,7 +56,7 @@
                         this.deactivate()
                         let islandName = res.data.island && res.data.island.name || null
                         let info = !islandName ? `От доступа отвязан островок` : `К доступу привязан островок ${islandName}`
-                        this.$emit('success', info)
+                        this.$store.dispatch('pushMessage', {text: info})
                     })
             }
         }
