@@ -15,6 +15,7 @@ const https = createServer(options)
 const wss = createServerFrom(https, ws => {
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
+        checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
                 console.log(res)
@@ -50,6 +51,48 @@ const broadcast = data => {
         client.readyState === 1 ? client.send(data) : null
     })
     console.log(`Delivered to ${[... wss.clients].filter(client => client.readyState === 1).length} clients`)
+}
+
+const activeClients = () => {
+    let result = []
+    wss.clients.forEach(client => client.readyState === 1 ? result.push(client) : null)
+    return result
+}
+
+const checkToInternalFunction = ({message, ws}) => {
+    try {
+        let frame = JSON.parse(message)
+        console.log(frame)
+        let responseFrame
+        switch (frame.type) {
+            case 'request_get_active_clients':
+                responseFrame = {
+                    type: 'set_active_clients',
+                    model: activeClients()
+                }
+                if (frame.request) {
+                    responseFrame.response = {
+                        id: frame.request.id
+                    }
+                }
+                ws && ws.readyState === 1 ? ws.send(JSON.stringify(responseFrame)) : null
+                break
+            case 'close_active_sessions':
+                console.log('Closing active sessions')
+                let mutation = {name: 'AUTH_LOGOUT', data: null}
+                responseFrame = {
+                    type: 'instruction',
+                    model: {
+                        mutations: [mutation]
+                    }
+                }
+                broadcast(JSON.stringify(responseFrame))
+                break
+            default: break
+        }
+    } catch (e) {
+        throw Error('Ошибка выполнения внутренней инструкции сервера WebSocket: ', e)
+    }
 }
 
 
