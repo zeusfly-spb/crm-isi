@@ -53,6 +53,12 @@ module.exports = (sequelize, DataTypes) => {
     income: {type: DataTypes.INTEGER, allowNull: false},
     expense: {type: DataTypes.INTEGER, allowNull: false},
     service_id: DataTypes.BIGINT,
+    is_cache: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
+    deal_action_id: {type: DataTypes.BIGINT, allowNull: false},
+    product_id: {type: DataTypes.BIGINT, allowNull: false},
+    type_id: {type: DataTypes.BIGINT, allowNull: false},
+    size_id:  {type: DataTypes.BIGINT, allowNull: false},
+    subscription_id: DataTypes.BIGINT,
     action_type: {
       type: DataTypes.VIRTUAL,
       get () {
