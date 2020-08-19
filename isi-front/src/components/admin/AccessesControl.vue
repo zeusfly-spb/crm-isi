@@ -1,5 +1,12 @@
 <template>
     <v-flex align-center>
+        <v-btn>
+            <span
+                class="ml-1 mr-1 red--text"
+            >
+                Завершить все активные сессии ({{ activeClients.length }})
+            </span>
+        </v-btn>
         <v-data-table
             hide-actions
             class="elevation-1"
@@ -135,11 +142,12 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
     </v-flex>
 </template>
 <script>
     import AccessIslandChanger from './accesses/AccessIslandChanger'
+    import { v4 as uuidv4 } from 'uuid'
+
     export default {
         name: 'AccessesControl',
         data: () => ({
@@ -163,6 +171,9 @@
             ]
         }),
         computed: {
+            activeClients () {
+                return this.$store.state.ws.activeClients
+            },
             islands () {
                 return [...this.$store.state.islands, {id: null, name: 'Без островка'}]
             },
@@ -221,6 +232,16 @@
                 let user = this.users.find(item => item.id === id)
                 return user && user.full_name || ''
             }
+        },
+        mounted () {
+            let request = {
+                id: uuidv4(),
+                title: 'Загрузка активных клиентов'
+            }
+            this.$store.dispatch('pushFrame', {
+                type: 'request_get_active_clients',
+                request
+            })
         },
         components: {
             AccessIslandChanger

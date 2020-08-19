@@ -1,10 +1,16 @@
 const WorkDayController = require('./controllers/WorkDayController')
 const DealController = require('./controllers/DealController')
+
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
         let responseFrame
         switch (frame.type) {
+            case 'request_get_active_clients':
+                return Promise.resolve({
+                    response: null,
+                    broadcast: null
+                })
             case 'request_start_workday':
                 let workday = await WorkDayController.create({...frame.model})
                 responseFrame = {

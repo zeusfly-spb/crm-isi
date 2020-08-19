@@ -11,6 +11,7 @@ const isJson = str => {
 
 export default {
     state: {
+        activeClients: [],
         requests: [],
         wsOutbox: []
     },
@@ -131,6 +132,9 @@ export default {
                         return
                     }
                     switch (obj.type) {
+                        case 'set_active_clients':
+                            commit('SET_ACTIVE_CLIENTS', obj.model)
+                            break
                         case 'instruction':
                             handleInstruction(obj.model)
                             break
@@ -215,6 +219,9 @@ export default {
         }
     },
     mutations: {
+        SET_ACTIVE_CLIENTS (state, clients) {
+            state.activeClients = clients
+        },
         REMOVE_REQUEST (state, id) {
             state.requests = state.requests.filter(item => item.id !== id)
         },

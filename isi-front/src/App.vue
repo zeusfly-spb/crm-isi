@@ -30,6 +30,12 @@ export default {
         userRates: null
     }),
     computed: {
+        wsRequests () {
+            return this.$store.state.ws.requests
+        },
+        hasWsRequests () {
+            return this.wsRequests.length > 0
+        },
         colors () {
             return this.$store.state.catalog.colors
         },
@@ -67,7 +73,7 @@ export default {
             return this.$store.state.access
         },
         loading () {
-            return this.$store.getters.busy || this.$store.state.ws.requests.length > 0
+            return this.$store.getters.busy || this.hasWsRequests
         },
         authUser () {
             return this.$store.state.authUser

@@ -9,6 +9,38 @@ const broadcast = data => {
     })
 }
 
+const activeClients = () => {
+    let result = []
+    wss.clients.forEach(client => client.readyState === 1 ? result.push(client) : null)
+    return result
+}
+
+const checkToInternalFunction = ({message, ws}) => {
+    try {
+        let frame = JSON.parse(message)
+        console.log('Requested internal function')
+        console.log(frame)
+        let responseFrame
+        switch (frame.type) {
+            case 'request_get_active_clients':
+                responseFrame = {
+                    type: 'set_active_clients',
+                    model: activeClients()
+                }
+                if (frame.request) {
+                    responseFrame.response = {
+                        id: frame.request.id
+                    }
+                }
+                console.log('Response: ', responseFrame)
+                ws && ws.readyState === WebSocket.OPEN ? ws.send(JSON.stringify(responseFrame)) : null
+                break
+            default: break
+        }
+    } catch (e) {
+        throw Error('Ошибка выполнения внутренней инструкции сервера WebSocket: ', e)
+    }
+}
 
 wss.on('connection', (ws, req) => {
     const parseCookie = str => {
@@ -28,6 +60,7 @@ wss.on('connection', (ws, req) => {
 
     ws.on('message', message => {
         console.log(`Received message => ${message}`)
+        checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
                 console.log(res)
@@ -38,4 +71,8 @@ wss.on('connection', (ws, req) => {
     })
 })
 
-exports.broadcast = broadcast
+// exports.broadcast = broadcast
+// exports.wss = wss
+module.exports = {
+    broadcast
+}
