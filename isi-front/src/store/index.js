@@ -1,7 +1,6 @@
 const Cookies = require('js-cookie')
 require('dotenv').config()
 
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -1149,6 +1148,7 @@ export const store = new Vuex.Store({
             delete Vue.axios.defaults.headers.common['Authorization']
             state.authUser = null
             state.status = 'logout'
+            Vue.axios.post('/api/details')
         },
         SET_AUTH_USER (state, user) {
             state.authUser = user

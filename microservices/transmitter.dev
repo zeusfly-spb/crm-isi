@@ -18,7 +18,6 @@ const activeClients = () => {
 const checkToInternalFunction = ({message, ws}) => {
     try {
         let frame = JSON.parse(message)
-        console.log('Requested internal function')
         console.log(frame)
         let responseFrame
         switch (frame.type) {
@@ -32,8 +31,18 @@ const checkToInternalFunction = ({message, ws}) => {
                         id: frame.request.id
                     }
                 }
-                console.log('Response: ', responseFrame)
-                ws && ws.readyState === WebSocket.OPEN ? ws.send(JSON.stringify(responseFrame)) : null
+                ws && ws.readyState === 1 ? ws.send(JSON.stringify(responseFrame)) : null
+                break
+            case 'close_active_sessions':
+                console.log('Closing active sessions')
+                let mutation = {name: 'AUTH_LOGOUT', data: null}
+                responseFrame = {
+                    type: 'instruction',
+                    model: {
+                        mutations: [mutation]
+                    }
+                }
+                broadcast(JSON.stringify(responseFrame))
                 break
             default: break
         }

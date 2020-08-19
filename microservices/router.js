@@ -6,6 +6,11 @@ const parse = async message => {
         const frame = JSON.parse(message)
         let responseFrame
         switch (frame.type) {
+            case 'close_active_sessions':
+                return Promise.resolve({
+                    response: null,
+                    broadcast: null
+                })
             case 'request_get_active_clients':
                 return Promise.resolve({
                     response: null,

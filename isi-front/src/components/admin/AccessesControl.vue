@@ -164,7 +164,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="darken-1" flat @click="hideCloseSessionsConfirm">Отмена</v-btn>
-                    <v-btn color="red darken-1" flat @click="">Завершить</v-btn>
+                    <v-btn color="red darken-1" flat @click="closeActiveSessions">Завершить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -212,6 +212,9 @@
             }
         },
         methods: {
+            closeActiveSessions () {
+                this.$store.dispatch('pushFrame', {type: 'close_active_sessions'})
+            },
             hideCloseSessionsConfirm () {
                 this.closeSessionsConfirm = false
             },
