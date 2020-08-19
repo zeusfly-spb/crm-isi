@@ -1,8 +1,11 @@
 <template>
     <v-flex align-center>
-        <v-btn>
+        <v-btn
+            color="error"
+            @click="showCloseSessionsConfirm"
+        >
             <span
-                class="ml-1 mr-1 red--text"
+                class="ml-2 mr-2 white--text"
             >
                 Завершить все активные сессии ({{ activeClients.length }})
             </span>
@@ -110,7 +113,7 @@
         </v-dialog>
 
         <v-dialog v-model="deleteConfirm"
-                  max-width="500"
+                  max-width="500px"
         >
             <v-card
                 class="round-corner"
@@ -123,7 +126,6 @@
                     <strong class="ml-1 mr-1">{{ accessToDelete && accessToDelete.created_at | moment('D MMMM YYYY г.') }}</strong>
                     отправителя <strong class="ml-1">{{ accessToDelete && userName(accessToDelete.user_id) || '' }}</strong>?
                 </v-card-text>
-
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -142,6 +144,30 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog
+            v-model="closeSessionsConfirm"
+            max-width="500px"
+        >
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title
+                    class="title red white--text"
+                >
+                    Завершение активных сессий
+                </v-card-title>
+                <v-card-text>
+                    В данный момент в системе авторизовано <strong>{{ activeClients.length }}</strong> рабочие станции,
+                    (включая вас), вы уверены, что хотите принудительно завершить все сеансы?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="hideCloseSessionsConfirm">Отмена</v-btn>
+                    <v-btn color="red darken-1" flat @click="">Завершить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 <script>
@@ -151,6 +177,7 @@
     export default {
         name: 'AccessesControl',
         data: () => ({
+            closeSessionsConfirm: false,
             deleteConfirm: false,
             accessToDelete: null,
             currentAccessId: null,
@@ -185,6 +212,12 @@
             }
         },
         methods: {
+            hideCloseSessionsConfirm () {
+                this.closeSessionsConfirm = false
+            },
+            showCloseSessionsConfirm () {
+                this.closeSessionsConfirm = true
+            },
             deleteAccess () {
                 this.$store.dispatch('deleteAccess', this.accessToDelete.id)
                     .then(() => {
