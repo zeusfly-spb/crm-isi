@@ -116,6 +116,7 @@
                                     data-vv-name="code"
                                     :error-messages="errors.collect('code')"
                                     v-validate="'numeric|required|max:3'"
+                                    ref="new_val"
                                 />
                             </v-flex>
                             <v-flex
@@ -157,7 +158,7 @@
                 <v-card-actions>
                     <v-spacer/>
                     <v-btn color="darken-1" flat @click="deleteConfirm = false">Отмена</v-btn>
-                    <v-btn color="red darken-1" flat @click="">Удалить</v-btn>
+                    <v-btn color="red darken-1" flat @click="deleteTelCode">Удалить</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -210,15 +211,41 @@
             }
         },
         methods: {
+            deleteTelCode () {
+                let before = this.additionalTelephonyCodes
+                this.additionalTelephonyCodes = before.filter(item => item.value !== this.codeToDelete.value)
+                this.deleteConfirm = false
+            },
             showDeleteConfirm (telCode) {
                 this.codeToDelete = telCode
             },
             addTelCode () {
+                const exists = telCode => this.additionalTelephonyCodes
+                    .map(item => item.value).includes(telCode.value)
+                const isMain = telCode => this.island.vpbx_extension === telCode.value
                 const action = () => {
                     let before = this.additionalTelephonyCodes
                     before.push(this.newTelCode)
                     this.additionalTelephonyCodes = before
                     this.addMode = false
+                }
+                if (exists(this.newTelCode)) {
+                    this.$store.dispatch('pushMessage', {
+                        text: 'Добавляемый код уже присутствует в списке',
+                        color: 'red'
+                    })
+                    this.newTelCode.value = ''
+                    this.$refs.new_val.focus()
+                    return
+                }
+                if (isMain(this.newTelCode)) {
+                    this.$store.dispatch('pushMessage', {
+                        text: 'Добавляемый код является основным',
+                        color: 'red'
+                    })
+                    this.newTelCode.value = ''
+                    this.$refs.new_val.focus()
+                    return
                 }
                 this.$validator.validate()
                     .then(res => res ? action() : null)
