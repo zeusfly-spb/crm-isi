@@ -9,7 +9,9 @@ const index = async data => {
             where = {[Op.and]: [{created_at: {[Op.startsWith]: data.date}}, {island_id: data.island_id}]}
         :
             where = {created_at: {[Op.startsWith]: data.date}}
-        return Promise.resolve(await Deal.findAll({where: where,include: {all: true}}))
+        let deals = await Deal.findAll({where: where,include: {all: true}})
+        let result = deals.sort((a, b) => +a.id - +b.id)
+        return Promise.resolve(result)
     } catch (e) {
         return Promise.reject(e)
     }
