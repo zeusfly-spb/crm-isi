@@ -38,6 +38,33 @@
                     </th>
                 </tr>
             </template>
+            <template v-slot:items="props">
+                <tr
+                    :style="{backgroundColor: `${$store.getters.colorValue(color)}!important`}"
+                >
+                    <td>
+                        {{ props.item.value }}
+                    </td>
+                    <td>
+                        {{ props.item.description }}
+                    </td>
+                    <td align="right">
+                        <v-btn
+                            icon
+                            small
+                            :title="`Удалить дополнительный код ${props.item.value}`"
+                            @click="showDeleteConfirm(props.item)"
+                        >
+                            <v-icon
+                                small
+                                color="red"
+                            >
+                                delete
+                            </v-icon>
+                        </v-btn>
+                    </td>
+                </tr>
+            </template>
             <template v-slot:no-data>
                 <span class="red--text">Нет дополнительных телефонных кодов</span>
             </template>
@@ -83,23 +110,56 @@
                                     xs12 sm6 md6
                             >
                                 <v-text-field
-                                        v-model="newTelCode.value"
+                                    v-model="newTelCode.value "
+                                    label="Код"
+                                    data-vv-as="Код"
+                                    data-vv-name="code"
+                                    :error-messages="errors.collect('code')"
+                                    v-validate="'numeric|required|max:3'"
                                 />
                             </v-flex>
                             <v-flex
                                     xs12 sm6 md6
                             >
                                 <v-text-field
-                                        v-model="newTelCode.description"
+                                    v-model="newTelCode.description"
+                                    label="Примечание"
                                 />
                             </v-flex>
                         </v-layout>
                     </v-container>
-
                 </v-card-text>
-
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="darken-1" flat @click="addMode = false">Отмена</v-btn>
+                    <v-btn color="green darken-1" flat @click="addTelCode">Сохранить</v-btn>
+                </v-card-actions>
             </v-card>
-
+        </v-dialog>
+        <v-dialog
+            v-model="deleteConfirm"
+            max-width="500px"
+        >
+            <v-card
+                class="round-corner"
+            >
+                <v-card-title
+                    class="red"
+                >
+                    <span class="title white--text">Подтверждение</span>
+                </v-card-title>
+                <v-card-text>
+                    <span class="subheading">
+                        Удалить код телефонии <strong>{{ codeToDelete && codeToDelete.value || '' }}</strong>
+                        {{ codeToDelete && codeToDelete.description || ''}}?
+                    </span>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn color="darken-1" flat @click="deleteConfirm = false">Отмена</v-btn>
+                    <v-btn color="red darken-1" flat @click="">Удалить</v-btn>
+                </v-card-actions>
+            </v-card>
         </v-dialog>
     </v-sheet>
 </template>
@@ -111,7 +171,11 @@
             island_id: Number
         },
         data: () => ({
-            newTelCode: {value: '', description: ''},
+            codeToDelete: null,
+            newTelCode: {
+                value: '',
+                description: ''
+            },
             addMode: false,
             color: 'teal lighten-5',
             island: null,
@@ -122,6 +186,14 @@
             ]
         }),
         computed: {
+            deleteConfirm: {
+                get () {
+                    return !!this.codeToDelete
+                },
+                set (val) {
+                    !val ? this.codeToDelete = null : null
+                }
+            },
             additionalTelephonyCodes: {
                 get () {
                     const value = () => this.island.options.additionalTelephonyCodes || []
@@ -138,6 +210,19 @@
             }
         },
         methods: {
+            showDeleteConfirm (telCode) {
+                this.codeToDelete = telCode
+            },
+            addTelCode () {
+                const action = () => {
+                    let before = this.additionalTelephonyCodes
+                    before.push(this.newTelCode)
+                    this.additionalTelephonyCodes = before
+                    this.addMode = false
+                }
+                this.$validator.validate()
+                    .then(res => res ? action() : null)
+            },
             setIsland () {
                 this.island = this.$store.state.islands.find(item => +item.id === +this.island_id)
             }
