@@ -80,7 +80,16 @@
                 v-if="extended"
             >
                 <island-salary-options-control
-                        :island_id="island.id"
+                    :island_id="island.id"
+                />
+            </v-layout>
+
+            <v-layout
+                style="margin-top: 1em"
+                v-if="extended"
+            >
+                <additional-telephony-codes-control
+                    :island_id="island.id"
                 />
             </v-layout>
 
@@ -88,7 +97,7 @@
         <v-layout justify-center>
             <span
                 v-if="extended"
-                class="caption blue--text clickable"
+                class="caption blue--text clickable mt-2"
                 @click="expand"
             >
                 Базовые настройки
@@ -101,6 +110,7 @@
     import IslandNotifyControl from './IslandNotifyControl'
     import CallCenterSwitcher from './CallCenterSwitcher'
     import IslandSalaryOptionsControl from './IslandSalaryOptionsControl'
+    import AdditionalTelephonyCodesControl from './AdditionalTelephonyCodesControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -175,7 +185,8 @@
             CabinetControl,
             IslandNotifyControl,
             CallCenterSwitcher,
-            IslandSalaryOptionsControl
+            IslandSalaryOptionsControl,
+            AdditionalTelephonyCodesControl
         }
     }
 </script>
