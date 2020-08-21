@@ -18,7 +18,7 @@
         >
             <template v-slot:items="props">
                 <td>{{ props.item.id }}</td>
-                <td>{{ props.item.created_at | moment('DD MMMM YYYY г.')}}</td>
+                <td class="date-field">{{ props.item.created_at | moment('DD MMMM YYYY г.')}}</td>
                 <td>{{ props.item.user_info }}</td>
                 <td>{{ userName(props.item.user_id) }}</td>
                 <td>{{ props.item.comment }}</td>
@@ -153,9 +153,16 @@
                 class="round-corner"
             >
                 <v-card-title
-                    class="title red white--text"
+                    class="title red"
                 >
-                    Завершение активных сессий
+                    <v-icon
+                        color="white"
+                        class="mr-2"
+                    >
+                        link_off
+                    </v-icon>
+                    <span class="title white--text">Завершение активных сессий</span>
+                    <v-spacer/>
                 </v-card-title>
                 <v-card-text>
                     В данный момент в системе авторизовано <strong>{{ activeClients.length }}</strong> рабочие станции,
@@ -284,3 +291,8 @@
         }
     }
 </script>
+<style>
+    .date-field {
+        width: 15em;
+    }
+</style>
