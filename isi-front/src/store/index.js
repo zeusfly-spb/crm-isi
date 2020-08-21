@@ -994,7 +994,7 @@ export const store = new Vuex.Store({
             state.accessRequests = state.accessRequests.map(item => +item.id === +accessRequest.id ? accessRequest : item)
         },
         SET_DAILY_PAGE (state, data) {
-            state.workdays = data.workdays
+            // state.workdays = data.workdays
             // state.deals = data.deals
             state.expenses = data.expenses
             state.handover = data.handover

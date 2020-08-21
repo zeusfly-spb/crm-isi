@@ -5,7 +5,29 @@ const parse = async message => {
     try {
         const frame = JSON.parse(message)
         let responseFrame
+        let mutation
         switch (frame.type) {
+            case 'request_get_workdays':
+                let workdays = await WorkDayController.index({...frame.model})
+                mutation = {
+                    name: 'SET_WORK_DAYS',
+                    data: workdays
+                }
+                responseFrame = {
+                    type: 'instruction',
+                    model: {
+                        mutations: [mutation]
+                    }
+                }
+                if (frame.request) {
+                    responseFrame.response = {
+                        id: frame.request.id
+                    }
+                }
+                return Promise.resolve({
+                    response: JSON.stringify(responseFrame),
+                    broadcast: null
+                })
             case 'close_active_sessions':
                 return Promise.resolve({
                     response: null,
@@ -34,7 +56,7 @@ const parse = async message => {
                 })
             case 'request_get_deals':
                 let deals = await DealController.index({...frame.model})
-                let mutation = {name: 'SET_DEALS', data: deals}
+                mutation = {name: 'SET_DEALS', data: deals}
                 responseFrame = {
                     type: 'instruction',
                     model: {
