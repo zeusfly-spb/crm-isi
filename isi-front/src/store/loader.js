@@ -450,6 +450,18 @@ export default {
                     request
                 }
             })
+            request = {
+                id: uuidv4(),
+                title: 'Загрузка рабочих дней текущей даты'
+            }
+            dispatch('pushFrame', {
+                type: 'request_get_workdays',
+                model: {
+                    date: rootState.accountingDate,
+                    island_id: rootState.workingIslandId || null,
+                    request
+                }
+            })
             return new Promise((resolve, reject) => {
                 commit('ADD_TASK', 'daily')
                 Vue.axios.post('/api/load_daily_page', {

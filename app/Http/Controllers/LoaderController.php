@@ -64,7 +64,7 @@ class LoaderController extends Controller
         if ($island_id > 0) {
             $workdaysBuilder = $workdaysBuilder->where('island_id', $island_id);
         }
-        $workdays = $workdaysBuilder->get()->toArray();
+//        $workdays = $workdaysBuilder->get()->toArray();
 
         $dealsBuilder = Deal::with('user', 'customer', 'action')->whereDate('created_at', $date);
         if ($island_id) {
@@ -91,7 +91,7 @@ class LoaderController extends Controller
         $handoverAmount = $amount;
 
         return response()->json([
-            'workdays' => $workdays,
+//            'workdays' => $workdays,
 //            'deals' => $deals,
             'expenses' => $expenses,
             'handover' => $handoverAmount
