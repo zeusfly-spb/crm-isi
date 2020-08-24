@@ -16,7 +16,7 @@
             >
                 {{   `${ icons[event.status]}` }}
             </v-icon>
-            <span class="green--text title">{{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}</span>
+            <span class="green--text title">{{ $store.state.appointment.displayTime(timePart(event.date)) }}</span>
             <span class="pl-1 pr-1">{{ event.service && event.service.description }}</span>
             <strong>Клиент:</strong>
             <span class="pl-1 pr-1">
@@ -106,6 +106,13 @@
             }
         },
         methods: {
+            timePart (date) {
+                if (date.includes('T')) {
+                    return date.split('T')[1]
+                } else {
+                    return date.split(' ')[1]
+                }
+            },
             dragEnd () {
                 if (this.$store.getters.moveReady) {
                     this.$store.dispatch('moveEvent')

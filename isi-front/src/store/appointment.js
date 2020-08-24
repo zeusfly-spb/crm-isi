@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+
 
 export default {
     state: {
@@ -214,7 +216,19 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setAppointments ({commit, rootState, state, getters}) {
+        setAppointments ({commit, rootState, state, getters, dispatch}) {
+            dispatch('pushFrame', {
+                type: 'request_get_appointments',
+                model: {
+                    date: state.date,
+                    island_id: getters.callCenter ? getters.inspectingIslandId : rootState.workingIslandId
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка записей текущего месяца'
+                }
+            })
+            /**
             return new Promise((resolve, reject) => {
                 commit('ADD_TASK', 'appointments')
                 Vue.axios.post('/api/get_appointments', {
@@ -228,6 +242,7 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'appointments'))
             })
+            */
         }
     },
     mutations: {

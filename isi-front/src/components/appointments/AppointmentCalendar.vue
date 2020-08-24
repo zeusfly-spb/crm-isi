@@ -286,14 +286,6 @@
             :event="editedEvent"
             @close="$store.commit('SET_EDITED_EVENT', null)"
         />
-<!--        <v-bottom-nav-->
-<!--                shift-->
-<!--                v-if="tabMode && mode==='day' && viewMode === 'calendar'"-->
-<!--                :value="tabMode"-->
-<!--                absolute-->
-<!--                color="blue lighten-5"-->
-<!--        >-->
-<!--        </v-bottom-nav>-->
     </v-flex>
 </template>
 <script>

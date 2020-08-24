@@ -60,7 +60,15 @@
                     .map(item => extend(item))
             },
             periodAppointments () {
-                let base =  this.appointments && this.appointments.filter(item => item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour) || []
+                const relevant = item => {
+                    if (item.date.includes('T')) {
+                        return item.date.split('T')[0] === this.date && +item.date.split('T')[1].split(':')[0] === +this.hour
+                    } else {
+                        return item.date.split(' ')[0] === this.date && +item.date.split(' ')[1].split(':')[0] === +this.hour
+                    }
+                }
+                let base =  this.appointments && this.appointments
+                    .filter(item => relevant(item)) || []
                 return base.sort(this.$store.state.appointment.sortByDateTime)
             }
         },

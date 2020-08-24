@@ -311,10 +311,17 @@
             }
         },
         mounted () {
+            const timePart = date => {
+                if (date.includes('T')) {
+                    return date.split('T')[1]
+                } else {
+                    return date.split(' ')[1]
+                }
+            }
             this.editedEvent = JSON.parse(JSON.stringify(this.event))
             this.backupEvent = JSON.parse(JSON.stringify(this.event))
-            this.date = this.event.date.split(' ')[0]
-            this.time = this.$store.state.appointment.displayTime(this.event.date.split(' ')[1])
+            this.date = this.event.date.includes('T') ? this.event.date.split('T')[0] : this.event.date.split(' ')[0]
+            this.time = this.$store.state.appointment.displayTime(timePart(this.event.date))
         }
     }
 </script>
