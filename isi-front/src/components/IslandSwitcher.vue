@@ -164,6 +164,13 @@
                     this.$router.replace({query: {... this.$route.query, island: selectedIslandId}})
                 }
             }
+        },
+        watch: {
+            workingIslandId (val, oldVal) {
+                if (!oldVal && this.$store.getters.currentPage === 'appointments') {
+                    this.$store.dispatch('setAppointmentMode', 'day')
+                }
+            }
         }
     }
 </script>
