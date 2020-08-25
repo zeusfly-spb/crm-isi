@@ -37,11 +37,27 @@ export default {
             }
         },
         sortByDateTime: (a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0,
-        splitEventTime: (event) => ({
-            ...event,
-            hour: +event.date.split(' ')[1].split(':')[0],
-            minutes: +event.date.split(' ')[1].split(':')[1]
-        }),
+        splitEventTime: (event) => {
+            const getHour = event => {
+                if (event.date.includes('T')) {
+                    return +event.date.split('T')[1].split(':')[0]
+                } else {
+                    return +event.date.split(' ')[1].split(':')[0]
+                }
+            }
+            const getMinutes = event => {
+                if (event.date.includes('T')) {
+                    return +event.date.split('T')[1].split(':')[1]
+                } else {
+                    return +event.date.split(' ')[1].split(':')[1]
+                }
+            }
+            return {
+                ...event,
+                hour: getHour(event),
+                minutes: getMinutes(event)
+            }
+        },
         statusColor: status => {
             const colors = {
                 active: 'blue',
@@ -147,6 +163,13 @@ export default {
             })
         },
         moveEvent ({commit, state, rootState, dispatch}) {
+            const getMinutes = event => {
+                if (event.date.includes('T')) {
+                    return +event.date.split('T')[1].split(':')[1]
+                } else {
+                    return +event.date.split(' ')[1].split(':')[1]
+                }
+            }
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/move_appointment', {
                     user_id: rootState.authUser.id,
@@ -156,7 +179,7 @@ export default {
                     hour: state.dragTarget.hour
                 })
                     .then(res => {
-                        let minutes = state.draggedEvent.date.split(' ')[1].split(':')[1]
+                        let minutes = getMinutes(state.draggedEvent)
                         let text = `Запись перенесена ${state.dragTarget.cabinet ? 'в кабинет' : ''} ${state.dragTarget.cabinet && state.dragTarget.cabinet.name || ''} на 
                         ${Vue.moment(state.dragTarget.date + ' ' + state.dragTarget.hour + ':' + minutes)
                             .format('D MMMM YYYY г. HH:mm')}`
