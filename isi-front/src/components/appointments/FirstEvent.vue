@@ -35,7 +35,7 @@
                 v-if="!compact"
                 class="green--text"
             >
-                    {{ $store.state.appointment.displayTime(event.date.split(' ')[1]) }}
+                    {{ $store.state.appointment.displayTime(getTime(event.date)) }}
                 </span>
             <span
                 v-if="!compact"
@@ -163,6 +163,13 @@
             }
         },
         methods: {
+            getTime (date) {
+                if (date.includes('T')) {
+                    return date.split('T')[1]
+                } else {
+                    return date.split(' ')[1]
+                }
+            },
             dialogLockControl (val) {
                 val ? this.$store.commit('LOCK_DIALOG') : this.$store.commit('UNLOCK_DIALOG')
             },

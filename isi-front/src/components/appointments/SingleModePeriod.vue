@@ -71,11 +71,21 @@
                 return this.$store.getters.workingIsland
             },
             events () {
-                const compareHour = (item) => {
-                    let dateEq = item.date && item.date.split(' ')[0] === this.date || false
-                    let hourEq = item.date && item.date.split(' ')[1] && +item.date.split(' ')[1].split(':')[0] === +this.hour || false
-                    return dateEq && hourEq
+                const relevantDate = event => {
+                    if (event.date.includes('T')) {
+                        return event.date && event.date.split('T')[0] === this.date || false
+                    } else {
+                        return event.date && event.date.split(' ')[0] === this.date || false
+                    }
                 }
+                const relevantHour = event => {
+                    if (event.date.includes('T')) {
+                        return event.date && event.date.split('T')[1] && +event.date.split('T')[1].split(':')[0] === +this.hour || false
+                    } else {
+                        return event.date && event.date.split(' ')[1] && +event.date.split(' ')[1].split(':')[0] === +this.hour || false
+                    }
+                }
+                const compareHour = (item) => relevantDate(item) && relevantHour(item)
                 const extend = (base) => {
                     base.draggable = base.status !== 'completed'
                     base.icon = {
