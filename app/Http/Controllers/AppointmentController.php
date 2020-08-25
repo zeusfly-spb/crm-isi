@@ -140,6 +140,8 @@ class AppointmentController extends Controller
             $appointment->setStatus($request->status);
         }
         $inputs = Arr::except($inputs, ['status']);
+        $inputs['created_at'] = explode('.', str_replace('T', ' ', $inputs['created_at']))[0];
+        $inputs['updated_at'] = explode('.',str_replace('T', ' ', $inputs['created_at']))[0];
         $appointment->update($inputs);
         $appointment->load('user', 'performer', 'service', 'lead', 'island');
         return response()->json($appointment->toArray());
