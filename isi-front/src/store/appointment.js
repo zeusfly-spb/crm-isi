@@ -67,6 +67,16 @@ export default {
                 return 'event'
             }
             return icons[status]
+        },
+        firstWeekDay: date => {
+            let curr = new Date(date)
+            let first = curr.getDate() - curr.getDay() + 1
+            return new Date(curr.setDate(first)).toISOString().split('T')[0]
+        },
+        lastWeekDay: date => {
+            let curr = new Date(date)
+            let last = curr.getDate() - curr.getDay() + 7
+            return new Date(curr.setDate(last)).toISOString().split('T')[0]
         }
     },
     actions: {
@@ -163,9 +173,19 @@ export default {
             })
         },
         changeAppointmentDate ({dispatch, commit, state}, date) {
+            const diffPeriod = () => {
+                switch (state.mode) {
+                    case 'day':
+                        return state.date !== date
+                    case 'week':
+                        return state.firstWeekDay(date) > state.date || state.lastWeekDay(date) < state.date
+                    case 'month':
+                        return state.date.split('-')[1] !== date.split('-')[1]
+                }
+            }
             return new Promise((resolve, reject) => {
                 try {
-                    let mustUpdate = state.date.split('-')[1] !== date.split('-')[1]
+                    let mustUpdate = diffPeriod()
                     commit('SET_APPOINTMENT_DATE', date)
                     if (mustUpdate) {
                         dispatch('setAppointments')
