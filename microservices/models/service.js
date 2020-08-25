@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     name: {type: DataTypes.STRING, allowNull: false},
     description: DataTypes.STRING,
     price: DataTypes.INTEGER,
-    changeable_price: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
+    changeable_price: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+    highlight: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Service',
