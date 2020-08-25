@@ -70,6 +70,10 @@ export default {
         }
     },
     actions: {
+        setAppointmentMode ({dispatch, commit}, mode) {
+           commit('SET_APPOINTMENT_MODE', mode)
+           dispatch('setAppointments')
+        },
         setTabMode ({commit, getters}, val) {
             commit('SET_TAB_MODE', val)
             let island = getters.callCenter ? getters.inspectingIsland : getters.workingIsland
@@ -221,11 +225,12 @@ export default {
                 type: 'request_get_appointments',
                 model: {
                     date: state.date,
-                    island_id: getters.callCenter ? getters.inspectingIslandId : rootState.workingIslandId
+                    island_id: getters.callCenter ? getters.inspectingIslandId : rootState.workingIslandId,
+                    mode: state.mode
                 },
                 request: {
                     id: uuidv4(),
-                    title: 'Загрузка записей текущего месяца',
+                    title: `Загрузка записей текущего периода (${{month: 'месяц', week: 'неделя', day: 'день'}[state.mode]})`,
                     page: 'appointments'
                 }
             })

@@ -381,15 +381,8 @@
             }
         },
         methods: {
-            relevantDate (event) {
-                if (event.date.includes('T')) {
-                    return event.date.split('T')[0] === this.date || false
-                } else {
-                    return event.date.split(' ')[0] === this.date || false
-                }
-            },
             changeMode (mode) {
-                this.$store.commit('SET_APPOINTMENT_MODE', mode)
+                this.$store.dispatch('setAppointmentMode', mode)
             },
             resetDeleting () {
                 this.$store.commit('CANCEL_DELETE_EVENT')
