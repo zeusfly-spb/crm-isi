@@ -178,7 +178,7 @@
                                      :title="`Переключить на ${$moment(date).format('DD MMMM YYYY г.')} в режим 'день'`"
                                 >
                                     <month-mode-date
-                                            v-if="appointments.filter(item => item.date.split(' ')[0] === date).length"
+                                            v-if="appointments.filter(item => item.date.split('T')[0] === date || item.date.split(' ')[0] === date).length"
                                             :date="date"
                                     />
                                 </div>
@@ -381,6 +381,13 @@
             }
         },
         methods: {
+            relevantDate (event) {
+                if (event.date.includes('T')) {
+                    return event.date.split('T')[0] === this.date || false
+                } else {
+                    return event.date.split(' ')[0] === this.date || false
+                }
+            },
             changeMode (mode) {
                 this.$store.commit('SET_APPOINTMENT_MODE', mode)
             },

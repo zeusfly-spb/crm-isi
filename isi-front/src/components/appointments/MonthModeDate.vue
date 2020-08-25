@@ -22,7 +22,7 @@
                         v-else
                         class="subheading"
                     >
-                        Кабинет "{{ item.name }}"
+                        {{ item.name }}
                     </span>
                 </v-flex>
                 <v-flex
@@ -61,8 +61,15 @@
                 return this.$vuetify.breakpoint
             },
             events () {
+                const relevantDate = event => {
+                    if (event.date.includes('T')) {
+                        return event.date.split('T')[0] === this.date
+                    } else {
+                        return event.date.split(' ')[0] === this.date
+                    }
+                }
                 let base = this.$store.state.appointment.appointments
-                    .filter(item => item.date.split(' ')[0] === this.date)
+                    .filter(item => relevantDate(item))
                 if (this.$store.getters.callCenter) {
                     if (this.$store.getters.inspectingIsland.cabinets.length) {
                         return base.filter(item => this.$store.getters.inspectingIsland.cabinets.map(cab => +cab.id).includes(+item.cabinet_id))
