@@ -14,6 +14,7 @@
                                 mandatory
                                 v-model="mode"
                                 class="ml-2 mt-2"
+                                @change="changeMode"
                         >
                             <v-btn
                                     flat
@@ -380,6 +381,9 @@
             }
         },
         methods: {
+            changeMode (mode) {
+                this.$store.commit('SET_APPOINTMENT_MODE', mode)
+            },
             resetDeleting () {
                 this.$store.commit('CANCEL_DELETE_EVENT')
             },

@@ -24,7 +24,7 @@ export default {
         deleteMode: false,
         message: null,
         date: null,
-        mode: 'month',
+        mode: 'day',
         appointments: [],
         uniqID: (base) => base + '_' + Math.random().toString(36).substr(2, 9),
         displayTime: (fullTime) => {
@@ -225,7 +225,8 @@ export default {
                 },
                 request: {
                     id: uuidv4(),
-                    title: 'Загрузка записей текущего месяца'
+                    title: 'Загрузка записей текущего месяца',
+                    page: 'appointments'
                 }
             })
             /**
@@ -347,6 +348,7 @@ export default {
         }
     },
     getters: {
+        appointmentsMode: state => state.mode,
         commentsOpenEvent: state => state.appointments.find(item => item.id === state.archiveCommentsOpenId),
         eventStatusIcon: state => state.statusIcon,
         eventStatusColor: state => state.statusColor,

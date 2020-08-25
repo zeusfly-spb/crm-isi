@@ -30,6 +30,9 @@ export default {
         userRates: null
     }),
     computed: {
+        apMode () {
+            return this.$store.getters.appointmentsMode
+        },
         wsRequests () {
             return this.$store.state.ws.requests
         },
