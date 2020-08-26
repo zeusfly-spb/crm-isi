@@ -90,7 +90,7 @@ class DealController extends Controller
             PerformSubscribe::dispatch($data);
         }
 
-        if ($deal->action_type !== 'correction' && $deal->action_type !== 'subscribe') {
+        if ($deal->action_type !== 'correction' && $deal->action_type !== 'subscribe' && $deal->action_type !== 'service') {
             $product = Product::find($request->product_id);
             if ($product->description === 'good') {
                 $comment = $deal->action->text . ' ' . $this->products->where('id', $request->product_id)->first()->name;
