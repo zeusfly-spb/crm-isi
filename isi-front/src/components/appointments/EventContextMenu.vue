@@ -4,7 +4,7 @@
             v-model="visible"
             :close-on-content-click="false"
             transition="scale-transition"
-            :activator="selector"
+            :activator="getSelectorElement(selector)"
             :nudge-right="40"
             :nudge-bottom="-10"
             lazy
@@ -49,6 +49,9 @@
             }
         },
         methods: {
+            getSelectorElement (sel) {
+                return document.getElementById(sel)
+            },
             commonAction (val) {
                 switch (val) {
                     case 'edit':

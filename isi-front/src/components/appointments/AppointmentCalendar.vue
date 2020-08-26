@@ -461,10 +461,12 @@
                         break
                     case 'archive':
                         this.mode = 'month'
+                        this.changeMode('month')
                         break
                 }
                 if (val === 'calendar' && !!oldVal) {
                     this.mode = this.backupMode
+                    this.changeMode(this.backupMode)
                 }
             },
             eventToDelete (event) {

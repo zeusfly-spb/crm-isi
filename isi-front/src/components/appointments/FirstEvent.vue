@@ -95,7 +95,7 @@
         </v-expand-x-transition>
         <event-context-menu
             v-model="menu"
-            :selector="`#first-${event.id}`"
+            :selector="`first-${event.id}`"
             :event="event"
         />
     </span>
