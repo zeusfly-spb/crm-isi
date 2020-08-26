@@ -67,6 +67,15 @@ module.exports = (sequelize, DataTypes) => {
       set (val) {
         throw new Error('Do not try to set the `status` value!')
       }
+    },
+    last_comment: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.comments && this.comments.length && this.comments[this.comments.length - 1]['text'] || null
+      },
+      set (val) {
+        throw new Error('Do not try to set the `last_comment` value!')
+      }
     }
     }, {
     sequelize,
