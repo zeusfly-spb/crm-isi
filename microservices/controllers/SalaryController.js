@@ -19,6 +19,7 @@ const monthDates = (date) => Array(monthDayCount(date))
 
 async function retrieveMonthData({date, island_id}) {
     try {
+        const userInclude = ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands', 'group']
         const dates = monthDates(date)
         const islandId = +island_id
         const monthString = `${date.split('-')[0]}-${date.split('-')[1]}`
@@ -61,12 +62,10 @@ async function retrieveMonthData({date, island_id}) {
             }
             users = await User.findAll({
                 where: {id: userIds},
-                include: ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands']
+                include: userInclude
             })
         } else {
-            users = await User.findAll({include: [
-                'islands', 'prizes', 'workdays', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands'
-                ]})
+            users = await User.findAll({include: userInclude})
             users = users.filter(item => item.islands.length > 0)
         }
         return Promise.resolve({

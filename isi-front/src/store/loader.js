@@ -19,7 +19,12 @@ export default {
         leads: [],
         beep: false,
         withDone: false,
-        savedPage: null
+        savedPage: null,
+        microtime: (float) => {
+            let now = new Date().getTime() / 1000
+            let s = parseInt(now)
+            return float ? now : (Math.round((now - s) * 1000) / 1000) + ' ' + s
+        }
     },
     actions: {
         startAnotherUserDay ({dispatch}, data) {
@@ -523,6 +528,7 @@ export default {
         }
     },
     getters: {
+        microtime: state => state.microtime,
         callTodayLeads: state => state.callTodayLeads,
         currentLeads: state => state.leads,
         currentLeadStatus: state => state.leadStatus,

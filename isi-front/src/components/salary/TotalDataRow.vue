@@ -117,7 +117,8 @@
         },
         methods: {
             dateIncome ({date, isCache}) {
-                let deals = this.deals && this.deals.filter(item => item.created_at.split(' ')[0] === date && item.is_cache === isCache)
+                const clearDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
+                let deals = this.deals && this.deals.filter(item => clearDate(item) === date && item.is_cache === isCache)
                 const add = (a, b) => a + +b.income
                 return deals.reduce(add, 0)
             },

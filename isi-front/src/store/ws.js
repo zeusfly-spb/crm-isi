@@ -31,11 +31,22 @@ export default {
                 }
             })
         },
-        handleFrame ({dispatch, getters, commit}, frame) {
+        handleFrame ({dispatch, getters, commit, rootState}, frame) {
             const handleInstruction = model => {
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
                         commit(item.name, item.data)
+                        if (item.name === 'SET_MONTH_DATA') {
+                            dispatch('appendSalaryCharges')
+                            if (!rootState.workingIslandId) {
+                                commit('SET_STAT_DATA', item.data)
+                            }
+                            if (getters.startSalaryLoad) {
+                                let estimated = getters.microtime(true) - getters.startSalaryLoad
+                                console.log(`Loaded month data in ${estimated} sec.`)
+                                commit('SET_START_SALARY_LOAD', null)
+                            }
+                        }
                     })
                 }
             }

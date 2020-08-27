@@ -6,7 +6,8 @@ export default {
     state: {
         monthData: null,
         mustUpdate: false,
-        statData: null
+        statData: null,
+        startSalaryLoad: null
     },
     actions: {
         appendSalaryCharges ({state, rootState}) {
@@ -141,8 +142,9 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setMonthData ({commit, rootState, dispatch}) {
+        setMonthData ({commit, rootState, dispatch, getters}) {
             console.log('Setting month data')
+            commit('SET_START_SALARY_LOAD', getters.microtime(true))
             dispatch('pushFrame', {
                 type: 'request_get_month_data',
                 model: {
@@ -176,6 +178,9 @@ export default {
         }
     },
     mutations: {
+        SET_START_SALARY_LOAD (state, value) {
+            state.startSalaryLoad = value
+        },
         SET_STAT_DATA (state, data) {
             state.statData = data
         },
@@ -248,11 +253,18 @@ export default {
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
-            const getDate = (timestamp) => timestamp.split(' ')[0] || timestamp.split('T')[0] || null
+            const getDate = timestamp => {
+                if (timestamp.includes('T')) {
+                    return timestamp.split('T')[0]
+                } else {
+                    return timestamp.split(' ')[0]
+                }
+            }
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({...user,
                     dates: data.dates,
-                    monthDeals: rawData.allDeals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || [],
+                    monthDeals: rawData.allDeals
+                        .filter(deal => +deal.user_id === +user.id) || [],
                     monthWorkdays: user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate) || [],
                     monthPrizes: user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
                     monthForfeits: user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
@@ -268,6 +280,6 @@ export default {
         }
     },
     getters: {
-
+        startSalaryLoad: state => state.startSalaryLoad
     }
 }

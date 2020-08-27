@@ -326,6 +326,9 @@
     import UserVacations from './UserVacations'
     import MonthRateEditor from './MonthRateEditor'
     import UserTotalField from './UserTotalField'
+
+    const clearDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
+
     export default {
         name: 'UserRow',
         props: ['user'],
@@ -541,14 +544,14 @@
                 return date.toLocaleDateString('ru-RU', options)
             },
             getDealsExpense (dateString) {
-                let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                let deals = this.user.monthDeals.filter(deal => clearDate(deal) === dateString)
                 if (this.workingIslandId) {
                     deals = deals.filter(item => +item.island_id === +this.workingIslandId)
                 }
                 return deals.reduce((a, b) => a + +b.expense, 0)
             },
             getDealsIncome (dateString) {
-                let deals = this.user.monthDeals.filter(deal => deal.created_at.split(' ')[0] === dateString)
+                let deals = this.user.monthDeals.filter(deal => clearDate(deal) === dateString)
                 if (this.workingIslandId) {
                     deals = deals.filter(item => +item.island_id === +this.workingIslandId)
                 }
@@ -559,7 +562,7 @@
                 if (this.workingIslandId) {
                     base = base.filter(item => +item.island_id === +this.workingIslandId)
                 }
-                return base.filter(deal => deal.created_at.split(' ')[0] === dateString).length
+                return base.filter(deal => clearDate(deal) === dateString).length
             },
             getHours (dateString) {
                 let base = this.user.monthWorkdays
@@ -574,14 +577,14 @@
                 if (this.workingIslandId) {
                     base = base.filter(item => +item.island_id === +this.workingIslandId)
                 }
-                return base.filter(item => item.created_at.split(' ')[0] === dateString)
+                return base.filter(item => clearDate(item) === dateString)
             },
             getPrizes (dateString) {
                 let base = this.user.monthPrizes
                 if (this.workingIslandId) {
                     base = base.filter(item => +item.island_id === +this.workingIslandId)
                 }
-                return base.filter(item => item.created_at.split(' ')[0] === dateString)
+                return base.filter(item => clearDate(item) === dateString)
             }
         },
         mounted () {
