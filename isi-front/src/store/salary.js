@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+
 
 export default {
     state: {
@@ -140,6 +142,19 @@ export default {
             })
         },
         setMonthData ({commit, rootState, dispatch}) {
+            console.log('Setting month data')
+            dispatch('pushFrame', {
+                type: 'request_get_month_data',
+                model: {
+                    island_id: rootState.workingIslandId,
+                    date: rootState.accountingDate
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка данных по зарплате'
+                }
+            })
+            /**
             commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_month_data', {
@@ -157,6 +172,7 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'salary'))
             })
+             */
         }
     },
     mutations: {
@@ -232,18 +248,17 @@ export default {
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
-            const getDate = (timestamp) => timestamp.split(' ')[0] || null
+            const getDate = (timestamp) => timestamp.split(' ')[0] || timestamp.split('T')[0] || null
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({...user,
                     dates: data.dates,
-                    monthDeals: user.deals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || [],
+                    monthDeals: rawData.allDeals.filter(deal => getDate(deal.created_at) >= firstDate &&  getDate(deal.created_at) <= lastDate) || [],
                     monthWorkdays: user.workdays.filter(workday => workday.date >= firstDate && workday.date <= lastDate) || [],
                     monthPrizes: user.prizes.filter(prize => getDate(prize.created_at) >= firstDate && getDate(prize.created_at) <= lastDate) || [],
                     monthForfeits: user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
                     monthSicks: user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
                     monthPrepays: user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
-                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || [],
-                    app_count: data.allAppointments.filter(item => +item.user_id === +user.id).length
+                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
                 }))
                 return rawData
             }

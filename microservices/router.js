@@ -1,6 +1,7 @@
 const WorkDayController = require('./controllers/WorkDayController')
 const DealController = require('./controllers/DealController')
 const AppointmentController = require('./controllers/AppointmentController')
+const SalaryController = require('./controllers/SalaryController')
 
 const parse = async message => {
     try {
@@ -8,6 +9,18 @@ const parse = async message => {
         let responseFrame
         let mutation
         switch (frame.type) {
+            case 'request_get_month_data':
+                let monthData = await SalaryController.retrieveMonthData({...frame.model})
+                mutation = {name: 'SET_MONTH_DATA', data: monthData}
+                responseFrame = {
+                    type: 'instruction',
+                    model: {mutations: [mutation]},
+                    response: {id: frame.request.id}
+                }
+                return Promise.resolve({
+                    response: JSON.stringify(responseFrame),
+                    broadcast: null
+                })
             case 'request_get_appointments':
                 let appointments = await AppointmentController.index({...frame.model})
                 mutation = {name: 'SET_APPOINTMENTS', data: appointments}

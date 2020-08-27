@@ -26,26 +26,14 @@ async function retrieveMonthData({date, island_id}) {
 
         let dealWhere
         if (!islandId) {
-            dealWhere = {
-                created_at: {
-                    [Op.startsWith]: monthString
-                }
-            }
+            dealWhere = { created_at: { [Op.startsWith]: monthString } }
         } else {
-            dealWhere = {
-                [Op.and]: [
-                    {
-                        created_at: {
-                            [Op.startsWith]: monthString
-                        }
-                    },
-                    {
-                        island_id: islandId
-                    }
-                ]
-            }
+            dealWhere = { [Op.and]: [
+                    { created_at: { [Op.startsWith]: monthString } },
+                    { island_id: islandId }
+                ] }
         }
-        let deals = await Deal.findAll({where: dealWhere, include: ['user']})
+        let deals = await Deal.findAll({where: dealWhere, include: ['user', 'action', 'product', 'type', 'size']})
 
         let users
         if (island) {
@@ -73,24 +61,24 @@ async function retrieveMonthData({date, island_id}) {
             }
             users = await User.findAll({
                 where: {id: userIds},
-                include: ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations']
+                include: ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands']
             })
         } else {
-            users = await User.findAll({include: ['islands', 'prizes', 'workdays', 'forfeits', 'sicks', 'prepays', 'vacations']})
-                .filter(item => item.islands.length > 0)
+            users = await User.findAll({include: [
+                'islands', 'prizes', 'workdays', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands'
+                ]})
+            users = users.filter(item => item.islands.length > 0)
         }
-
-        let result = {
+        return Promise.resolve({
             dates: dates,
             allDeals: deals,
             users: users
-        }
-        return result
+        })
     } catch (e) {
         return Promise.reject(e)
     }
 }
 
 module.exports = {
-    monthData: retrieveMonthData
+    retrieveMonthData
 }
