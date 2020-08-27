@@ -26,8 +26,6 @@ const index = async data => {
                 where = {[Op.and]: [{date: {[Op.startsWith]: month}}, {island_id: data.island_id}]}
                 break
             case 'week':
-                let start = firstWeekDay(data.date)
-                let end = lastWeekDay(data.date)
                 where = {
                     [Op.and]: [
                         {date: {[Op.between]: [firstWeekDay(data.date), lastWeekDay(data.date)]}},

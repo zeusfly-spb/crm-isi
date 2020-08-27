@@ -52,7 +52,7 @@ class SalaryController extends Controller
         }
         $allDeals = $dealsBuilder->get();
 
-        $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'group')
+        $queryBuilder = User::with('deals', 'workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'group', 'islands')
             ->where('is_superadmin', false)
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereNull('fired_at')

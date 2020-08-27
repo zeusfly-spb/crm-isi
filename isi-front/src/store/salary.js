@@ -143,6 +143,9 @@ export default {
             })
         },
         setMonthData ({commit, rootState, dispatch, getters}) {
+            if (getters.startSalaryLoad) {
+                return
+            }
             console.log('Setting month data')
             commit('SET_START_SALARY_LOAD', getters.microtime(true))
             dispatch('pushFrame', {
@@ -261,7 +264,8 @@ export default {
                 }
             }
             const addMonthCharges = rawData => {
-                rawData.users = rawData.users.map(user => ({...user,
+                rawData.users = rawData.users.map(user => ({
+                    ...user,
                     dates: data.dates,
                     monthDeals: rawData.allDeals
                         .filter(deal => +deal.user_id === +user.id) || [],
