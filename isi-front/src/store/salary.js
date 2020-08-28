@@ -151,6 +151,7 @@ export default {
             if (getters.startSalaryLoad) {
                 return
             }
+            /*
             console.log('Setting month data')
             commit('SET_START_SALARY_LOAD', getters.microtime(true))
             dispatch('pushFrame', {
@@ -165,8 +166,12 @@ export default {
                 }
             })
             /**
+             *
+             *
+             */
             commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
+                commit('SET_START_SALARY_LOAD', getters.microtime(true))
                 Vue.axios.post('/api/get_month_data', {
                     island_id: rootState.workingIslandId,
                     date: rootState.accountingDate
@@ -182,7 +187,6 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'salary'))
             })
-             */
         }
     },
     mutations: {
