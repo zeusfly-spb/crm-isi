@@ -106,8 +106,7 @@ class SalaryController extends Controller
         return [
             'users' => $users->toArray(),
             'dates' => $monthDates,
-            'allDeals' => $allDeals->toArray(),
-            'allAppointments' => $allAppointments->toArray()
+            'allDeals' => $allDeals->toArray()
         ];
     }
 
