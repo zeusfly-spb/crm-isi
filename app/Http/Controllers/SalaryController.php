@@ -87,12 +87,22 @@ class SalaryController extends Controller
         }
         $users = $queryBuilder->get();
 
+
+
         $appBuilder = Appointment::where('status_id', 4)->whereMonth('date', $month);
         if ($island_id) {
             $appBuilder = $appBuilder->where('island_id', $island_id);
         }
         $allAppointments = $appBuilder->get();
 
+        $users->each(function ($item) use ($allAppointments) {
+            $apps = $item->is_admin ? $allAppointments->filter(function ($app) use ($item) {
+                return $app->user_id == $item->id;
+            }) : $allAppointments->filter(function ($app) use ($item) {
+                return $app->performer_id == $item->id;
+            });
+            $item['app_count'] = $apps->count();
+        });
         return [
             'users' => $users->toArray(),
             'dates' => $monthDates,
