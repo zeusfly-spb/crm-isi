@@ -41,11 +41,6 @@ export default {
                             if (!rootState.workingIslandId) {
                                 commit('SET_STAT_DATA', item.data)
                             }
-                            if (getters.startSalaryLoad) {
-                                let estimated = getters.microtime(true) - getters.startSalaryLoad
-                                console.log(`Loaded month data in ${estimated} sec.`)
-                                commit('SET_START_SALARY_LOAD', null)
-                            }
                         }
                     })
                 }

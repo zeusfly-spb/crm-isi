@@ -7,7 +7,12 @@ export default {
         monthData: null,
         mustUpdate: false,
         statData: null,
-        startSalaryLoad: null
+        startSalaryLoad: null,
+        microtime: (float) => {
+            let now = new Date().getTime() / 1000
+            let s = parseInt(now)
+            return float ? now : (Math.round((now - s) * 1000) / 1000) + ' ' + s
+        }
     },
     actions: {
         appendSalaryCharges ({state, rootState}) {
@@ -256,7 +261,7 @@ export default {
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
-            const getDate = timestamp => timestamp.includes('T') ?  timestamp.split('T')[0] : timestamp.split(' ')[0] 
+            const getDate = timestamp => timestamp.includes('T') ?  timestamp.split('T')[0] : timestamp.split(' ')[0]
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({
                     ...user,
@@ -273,11 +278,18 @@ export default {
                 return rawData
             }
             state.monthData = addMonthCharges(data)
+            if (state.startSalaryLoad) {
+                let elapsed = state.microtime(true) - state.startSalaryLoad
+                console.log(`Loaded month data in ${elapsed} sec.`)
+                state.startSalaryLoad = null
+            }
+            state.startSalaryLoad = null
             state.mustUpdate = true
             setTimeout(() => state.mustUpdate = false, 300)
         }
     },
     getters: {
+        microtime: state => state.microtime,
         startSalaryLoad: state => state.startSalaryLoad
     }
 }
