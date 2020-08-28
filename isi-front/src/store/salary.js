@@ -277,7 +277,9 @@ export default {
                     monthForfeits: user.forfeits.filter(forfeit => getDate(forfeit.created_at) >= firstDate && getDate(forfeit.created_at) <= lastDate) || [],
                     monthSicks: user.sicks.filter(sick => getDate(sick.created_at) >= firstDate && getDate(sick.created_at) <= lastDate) || [],
                     monthPrepays: user.prepays.filter(prepay => getDate(prepay.created_at) >= firstDate && getDate(prepay.created_at) <= lastDate) || [],
-                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || []
+                    monthVacations: user.vacations.filter(vacation => getDate(vacation.created_at) >= firstDate && getDate(vacation.created_at) <= lastDate) || [],
+                    app_count: user.is_admin ? rawData.allAppointments.filter(item => +item.user_id === +user.id).length :
+                        rawData.allAppointments.filter(item => +item.performer_id === +user.id).length
                 }))
                 return rawData
             }
