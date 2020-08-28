@@ -65,10 +65,7 @@ const retrieveMonthData = async ({date, island_id}) => {
                     break
             }
             users = await User.findAll({
-                where: { [Op.and]: [
-                        {id: userIds},
-                        usersMainWhere
-                    ]},
+                where: { [Op.and]: [{id: userIds}, usersMainWhere] },
                 include: userInclude
             })
         } else {

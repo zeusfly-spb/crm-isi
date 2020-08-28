@@ -256,13 +256,7 @@ export default {
         SET_MONTH_DATA (state, data) {
             let firstDate = data.dates[0]
             let lastDate = data.dates[data.dates.length - 1]
-            const getDate = timestamp => {
-                if (timestamp.includes('T')) {
-                    return timestamp.split('T')[0]
-                } else {
-                    return timestamp.split(' ')[0]
-                }
-            }
+            const getDate = timestamp => timestamp.includes('T') ?  timestamp.split('T')[0] : timestamp.split(' ')[0] 
             const addMonthCharges = rawData => {
                 rawData.users = rawData.users.map(user => ({
                     ...user,
