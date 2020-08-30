@@ -3,39 +3,46 @@ const models = require('../models')
 const User = models.User
 const Deal = models.Deal
 const Island = models.Island
+const Appointment = models.Appointment
 
-const monthDayCount = (date) => {
+const monthDayCount = date => {
     if (date.split('-')[1] === '02') {
         return +date.split('-')[0] % 4 === 0 ? 29 : 28
     }
     return ['04', '06', '09', '11'].includes(date.split('-')[1]) ? 30 : 31
 }
 
-const monthDates = (date) => Array(monthDayCount(date))
+const monthDates = date => Array(monthDayCount(date))
         .fill(1)
         .map((item, index) => index + 1)
         .map(day => day < 10 ? `0${day}` : day)
         .map(day => `${date.split('-')[0]}-${date.split('-')[1]}-${day}`)
-
 const retrieveMonthData = async ({date, island_id}) => {
     try {
+        const appCount = user => {
+
+            let field = user.is_admin ? 'user_id' : 'performer_id'
+            return allAppointments
+                .filter(item => +item[field] === +user.id)
+                .length
+        }
+        const dateArr = date.split('-')
         const userInclude = ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands', 'group', 'islands']
         const dates = monthDates(date)
         const islandId = +island_id
-        const monthString = `${date.split('-')[0]}-${date.split('-')[1]}`
+        const monthString = `${dateArr[0]}-${dateArr[1]}`
         const island = islandId ? await Island.findByPk(islandId, {include: ['users', 'workdays']}) : null
-
-        let dealWhere
+        let commonWhere
         if (!islandId) {
-            dealWhere = { created_at: { [Op.startsWith]: monthString } }
+            commonWhere = { created_at: { [Op.startsWith]: monthString } }
         } else {
-            dealWhere = { [Op.and]: [
+            commonWhere = { [Op.and]: [
                     { created_at: { [Op.startsWith]: monthString } },
                     { island_id: islandId }
                 ] }
         }
-        let deals = await Deal.findAll({where: dealWhere, include: ['user', 'action', 'product', 'type', 'size']})
-
+        const allDeals = await Deal.findAll({where: commonWhere, include: ['user', 'action', 'product', 'type', 'size']})
+        const allAppointments = await Appointment.findAll({where: commonWhere})
         let usersMainWhere = { [Op.or]: [
                 {fired_at: { [Op.is]: null } },
                 {fired_at: { [Op.between]: [dates[0], dates[dates.length - 1]] } }
@@ -72,13 +79,15 @@ const retrieveMonthData = async ({date, island_id}) => {
             users = await User.findAll({where: usersMainWhere, include: userInclude})
             users = users.filter(item => item.islands.length > 0)
         }
+
         return Promise.resolve({
-            dates: dates,
-            allDeals: deals,
-            users: users
+            allDeals,
+            dates,
+            users,
+            allAppointments
         })
     } catch (e) {
-        return Promise.reject(e)
+        return Promise.reject(new Error('Ошибка получения данных месяца: ' + e))
     }
 }
 
