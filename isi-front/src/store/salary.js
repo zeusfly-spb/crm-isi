@@ -151,8 +151,8 @@ export default {
             if (getters.startSalaryLoad) {
                 return
             }
-            
             console.log('Setting month data')
+            /*
             commit('SET_START_SALARY_LOAD', getters.microtime(true))
             dispatch('pushFrame', {
                 type: 'request_get_month_data',
@@ -165,7 +165,10 @@ export default {
                     title: 'Загрузка данных по зарплате'
                 }
             })
-            /**
+
+             */
+
+
             commit('ADD_TASK', 'salary')
             return new Promise((resolve, reject) => {
                 commit('SET_START_SALARY_LOAD', getters.microtime(true))
@@ -184,7 +187,6 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'salary'))
             })
-             */
         }
     },
     mutations: {

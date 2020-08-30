@@ -4,6 +4,9 @@ const User = models.User
 const Deal = models.Deal
 const Island = models.Island
 const Appointment = models.Appointment
+const cache = require('../cache')
+
+const cacheKey = ({date, island_id}) => `salary:${month(date)}:${island_id}`
 
 const monthDayCount = date => {
     if (date.split('-')[1] === '02') {
@@ -17,27 +20,26 @@ const monthDates = date => Array(monthDayCount(date))
         .map((item, index) => index + 1)
         .map(day => day < 10 ? `0${day}` : day)
         .map(day => `${date.split('-')[0]}-${date.split('-')[1]}-${day}`)
+
+const month = date => `${date.split('-')[0]}-${date.split('-')[1]}`
+
 const retrieveMonthData = async ({date, island_id}) => {
     try {
-        const appCount = user => {
-
-            let field = user.is_admin ? 'user_id' : 'performer_id'
-            return allAppointments
-                .filter(item => +item[field] === +user.id)
-                .length
+        let exists = await cache.Get(cacheKey({date, island_id}))
+        if (await cache.Has(cacheKey({date, island_id}))) {
+            console.log('Берем из кеша')
+            return Promise.resolve(JSON.parse(await cache.Get(cacheKey({date, island_id}))))
         }
-        const dateArr = date.split('-')
         const userInclude = ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands', 'group', 'islands']
         const dates = monthDates(date)
         const islandId = +island_id
-        const monthString = `${dateArr[0]}-${dateArr[1]}`
         const island = islandId ? await Island.findByPk(islandId, {include: ['users', 'workdays']}) : null
         let commonWhere
         if (!islandId) {
-            commonWhere = { created_at: { [Op.startsWith]: monthString } }
+            commonWhere = { created_at: { [Op.startsWith]: month(date) } }
         } else {
             commonWhere = { [Op.and]: [
-                    { created_at: { [Op.startsWith]: monthString } },
+                    { created_at: { [Op.startsWith]: month(date) } },
                     { island_id: islandId }
                 ] }
         }
@@ -79,7 +81,6 @@ const retrieveMonthData = async ({date, island_id}) => {
             users = await User.findAll({where: usersMainWhere, include: userInclude})
             users = users.filter(item => item.islands.length > 0)
         }
-
         return Promise.resolve({
             allDeals,
             dates,
@@ -92,9 +93,16 @@ const retrieveMonthData = async ({date, island_id}) => {
 }
 
 const cacheMonthData = async ({date, island_id}) => {
-
+    try {
+        console.log(`Saving month data at "${cacheKey({date, island_id})}"`)
+        await cache.Set(cacheKey({date, island_id}), JSON.stringify(await retrieveMonthData({date, island_id})))
+        return Promise.resolve('OK')
+    } catch (e) {
+        return Promise.reject(new Error('Ошибка кеширования данных месяца: ' + e))
+    }
 }
 
 module.exports = {
-    retrieveMonthData
+    retrieveMonthData,
+    cacheMonthData
 }
