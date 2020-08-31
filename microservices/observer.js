@@ -1,7 +1,8 @@
 const mysql = require('mysql')
 const mySqlEvents = require('@rodrigogs/mysql-events')
-
 const CONFIG = require('./config')
+const salaryController = require('./controllers/SalaryController')
+
 const connection = mysql.createConnection({
     host: CONFIG.db_host,
     user: CONFIG.db_user,
@@ -9,6 +10,7 @@ const connection = mysql.createConnection({
 })
 
 const { broadcast } = require('./transmitter')
+const clearDate = datetime => datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
 
 const handleEvent = event => {
     if (event.schema !== CONFIG.db_name) {
@@ -20,6 +22,16 @@ const handleEvent = event => {
             model: event.affectedRows[0].after
         }
         broadcast(JSON.stringify(frame))
+    }
+    if (['deals', 'work_days', 'appointments', 'prepays', 'prizes', 'sicks', 'vacations'].includes(event.table)) {
+        console.time('Caching salary month data')
+        let row = event.type === 'DELETE' ? event.affectedRows[0].before : event.affectedRows[0].after
+        let targetDate = (['appointments', 'work_days'].includes(event.table) ? row.date : row.created_at).toISOString()
+        Promise.all([
+            salaryController.cacheMonthData({date: clearDate(targetDate), island_id: row.island_id}),
+            salaryController.cacheMonthData({date: clearDate(targetDate)})
+        ])
+            .then(() => console.timeEnd('Caching salary month data'))
     }
 }
 

@@ -19,7 +19,6 @@ const activeClients = () => {
 const checkToInternalFunction = ({message, ws}) => {
     try {
         let frame = JSON.parse(message)
-        console.log(frame)
         let responseFrame
         switch (frame.type) {
             case 'request_get_active_clients':
