@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default {
     state: {
+        useWS: true,
         monthData: null,
         mustUpdate: false,
         statData: null,
@@ -147,46 +148,44 @@ export default {
                     .catch(e => reject(e))
             })
         },
-        setMonthData ({commit, rootState, dispatch, getters}) {
+        setMonthData ({commit, rootState, dispatch, getters, state}) {
             if (getters.startSalaryLoad) {
                 return
             }
             console.log('Setting month data')
-            /*
             commit('SET_START_SALARY_LOAD', getters.microtime(true))
-            dispatch('pushFrame', {
-                type: 'request_get_month_data',
-                model: {
-                    island_id: rootState.workingIslandId,
-                    date: rootState.accountingDate
-                },
-                request: {
-                    id: uuidv4(),
-                    title: 'Загрузка данных по зарплате'
-                }
-            })
-
-             */
-
-
-            commit('ADD_TASK', 'salary')
-            return new Promise((resolve, reject) => {
-                commit('SET_START_SALARY_LOAD', getters.microtime(true))
-                Vue.axios.post('/api/get_month_data', {
-                    island_id: rootState.workingIslandId,
-                    date: rootState.accountingDate
+            if (state.useWS) {
+                dispatch('pushFrame', {
+                    type: 'request_get_month_data',
+                    model: {
+                        island_id: rootState.workingIslandId,
+                        date: rootState.accountingDate
+                    },
+                    request: {
+                        id: uuidv4(),
+                        title: 'Загрузка данных по зарплате'
+                    }
                 })
-                    .then(res => {
-                        commit('SET_MONTH_DATA', JSON.parse(JSON.stringify(res.data)))
-                        dispatch('appendSalaryCharges')
-                        if (!rootState.workingIslandId) {
-                            commit('SET_STAT_DATA', res.data)
-                        }
-                        resolve(res)
+            } else {
+                commit('ADD_TASK', 'salary')
+                return new Promise((resolve, reject) => {
+                    commit('SET_START_SALARY_LOAD', getters.microtime(true))
+                    Vue.axios.post('/api/get_month_data', {
+                        island_id: rootState.workingIslandId,
+                        date: rootState.accountingDate
                     })
-                    .catch(e => reject(e))
-                    .finally(() => commit('REMOVE_TASK', 'salary'))
-            })
+                        .then(res => {
+                            commit('SET_MONTH_DATA', JSON.parse(JSON.stringify(res.data)))
+                            dispatch('appendSalaryCharges')
+                            if (!rootState.workingIslandId) {
+                                commit('SET_STAT_DATA', res.data)
+                            }
+                            resolve(res)
+                        })
+                        .catch(e => reject(e))
+                        .finally(() => commit('REMOVE_TASK', 'salary'))
+                })
+            }
         }
     },
     mutations: {

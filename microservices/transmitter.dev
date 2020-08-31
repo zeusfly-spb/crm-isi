@@ -2,6 +2,7 @@ const passport = require('./passport')
 const WebSocket = require('ws')
 const wss = new WebSocket.Server({port: 8118})
 const router = require('./router')
+const chalk = require('chalk')
 
 const broadcast = data => {
     wss.clients.forEach(client => {
@@ -64,7 +65,7 @@ wss.on('connection', (ws, req) => {
     } else {
         let cookies = req.headers.cookie.split(';')
         cookies = cookies.map(item => parseCookie(item))
-        !passport.verifyToken(cookies) ? ws.close() : console.log('Connected from: ' + req.socket.remoteAddress)
+        !passport.verifyToken(cookies) ? ws.close() : console.log(chalk.blue.bold.inverse('Connected from: ') + req.socket.remoteAddress)
     }
 
     ws.on('message', message => {

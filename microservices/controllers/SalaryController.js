@@ -5,6 +5,7 @@ const Deal = models.Deal
 const Island = models.Island
 const Appointment = models.Appointment
 const cache = require('../cache')
+const chalk = require('chalk')
 
 const cacheKey = ({date, island_id}) => `salary:${month(date)}:${island_id}`
 
@@ -25,9 +26,10 @@ const month = date => `${date.split('-')[0]}-${date.split('-')[1]}`
 
 const retrieveMonthData = async ({date, island_id}) => {
     try {
-        let exists = await cache.Get(cacheKey({date, island_id}))
         if (await cache.Has(cacheKey({date, island_id}))) {
-            console.log('Берем из кеша')
+            for (let i = 0; i < 10; i++) {
+                console.log(chalk.blue.bold.bgWhite('Берем из кеша'))
+            }
             return Promise.resolve(JSON.parse(await cache.Get(cacheKey({date, island_id}))))
         }
         const userInclude = ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands', 'group', 'islands']
@@ -81,12 +83,15 @@ const retrieveMonthData = async ({date, island_id}) => {
             users = await User.findAll({where: usersMainWhere, include: userInclude})
             users = users.filter(item => item.islands.length > 0)
         }
-        return Promise.resolve({
+        let monthData = {
             allDeals,
             dates,
             users,
             allAppointments
-        })
+        }
+        await cache.Set(cacheKey({date, island_id}), JSON.stringify(monthData))
+        console.log(chalk.green.bold.bgWhite(`Cached ${cacheKey({date, island_id})} month data`))
+        return Promise.resolve(monthData)
     } catch (e) {
         return Promise.reject(new Error('Ошибка получения данных месяца: ' + e))
     }
@@ -94,7 +99,7 @@ const retrieveMonthData = async ({date, island_id}) => {
 
 const cacheMonthData = async ({date, island_id}) => {
     try {
-        console.log(`Saving month data at "${cacheKey({date, island_id})}"`)
+        console.log(chalk.blue.bgWhite(`Caching month data in "${cacheKey({date, island_id})}"`))
         await cache.Set(cacheKey({date, island_id}), JSON.stringify(await retrieveMonthData({date, island_id})))
         return Promise.resolve('OK')
     } catch (e) {
