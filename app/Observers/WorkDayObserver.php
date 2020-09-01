@@ -15,7 +15,7 @@ class WorkDayObserver
      */
     public function created(WorkDay $workDay)
     {
-        CalculateSalary::dispatch($workDay);
+//        CalculateSalary::dispatch($workDay);
     }
 
     /**
@@ -26,7 +26,7 @@ class WorkDayObserver
      */
     public function updated(WorkDay $workDay)
     {
-        CalculateSalary::dispatch($workDay);
+//        CalculateSalary::dispatch($workDay);
     }
 
     /**
@@ -37,7 +37,7 @@ class WorkDayObserver
      */
     public function deleted(WorkDay $workDay)
     {
-        CalculateSalary::dispatch($workDay);
+//        CalculateSalary::dispatch($workDay);
     }
 
     /**

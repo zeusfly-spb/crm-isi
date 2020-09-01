@@ -17,7 +17,7 @@ class PrizeObserver
     public function created(Prize $prize)
     {
 
-        CalculateSalary::dispatch($prize);
+//        CalculateSalary::dispatch($prize);
     }
 
     /**
@@ -28,7 +28,7 @@ class PrizeObserver
      */
     public function updated(Prize $prize)
     {
-        CalculateSalary::dispatch($prize);
+//        CalculateSalary::dispatch($prize);
     }
 
     /**
@@ -39,7 +39,7 @@ class PrizeObserver
      */
     public function deleted(Prize $prize)
     {
-        CalculateSalary::dispatch($prize);
+//        CalculateSalary::dispatch($prize);
     }
 
     /**

@@ -28,6 +28,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
+        /*
         $rateMonths = [];
         if ($user->rates) {
             foreach ($user->rates as $rate) {
@@ -43,6 +44,8 @@ class UserObserver
             }
             Cache::forget('salary_0_' . $month);
         }
+        */
+
     }
 
     /**

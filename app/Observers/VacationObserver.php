@@ -16,17 +16,7 @@ class VacationObserver
      */
     public function created(Vacation $vacation)
     {
-//        $created = $vacation->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $vacation->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($vacation);
-
+//        CalculateSalary::dispatch($vacation);
     }
 
     /**
@@ -37,17 +27,8 @@ class VacationObserver
      */
     public function updated(Vacation $vacation)
     {
-//        $created = $vacation->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $vacation->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($vacation);
 
+//        CalculateSalary::dispatch($vacation);
     }
 
     /**
@@ -58,16 +39,7 @@ class VacationObserver
      */
     public function deleted(Vacation $vacation)
     {
-//        $created = $vacation->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $vacation->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($vacation);
+//        CalculateSalary::dispatch($vacation);
     }
 
     /**

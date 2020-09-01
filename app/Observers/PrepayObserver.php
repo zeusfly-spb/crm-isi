@@ -16,7 +16,7 @@ class PrepayObserver
      */
     public function created(Prepay $prepay)
     {
-        CalculateSalary::dispatch($prepay);
+//        CalculateSalary::dispatch($prepay);
     }
 
     /**
@@ -27,7 +27,7 @@ class PrepayObserver
      */
     public function updated(Prepay $prepay)
     {
-        CalculateSalary::dispatch($prepay);
+//        CalculateSalary::dispatch($prepay);
     }
 
     /**
@@ -38,7 +38,7 @@ class PrepayObserver
      */
     public function deleted(Prepay $prepay)
     {
-        CalculateSalary::dispatch($prepay);
+//        CalculateSalary::dispatch($prepay);
     }
 
     /**

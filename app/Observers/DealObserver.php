@@ -18,7 +18,7 @@ class DealObserver
      */
     public function created(Deal $deal)
     {
-        CalculateSalary::dispatch($deal);
+//        CalculateSalary::dispatch($deal);
     }
 
     /**
@@ -29,7 +29,7 @@ class DealObserver
      */
     public function updated(Deal $deal)
     {
-        CalculateSalary::dispatch($deal);
+//        CalculateSalary::dispatch($deal);
     }
 
     /**
@@ -40,7 +40,7 @@ class DealObserver
      */
     public function deleted(Deal $deal)
     {
-        CalculateSalary::dispatch($deal);
+//        CalculateSalary::dispatch($deal);
     }
 
     /**

@@ -16,17 +16,7 @@ class SickObserver
      */
     public function created(Sick $sick)
     {
-//        $created = $sick->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $sick->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($sick);
-
+//        CalculateSalary::dispatch($sick);
     }
 
     /**
@@ -37,16 +27,7 @@ class SickObserver
      */
     public function updated(Sick $sick)
     {
-//        $created = $sick->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $sick->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($sick);
+//        CalculateSalary::dispatch($sick);
     }
 
     /**
@@ -57,16 +38,7 @@ class SickObserver
      */
     public function deleted(Sick $sick)
     {
-//        $created = $sick->created_at;
-//        $date = explode(' ', $created)[0];
-//        $dateArray = explode('-', $date);
-//        array_pop($dateArray);
-//        $monthStr = implode('-', $dateArray);
-//        $cache_name = 'salary_' . $sick->island_id . '_' . $monthStr;
-//        Cache::forget($cache_name);
-//        $cache_name = 'salary_0_' . $monthStr;
-//        Cache::forget($cache_name);
-        CalculateSalary::dispatch($sick);
+//        CalculateSalary::dispatch($sick);
     }
 
     /**
