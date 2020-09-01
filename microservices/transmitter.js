@@ -2,6 +2,16 @@ const passport = require('./passport')
 const fs = require('fs')
 const router = require('./router')
 
+const chalk = require('chalk')
+const jsonSize = string => Buffer.byteLength(string, 'utf8');
+const frameType = frame => {
+    let obj = JSON.parse(frame)
+    if (obj.type === 'instruction') {
+        return chalk.red.bold(`Instruction ${obj.model.mutations.map(item => item.name).join(', ')}`)
+    }
+    return chalk.red.bold(obj.type)
+}
+
 const options = {
     key: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.key'),
     cert: fs.readFileSync('/var/www/httpd-cert/www-root/crmkin.com.crt')
@@ -18,7 +28,8 @@ const wss = createServerFrom(https, ws => {
         checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
-                console.log(res)
+                res.response ? console.log(chalk.blue.bold('Sending response', frameType(res.response), chalk.green.bold(`${(jsonSize(res.response)/1024).toFixed(2)} Kb`))) : null
+                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', frameType(res.broadcast),chalk.green.bold(`${(jsonSize(res.broadcast)/1024).toFixed(2)} Kb`))) : null
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })
