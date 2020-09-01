@@ -7,21 +7,10 @@ const salaryController = require('./controllers/SalaryController')
 
 const clearDate = datetime => datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
 const targetRow = event => event.type === 'DELETE' ? event.affectedRows[0].before : event.affectedRows[0].after
-const targetDate = event => {
-    switch(event.table) {
-        case 'work_days':
-            return moment(targetRow(event).date).format('YYYY-MM-DD HH:mm:ss')
-        case 'appointments':
-            return moment(targetRow(event).date).format('YYYY-MM-DD HH:mm:ss')
-        default:
-            return moment(targetRow(event).created_at).format('YYYY-MM-DD HH:mm:ss')
-    }
-}
-/*
-(['appointments', 'work_days']
-    .includes(event.table) ? targetRow(event).date : targetRow(event).created_at).toISOString()
+const targetDate = event => moment(['appointments', 'work_days']
+    .includes(event.table) ? targetRow(event).date : targetRow(event).created_at).format('YYYY-MM-DD HH:mm:ss')
 
- */
+
 const cacheSalary = event => {
     console.time('Cache salary month data')
     Promise.all([
