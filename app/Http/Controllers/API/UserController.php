@@ -152,7 +152,7 @@ class UserController extends Controller
     public function finishDay(Request $request)
     {
         $user = User::find($request->user_id);
-        $currentWorkDay = $user->workdays()->whereDate('created_at', now()->toDateString())->first();
+        $currentWorkDay = $user->workdays()->whereDate('date', now()->toDateString())->first();
 //        $currentWorkDay = $user->finishDay($request->all());
 //        return response()->json($currentWorkDay->toArray());
         $currentWorkDay->update([

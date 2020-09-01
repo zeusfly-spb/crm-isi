@@ -4,6 +4,8 @@ const wss = new WebSocket.Server({port: 8118})
 const router = require('./router')
 const chalk = require('chalk')
 
+const frameType = frame => JSON.parse(frame).type
+
 const broadcast = data => {
     wss.clients.forEach(client => {
         client.readyState === WebSocket.OPEN ? client.send(data) : null
@@ -72,7 +74,8 @@ wss.on('connection', (ws, req) => {
         checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
-                console.log(res)
+                res.response ? console.log(chalk.blue.bold('Sending response', chalk.red.bold.inverse(`${frameType(res.response)}`), chalk.green.bold(`${res.response.length * 2} bytes`))) : null
+                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', chalk.red.bold.inverse(`${frameType(res.broadcast)}`),chalk.green.bold(`${res.broadcast.length * 2} bytes`))) : null
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })
