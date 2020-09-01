@@ -4,7 +4,15 @@ const wss = new WebSocket.Server({port: 8118})
 const router = require('./router')
 const chalk = require('chalk')
 
-const frameType = frame => JSON.parse(frame).type
+const jsonSize = string => Buffer.byteLength(string, 'utf8');
+
+const frameType = frame => {
+    let obj = JSON.parse(frame)
+    if (obj.type === 'instruction') {
+        return chalk.red.bold(`Instruction ${obj.model.mutations.map(item => item.name).join(', ')}`)
+    }
+    return chalk.red.bold(obj.type)
+}
 
 const broadcast = data => {
     wss.clients.forEach(client => {
@@ -74,8 +82,8 @@ wss.on('connection', (ws, req) => {
         checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
-                res.response ? console.log(chalk.blue.bold('Sending response', chalk.red.bold.inverse(`${frameType(res.response)}`), chalk.green.bold(`${res.response.length * 2} bytes`))) : null
-                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', chalk.red.bold.inverse(`${frameType(res.broadcast)}`),chalk.green.bold(`${res.broadcast.length * 2} bytes`))) : null
+                res.response ? console.log(chalk.blue.bold('Sending response', frameType(res.response), chalk.green.bold(`${(jsonSize(res.response)/1024).toFixed(2)} Kb`))) : null
+                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', frameType(res.broadcast),chalk.green.bold(`${(jsonSize(res.broadcast)/1024).toFixed(2)} Kb`))) : null
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })
