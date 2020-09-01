@@ -1,4 +1,3 @@
-const chalk = require('chalk')
 const CONFIG = require('./config')
 const moment = require('moment')
 const { broadcast } = require('./transmitter')
@@ -8,8 +7,8 @@ const salaryController = require('./controllers/SalaryController')
 const clearDate = datetime => datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
 const targetRow = event => event.type === 'DELETE' ? event.affectedRows[0].before : event.affectedRows[0].after
 const targetDate = event => moment(['appointments', 'work_days']
-    .includes(event.table) ? targetRow(event).date : targetRow(event).created_at).format('YYYY-MM-DD HH:mm:ss')
-
+    .includes(event.table) ? targetRow(event).date : targetRow(event).created_at)
+    .format('YYYY-MM-DD HH:mm:ss')
 
 const cacheSalary = event => {
     console.time('Cache salary month data')
@@ -28,21 +27,12 @@ const performDeal = event => cacheSalary(event)
 const performWorkDay = event => event.type === 'UPDATE' && event.affectedColumns.includes('working_hours') ?
         cacheSalary(event) : null
 
-/*
-if (['deals', 'work_days', 'appointments', 'prepays', 'prizes', 'sicks', 'vacations'].includes(event.table)) {
-    console.time('Caching salary month data')
-    let row = event.type === 'DELETE' ? event.affectedRows[0].before : event.affectedRows[0].after
-    let targetDate = (['appointments', 'work_days'].includes(event.table) ? row.date : row.created_at).toISOString()
-    Promise.all([
-        salaryController.cacheMonthData({date: clearDate(targetDate), island_id: row.island_id}),
-        salaryController.cacheMonthData({date: clearDate(targetDate)})
-    ])
-        .then(() => console.timeEnd('Caching salary month data'))
-}
- */
-
 const inspect = event => {
     if (event.schema !== CONFIG.db_name) {
+        return
+    }
+    if (['prepays', 'prizes', 'sicks', 'vacations'].includes(event.table)) {
+        cacheSalary(event)
         return
     }
     switch (event.table) {
