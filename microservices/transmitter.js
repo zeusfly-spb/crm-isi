@@ -3,7 +3,7 @@ const fs = require('fs')
 const router = require('./router')
 
 const chalk = require('chalk')
-const jsonSize = string => Buffer.byteLength(string, 'utf8');
+const jsonSize = string => (Buffer.byteLength(string, 'utf8') / 1024).toFixed(2)
 const frameType = frame => {
     let obj = JSON.parse(frame)
     if (obj.type === 'instruction') {
@@ -28,8 +28,8 @@ const wss = createServerFrom(https, ws => {
         checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
-                res.response ? console.log(chalk.blue.bold('Sending response', frameType(res.response), chalk.green.bold(`${(jsonSize(res.response)/1024).toFixed(2)} Kb`))) : null
-                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', frameType(res.broadcast),chalk.green.bold(`${(jsonSize(res.broadcast)/1024).toFixed(2)} Kb`))) : null
+                res.response ? console.log(chalk.blue.bold('Sending response', frameType(res.response), chalk.green.bold(`${jsonSize(res.response)} Kb.`))) : null
+                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', frameType(res.broadcast),chalk.green.bold(`${jsonSize(res.broadcast)} Kb.`))) : null
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })
