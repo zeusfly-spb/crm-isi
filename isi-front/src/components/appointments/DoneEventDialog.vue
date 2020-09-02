@@ -86,8 +86,11 @@
                     return this.eventToDone && dealService && (dealService.id === this.eventToDone.service.id) || false
                 }
                 const dealInfo = deal => {
+                    const userName = deal.user && deal.user.full_name || '-'
+                    const actionText = deal.action && deal.action.text || '-'
+                    const customerName = deal.customer && deal.customer.full_name || '-'
                     let product = deal.action.type === 'service' ? deal.service.description : deal.insole.name
-                    return `${deal.user.full_name} * ${deal.action.text} * ${deal.customer.full_name} * ${product}`
+                    return `${userName} * ${actionText} * ${customerName} * ${product}`
                 }
                 const dealColor = deal => {
                     if (['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(deal.action_type)) {

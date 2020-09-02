@@ -27,6 +27,12 @@ const performDeal = event => cacheSalary(event)
 const performWorkDay = event => event.type === 'UPDATE' && event.affectedColumns.includes('working_hours') ?
         cacheSalary(event) : null
 
+const performAppointment = event => {
+    const beforeStatusDone = event.affectedRows[0].before && event.affectedRows[0].before.status_id === 4 || false
+    const afterStatusDone = event.affectedRows[0].after && event.affectedRows[0].after.status_id === 4 || false
+    beforeStatusDone || afterStatusDone ? cacheSalary(event) : null
+}
+
 const inspect = event => {
     if (event.schema !== CONFIG.db_name) {
         return
@@ -36,11 +42,14 @@ const inspect = event => {
         return
     }
     switch (event.table) {
-        case 'leads':
-            performLead(event)
+        case 'appointments':
+            performAppointment(event)
             break
         case 'deals':
             performDeal(event)
+            break
+        case 'leads':
+            performLead(event)
             break
         case 'work_days':
             performWorkDay(event)

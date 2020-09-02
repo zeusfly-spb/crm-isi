@@ -73,6 +73,7 @@
     </div>
 </template>
 <script>
+    const clearDate = datetime => datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
     export default {
         name: 'EventContextMenuEntry',
         props: ['event'],
@@ -108,7 +109,7 @@
                 return this.$store.getters.isSuperadmin
             },
             contextMenuItems () {
-                const today = () => this.event && this.event.date.split(' ')[0] === this.$store.getters.realDate || false
+                const today = () => this.event && clearDate(this.event.date) === this.$store.getters.realDate || false
                 let base = this.contextMenuRaw
                 if (!this.isSuperadmin) {
                     base = base.filter(item => item.action !== 'cancelled')
