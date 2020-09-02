@@ -1,19 +1,10 @@
 const models = require('../models')
 const Appointment = models.Appointment
 const { Op } = require("sequelize")
+const moment = require('moment')
 
-const firstWeekDay = date => {
-    let curr = new Date(date)
-    let first = curr.getDate() - curr.getDay() + 1
-    return new Date(curr.setDate(first)).toISOString().split('T')[0]
-}
-
-const lastWeekDay = date => {
-    let curr = new Date(date)
-    let last = curr.getDate() - curr.getDay() + 7
-    return new Date(curr.setDate(last)).toISOString().split('T')[0]
-}
-
+const firstWeekDay = date => moment(date).day(1).format('YYYY-MM-DD')
+const lastWeekDay = date => moment(date).day(8).format('YYYY-MM-DD')
 
 const index = async data => {
     try {
