@@ -84,7 +84,7 @@
                         event
                     </v-icon>
                     <span
-                        class="blue--text body-2"
+                        class="blue--text caption"
                         v-if="hourEvents(hour).length"
                     >
                         {{ eventNames(hourEvents(hour)) }}
@@ -109,6 +109,9 @@
     </v-sheet>
 </template>
 <script>
+    const clearDate = datetime => datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
+    const clearTime = datetime => datetime.includes('T') ? datetime.split('T')[1] : datetime.split(' ')[1]
+
     import CalendarRecordAdder from '../appointments/CalendarRecordAdder'
     export default {
         name: 'PanelEventsSingle',
@@ -146,8 +149,8 @@
                 },
                 set (val) {
                     this.$store.commit('SET_ADDING_DATE', val)
-                    let eventsDateMonth = this.$store.state.appointment.date.split(' ')[0].split('-')[1] || ''
-                    let valMonth = val.split(' ')[0].split('-')[1]
+                    let eventsDateMonth = clearDate(this.$store.state.appointment.date).split('-')[1] || ''
+                    let valMonth = clearDate(val).split('-')[1]
                     if (eventsDateMonth !== valMonth) {
                         this.$store.dispatch('changeAppointmentDate', val)
                     }
@@ -159,8 +162,8 @@
                     base = base.filter(item => item.cabinet_id === this.selectedCabinetId)
                 }
                 return base
-                    .filter(item => item.date.split(' ')[0] === this.addingDate)
-                    .map(item => ({...item, hour: item.date.split(' ')[1].split(':')[0]}))
+                    .filter(item => clearDate(item.date) === this.addingDate)
+                    .map(item => ({...item, hour: clearTime(item.date).split(':')[0]}))
             },
             intervalHeight () {
                 return this.windowHeight / 15
@@ -206,7 +209,7 @@
                 return events.length === 1 ? base[0] : base.join(', ')
             },
             hourEvents (hour) {
-                return this.events.filter(item => +item.date.split(' ')[1].split(':')[0] === +hour)
+                return this.events.filter(item => +clearTime(item.date).split(':')[0] === +hour)
             },
             intervalFormat (interval) {
                 return interval.time
