@@ -3,7 +3,8 @@ const fs = require('fs')
 const router = require('./router')
 
 const chalk = require('chalk')
-const jsonSize = string => (Buffer.byteLength(string, 'utf8') / 1024).toFixed(2)
+const jsonSize = string => chalk.green.bold((Buffer.byteLength(string, 'utf8') / 1024).toFixed(2) + ' Kb.')
+
 const frameType = frame => {
     let obj = JSON.parse(frame)
     if (obj.type === 'instruction') {
@@ -24,12 +25,12 @@ const https = createServer(options)
 
 const wss = createServerFrom(https, ws => {
     ws.on('message', message => {
-        console.log(`Received message => ${message}`)
+        console.log(chalk.green.bold('Received message =>'), chalk.cyan.bold(`${message}`))
         checkToInternalFunction({message, ws})
         router.parse(message)
             .then(res => {
-                res.response ? console.log(chalk.blue.bold('Sending response', frameType(res.response), chalk.green.bold(`${jsonSize(res.response)} Kb.`))) : null
-                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast', frameType(res.broadcast),chalk.green.bold(`${jsonSize(res.broadcast)} Kb.`))) : null
+                res.response ? console.log(chalk.blue.bold('Sending response'), frameType(res.response), jsonSize(res.response)) : null
+                res.broadcast ? console.log(chalk.blue.bold('Sending broadcast'), frameType(res.broadcast), jsonSize(res.broadcast)) : null
                 res.response ? ws.send(res.response) : null
                 res.broadcast ? broadcast(res.broadcast) : null
             })
@@ -52,7 +53,7 @@ wss.on('connection', ws => {
     } else {
         let cookies = ws.upgradeReq.headers.cookie.split(';')
         cookies = cookies.map(item => parseCookie(item))
-        !passport.verifyToken(cookies) ? ws.close() : console.log('Connected')
+        !passport.verifyToken(cookies) ? ws.close('401', 'Access denied') : console.log('Connected')
     }
 })
 
