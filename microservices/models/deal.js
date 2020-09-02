@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'service_id',
         as: 'service'
       })
+      Deal.hasOne(models.Appointment, {
+        foreignKey: 'deal_id',
+        as: 'appointment'
+      })
     }
   }
   Deal.init({
@@ -91,6 +95,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       set (val) {
         throw new Error('Do not try to set the `service` value!')
+      }
+    },
+    has_appointment: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return !!this.appointment
+      },
+      set (val) {
+        throw new Error('Do not try to set the `has_appointment` value!')
       }
     }
   }, {
