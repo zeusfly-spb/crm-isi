@@ -38,7 +38,7 @@
                         </template>
                         <template v-slot:no-data>
                             <span
-                                class="pl-1"
+                                class="pl-1 red--text"
                             >
                                 Нет соответствующих сделок на текущий день
                             </span>

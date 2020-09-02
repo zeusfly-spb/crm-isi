@@ -1,5 +1,6 @@
 const CONFIG = require('./config')
 const moment = require('moment')
+const chalk = require('chalk')
 const { broadcast } = require('./transmitter')
 
 const salaryController = require('./controllers/SalaryController')
@@ -28,9 +29,12 @@ const performWorkDay = event => event.type === 'UPDATE' && event.affectedColumns
         cacheSalary(event) : null
 
 const performAppointment = event => {
-    const beforeStatusDone = event.affectedRows[0].before && event.affectedRows[0].before.status_id === 4 || false
-    const afterStatusDone = event.affectedRows[0].after && event.affectedRows[0].after.status_id === 4 || false
-    beforeStatusDone || afterStatusDone ? cacheSalary(event) : null
+    let needFields = ['status_id', 'performer_id', 'user_id', 'date']
+    if(needFields.some(field => event.affectedColumns.includes(field))) {
+        const beforeStatusDone = event.affectedRows[0].before && event.affectedRows[0].before.status_id === 4 || false
+        const afterStatusDone = event.affectedRows[0].after && event.affectedRows[0].after.status_id === 4 || false
+        beforeStatusDone || afterStatusDone ? cacheSalary(event) : null
+    }
 }
 
 const inspect = event => {

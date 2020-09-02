@@ -30,8 +30,8 @@ export default {
         userRates: null
     }),
     computed: {
-        apMode () {
-            return this.$store.getters.appointmentsMode
+        dealsToDone () {
+            return this.$store.state.deals.filter(deal => !deal.has_appointment).length
         },
         wsRequests () {
             return this.$store.state.ws.requests
