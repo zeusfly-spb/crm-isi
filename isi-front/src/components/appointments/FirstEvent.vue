@@ -12,101 +12,101 @@
             min-width="290px"
     >
         <template v-slot:activator="data">
-             <span>
-        <v-btn
-                flat
-                round
-                outline
-                v-if="!display"
-                :draggable="event.draggable"
-                :title="mainTitle"
-                :style="{
-                'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab',
-                'min-width': compact ? 0 : '88px',
-                'background-color': `${background}!important`
-            }"
-                :ripple="false"
-                :id="`first-${event.id}`"
-                @click="show"
-                @dragstart="dragStart"
-                @dragend="dragEnd"
-                @dragenter="dragEnter"
-                @dragover="dragEnter"
-                @dragleave="dragEnter"
-                @mousedown="dragging = true"
-                @mouseup="dragging = false"
-                @contextmenu.prevent="menu = true; data.on"
-        >
-            <v-icon
-                    :color="colors[event.status]"
-                    class="ml-1"
-                    :title="`Статус: ${ {active: 'Активна', postponed: 'Отложена', moderate: 'На модерации', completed: 'Завершена', cancelled: 'Отказ'}[event.status] }`"
-            >
-                {{ icons[event.status] }}
-            </v-icon>
-            <span
-                    v-if="!compact"
-                    class="green--text"
-            >
-                    {{ $store.state.appointment.displayTime(getTime(event.date)) }}
-                </span>
-            <span
-                    v-if="!compact"
-                    class="blue--text ml-1 mr-1"
-            >
-                    {{ event.client_name }}
-            </span>
-            <v-avatar
-                    size="28px"
-                    class="mr-1"
-                    :title="`Исполнитель: ${event.performer && event.performer.full_name || ''}`"
-            >
-                <img
-                        v-if="event.performer && event.performer.avatar"
-                        :src="basePath + event.performer.avatar" alt="Фото"
-                        :draggable="false"
-                >
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
-            </v-avatar>
-            <v-avatar
-                    size="28px"
-                    class="mr-1"
-                    :title="`Администратор: ${event.user && event.user.full_name || ''}`"
-            >
-                <img
-                        v-if="event.user && event.user.avatar"
-                        :src="basePath + event.user.avatar" alt="Фото"
-                        :draggable="false"
-                >
-                <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
-            </v-avatar>
-        </v-btn>
-        <v-expand-x-transition>
-            <v-chip
-                    disabled
+         <span>
+            <v-btn
+                    flat
+                    round
                     outline
-                    text-color="black"
-                    style="height: 40px; border: 1px solid lightgrey"
-                    :style="{'background-color': `${background}!important`}"
-                    v-if="display"
+                    v-if="!display"
+                    :draggable="event.draggable"
+                    :title="mainTitle"
+                    :style="{
+                    'cursor': !event.draggable ? 'pointer' : dragging ? 'grabbing' : 'grab',
+                    'min-width': compact ? 0 : '88px',
+                    'background-color': `${background}!important`
+                }"
+                    :ripple="false"
+                    :id="`first-${event.id}`"
+                    @click="show"
+                    @dragstart="dragStart"
+                    @dragend="dragEnd"
+                    @dragenter="dragEnter"
+                    @dragover="dragEnter"
+                    @dragleave="dragEnter"
+                    @mousedown="dragging = true"
+                    @mouseup="dragging = false"
+                    @contextmenu.prevent="menu = true; data.on"
             >
-                <event
-                        first
-                        :event="event"
-                        @hide="display = false"
-                />
                 <v-icon
-                        small
-                        color="grey lighten-1"
-                        class="clickable"
-                        title="Скрыть подробности"
-                        @click="hide"
+                        :color="colors[event.status]"
+                        class="ml-1"
+                        :title="`Статус: ${ {active: 'Активна', postponed: 'Отложена', moderate: 'На модерации', completed: 'Завершена', cancelled: 'Отказ'}[event.status] }`"
                 >
-                    cancel
+                    {{ icons[event.status] }}
                 </v-icon>
-            </v-chip>
-        </v-expand-x-transition>
-    </span>
+                <span
+                        v-if="!compact"
+                        class="green--text"
+                >
+                        {{ $store.state.appointment.displayTime(getTime(event.date)) }}
+                    </span>
+                <span
+                        v-if="!compact"
+                        class="blue--text ml-1 mr-1"
+                >
+                        {{ event.client_name }}
+                </span>
+                <v-avatar
+                        size="28px"
+                        class="mr-1"
+                        :title="`Исполнитель: ${event.performer && event.performer.full_name || ''}`"
+                >
+                    <img
+                            v-if="event.performer && event.performer.avatar"
+                            :src="basePath + event.performer.avatar" alt="Фото"
+                            :draggable="false"
+                    >
+                    <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
+                </v-avatar>
+                <v-avatar
+                        size="28px"
+                        class="mr-1"
+                        :title="`Администратор: ${event.user && event.user.full_name || ''}`"
+                >
+                    <img
+                            v-if="event.user && event.user.avatar"
+                            :src="basePath + event.user.avatar" alt="Фото"
+                            :draggable="false"
+                    >
+                    <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-else :draggable="false">
+                </v-avatar>
+            </v-btn>
+            <v-expand-x-transition>
+                <v-chip
+                        disabled
+                        outline
+                        text-color="black"
+                        style="height: 40px; border: 1px solid lightgrey"
+                        :style="{'background-color': `${background}!important`}"
+                        v-if="display"
+                >
+                    <event
+                            first
+                            :event="event"
+                            @hide="display = false"
+                    />
+                    <v-icon
+                            small
+                            color="grey lighten-1"
+                            class="clickable"
+                            title="Скрыть подробности"
+                            @click="hide"
+                    >
+                        cancel
+                    </v-icon>
+                </v-chip>
+            </v-expand-x-transition>
+        </span>
 
         </template>
         <event-context-menu-entry
