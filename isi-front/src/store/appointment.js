@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default {
     state: {
+        sidePanelEvents: [],
         eventToDone: null,
         eventDoneConfirm: false,
         activeCabinetId: null,
@@ -96,6 +97,20 @@ export default {
         }
     },
     actions: {
+        setAddingDate ({commit, dispatch, getters}, date) {
+            commit('SET_ADDING_DATE', date)
+            dispatch('pushFrame', {
+                type: 'request_get_side_panel_events',
+                model: {
+                    island_id: getters.workingIslandId,
+                    date: date,
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка записей боковой панели'
+                }
+            })
+        },
         setAppointmentMode ({dispatch, commit}, mode) {
            commit('SET_APPOINTMENT_MODE', mode)
            dispatch('setAppointments')
@@ -295,6 +310,9 @@ export default {
         }
     },
     mutations: {
+        SET_SIDE_PANEL_EVENTS (state, events) {
+            state.sidePanelEvents = events
+        },
         SET_EVENT_TO_DONE (state, event) {
             state.eventToDone = event
         },
@@ -396,6 +414,15 @@ export default {
         }
     },
     getters: {
+        sidePanelEvents: state => {
+            if (state.sidePanelEvents.length) {
+                return state.sidePanelEvents
+            }
+            if (state.appointments.length) {
+                return state.appointments
+            }
+            return []
+        },
         appointmentsMode: state => state.mode,
         commentsOpenEvent: state => state.appointments.find(item => item.id === state.archiveCommentsOpenId),
         eventStatusIcon: state => state.statusIcon,

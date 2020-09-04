@@ -6,7 +6,7 @@ const SalaryController = require('./controllers/SalaryController')
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
-        const Instruction = ({name, data, conditions = []}) => {
+        const Instruction = ({name, data, info, conditions = []}) => {
         let response ={
             type: 'instruction',
             model: {
@@ -19,11 +19,21 @@ const parse = async message => {
         if (conditions.length) {
             response.conditions = conditions
         }
+        if (info) {
+            response.response.info = info
+        }
         return JSON.stringify(response)
     }
         let responseFrame
         let mutation
         switch (frame.type) {
+            case  'request_get_side_panel_events':
+                return Promise.resolve({
+                    response: Instruction({
+                        name: 'SET_SIDE_PANEL_EVENTS', data: await AppointmentController.index({...frame.model, mode: 'day'})
+                    }),
+                    broadcast: null
+                })
             case 'request_get_month_data':
                 return Promise.resolve({
                     response: Instruction({
