@@ -52,15 +52,15 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('ru');
         DocumentPack::observe(DocPackObserver::class);
         User::observe(UserObserver::class);
-        Deal::observe (DealObserver::class);
-        Prepay::observe(PrepayObserver::class);
-        Prize::observe(PrizeObserver::class);
-        Sick::observe(SickObserver::class);
-        Vacation::observe(VacationObserver::class);
-        WorkDay::observe(WorkDayObserver::class);
-        Lead::observe(LeadObserver::class);
-        Postpone::observe(PostponeObserver::class);
-        LeadComment::observe(LeadCommentObserver::class);
+//        Deal::observe (DealObserver::class);
+//        Prepay::observe(PrepayObserver::class);
+//        Prize::observe(PrizeObserver::class);
+//        Sick::observe(SickObserver::class);
+//        Vacation::observe(VacationObserver::class);
+//        WorkDay::observe(WorkDayObserver::class);
+//        Lead::observe(LeadObserver::class);
+//        Postpone::observe(PostponeObserver::class);
+//        LeadComment::observe(LeadCommentObserver::class);
         Appointment::observe(AppointmentObserver::class);
     }
 }
