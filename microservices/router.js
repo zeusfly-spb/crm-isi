@@ -6,52 +6,41 @@ const SalaryController = require('./controllers/SalaryController')
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
+        const Instruction = ({name, data, conditions = []}) => {
+        let response ={
+            type: 'instruction',
+            model: {
+                mutations: [{name, data}]
+            }
+        }
+        if (frame.request && frame.request.id) {
+            response.response = {id: frame.request.id}
+        }
+        if (conditions.length) {
+            response.conditions = conditions
+        }
+        return JSON.stringify(response)
+    }
         let responseFrame
         let mutation
         switch (frame.type) {
             case 'request_get_month_data':
-                let monthData = await SalaryController.retrieveMonthData({...frame.model})
-                mutation = {name: 'SET_MONTH_DATA', data: monthData}
-                responseFrame = {
-                    type: 'instruction',
-                    model: {mutations: [mutation]},
-                    response: {id: frame.request.id}
-                }
                 return Promise.resolve({
-                    response: JSON.stringify(responseFrame),
+                    response: Instruction({
+                        name: 'SET_MONTH_DATA', data: await SalaryController.retrieveMonthData({...frame.model})
+                    }),
                     broadcast: null
                 })
             case 'request_get_appointments':
-                let appointments = await AppointmentController.index({...frame.model})
-                mutation = {name: 'SET_APPOINTMENTS', data: appointments}
-                responseFrame = {
-                    type: 'instruction',
-                    model: {mutations: [mutation]},
-                    response: {id: frame.request.id}
-                }
                 return Promise.resolve({
-                    response: JSON.stringify(responseFrame),
+                    response: Instruction({
+                        name: 'SET_APPOINTMENTS', data: await AppointmentController.index({...frame.model})
+                    }),
                     broadcast: null
                 })
             case 'request_get_workdays':
-                let workdays = await WorkDayController.index({...frame.model})
-                mutation = {
-                    name: 'SET_WORK_DAYS',
-                    data: workdays
-                }
-                responseFrame = {
-                    type: 'instruction',
-                    model: {
-                        mutations: [mutation]
-                    }
-                }
-                if (frame.request) {
-                    responseFrame.response = {
-                        id: frame.request.id
-                    }
-                }
                 return Promise.resolve({
-                    response: JSON.stringify(responseFrame),
+                    response: Instruction({ name: 'SET_WORK_DAYS', data: await WorkDayController.index({...frame.model})}),
                     broadcast: null
                 })
             case 'close_active_sessions':
