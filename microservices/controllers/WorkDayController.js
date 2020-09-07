@@ -7,8 +7,8 @@ const index = async data => {
     try {
         let where
         data.island_id ?
-            where = {[Op.and]: [{created_at: {[Op.startsWith]: data.date}}, {island_id: data.island_id}]} :
-            where = {created_at: {[Op.startsWith]: data.date}}
+            where = {[Op.and]: [{date: {[Op.startsWith]: data.date}}, {island_id: data.island_id}]} :
+            where = {date: {[Op.startsWith]: data.date}}
         let workdays = await WorkDay
             .findAll({where:where, include: ['user']})
         let result = workdays.sort((a, b) => a.id - b.id)
