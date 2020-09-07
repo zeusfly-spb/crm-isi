@@ -148,16 +148,11 @@
                     return this.$store.state.appointment.addingDate || this.$store.state.realDate
                 },
                 set (val) {
-                    this.$store.commit('SET_ADDING_DATE', val)
-                    let eventsDateMonth = clearDate(this.$store.state.appointment.date).split('-')[1] || ''
-                    let valMonth = clearDate(val).split('-')[1]
-                    if (eventsDateMonth !== valMonth) {
-                        this.$store.dispatch('changeAppointmentDate', val)
-                    }
+                    this.$store.dispatch('setAddingDate', val)
                 }
             },
             events () {
-                let base  = this.$store.state.appointment.appointments
+                let base  = this.$store.getters.sidePanelEvents
                 if (this.hasCabinets) {
                     base = base.filter(item => item.cabinet_id === this.selectedCabinetId)
                 }
