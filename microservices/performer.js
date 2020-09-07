@@ -46,17 +46,19 @@ const inspect = event => {
         return
     }
     switch (event.table) {
+/**
         case 'appointments':
             performAppointment(event)
             break
         case 'deals':
             performDeal(event)
             break
-        case 'leads':
-            performLead(event)
-            break
         case 'work_days':
             performWorkDay(event)
+            break
+*/
+        case 'leads':
+            performLead(event)
             break
         default: break
     }

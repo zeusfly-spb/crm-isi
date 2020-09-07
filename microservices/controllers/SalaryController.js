@@ -26,10 +26,10 @@ const month = date => `${date.split('-')[0]}-${date.split('-')[1]}`
 
 const retrieveMonthData = async ({date, island_id = 0, internal = false}) => {
     try {
-        if (await cache.Has(cacheKey({date, island_id})) && !internal) {
-            console.log(chalk.blue.bold.bgWhite('Getting salary month data from cache'))
-            return Promise.resolve(JSON.parse(await cache.Get(cacheKey({date, island_id}))))
-        }
+       // if (await cache.Has(cacheKey({date, island_id})) && !internal) {
+       ///     console.log(chalk.blue.bold.bgWhite('Getting salary month data from cache'))
+       //     return Promise.resolve(JSON.parse(await cache.Get(cacheKey({date, island_id}))))
+       // }
         const userInclude = ['workdays', 'prizes', 'forfeits', 'sicks', 'prepays', 'vacations', 'controlled_islands', 'group', 'islands']
         const dates = monthDates(date)
         const islandId = +island_id
@@ -87,10 +87,10 @@ const retrieveMonthData = async ({date, island_id = 0, internal = false}) => {
             users,
             allAppointments
         }
-        if (!internal) {
-            await cache.Set(cacheKey({date, island_id}), JSON.stringify(monthData))
-            console.log(chalk.white.bold.bgGreen(`Auto cached ${cacheKey({date, island_id})} month data`))
-        }
+        //if (!internal) {
+        //    await cache.Set(cacheKey({date, island_id}), JSON.stringify(monthData))
+        //    console.log(chalk.white.bold.bgGreen(`Auto cached ${cacheKey({date, island_id})} month data`))
+        //}
         return Promise.resolve(monthData)
     } catch (e) {
         return Promise.reject(new Error('Ошибка получения данных месяца: ' + e))
