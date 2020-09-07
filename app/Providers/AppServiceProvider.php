@@ -58,9 +58,9 @@ class AppServiceProvider extends ServiceProvider
 //        Sick::observe(SickObserver::class);
 //        Vacation::observe(VacationObserver::class);
 //        WorkDay::observe(WorkDayObserver::class);
-//        Lead::observe(LeadObserver::class);
-//        Postpone::observe(PostponeObserver::class);
-//        LeadComment::observe(LeadCommentObserver::class);
+        Lead::observe(LeadObserver::class);
+        Postpone::observe(PostponeObserver::class);
+        LeadComment::observe(LeadCommentObserver::class);
         Appointment::observe(AppointmentObserver::class);
     }
 }
