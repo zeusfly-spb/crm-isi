@@ -2,6 +2,7 @@ const WorkDayController = require('./controllers/WorkDayController')
 const DealController = require('./controllers/DealController')
 const AppointmentController = require('./controllers/AppointmentController')
 const SalaryController = require('./controllers/SalaryController')
+const LoaderController = require('./controllers/LoaderController')
 
 const parse = async message => {
     try {
@@ -27,6 +28,14 @@ const parse = async message => {
         let responseFrame
         let mutation
         switch (frame.type) {
+            case 'request_load_daily_page':
+                return Promise.resolve({
+                    response: Instruction({
+                        name: 'SET_DAILY_PAGE',
+                        data: await LoaderController.loadDailyPage({... frame.model})
+                    }),
+                    broadcast: null
+                })
             case  'request_get_side_panel_events':
                 return Promise.resolve({
                     response: Instruction({

@@ -438,6 +438,12 @@ export default {
             })
         },
         loadDailyPage ({commit, rootState, dispatch}) {
+            dispatch('pushFrame', {
+                type: 'request_load_daily_page',
+                model: {date: rootState.accountingDate, island_id: rootState.workingIslandId},
+                request: {id: uuidv4(), title: 'Загрузка данных дневного учета', page: 'daily'}
+            })
+            /*
             let request = {
                 id: uuidv4(),
                 title: 'Загрузка сделок текущей даты'
@@ -475,6 +481,7 @@ export default {
                     })
                     .catch(e => reject(e))
             })
+             */
         }
     },
     mutations: {
