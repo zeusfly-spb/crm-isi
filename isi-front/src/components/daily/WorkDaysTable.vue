@@ -13,6 +13,7 @@
             <v-data-table
                 :headers="headers"
                 :items="workdays"
+                :pagination.sync="defSorting"
                 hide-actions
                 class="elevation-1"
             >
@@ -163,6 +164,7 @@
     export default {
         name: 'WorkDaysTable',
         data: () => ({
+            defSorting: {'sortBy': 'time_start', 'descending': false, 'rowsPerPage': -1},
             adminClosing: false,
             closingUser: null,
             snackbar: false,
