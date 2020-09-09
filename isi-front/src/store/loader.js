@@ -438,34 +438,33 @@ export default {
             })
         },
         loadDailyPage ({commit, rootState, dispatch}) {
+            /*
             dispatch('pushFrame', {
                 type: 'request_load_daily_page',
                 model: {date: rootState.accountingDate, island_id: rootState.workingIslandId},
                 request: {id: uuidv4(), title: 'Загрузка данных дневного учета', page: 'daily'}
             })
-            /*
-            let request = {
-                id: uuidv4(),
-                title: 'Загрузка сделок текущей даты'
-            }
+             */
             dispatch('pushFrame', {
                 type: 'request_get_deals',
                 model: {
                     date: rootState.accountingDate,
                     island_id: rootState.workingIslandId || null,
-                    request
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка сделок текущей даты'
                 }
             })
-            request = {
-                id: uuidv4(),
-                title: 'Загрузка рабочих дней текущей даты'
-            }
             dispatch('pushFrame', {
                 type: 'request_get_workdays',
                 model: {
                     date: rootState.accountingDate,
-                    island_id: rootState.workingIslandId || null,
-                    request
+                    island_id: rootState.workingIslandId || null
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка рабочих дней текущей даты'
                 }
             })
             return new Promise((resolve, reject) => {
@@ -481,7 +480,6 @@ export default {
                     })
                     .catch(e => reject(e))
             })
-             */
         }
     },
     mutations: {
