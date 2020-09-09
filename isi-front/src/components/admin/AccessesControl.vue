@@ -279,7 +279,8 @@
         mounted () {
             let request = {
                 id: uuidv4(),
-                title: 'Загрузка активных клиентов'
+                title: 'Загрузка активных клиентов',
+                page: 'admin'
             }
             this.$store.dispatch('pushFrame', {
                 type: 'request_get_active_clients',

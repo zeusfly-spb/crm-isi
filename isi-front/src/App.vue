@@ -37,7 +37,9 @@ export default {
             return this.$store.state.ws.requests
         },
         hasWsRequests () {
-            return this.wsRequests.length > 0
+            return this.wsRequests
+                .filter(item => item.page === this.$store.getters.currentPage)
+                .length > 0
         },
         colors () {
             return this.$store.state.catalog.colors

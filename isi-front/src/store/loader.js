@@ -24,17 +24,17 @@ export default {
     actions: {
         startAnotherUserDay ({dispatch}, data) {
             try {
-                let request = {
-                    id: uuidv4(),
-                    title: 'Начало рабочего дня'
-                }
                 let frame = {
                     type: 'request_start_workday',
                     model: {
                         island_id: data.island_id,
                         user_id: data.user_id
                     },
-                    request
+                    request: {
+                        id: uuidv4(),
+                        title: 'Начало рабочего дня',
+                        page: 'daily'
+                    }
                 }
                 dispatch('pushFrame', frame)
             } catch (e) {
@@ -449,11 +449,12 @@ export default {
                 type: 'request_get_deals',
                 model: {
                     date: rootState.accountingDate,
-                    island_id: rootState.workingIslandId || null,
+                    island_id: rootState.workingIslandId || null
                 },
                 request: {
                     id: uuidv4(),
-                    title: 'Загрузка сделок текущей даты'
+                    title: 'Загрузка сделок текущей даты',
+                    page: 'daily'
                 }
             })
             dispatch('pushFrame', {
@@ -464,7 +465,8 @@ export default {
                 },
                 request: {
                     id: uuidv4(),
-                    title: 'Загрузка рабочих дней текущей даты'
+                    title: 'Загрузка рабочих дней текущей даты',
+                    page: 'daily'
                 }
             })
             return new Promise((resolve, reject) => {

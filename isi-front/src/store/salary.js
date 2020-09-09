@@ -163,7 +163,8 @@ export default {
                     },
                     request: {
                         id: uuidv4(),
-                        title: 'Загрузка данных по зарплате'
+                        title: 'Загрузка данных по зарплате',
+                        page: 'salary'
                     }
                 })
             } else {
