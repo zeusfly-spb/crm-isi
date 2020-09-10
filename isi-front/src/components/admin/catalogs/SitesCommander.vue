@@ -21,6 +21,7 @@
                     class="light-blue darken-3"
                 >
                     <span class="white--text title" v-if="addMode">Добавить сайт</span>
+                    <span class="white--text title" v-if="editMode">Редактировать сайт</span>
                 </v-card-text>
                 <v-card-text>
                     <v-container
@@ -49,7 +50,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="darken-1" flat @click="addMode = false">Отмена</v-btn>
+                    <v-btn color="darken-1" flat @click="hideDialog()">Отмена</v-btn>
                     <v-btn color="green darken-1" flat @click="addSite">Добавить</v-btn>
                 </v-card-actions>
             </v-card>
@@ -68,6 +69,14 @@
             blankSite: {url: '', description: ''}
         }),
         computed: {
+            siteToEdit: {
+                get () {
+                    return this.$store.state.catalog.siteToEdit
+                },
+                set (val) {
+                    this.$store.commit('SET_SITE_TO_EDIT', val)
+                }
+            },
             deleteMode: {
                 get () {
                     return !!this.siteToDelete
@@ -106,9 +115,20 @@
             },
             hideDialog () {
                 this.dialog = false
+                this.mode = null
+                this.siteToEdit = null
             }
         },
         watch: {
+            siteToEdit (val) {
+                if (val) {
+                    this.mode = 'edit'
+                    this.editedSite = JSON.parse(JSON.stringify(this.siteToEdit))
+                    this.showDialog()
+                } else {
+                    this.editedSite = null
+                }
+            },
             addMode (val) {
                 if (val) {
                     this.editedSite = this.blankSite

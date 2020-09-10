@@ -27,6 +27,13 @@
                                 </td>
                                 <td>{{ props.item.url }}</td>
                                 <td>{{ props.item.description }}</td>
+                                <td
+                                    align="right"
+                                >
+                                    <sites-catalog-controls
+                                        :site="props.item"
+                                    />
+                                </td>
                             </tr>
                         </template>
                     </v-data-table>
@@ -38,13 +45,15 @@
 
 <script>
     import SitesCommander from './SitesCommander'
+    import SitesCatalogControls from './SitesCatalogControls'
     export default {
         name: 'SitesCatalog',
         data: () => ({
             headers: [
                 {text: '#', sortable: false},
                 {text: 'url', sortable: false},
-                {text: 'Описание', sortable: false}
+                {text: 'Описание', sortable: false},
+                {text: 'Действия', sortable: false, align: 'right'}
             ]
         }),
         computed: {
@@ -53,7 +62,8 @@
             }
         },
         components: {
-            SitesCommander
+            SitesCommander,
+            SitesCatalogControls
         }
     }
 </script>

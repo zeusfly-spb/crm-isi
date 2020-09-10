@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        siteToEdit: null,
         siteToDelete: null,
         sites: [],
         deletingNotifyTemplate: null,
@@ -468,6 +469,9 @@ export default {
         }
     },
     mutations: {
+        SET_SITE_TO_EDIT (state, site) {
+            state.siteToEdit = site
+        },
         ADD_SITE (state, site) {
             state.sites.push(site)
         },
