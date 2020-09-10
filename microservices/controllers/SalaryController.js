@@ -47,7 +47,8 @@ const retrieveMonthData = async ({date, island_id = 0, internal = false}) => {
         const allAppointments = await Appointment.findAll({where: commonWhere})
         let usersMainWhere = { [Op.or]: [
                 {fired_at: { [Op.is]: null } },
-                {fired_at: { [Op.between]: [dates[0], dates[dates.length - 1]] } }
+                {fired_at: { [Op.between]: [dates[0], dates[dates.length - 1]] } },
+                {created_at: { [Op.between]: [dates[0], dates[dates.length - 1]] } }
             ]}
         let users
         if (island) {
