@@ -303,7 +303,8 @@
                     .reduce((a, b) => a + b.count, 0)
             },
             findActionCount (action, productName, typeName, sizeId) {
-                const nameOfType = (type_id) => this.$store.state.stock.options.types && this.$store.state.stock.options.types.find(item => +item.id === +type_id).name
+                const nameOfType = (type_id) => this.$store.state.stock.options.types &&
+                    this.$store.state.stock.options.types.find(item => +item.id === +type_id).name
                 const add = (a, b) => +a + +b.count
                 let currentEntityActions = this.stockActions.filter(item => item.type === action && item.product.name === productName && nameOfType(item.type_id) === typeName && +item.size_id === +sizeId)
                 return currentEntityActions.reduce(add, 0) || 0

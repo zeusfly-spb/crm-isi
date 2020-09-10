@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 export default {
     state: {
+        siteToDelete: null,
+        sites: [],
         deletingNotifyTemplate: null,
         editedNotifyTemplate: null,
         attemptToAddNotifyTemplate: false,
@@ -323,6 +325,19 @@ export default {
         }
     },
     actions: {
+        addSite ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_site', {... data})
+                    .then(res => {
+                        commit('ADD_SITE', res.data)
+                        let text = `Добавлен сайт ${res.data.url}`
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+
+            })
+        },
         setServiceHighlight ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/set_service_highlight', {...data})
@@ -453,6 +468,12 @@ export default {
         }
     },
     mutations: {
+        ADD_SITE (state, site) {
+            state.sites.push(site)
+        },
+        SET_SITE_TO_DELETE (state, site) {
+            state.siteToDelete = site
+        },
         SET_DELETING_NOTIFY_TEMPLATE (state, template) {
             state.deletingNotifyTemplate = template
         },
@@ -504,9 +525,10 @@ export default {
             state.services.push(service)
         },
         SET_CATALOGS (state, data) {
-            state.services = data.services
-            state.subscriptions = data.subscriptions
-            state.notifyTemplates = data.notify_templates
+            data.services ? state.services = data.services : null
+            data.subscriptions ? state.subscriptions = data.subscriptions : null
+            data.notify_templates ? state.notifyTemplates = data.notify_templates : null
+            data.sites ? state.sites = data.sites : null
         }
     },
     getters: {
