@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
+    public function updateSite(Request $request)
+    {
+        $site = Site::find($request->id);
+        $site->update($request->all());
+        return response()->json($site->toArray());
+    }
     public function addSite(Request $request)
     {
         $site = Site::create($request->all());

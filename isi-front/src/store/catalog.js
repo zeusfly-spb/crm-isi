@@ -326,6 +326,18 @@ export default {
         }
     },
     actions: {
+        updateSite ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_site', {... data})
+                    .then(res => {
+                        commit('UPDATE_SITE', res.data)
+                        let text = `Изменен сайт ${res.data.url}`
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         addSite ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_site', {... data})
@@ -469,6 +481,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_SITE (state, site) {
+            state.sites = state.sites.map(item => +item.id === +site.id ? site : item)
+        },
         SET_SITE_TO_EDIT (state, site) {
             state.siteToEdit = site
         },

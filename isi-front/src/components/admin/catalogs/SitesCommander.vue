@@ -50,8 +50,25 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="darken-1" flat @click="hideDialog()">Отмена</v-btn>
-                    <v-btn color="green darken-1" flat @click="addSite">Добавить</v-btn>
+                    <v-btn color="darken-1" flat @click="hideDialog">
+                        Отмена
+                    </v-btn>
+                    <v-btn
+                        color="green darken-1"
+                        v-if="addMode"
+                        flat
+                        @click="addSite"
+                    >
+                        Добавить
+                    </v-btn>
+                    <v-btn
+                        color="blue darken-1"
+                        v-if="editMode"
+                        flat
+                        @click="updateSite"
+                    >
+                        Сохранить
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -106,8 +123,12 @@
             }
         },
         methods: {
+            updateSite () {
+                const action = () => this.$store.dispatch('updateSite', {... this.editedSite}).then(this.hideDialog())
+                this.$validator.validate().then(res => res ? action() : null)
+            },
             addSite () {
-                const action = () => this.$store.dispatch('addSite', {...this.editedSite}).then(this.hideDialog())
+                const action = () => this.$store.dispatch('addSite', {... this.editedSite}).then(this.hideDialog())
                 this.$validator.validate().then(res => res ? action() : null)
             },
             showDialog () {

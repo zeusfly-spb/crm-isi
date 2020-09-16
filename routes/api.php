@@ -172,6 +172,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('delete_notify_template', 'CatalogController@deleteNotifyTemplate');
     Route::post('set_service_highlight', 'CatalogController@setServiceHighlight');
     Route::post('add_site', 'CatalogController@addSite');
+    Route::post('update_site', 'CatalogController@updateSite');
 
 
     //APPOINTMENTS
