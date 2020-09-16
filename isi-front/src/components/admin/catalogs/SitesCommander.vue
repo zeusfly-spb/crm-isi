@@ -18,13 +18,18 @@
                 class="round-corner"
             >
                 <v-card-text
-                    class="light-blue darken-3"
+                    :class="{
+                        'light-blue darken-3': ['add', 'edit'].includes(mode),
+                        'red darken-3': mode === 'delete'
+                    }"
                 >
                     <span class="white--text title" v-if="addMode">Добавить сайт</span>
                     <span class="white--text title" v-if="editMode">Редактировать сайт</span>
+                    <span class="white--text title" v-if="deleteMode">Подтверждение удаления</span>
                 </v-card-text>
                 <v-card-text>
                     <v-container
+                            v-if="['add', 'edit'].includes(mode)"
                             grid-list-md
                             class="p-0 m-0"
                     >
@@ -47,6 +52,12 @@
                             </v-flex>
                         </v-layout>
                     </v-container>
+                    <span
+                        v-else
+                        class="subheading"
+                    >
+                        Вы действительно хотите удалить сайт <strong>{{ siteToDelete && siteToDelete.url || ''}}</strong> из каталога?
+                    </span>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
@@ -68,6 +79,14 @@
                         @click="updateSite"
                     >
                         Сохранить
+                    </v-btn>
+                    <v-btn
+                        color="red darken-1"
+                        v-if="deleteMode"
+                        flat
+                        @click="deleteSite"
+                    >
+                        Удалить
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -123,6 +142,9 @@
             }
         },
         methods: {
+            deleteSite () {
+                this.$store.dispatch('deleteSite').then(this.hideDialog())
+            },
             updateSite () {
                 const action = () => this.$store.dispatch('updateSite', {... this.editedSite}).then(this.hideDialog())
                 this.$validator.validate().then(res => res ? action() : null)
@@ -138,9 +160,18 @@
                 this.dialog = false
                 this.mode = null
                 this.siteToEdit = null
+                this.$store.commit('SET_SITE_TO_DELETE', null)
             }
         },
         watch: {
+            siteToDelete (val) {
+                if (val) {
+                    this.mode = 'delete'
+                    this.showDialog()
+                } else {
+                    this.hideDialog()
+                }
+            },
             siteToEdit (val) {
                 if (val) {
                     this.mode = 'edit'
@@ -152,7 +183,7 @@
             },
             addMode (val) {
                 if (val) {
-                    this.editedSite = this.blankSite
+                    this.editedSite = JSON.parse(JSON.stringify(this.blankSite))
                     this.showDialog()
                 } else {
                     this.editedSite = null

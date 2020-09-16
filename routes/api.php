@@ -173,6 +173,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('set_service_highlight', 'CatalogController@setServiceHighlight');
     Route::post('add_site', 'CatalogController@addSite');
     Route::post('update_site', 'CatalogController@updateSite');
+    Route::post('delete_site', 'CatalogController@deleteSite');
+
 
 
     //APPOINTMENTS

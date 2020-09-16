@@ -16,7 +16,7 @@
                 color="red"
                 class="clickable"
                 :title="`Удалить сайт ${site.url}`"
-                @click=""
+                @click="toDelete"
         >
             delete
         </v-icon>
@@ -31,6 +31,9 @@
             site: Object
         },
         methods: {
+            toDelete () {
+                this.$store.commit('SET_SITE_TO_DELETE', this.site)
+            },
             toEdit () {
                 this.$store.commit('SET_SITE_TO_EDIT', this.site)
             }

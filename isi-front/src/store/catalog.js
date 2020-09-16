@@ -326,12 +326,25 @@ export default {
         }
     },
     actions: {
+        deleteSite ({commit, dispatch, state}) {
+            let text = `Сайт ${state.siteToDelete.url} удален из каталога`
+            let id = state.siteToDelete.id
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_site', {id: state.siteToDelete.id})
+                    .then(res => {
+                        commit('DELETE_SITE', id)
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
         updateSite ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_site', {... data})
                     .then(res => {
                         commit('UPDATE_SITE', res.data)
-                        let text = `Изменен сайт ${res.data.url}`
+                        let text = `В каталоге изменен сайт ${res.data.url}`
                         dispatch('pushMessage', {text})
                         resolve(res)
                     })
@@ -343,7 +356,7 @@ export default {
                 Vue.axios.post('/api/add_site', {... data})
                     .then(res => {
                         commit('ADD_SITE', res.data)
-                        let text = `Добавлен сайт ${res.data.url}`
+                        let text = `В каталог добавлен сайт ${res.data.url}`
                         dispatch('pushMessage', {text})
                         resolve(res)
                     })
@@ -481,6 +494,9 @@ export default {
         }
     },
     mutations: {
+        DELETE_SITE (state, id) {
+            state.sites = state.sites.filter(site => +site.id !== +id)
+        },
         UPDATE_SITE (state, site) {
             state.sites = state.sites.map(item => +item.id === +site.id ? site : item)
         },
