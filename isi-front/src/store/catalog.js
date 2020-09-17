@@ -1,5 +1,15 @@
 import Vue from 'vue'
 
+const getLeadTime = lead => {
+    let date = lead.event.date || null
+    if (!date) {
+        return ''
+    }
+    let timeArr = date.includes('T') ? date.split('T').split(':') : date.split(' ').split(':')
+    timeArr.pop()
+    return timeArr.join(':')
+}
+
 export default {
     state: {
         siteToEdit: null,
@@ -20,10 +30,7 @@ export default {
             let result = text
             switch (type) {
                 case 'lead':
-                    let timeArr = entity.event.date.split(' ')[1].split(':')
-                    timeArr.pop()
-                    let time = timeArr.join(':')
-                    result = text.replace('||TIME||', time)
+                    result = text.replace('||TIME||', getLeadTime(entity))
                     break
                 default:
                     break
