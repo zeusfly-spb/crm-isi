@@ -12,32 +12,39 @@
                 <v-flex
                         v-if="extended"
                 >
-                <span class="text-center body-2">
-                    Показывать на странице Зарплата
-                </span>
-                    <v-radio-group
+                    <v-sheet
+                        class="p-1 m-1 mb-1 round-corner"
+                        elevation="2"
+                        color="blue lighten-5"
+                    >
+                        <span class="text-center body-2 pl-2">
+                            Показывать на странице Зарплата
+                        </span>
+                        <v-radio-group
+                            class="pl-2"
                             column
                             v-model="salaryDisplay"
-                    >
-                        <v-radio
-                                v-for="(item, index) in salaryDisplayOptions"
-                                :key="index"
-                                :label="item.description"
-                                :value="item.value"
-                        />
-                    </v-radio-group>
-                    <div
-                            class="teal lighten-5"
-                            v-if="salaryDisplay === 'selected'"
-                    >
-                        <v-checkbox
-                                v-for="user in users"
-                                :key="user.id"
-                                :label="user.full_name"
-                                v-model="user.accepted"
-                                @change="submitUsersList"
-                        />
-                    </div>
+                        >
+                            <v-radio
+                                    v-for="(item, index) in salaryDisplayOptions"
+                                    :key="index"
+                                    :label="item.description"
+                                    :value="item.value"
+                            />
+                        </v-radio-group>
+                        <div
+                                class="teal lighten-5"
+                                v-if="salaryDisplay === 'selected'"
+                        >
+                            <v-checkbox
+                                    v-for="user in users"
+                                    :key="user.id"
+                                    :label="user.full_name"
+                                    v-model="user.accepted"
+                                    @change="submitUsersList"
+                            />
+                        </div>
+                    </v-sheet>
                 </v-flex>
                 <v-flex
                         v-if="extended"
