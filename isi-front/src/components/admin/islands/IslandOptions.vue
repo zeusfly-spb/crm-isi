@@ -47,24 +47,33 @@
                     </v-sheet>
                 </v-flex>
                 <v-flex
-                        v-if="extended"
+                    v-if="extended"
                 >
-                    <span
-                            class="text-center body-2"
+                    <v-sheet
+                        class="p-1 m-1 mb-1 round-corner"
+                        elevation="2"
+                        color="yellow lighten-5"
                     >
-                        Услуги
-                    </span>
-                    <div>
-                        <v-checkbox
-                                height=".5em"
-                                v-for="service in servicesCatalog"
-                                :key="service.id"
-                                :label="service.description"
-                                v-model="service.accepted"
-                                hide-details
-                                @change="submitServiceList"
-                        />
-                    </div>
+                        <span
+                              class="text-center body-2 pl-2"
+                        >
+                            Услуги
+                        </span>
+                        <div
+                            class="pb-3 pl-1"
+                        >
+                            <v-checkbox
+                                    height=".5em"
+                                    v-for="service in servicesCatalog"
+                                    :key="service.id"
+                                    :label="service.description"
+                                    v-model="service.accepted"
+                                    hide-details
+                                    @change="submitServiceList"
+                            />
+                        </div>
+                    </v-sheet>
+
                 </v-flex>
                 <cabinet-control
                         v-if="extended"
