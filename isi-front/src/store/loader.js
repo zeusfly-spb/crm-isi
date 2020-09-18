@@ -43,6 +43,9 @@ export default {
         },
         changeCount ({state, commit}, data) {
             let counts = state.counts
+            if (!counts) {
+                return
+            }
             counts[data.status] += data.value
             commit('SET_COUNTS', counts)
         },
