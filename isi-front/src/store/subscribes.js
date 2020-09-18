@@ -8,6 +8,9 @@ export default {
         subscribesLoading: false,
         subscribes: [],
         truncate: (text, stop, clamp) => {
+            if (!text || !text.length) {
+                return ''
+            }
             return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '')
         }
     },
