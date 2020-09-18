@@ -107,6 +107,9 @@
                 <additional-telephony-codes-control
                     :island_id="island.id"
                 />
+                <island-sites-control
+                    :island_id="island.id"
+                />
             </v-layout>
 
         </v-layout>
@@ -127,6 +130,7 @@
     import CallCenterSwitcher from './CallCenterSwitcher'
     import IslandSalaryOptionsControl from './IslandSalaryOptionsControl'
     import AdditionalTelephonyCodesControl from './AdditionalTelephonyCodesControl'
+    import IslandSitesControl from './IslandSitesControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -202,7 +206,8 @@
             IslandNotifyControl,
             CallCenterSwitcher,
             IslandSalaryOptionsControl,
-            AdditionalTelephonyCodesControl
+            AdditionalTelephonyCodesControl,
+            IslandSitesControl
         }
     }
 </script>
