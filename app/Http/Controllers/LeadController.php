@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Island;
 use App\Lead;
 use App\LeadComment;
 use App\Postpone;
@@ -32,6 +33,9 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $builder = Lead::with('event');
+        if (count($request->accepted_sites)) {
+            $builder = $builder->whereIn('site', $request->accepted_sites);
+        }
 
         if ($request->name) {
             $builder = $builder->where('name', 'LIKE', $request->name . '%')
@@ -56,13 +60,25 @@ class LeadController extends Controller
             $leads = array_reverse($builder->get()->toArray());
         }
 
-        $counts = [
-            'all' => Lead::where('status', '<>', 'done')->count(),
-            'wait' => Lead::where('status', 'wait')->count(),
-            'process' => Lead::where('status', 'process')->count(),
-            'done' => Lead::where('status', 'done')->count(),
-            'moderate' => Lead::where('status', 'moderate')->count()
-        ];
+        if (count($request->accepted_sites)) {
+            $counts = [
+                'all' => Lead::whereIn('site', $request->accepted_sites)->where('status', '<>', 'done')->count(),
+                'wait' => Lead::whereIn('site', $request->accepted_sites)->where('status', 'wait')->count(),
+                'process' => Lead::whereIn('site', $request->accepted_sites)->where('status', 'process')->count(),
+                'done' => Lead::whereIn('site', $request->accepted_sites)->where('status', 'done')->count(),
+                'moderate' => Lead::whereIn('site', $request->accepted_sites)->where('status', 'moderate')->count()
+            ];
+        } else {
+            $counts = [
+                'all' => Lead::where('status', '<>', 'done')->count(),
+                'wait' => Lead::where('status', 'wait')->count(),
+                'process' => Lead::where('status', 'process')->count(),
+                'done' => Lead::where('status', 'done')->count(),
+                'moderate' => Lead::where('status', 'moderate')->count()
+            ];
+        }
+
+
 
         $callToday = Cache::rememberForever('call_today_' . today()->toDateString(), function () {
            $call_leads = Lead::with('event')->where('status', 'process')->get();

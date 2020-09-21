@@ -52,6 +52,7 @@ export default {
         setLeadsOnTimer ({commit, rootState, state, getters}) {
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {
+                    accepted_sites: getters.acceptedSites,
                     date: rootState.accountingDate,
                     with_done: state.withDone,
                     page: getters.paginator_page,
@@ -533,6 +534,14 @@ export default {
         }
     },
     getters: {
+        acceptedSites: (state, getters) => {
+            if (!getters.workingIsland) {
+                return []
+            }
+            let sites = getters.workingIsland.options && getters.workingIsland.options.sites || []
+            sites.push(`island_${getters.workingIsland.id}`)
+            return  sites
+        },
         callTodayLeads: state => state.callTodayLeads,
         currentLeads: state => state.leads,
         currentLeadStatus: state => state.leadStatus,

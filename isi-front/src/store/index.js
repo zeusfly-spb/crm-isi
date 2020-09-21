@@ -558,6 +558,7 @@ export const store = new Vuex.Store({
                             dispatch('loadStockPage')
                             dispatch('setMonthData')
                             dispatch('setAppointments')
+                            dispatch('setLeads') // added after made leads filter
                         })
                 })
         },
@@ -601,11 +602,15 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        addCustomer ({commit}, customer) {
+        addCustomer ({commit, dispatch}, customer) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_customer', {...customer})
                     .then(res => {
                         if (res.data.exists) {
+                            dispatch('pushMessage', {
+                                color: 'red',
+                                text: 'Данный номер телефона уже присутствует в базе клиентов'
+                            })
                             resolve(res)
                             return
                         }

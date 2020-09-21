@@ -5,7 +5,7 @@ const getLeadTime = lead => {
     if (!date) {
         return ''
     }
-    let timeArr = date.includes('T') ? date.split('T').split(':') : date.split(' ').split(':')
+    let timeArr = date.includes('T') ? date.split('T')[1].split(':') : date.split(' ')[1].split(':')
     timeArr.pop()
     return timeArr.join(':')
 }
