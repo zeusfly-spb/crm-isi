@@ -9,8 +9,19 @@
          >
             Сайты источники заявок
         </span>
-
-
+        <div
+            class="pb-3 pl-1"
+        >
+            <v-checkbox
+                height=".5em"
+                v-for="site in sitesCatalog"
+                v-model="site.accepted"
+                :key="site.id"
+                :label="site.url"
+                hide-details
+                @change="submitSitesList"
+            />
+        </div>
     </v-sheet>
 </template>
 
@@ -39,6 +50,10 @@
             }
         },
         methods: {
+            submitSitesList () {
+                const acceptedUrls = () => this.sitesCatalog.filter(site => site.accepted).map(site => site.url)
+                this.sites = acceptedUrls()
+            },
             setIsland () {
                 this.island = this.$store.state.islands.find(item => +item.id === +this.island_id)
             }
