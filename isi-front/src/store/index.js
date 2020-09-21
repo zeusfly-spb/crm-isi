@@ -1165,6 +1165,15 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        usedLeadFilterSites: state => {
+            let result = []
+            state.islands.forEach(island => {
+                if (island.options && island.options.sites && island.options.sites.length) {
+                    island.options.sites.forEach(site => result.push(site))
+                }
+            })
+            return result
+        },
         currentDeals: state => state.deals,
         workingIslandId: state => state.workingIslandId,
         callCenter: (state, getters) => !getters.isSuperadmin && getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,

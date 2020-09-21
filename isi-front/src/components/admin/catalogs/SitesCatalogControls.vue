@@ -4,18 +4,18 @@
     >
         <v-icon
                 small
-                color="blue"
+                :color="used ? 'grey lighten-1' : 'blue'"
                 class="clickable"
-                :title="`Редактировать сайт ${site.url}`"
+                :title="used ? `Невозможно редатировать сайт, используемый для фильтрации в данный момент!` : `Редактировать сайт ${site.url}`"
                 @click="toEdit"
         >
             edit
         </v-icon>
         <v-icon
                 small
-                color="red"
+                :color="used ? 'grey lighten-1' : 'red'"
                 class="clickable"
-                :title="`Удалить сайт ${site.url}`"
+                :title="used ? `Невозможно удалить сайт, используемый для фильтрации в данный момент!` : `Удалить сайт ${site.url}`"
                 @click="toDelete"
         >
             delete
@@ -30,11 +30,22 @@
         props: {
             site: Object
         },
+        computed: {
+            used () {
+                return this.$store.getters.usedLeadFilterSites.includes(this.site.url)
+            }
+        },
         methods: {
             toDelete () {
+                if (this.used) {
+                    return
+                }
                 this.$store.commit('SET_SITE_TO_DELETE', this.site)
             },
             toEdit () {
+                if (this.used) {
+                    return
+                }
                 this.$store.commit('SET_SITE_TO_EDIT', this.site)
             }
         }
