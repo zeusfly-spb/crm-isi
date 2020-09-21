@@ -548,7 +548,7 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setWorkingIslandId ({commit, dispatch}, id) {
+        setWorkingIslandId ({commit, dispatch, getters}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setAccountingDate')
                 .then(() => {
@@ -558,7 +558,7 @@ export const store = new Vuex.Store({
                             dispatch('loadStockPage')
                             dispatch('setMonthData')
                             dispatch('setAppointments')
-                            dispatch('setLeads') // added after made leads filter
+                            getters.filterLeads ? dispatch('setLeads') : null // added after made leads filter
                         })
                 })
         },

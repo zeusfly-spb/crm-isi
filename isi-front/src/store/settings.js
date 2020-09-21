@@ -46,6 +46,7 @@ export default {
         }
     },
     getters: {
+        filterLeads: state => state.data.filterLeads || false,
         hideReminders: state => state.hideReminders !== null && state.hideReminders || localStorage.getItem('isi-hideReminders') === 'true' || false,
         miniMode: (state) => state.mini !== null && state.mini || localStorage.getItem('isi-miniMode') === 'true' || false
     }

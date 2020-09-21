@@ -59,11 +59,15 @@
             <v-flex xs12 sm6 md4>
                 <salary-settings/>
             </v-flex>
+            <v-flex xs12 sm6 md4>
+                <lead-settings/>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
 <script>
     import SalarySettings from './settings/SalarySettings'
+    import LeadSettings from './settings/LeadSettings'
     export default {
         name: 'SettingsControl',
         data: () => ({
@@ -125,7 +129,8 @@
             }
         },
         components: {
-            SalarySettings
+            SalarySettings,
+            LeadSettings
         }
     }
 </script>

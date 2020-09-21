@@ -535,7 +535,7 @@ export default {
     },
     getters: {
         acceptedSites: (state, getters) => {
-            if (!getters.workingIsland) {
+            if (!getters.workingIsland || !getters.filterLeads) {
                 return []
             }
             let sites = getters.workingIsland.options && getters.workingIsland.options.sites || []
