@@ -1,67 +1,77 @@
 <template>
     <v-flex class="m-0 p-0">
-        <span
-            class="text-center body-2"
+        <v-sheet
+            class="p-1 m-1 mb-1 round-corner"
+            elevation="2"
+            color="lime lighten-5"
         >
+            <span
+                    class="text-center body-2 pl-2"
+            >
             Кабинеты
         </span>
-        <div
-            class="p-0 m-0"
-        >
-            <v-btn color="primary"
-                   flat
-                   dark
-                   small
-                   @click="openAddDialog"
+            <div
+                    class="p-0 m-0"
             >
-                Добавить кабинет
-            </v-btn>
-        </div>
-        <v-data-table
-            :items="cabinets"
-            hide-headers
-            hide-actions
-        >
-            <template v-slot:items="props">
-                <tr style="height: 1em!important;">
-                    <td>{{ props.index + 1 }}</td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.description }}</td>
-                    <td
-                        align="right"
-                        style="margin: 0; padding: 0"
+                <v-btn color="primary"
+                       flat
+                       dark
+                       small
+                       @click="openAddDialog"
+                >
+                    Добавить кабинет
+                </v-btn>
+            </div>
+            <v-data-table
+                    :items="cabinets"
+                    hide-headers
+                    hide-actions
+            >
+                <template v-slot:items="props">
+                    <tr
+                        style="height: 1em!important;"
+                        :style="{backgroundColor: `${$store.getters.colorValue('lime lighten-5')}!important`}"
                     >
-                        <v-btn flat small icon
-                               title="Редактировать"
+                        <td>{{ props.index + 1 }}</td>
+                        <td>{{ props.item.name }}</td>
+                        <td>{{ props.item.description }}</td>
+                        <td
+                                align="right"
+                                style="margin: 0; padding: 0"
                         >
-                            <v-icon
-                                small
-                                color="green"
-                                @click="openEditDialog(props.item)"
+                            <v-btn flat small icon
+                                   title="Редактировать"
                             >
-                                edit
-                            </v-icon>
-                        </v-btn>
-                        <v-btn flat small icon
-                               @click="showDeleteConfirm(props.item)"
-                               title="Удалить"
-                        >
-                            <v-icon
-                                small
-                                color="red"
+                                <v-icon
+                                        small
+                                        color="green"
+                                        @click="openEditDialog(props.item)"
+                                >
+                                    edit
+                                </v-icon>
+                            </v-btn>
+                            <v-btn flat small icon
+                                   @click="showDeleteConfirm(props.item)"
+                                   title="Удалить"
                             >
-                                delete
-                            </v-icon>
-                        </v-btn>
-                    </td>
-                </tr>
-            </template>
-            <template v-slot:no-data>
+                                <v-icon
+                                        small
+                                        color="red"
+                                >
+                                    delete
+                                </v-icon>
+                            </v-btn>
+                        </td>
+                    </tr>
+                </template>
+                <template v-slot:no-data>
                 <span class="red--text">
                     У островка отсутствуют кабинеты
                 </span>
-            </template>
-        </v-data-table>
+                </template>
+            </v-data-table>
+        </v-sheet>
+
         <v-dialog
             :value="!!dialog"
             max-width="800px"

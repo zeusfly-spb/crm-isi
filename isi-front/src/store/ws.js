@@ -47,9 +47,8 @@ export default {
             }
             const modelDate = model => model.created_at.split(' ')[0]
             const dealDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
-            const displayed = lead => {
-                return getters.currentLeads.map(item => +item.id).includes(lead.id)
-            }
+            const displayed = lead => getters.currentLeads.map(item => +item.id).includes(lead.id)
+
             const month = date => date.split(' ')[0].split('-')[1]
             const targetIslandId = () => getters.callCenter && getters.inspectingIslandId || getters.workingIslandId
             /**
@@ -63,6 +62,9 @@ export default {
             const insertDeal = deal => commit('ADD_DEAL', deal)
 
             const insertLead = lead => {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
                 dispatch('changeCount', {
                     status: lead.status,
                     value: 1
@@ -73,6 +75,9 @@ export default {
                     })
             }
             const deleteLead = lead => {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
                 dispatch('changeCount', {
                     status: lead.status,
                     value: -1
@@ -80,6 +85,9 @@ export default {
                     .then(() => displayed(lead) ? commit('DELETE_LEAD', lead) : null)
             }
             const changeLeadStatus = lead => {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
                 let oldStatus = lead.old_status
                 delete lead.old_status
                 dispatch('changeCount', {
@@ -93,9 +101,17 @@ export default {
                 getters.currentLeadStatus === oldStatus && displayed(lead) ? commit('DELETE_LEAD', lead) : null
                 getters.currentLeadStatus === lead.status ? commit('ADD_LEAD', lead) : null
             }
-            const updateLead = lead => displayed(lead) ? commit('UPDATE_LEAD', lead) : null
+            const updateLead = lead => {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
+                displayed(lead) ? commit('UPDATE_LEAD', lead) : null
+            }
 
             const refreshCallToday = lead => {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
                 if (!getters.callTodayLeads.map(item => +item.id).includes(+lead.id)) {
                     return
                 }

@@ -24,17 +24,17 @@ export default {
     actions: {
         startAnotherUserDay ({dispatch}, data) {
             try {
-                let request = {
-                    id: uuidv4(),
-                    title: 'Начало рабочего дня'
-                }
                 let frame = {
                     type: 'request_start_workday',
                     model: {
                         island_id: data.island_id,
                         user_id: data.user_id
                     },
-                    request
+                    request: {
+                        id: uuidv4(),
+                        title: 'Начало рабочего дня',
+                        page: 'daily'
+                    }
                 }
                 dispatch('pushFrame', frame)
             } catch (e) {
@@ -43,12 +43,16 @@ export default {
         },
         changeCount ({state, commit}, data) {
             let counts = state.counts
+            if (!counts) {
+                return
+            }
             counts[data.status] += data.value
             commit('SET_COUNTS', counts)
         },
         setLeadsOnTimer ({commit, rootState, state, getters}) {
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {
+                    accepted_sites: getters.acceptedSites,
                     date: rootState.accountingDate,
                     with_done: state.withDone,
                     page: getters.paginator_page,
@@ -438,28 +442,35 @@ export default {
             })
         },
         loadDailyPage ({commit, rootState, dispatch}) {
-            let request = {
-                id: uuidv4(),
-                title: 'Загрузка сделок текущей даты'
-            }
+            /*
+            dispatch('pushFrame', {
+                type: 'request_load_daily_page',
+                model: {date: rootState.accountingDate, island_id: rootState.workingIslandId},
+                request: {id: uuidv4(), title: 'Загрузка данных дневного учета', page: 'daily'}
+            })
+             */
             dispatch('pushFrame', {
                 type: 'request_get_deals',
                 model: {
                     date: rootState.accountingDate,
-                    island_id: rootState.workingIslandId || null,
-                    request
+                    island_id: rootState.workingIslandId || null
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка сделок текущей даты',
+                    page: 'daily'
                 }
             })
-            request = {
-                id: uuidv4(),
-                title: 'Загрузка рабочих дней текущей даты'
-            }
             dispatch('pushFrame', {
                 type: 'request_get_workdays',
                 model: {
                     date: rootState.accountingDate,
-                    island_id: rootState.workingIslandId || null,
-                    request
+                    island_id: rootState.workingIslandId || null
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка рабочих дней текущей даты',
+                    page: 'daily'
                 }
             })
             return new Promise((resolve, reject) => {
@@ -523,6 +534,14 @@ export default {
         }
     },
     getters: {
+        acceptedSites: (state, getters) => {
+            if (!getters.workingIsland || !getters.filterLeads) {
+                return []
+            }
+            let sites = getters.workingIsland.options && getters.workingIsland.options.sites || []
+            sites.push(`island_${getters.workingIsland.id}`)
+            return  sites
+        },
         callTodayLeads: state => state.callTodayLeads,
         currentLeads: state => state.leads,
         currentLeadStatus: state => state.leadStatus,

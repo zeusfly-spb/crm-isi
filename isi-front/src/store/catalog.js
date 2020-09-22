@@ -1,7 +1,20 @@
 import Vue from 'vue'
 
+const getLeadTime = lead => {
+    let date = lead.event.date || null
+    if (!date) {
+        return ''
+    }
+    let timeArr = date.includes('T') ? date.split('T')[1].split(':') : date.split(' ')[1].split(':')
+    timeArr.pop()
+    return timeArr.join(':')
+}
+
 export default {
     state: {
+        siteToEdit: null,
+        siteToDelete: null,
+        sites: [],
         deletingNotifyTemplate: null,
         editedNotifyTemplate: null,
         attemptToAddNotifyTemplate: false,
@@ -17,10 +30,7 @@ export default {
             let result = text
             switch (type) {
                 case 'lead':
-                    let timeArr = entity.event.date.split(' ')[1].split(':')
-                    timeArr.pop()
-                    let time = timeArr.join(':')
-                    result = text.replace('||TIME||', time)
+                    result = text.replace('||TIME||', getLeadTime(entity))
                     break
                 default:
                     break
@@ -323,6 +333,44 @@ export default {
         }
     },
     actions: {
+        deleteSite ({commit, dispatch, state}) {
+            let text = `Сайт ${state.siteToDelete.url} удален из каталога`
+            let id = state.siteToDelete.id
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/delete_site', {id: state.siteToDelete.id})
+                    .then(res => {
+                        commit('DELETE_SITE', id)
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        updateSite ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/update_site', {... data})
+                    .then(res => {
+                        commit('UPDATE_SITE', res.data)
+                        let text = `В каталоге изменен сайт ${res.data.url}`
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+            })
+        },
+        addSite ({commit, dispatch}, data) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_site', {... data})
+                    .then(res => {
+                        commit('ADD_SITE', res.data)
+                        let text = `В каталог добавлен сайт ${res.data.url}`
+                        dispatch('pushMessage', {text})
+                        resolve(res)
+                    })
+                    .catch(e => reject(e))
+
+            })
+        },
         setServiceHighlight ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/set_service_highlight', {...data})
@@ -453,6 +501,21 @@ export default {
         }
     },
     mutations: {
+        DELETE_SITE (state, id) {
+            state.sites = state.sites.filter(site => +site.id !== +id)
+        },
+        UPDATE_SITE (state, site) {
+            state.sites = state.sites.map(item => +item.id === +site.id ? site : item)
+        },
+        SET_SITE_TO_EDIT (state, site) {
+            state.siteToEdit = site
+        },
+        ADD_SITE (state, site) {
+            state.sites.push(site)
+        },
+        SET_SITE_TO_DELETE (state, site) {
+            state.siteToDelete = site
+        },
         SET_DELETING_NOTIFY_TEMPLATE (state, template) {
             state.deletingNotifyTemplate = template
         },
@@ -504,9 +567,10 @@ export default {
             state.services.push(service)
         },
         SET_CATALOGS (state, data) {
-            state.services = data.services
-            state.subscriptions = data.subscriptions
-            state.notifyTemplates = data.notify_templates
+            data.services ? state.services = data.services : null
+            data.subscriptions ? state.subscriptions = data.subscriptions : null
+            data.notify_templates ? state.notifyTemplates = data.notify_templates : null
+            data.sites ? state.sites = data.sites : null
         }
     },
     getters: {

@@ -12,52 +12,68 @@
                 <v-flex
                         v-if="extended"
                 >
-                <span class="text-center body-2">
-                    Показывать на странице Зарплата
-                </span>
-                    <v-radio-group
+                    <v-sheet
+                        class="p-1 m-1 mb-1 round-corner"
+                        elevation="2"
+                        color="blue lighten-5"
+                    >
+                        <span class="text-center body-2 pl-2">
+                            Показывать на странице Зарплата
+                        </span>
+                        <v-radio-group
+                            class="pl-2"
                             column
                             v-model="salaryDisplay"
-                    >
-                        <v-radio
-                                v-for="(item, index) in salaryDisplayOptions"
-                                :key="index"
-                                :label="item.description"
-                                :value="item.value"
-                        />
-                    </v-radio-group>
-                    <div
-                            class="teal lighten-5"
-                            v-if="salaryDisplay === 'selected'"
-                    >
-                        <v-checkbox
-                                v-for="user in users"
-                                :key="user.id"
-                                :label="user.full_name"
-                                v-model="user.accepted"
-                                @change="submitUsersList"
-                        />
-                    </div>
+                        >
+                            <v-radio
+                                    v-for="(item, index) in salaryDisplayOptions"
+                                    :key="index"
+                                    :label="item.description"
+                                    :value="item.value"
+                            />
+                        </v-radio-group>
+                        <div
+                                class="teal lighten-5"
+                                v-if="salaryDisplay === 'selected'"
+                        >
+                            <v-checkbox
+                                    v-for="user in users"
+                                    :key="user.id"
+                                    :label="user.full_name"
+                                    v-model="user.accepted"
+                                    @change="submitUsersList"
+                            />
+                        </div>
+                    </v-sheet>
                 </v-flex>
                 <v-flex
-                        v-if="extended"
+                    v-if="extended"
                 >
-                    <span
-                            class="text-center body-2"
+                    <v-sheet
+                        class="p-1 m-1 mb-1 round-corner"
+                        elevation="2"
+                        color="yellow lighten-5"
                     >
-                        Услуги
-                    </span>
-                    <div>
-                        <v-checkbox
-                                height=".5em"
-                                v-for="service in servicesCatalog"
-                                :key="service.id"
-                                :label="service.description"
-                                v-model="service.accepted"
-                                hide-details
-                                @change="submitServiceList"
-                        />
-                    </div>
+                        <span
+                              class="text-center body-2 pl-2"
+                        >
+                            Услуги
+                        </span>
+                        <div
+                            class="pb-3 pl-1"
+                        >
+                            <v-checkbox
+                                    height=".5em"
+                                    v-for="service in servicesCatalog"
+                                    :key="service.id"
+                                    :label="service.description"
+                                    v-model="service.accepted"
+                                    hide-details
+                                    @change="submitServiceList"
+                            />
+                        </div>
+                    </v-sheet>
+
                 </v-flex>
                 <cabinet-control
                         v-if="extended"
@@ -91,6 +107,9 @@
                 <additional-telephony-codes-control
                     :island_id="island.id"
                 />
+                <island-sites-control
+                    :island_id="island.id"
+                />
             </v-layout>
 
         </v-layout>
@@ -111,6 +130,7 @@
     import CallCenterSwitcher from './CallCenterSwitcher'
     import IslandSalaryOptionsControl from './IslandSalaryOptionsControl'
     import AdditionalTelephonyCodesControl from './AdditionalTelephonyCodesControl'
+    import IslandSitesControl from './IslandSitesControl'
     export default {
         name: 'IslandOptions',
         props: ['island', 'extended'],
@@ -186,7 +206,8 @@
             IslandNotifyControl,
             CallCenterSwitcher,
             IslandSalaryOptionsControl,
-            AdditionalTelephonyCodesControl
+            AdditionalTelephonyCodesControl,
+            IslandSitesControl
         }
     }
 </script>

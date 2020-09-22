@@ -548,7 +548,7 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setWorkingIslandId ({commit, dispatch}, id) {
+        setWorkingIslandId ({commit, dispatch, getters}, id) {
             commit('SET_WORKING_ISLAND_ID', id)
             dispatch('setAccountingDate')
                 .then(() => {
@@ -558,6 +558,7 @@ export const store = new Vuex.Store({
                             dispatch('loadStockPage')
                             dispatch('setMonthData')
                             dispatch('setAppointments')
+                            getters.filterLeads ? dispatch('setLeads') : null // added after made leads filter
                         })
                 })
         },
@@ -601,11 +602,15 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        addCustomer ({commit}, customer) {
+        addCustomer ({commit, dispatch}, customer) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/create_customer', {...customer})
                     .then(res => {
                         if (res.data.exists) {
+                            dispatch('pushMessage', {
+                                color: 'red',
+                                text: 'Данный номер телефона уже присутствует в базе клиентов'
+                            })
                             resolve(res)
                             return
                         }
@@ -994,8 +999,12 @@ export const store = new Vuex.Store({
             state.accessRequests = state.accessRequests.map(item => +item.id === +accessRequest.id ? accessRequest : item)
         },
         SET_DAILY_PAGE (state, data) {
-            // state.workdays = data.workdays
-            // state.deals = data.deals
+            if (data.workdays) {
+                state.workdays = data.workdays
+            }
+            if (data.deals) {
+                state.deals = data.deals
+            }
             state.expenses = data.expenses
             state.handover = data.handover
         },
@@ -1156,6 +1165,15 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        usedLeadFilterSites: state => {
+            let result = []
+            state.islands.forEach(island => {
+                if (island.options && island.options.sites && island.options.sites.length) {
+                    island.options.sites.forEach(site => result.push(site))
+                }
+            })
+            return result
+        },
         currentDeals: state => state.deals,
         workingIslandId: state => state.workingIslandId,
         callCenter: (state, getters) => !getters.isSuperadmin && getters.workingIsland && getters.workingIsland.options && getters.workingIsland.options.callCenter || false,
