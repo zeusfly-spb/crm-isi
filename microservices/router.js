@@ -28,6 +28,15 @@ const parse = async message => {
         let responseFrame
         let mutation
         switch (frame.type) {
+            case 'request_update_deal_payment':
+                let instruction = Instruction({
+                    name: 'UPDATE_DEAL',
+                    data: await DealController.updatePaymentType({...frame.model})
+                })
+                return Promise.resolve({
+                    response: null,
+                    broadcast: instruction
+                })
             case 'request_load_daily_page':
                 return Promise.resolve({
                     response: Instruction({

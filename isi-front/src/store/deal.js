@@ -1,6 +1,16 @@
 import Vue from 'vue'
 export default {
     actions: {
+        updateDealPaymentType ({dispatch}, data) {
+            dispatch('pushFrame', {
+                type: 'request_update_deal_payment',
+                model: {
+                    deal_id: data.deal_id,
+                    is_cache: data.is_cache
+                }
+            })
+                .then(dispatch('pushMessage', {text: 'Форма оплаты сделки изменена'}))
+        },
         updateDealServiceId ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/update_deal_service_id', {... data})
