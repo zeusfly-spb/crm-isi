@@ -8,7 +8,6 @@
           <query-inspector/>
           <app-menu v-if="authUser"/>
           <router-view
-                  v-blur="loading"
                   v-if="authUser || currentPage === 'login'"
           />
       </v-content>
