@@ -19,7 +19,7 @@ const updatePaymentType = async data => {
     try {
         let deal = await Deal.findByPk(data.deal_id, {include: {all: true}})
         deal.is_cache = data.is_cache
-        await deal.save({fields: ['is_cache']})
+        await deal.save()
         return Promise.resolve(deal)
     } catch (e) {
         return Promise.reject(e)

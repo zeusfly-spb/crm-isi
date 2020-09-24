@@ -66,7 +66,7 @@ export default {
                     date: getters.eventsDate
                 })
                     .then(res => {
-                        let subscribes = res.data && res.data
+                        let subscribes = res.data && Array.isArray(res.data) && res.data
                             .map(item => item.events.length ? {
                                 ... item,
                                 events: attachProperties(item.events)
