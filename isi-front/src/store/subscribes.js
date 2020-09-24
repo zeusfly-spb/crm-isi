@@ -66,11 +66,11 @@ export default {
                     date: getters.eventsDate
                 })
                     .then(res => {
-                        let subscribes = res.data
+                        let subscribes = res.data && res.data
                             .map(item => item.events.length ? {
                                 ... item,
                                 events: attachProperties(item.events)
-                            } : item)
+                            } : item) || []
                         commit('SET_SUBSCRIBES', subscribes)
                         resolve(res)
                     })
