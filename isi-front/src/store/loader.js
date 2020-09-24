@@ -539,7 +539,9 @@ export default {
                 return []
             }
             let sites = getters.workingIsland.options && getters.workingIsland.options.sites || []
-            sites.push(`island_${getters.workingIsland.id}`)
+            if (!sites.includes(`island_${getters.workingIsland.id}`)) {
+                sites.push(`island_${getters.workingIsland.id}`)
+            }
             return  sites
         },
         callTodayLeads: state => state.callTodayLeads,

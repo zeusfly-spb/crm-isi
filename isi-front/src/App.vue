@@ -29,8 +29,8 @@ export default {
         userRates: null
     }),
     computed: {
-        dealsToDone () {
-            return this.$store.state.deals.filter(deal => !deal.has_appointment).length
+        acceptedSites () {
+            return this.$store.getters.acceptedSites
         },
         wsRequests () {
             return this.$store.state.ws.requests
