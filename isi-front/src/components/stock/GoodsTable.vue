@@ -7,6 +7,7 @@
         <v-data-table
                 hide-actions
                 :items="goodsProductIds"
+                :loading="$store.getters.busy || $store.getters.wsLoading"
                 class="elevation-1"
         >
             <template slot="headers" slot-scope="row">

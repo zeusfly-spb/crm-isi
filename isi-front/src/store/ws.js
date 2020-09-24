@@ -256,5 +256,10 @@ export default {
         POP_WS_OUTBOX(state) {
             state.wsOutbox.pop()
         }
+    },
+    getters: {
+        wsLoading: (state, getters) => {
+            return state.requests.filter(request => request.page === getters.currentPage).length > 0
+        }
     }
 }
