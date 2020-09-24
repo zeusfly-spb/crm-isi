@@ -123,10 +123,10 @@
             align="center"
             class="clear-td"
         >
-            <div v-if="props.item.site">{{ props.item.site }}</div>
-            <user-avatar v-if="props.item.user" :user="props.item.user" :mini="mini"/>
+            <div v-if="props.item.site && !props.item.user_id">{{ props.item.site }}</div>
+            <user-avatar v-if="props.item.user_id" :user="leadUser(props.item)" :mini="mini"/>
             <v-avatar
-                v-if="!props.item.site && !props.item.user"
+                v-if="!props.item.site && !props.item.user_id"
                 :size="mini ? '18px' : '36px'"
                 title="Заявка из сети"
             >
@@ -266,6 +266,9 @@
             }
         },
         methods: {
+            leadUser (lead) {
+                return this.$store.state.users.find(item => +item.id === +lead.user_id) || null
+            },
             eventControlAction () {
                 if (!this.workingIsland) {
                     return
