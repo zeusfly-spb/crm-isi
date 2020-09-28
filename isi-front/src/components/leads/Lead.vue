@@ -53,7 +53,7 @@
                     @done="contextMenu = null"
                 />
             </v-menu>
-            {{ props.item.name | upFirst }}
+            {{ $store.getters.truncate(props.item.name, 25) | upFirst }}
             <interactions-card
                 no-activator
                 v-if="+interactionsOpenId === +props.item.id"
