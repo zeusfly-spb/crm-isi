@@ -10,14 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Lead.hasMany(models.LeadComment, {
+        Lead.hasMany(models.LeadComment, {
           foreignKey: 'lead_id',
           as: 'comments'
-      })
-      Lead.belongsTo(models.User, {
+        })
+        Lead.belongsTo(models.User, {
           foreignKey: 'user_id',
           as: 'user'
-      })
+        })
+        Lead.hasOne(models.Appointment, {
+            foreignKey: 'lead_id',
+            as: 'event'
+        })
     }
   }
   Lead.init({
