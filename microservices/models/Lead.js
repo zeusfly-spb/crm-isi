@@ -1,5 +1,6 @@
 'use strict';
 const withPagination = require('sequelize-pagination');
+const moment = require('moment')
 const options = {
     methodName: 'paginate',
     primaryKey: 'id'
@@ -27,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'lead_id',
             as: 'event'
         })
+        Lead.hasMany(models.Postpone, {
+            foreignKey: 'lead_id',
+            as: 'postpones'
+        })
     }
   }
   Lead.init({
@@ -37,7 +42,26 @@ module.exports = (sequelize, DataTypes) => {
       status: { type: DataTypes.ENUM('wait', 'process', 'moderate', 'done') },
       user_id: { type: DataTypes.BIGINT.UNSIGNED },
       calls: { type: DataTypes.TEXT },
-      appointment_id: {type: DataTypes.BIGINT.UNSIGNED}
+      appointment_id: {type: DataTypes.BIGINT.UNSIGNED},
+      last_postpone: {
+          type: DataTypes.VIRTUAL,
+          get () {
+              return this.postpones.length && this.postpones[this.postpones.length - 1] || null
+          },
+          set () {
+              throw new Error('Do not try to set the `last_postpone` value!')
+          }
+      },
+      last_postpone_date: {
+          type: DataTypes.VIRTUAL,
+          get () {
+              let postpone = this.postpones.length && this.postpones[this.postpones.length - 1]
+              return postpone && moment(postpone.date).format('YYYY-MM-DD') || null
+          },
+          set () {
+              throw new Error('Do not try to set the `last_postpone_date` value!')
+          }
+      }
   }, {
     sequelize,
     modelName: 'Lead',

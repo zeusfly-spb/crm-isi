@@ -1,11 +1,13 @@
+const moment = require('moment')
 const models = require('../models')
 const Lead = models.Lead
 const { Op } = require("sequelize")
 
 const index = async data => {
     try {
+        const today = moment().format('YYYY-MM-DD')
         const order = [['id', 'DESC']]
-        let include = ['event']
+        let include = ['event', 'postpones', 'comments']
         let paginatorOptions = {
             pageIndex: +data.page && data.page - 1 || 0,
             pageSize: +data.per_page || 15
@@ -45,7 +47,16 @@ const index = async data => {
                 moderate: await Lead.count({where: {status: 'moderate'}}),
             }
         }
-        return Promise.resolve({leads, paginator_data, counts})
+        let call_today = await Lead.findAll({
+            include: ['postpones'], where: {status: 'process'}, order: [['id', 'ASC']]
+        })
+        call_today = call_today.filter(lead => lead.last_postpone_date === today)
+        return Promise.resolve({
+            leads,
+            paginator_data,
+            counts,
+            call_today
+        })
     } catch (e) {
         return Promise.reject(new Error(`Leads load error: ${e}`))
     }
