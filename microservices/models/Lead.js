@@ -1,4 +1,9 @@
 'use strict';
+const withPagination = require('sequelize-pagination');
+const options = {
+    methodName: 'paginate',
+    primaryKey: 'id'
+}
 const {
   Model
 } = require('sequelize');
@@ -41,5 +46,6 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   });
-  return Lead;
+  withPagination(options)(Lead)
+  return  Lead;
 };
