@@ -20,6 +20,13 @@ const index = async data => {
             }
         }
         let response = await Lead.paginate({... paginatorOptions, where, include, order})
+        let leads = response.data
+        let paginator_data = {
+            total: response.meta.total,
+            lastPage: response.meta.last,
+            perPage: response.meta.pageSize,
+            currentPage: response.meta.current + 1
+        }
         let counts
         if (data.sites && data.sites.length) {
             counts = {
@@ -38,9 +45,9 @@ const index = async data => {
                 moderate: await Lead.count({where: {status: 'moderate'}}),
             }
         }
-        return Promise.resolve({response, counts})
+        return Promise.resolve({leads, paginator_data, counts})
     } catch (e) {
-        return Promise.reject(new Error(`Lead load error: ${e}`))
+        return Promise.reject(new Error(`Leads load error: ${e}`))
     }
 }
 
