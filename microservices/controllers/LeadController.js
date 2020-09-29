@@ -22,7 +22,11 @@ const index = async data => {
             }
         }
         let response = await Lead.paginate({... paginatorOptions, where, include, order})
-        let leads = response.data
+        let leads = response.data.map(lead => ({
+            ...lead,
+            postpones: lead.postpones.reverse(),
+            comments: lead.comments.reverse()
+        }))
         let paginator_data = {
             total: response.meta.total,
             lastPage: response.meta.last,
@@ -48,7 +52,7 @@ const index = async data => {
             }
         }
         let call_today = await Lead.findAll({
-            include: ['postpones'], where: {status: 'process'}, order: [['id', 'ASC']]
+            include: ['postpones', 'comments'], where: {status: 'process'}, order: [['id', 'ASC']]
         })
         call_today = call_today.filter(lead => lead.last_postpone_date === today)
         return Promise.resolve({
