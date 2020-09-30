@@ -1,6 +1,7 @@
 const moment = require('moment')
 const models = require('../models')
 const Lead = models.Lead
+const Postpone = models.Postpone
 const { Op } = require("sequelize")
 
 const index = async data => {
@@ -22,11 +23,7 @@ const index = async data => {
             }
         }
         let response = await Lead.paginate({... paginatorOptions, where, include, order})
-        let leads = response.data.map(lead => ({
-            ...lead,
-            postpones: lead.postpones.reverse(),
-            comments: lead.comments.reverse()
-        }))
+        let leads = response.data
         let paginator_data = {
             total: response.meta.total,
             lastPage: response.meta.last,
@@ -51,10 +48,18 @@ const index = async data => {
                 moderate: await Lead.count({where: {status: 'moderate'}}),
             }
         }
+
+        let todayPostpones = await Postpone.findAll({
+            where: {date: {[Op.startsWith]: today}},
+            attributes: ['lead_id']
+        })
+        let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
         let call_today = await Lead.findAll({
-            include: ['postpones', 'comments'], where: {status: 'process'}, order: [['id', 'ASC']]
+            where: {id: todayLeadIds},
+            include: {all: true}
         })
         call_today = call_today.filter(lead => lead.last_postpone_date === today)
+
         return Promise.resolve({
             leads,
             paginator_data,
