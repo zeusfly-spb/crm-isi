@@ -55,7 +55,7 @@ const index = async data => {
         })
         let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
         let call_today = await Lead.findAll({
-            where: {id: todayLeadIds},
+            where: {id: todayLeadIds, status: 'process'},
             include: {all: true}
         })
         call_today = call_today.filter(lead => lead.last_postpone_date === today)
