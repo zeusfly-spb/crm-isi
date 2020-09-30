@@ -10,10 +10,10 @@ const index = async data => {
         const order = [['created_at', 'DESC']]
         let include = {all: true}
         let paginatorOptions = {
-            pageIndex: +data.page && data.page - 1 || 0,
-            pageSize: +data.per_page || 15
+            pageIndex: data.page && data.page - 1 || 0,
+            pageSize: data.per_page || 15
         }
-        let where = {status: ['wait', data.status]}
+        let where = {status: data.status}
         data.sites && data.sites.length ? where.site = data.sites : null
         if (data.name) {
             where = {... where,[Op.or]: [
@@ -24,12 +24,6 @@ const index = async data => {
         }
         let response = await Lead.paginate({... paginatorOptions, where, include, order})
         let leads = response.data
-        let paginator_data = {
-            total: response.meta.total,
-            lastPage: response.meta.last,
-            perPage: response.meta.pageSize,
-            currentPage: response.meta.current + 1
-        }
         let counts
         if (data.sites && data.sites.length) {
             counts = {
@@ -49,6 +43,12 @@ const index = async data => {
             }
         }
 
+        let paginator_data = {
+            total: counts[data.status] || null,
+            lastPage: response.meta.last,
+            perPage: response.meta.pageSize,
+            currentPage: response.meta.current + 1
+        }
         let todayPostpones = await Postpone.findAll({
             where: {date: {[Op.startsWith]: today}},
             attributes: ['lead_id']
