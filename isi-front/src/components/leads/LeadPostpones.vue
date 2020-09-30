@@ -160,6 +160,9 @@
     </v-flex>
 </template>
 <script>
+    const clearDate = date => date.includes('T') ? date.split('T')[0] : date.split(' ')[0]
+    const clearTime = date => date.includes('T') ? date.split('T')[1] : date.split(' ')[1]
+
     export default {
         name: 'LeadPostpones',
         props: ['lead', 'open'],
@@ -189,12 +192,14 @@
                 return this.lead.last_postpone
             },
             postpones () {
+                const postponeUser = postpone => this.$store.getters.allUsers
+                        .find(user => +user.id === +postpone.user_id) || null
                 let base = this.lead.postpones
                 return base.map(item => ({
                     id: item.id,
-                    user: item.user,
-                    date: item.date.split(' ')[0],
-                    time: item.date.split(' ')[1],
+                    user: postponeUser(item),
+                    date: clearDate(item.date),
+                    time: clearTime(item.date),
                     open: false,
                     created_at: item.created_at
                 }))
