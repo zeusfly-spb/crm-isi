@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       last_postpone: {
           type: DataTypes.VIRTUAL,
           get () {
-              return this.postpones.length && this.postpones[this.postpones.length - 1] || null
+              return this.postpones && this.postpones.length && this.postpones[this.postpones.length - 1] || null
           },
           set () {
               throw new Error('Do not try to set the `last_postpone` value!')
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       last_postpone_date: {
           type: DataTypes.VIRTUAL,
           get () {
-              let postpone = this.postpones.length && this.postpones[this.postpones.length - 1]
+              let postpone = this.postpones && this.postpones.length && this.postpones[this.postpones.length - 1]
               return postpone && moment(postpone.date).format('YYYY-MM-DD') || null
           },
           set () {
