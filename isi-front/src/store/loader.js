@@ -67,14 +67,7 @@ export default {
                         let callTodayLeads = Object.values(res.data.call_today)
                             .map(item => reverseLeadRelations(item))
                         res.data.call_today ? commit('SET_CALL_TODAY_LEADS', callTodayLeads) : null
-
-                        let leads = res.data.leads
-                            .map(lead => ({
-                                ...lead,
-                                postpones: lead.postpones.reverse(),
-                                comments: lead.comments.reverse()
-                            }))
-                        commit('SET_LEADS', leads)
+                        commit('SET_LEADS', res.data.leads)
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -525,7 +518,11 @@ export default {
         },
         SET_LEADS (state, leads) {
             let prevCount = state.leads.filter(item => item.status === 'wait')
-            state.leads = leads
+            state.leads = leads.map(lead => ({
+                ...lead,
+                comments: lead.comments.reverse(),
+                postpones: lead.postpones.reverse()
+            }))
             let postCount = state.leads.filter(item => item.status === 'wait')
             if (postCount > prevCount) {
                 state.beep = true
