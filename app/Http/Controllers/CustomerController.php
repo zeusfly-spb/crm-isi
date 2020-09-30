@@ -50,9 +50,14 @@ class CustomerController extends Controller
     public function update(Request $request)
     {
         $customer = Customer::find($request->id);
-        $input = Arr::except($request->all(), ['id', 'phones', 'phone', 'full_name', 'deals']);
-
-        $customer->update($input);
+        $customer->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'patronymic' => $request->patronymic,
+            'address' => $request->address,
+            'birth_date' => $request->birth_date,
+            'email' => $request->email
+        ]);
         $customer->load('phones', 'deals');
         return response()->json($customer->toArray());
     }
