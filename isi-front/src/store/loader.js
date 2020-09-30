@@ -63,9 +63,7 @@ export default {
                     .then(res => {
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-
                         let callTodayLeads = Object.values(res.data.call_today)
-                            .map(item => reverseLeadRelations(item))
                         res.data.call_today ? commit('SET_CALL_TODAY_LEADS', callTodayLeads) : null
                         commit('SET_LEADS', res.data.leads)
                         resolve(res)
@@ -487,7 +485,7 @@ export default {
             setTimeout(() => state.beep = false, 2000)
         },
         SET_CALL_TODAY_LEADS (state, leads) {
-            state.callTodayLeads = leads
+            state.callTodayLeads = leads.map(lead => reverseLeadRelations(lead))
         },
         SET_TODAY_POSTPONES (state, val) {
             state.showTodayPostpones = val
@@ -518,11 +516,7 @@ export default {
         },
         SET_LEADS (state, leads) {
             let prevCount = state.leads.filter(item => item.status === 'wait')
-            state.leads = leads.map(lead => ({
-                ...lead,
-                comments: lead.comments.reverse(),
-                postpones: lead.postpones.reverse()
-            }))
+            state.leads = leads.map(lead => reverseLeadRelations(lead))
             let postCount = state.leads.filter(item => item.status === 'wait')
             if (postCount > prevCount) {
                 state.beep = true
