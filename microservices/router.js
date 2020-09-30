@@ -3,6 +3,7 @@ const DealController = require('./controllers/DealController')
 const AppointmentController = require('./controllers/AppointmentController')
 const SalaryController = require('./controllers/SalaryController')
 const LoaderController = require('./controllers/LoaderController')
+const LeadController = require('./controllers/LeadController')
 
 const parse = async message => {
     try {
@@ -29,6 +30,18 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations
         switch (frame.type) {
+            case 'request_get_leads':
+                const response = await LeadController.index({...frame.model})
+                mutations = [
+                    {name: 'SET_COUNTS', data: response.counts},
+                    {name: 'SYNC_PAGINATION', data: response.paginator_data},
+                    {name: 'SET_CALL_TODAY_LEADS', data: response.call_today},
+                    {name: 'SET_LEADS', data: response.leads}
+                ]
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_update_deal_payment':
                 mutations = [
                     {name: 'UPDATE_DEAL', data: await DealController.updatePaymentType({...frame.model})}

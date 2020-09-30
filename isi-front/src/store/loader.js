@@ -49,7 +49,21 @@ export default {
             counts[data.status] += data.value
             commit('SET_COUNTS', counts)
         },
-        setLeadsOnTimer ({commit, rootState, state, getters}) {
+        setLeadsOnTimer ({commit, rootState, state, getters, dispatch}) {
+            commit('SET_PAGINATOR_LOADING', true)
+            dispatch('pushFrame', {
+                type: 'request_get_leads',
+                model: {
+                    accepted_sites: getters.acceptedSites,
+                    date: rootState.accountingDate,
+                    with_done: state.withDone,
+                    page: getters.paginator_page,
+                    per_page: getters.paginator_per_page,
+                    status: state.leadStatus,
+                    name: state.leadName
+                }
+            })
+            /*
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {
                     accepted_sites: getters.acceptedSites,
@@ -70,6 +84,7 @@ export default {
                     })
                     .catch(e => reject(e))
             })
+             */
         },
         setLeadName ({commit, dispatch, rootState}, name) {
             return new Promise((resolve, reject) => {
@@ -91,9 +106,9 @@ export default {
                 commit('CHANGE_LEAD_STATUS', status)
                 commit('RESET_PAGINATOR')
                 dispatch('setLeadsOnTimer')
-                    .then(res => resolve(res))
-                    .catch(e => reject(e))
-                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
+                    // .then(res => resolve(res))
+                    // .catch(e => reject(e))
+                    // .finally(() => commit('SET_PAGINATOR_LOADING', false))
             })
         },
         loadStockPage ({commit, rootState}) {
