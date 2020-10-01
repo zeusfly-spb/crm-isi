@@ -7,7 +7,7 @@ const { Op } = require("sequelize")
 const index = async data => {
     try {
         const today = moment().format('YYYY-MM-DD')
-        const order = [['created_at', 'DESC']]
+        const orders = [['id', 'DESC']]
         let include = {all: true}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,
@@ -22,7 +22,7 @@ const index = async data => {
                 ]
             }
         }
-        let response = await Lead.paginate({... paginatorOptions, where, include, order})
+        let response = await Lead.paginate({... paginatorOptions, where, include, orders})
         let leads = response.data
         let counts
         if (data.sites && data.sites.length) {
