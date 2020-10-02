@@ -3,6 +3,7 @@ const models = require('../models')
 const Lead = models.Lead
 const Postpone = models.Postpone
 const { Op } = require("sequelize")
+const cache = require('../cache')
 
 const index = async data => {
     try {
@@ -49,16 +50,25 @@ const index = async data => {
             perPage: response.meta.pageSize,
             currentPage: response.meta.current + 1
         }
-        let todayPostpones = await Postpone.findAll({
-            where: {date: {[Op.startsWith]: today}},
-            attributes: ['lead_id']
-        })
-        let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
-        let call_today = await Lead.findAll({
-            where: {id: todayLeadIds, status: 'process'},
-            include: ['postpones', 'comments']
-        })
-        call_today = call_today.filter(lead => lead.last_postpone_date === today)
+
+        const call_today_name = `call_today_${today}`
+        let call_today
+        if (await cache.Has(call_today_name)) {
+            call_today = JSON.parse(await cache.Get(call_today_name))
+        } else {
+            let todayPostpones = await Postpone.findAll({
+                where: {date: {[Op.startsWith]: today}},
+                attributes: ['lead_id']
+            })
+            let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
+            call_today = await Lead.findAll({
+                where: {id: todayLeadIds, status: 'process'},
+                include: ['postpones', 'comments']
+            })
+            call_today = call_today.filter(lead => lead.last_postpone_date === today)
+            await cache.Set(call_today_name, JSON.stringify(call_today))
+            console.log('Call today cache saved')
+        }
 
         return Promise.resolve({
             leads,
