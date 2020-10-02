@@ -16,7 +16,7 @@ class LeadCommentObserver
      */
     public function created(LeadComment $leadComment)
     {
-        clearPostponesCache();
+//        clearPostponesCache();
     }
 
     /**
@@ -27,7 +27,7 @@ class LeadCommentObserver
      */
     public function updated(LeadComment $leadComment)
     {
-        clearPostponesCache();
+//        clearPostponesCache();
     }
 
     /**
@@ -38,7 +38,7 @@ class LeadCommentObserver
      */
     public function deleted(LeadComment $leadComment)
     {
-        clearPostponesCache();
+//        clearPostponesCache();
     }
 
     /**
