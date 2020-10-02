@@ -8,7 +8,6 @@
           <query-inspector/>
           <app-menu v-if="authUser"/>
           <router-view
-                  v-blur="loading"
                   v-if="authUser || currentPage === 'login'"
           />
       </v-content>
@@ -30,8 +29,8 @@ export default {
         userRates: null
     }),
     computed: {
-        dealsToDone () {
-            return this.$store.state.deals.filter(deal => !deal.has_appointment).length
+        acceptedSites () {
+            return this.$store.getters.acceptedSites
         },
         wsRequests () {
             return this.$store.state.ws.requests

@@ -42,10 +42,12 @@ export default {
                                 commit('SET_STAT_DATA', item.data)
                             }
                         }
+                        if (item.name === 'SET_LEADS') {
+                            commit('SET_PAGINATOR_LOADING', false)
+                        }
                     })
                 }
             }
-            const modelDate = model => model.created_at.split(' ')[0]
             const dealDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
             const displayed = lead => getters.currentLeads.map(item => +item.id).includes(lead.id)
 
@@ -255,6 +257,11 @@ export default {
         },
         POP_WS_OUTBOX(state) {
             state.wsOutbox.pop()
+        }
+    },
+    getters: {
+        wsLoading: (state, getters) => {
+            return state.requests.filter(request => request.page === getters.currentPage).length > 0
         }
     }
 }

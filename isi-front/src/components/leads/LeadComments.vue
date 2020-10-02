@@ -171,8 +171,14 @@
                 return this.comments.length && this.comments[0]
             },
             comments () {
+                const appendUser = comment => {
+                    let user = this.$store.getters.allUsers
+                        .find(user => user.id === comment.user_id)
+                    comment.user = user || null
+                    return comment
+                }
                 let base = JSON.parse(JSON.stringify(this.lead))
-                return base && base.comments || []
+                return base && base.comments && base.comments.map(comment => appendUser(comment))|| []
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate

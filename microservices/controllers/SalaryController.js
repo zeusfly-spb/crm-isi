@@ -65,7 +65,7 @@ const retrieveMonthData = async ({date, island_id = 0, internal = false}) => {
                     break
                 case 'attach_time':
                     let attached = island.users.map(user => +user.id)
-                    let byTime = sland.workdays
+                    let byTime = island.workdays
                         .filter(workday => workday.created_at >= dates[0] && workday.created_at <= dates[dates.length - 1])
                         .map(item => +item.user_id)
                     userIds = [... attached, ... byTime]

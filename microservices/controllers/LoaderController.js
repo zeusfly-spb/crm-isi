@@ -1,9 +1,12 @@
+const moment = require('moment')
 const { Op } = require("sequelize")
 const models = require('../models')
 const WorkDay = models.WorkDay
 const Deal = models.Deal
 const Expense = models.Expense
 const HandOver = models.HandOver
+const Setting = models.Setting
+const Island = models.Island
 
 const loadDailyPage = async data => {
     try {
@@ -29,6 +32,22 @@ const loadDailyPage = async data => {
     }
 }
 
+const priorPrepare = async () => {
+    try {
+        let date = moment().format('YYYY-MM-DD')
+        let islands = await Island.findAll({include: ['users']})
+        let result = {date, islands}
+        let setting = await Setting.findByPk(1)
+        if (setting) {
+            result = {... result, setting}
+        }
+        return Promise.resolve(result)
+    } catch (e) {
+        return Promise.reject(new Error(`Ошибка начальной подготовки: ${e}`))
+    }
+}
+
 module.exports = {
-    loadDailyPage
+    loadDailyPage,
+    priorPrepare
 }

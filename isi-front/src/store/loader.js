@@ -49,7 +49,21 @@ export default {
             counts[data.status] += data.value
             commit('SET_COUNTS', counts)
         },
-        setLeadsOnTimer ({commit, rootState, state, getters}) {
+        setLeadsOnTimer ({commit, rootState, state, getters, dispatch}) {
+            commit('SET_PAGINATOR_LOADING', true)
+            dispatch('pushFrame', {
+                type: 'request_get_leads',
+                model: {
+                    accepted_sites: getters.acceptedSites,
+                    date: rootState.accountingDate,
+                    with_done: state.withDone,
+                    page: getters.paginator_page,
+                    per_page: getters.paginator_per_page,
+                    status: state.leadStatus,
+                    name: state.leadName
+                }
+            })
+            /*
             return new Promise((resolve ,reject) => {
                 Vue.axios.post('/api/get_leads', {
                     accepted_sites: getters.acceptedSites,
@@ -63,22 +77,14 @@ export default {
                     .then(res => {
                         res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
                         res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-
                         let callTodayLeads = Object.values(res.data.call_today)
-                            .map(item => reverseLeadRelations(item))
                         res.data.call_today ? commit('SET_CALL_TODAY_LEADS', callTodayLeads) : null
-
-                        let leads = res.data.leads
-                            .map(lead => ({
-                                ...lead,
-                                postpones: lead.postpones.reverse(),
-                                comments: lead.comments.reverse()
-                            }))
-                        commit('SET_LEADS', leads)
+                        commit('SET_LEADS', res.data.leads)
                         resolve(res)
                     })
                     .catch(e => reject(e))
             })
+             */
         },
         setLeadName ({commit, dispatch, rootState}, name) {
             return new Promise((resolve, reject) => {
@@ -100,9 +106,9 @@ export default {
                 commit('CHANGE_LEAD_STATUS', status)
                 commit('RESET_PAGINATOR')
                 dispatch('setLeadsOnTimer')
-                    .then(res => resolve(res))
-                    .catch(e => reject(e))
-                    .finally(() => commit('SET_PAGINATOR_LOADING', false))
+                    // .then(res => resolve(res))
+                    // .catch(e => reject(e))
+                    // .finally(() => commit('SET_PAGINATOR_LOADING', false))
             })
         },
         loadStockPage ({commit, rootState}) {
@@ -494,7 +500,7 @@ export default {
             setTimeout(() => state.beep = false, 2000)
         },
         SET_CALL_TODAY_LEADS (state, leads) {
-            state.callTodayLeads = leads
+            state.callTodayLeads = leads.map(lead => reverseLeadRelations(lead))
         },
         SET_TODAY_POSTPONES (state, val) {
             state.showTodayPostpones = val
@@ -525,7 +531,7 @@ export default {
         },
         SET_LEADS (state, leads) {
             let prevCount = state.leads.filter(item => item.status === 'wait')
-            state.leads = leads
+            state.leads = leads.map(lead => reverseLeadRelations(lead))
             let postCount = state.leads.filter(item => item.status === 'wait')
             if (postCount > prevCount) {
                 state.beep = true
@@ -539,7 +545,9 @@ export default {
                 return []
             }
             let sites = getters.workingIsland.options && getters.workingIsland.options.sites || []
-            sites.push(`island_${getters.workingIsland.id}`)
+            if (!sites.includes(`island_${getters.workingIsland.id}`)) {
+                sites.push(`island_${getters.workingIsland.id}`)
+            }
             return  sites
         },
         callTodayLeads: state => state.callTodayLeads,

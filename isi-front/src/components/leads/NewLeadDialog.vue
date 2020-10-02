@@ -6,6 +6,7 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2"
+                       :disabled="!workingIslandId"
                        @click="showModal"
                 >
                     Добавить заявку
@@ -67,6 +68,11 @@
             name: '',
             comment: ''
         }),
+        computed: {
+            workingIslandId () {
+                return this.$store.state.workingIslandId
+            }
+        },
         methods: {
             pause () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, leads: false})
@@ -82,7 +88,8 @@
                         this.$store.dispatch('addLead', {
                             phone: this.phone,
                             name: this.name,
-                            comment: this.comment
+                            comment: this.comment,
+                            site: `island_${this.workingIslandId}`
                         })
                             .then(() => {
                                 this.dialog = false

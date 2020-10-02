@@ -117,34 +117,35 @@
         <td v-if="!isTotal"
             :class="{'mini': mini}"
         >
-            <span
-                @click="switchEditMode('is_cache')"
-            >
-                <span
-                    :title="canUpdate ? 'Чтобы изменить форму оплаты - клик мышкой' : ''"
-                    :class="{clickable: canUpdate}"
-                >
-                    <span
-                        v-if="!editMode.is_cache"
-                    >
-                        {{ deal.is_cache ? 'Наличный' : 'Безналичный' }}
-                    </span>
-                    <v-select
-                        style="width: 3em"
-                        v-else
-                        autofocus
-                        height="1em"
-                        v-model="deal.is_cache"
-                        :items="paymentTypes"
-                        item-text="text"
-                        item-value="value"
-                        single-line
-                        @focus="focused('is_cache')"
-                        @blur="blur('is_cache')"
-                        @change="updateDeal('is_cache')"
-                    />
-                </span>
-            </span>
+            <deal-payment-updater :deal="deal"/>
+<!--            <span-->
+<!--                @click="switchEditMode('is_cache')"-->
+<!--            >-->
+<!--                <span-->
+<!--                    :title="canUpdate ? 'Чтобы изменить форму оплаты - клик мышкой' : ''"-->
+<!--                    :class="{clickable: canUpdate}"-->
+<!--                >-->
+<!--                    <span-->
+<!--                        v-if="!editMode.is_cache"-->
+<!--                    >-->
+<!--                        {{ deal.is_cache ? 'Наличный' : 'Безналичный' }}-->
+<!--                    </span>-->
+<!--                    <v-select-->
+<!--                        style="width: 3em"-->
+<!--                        v-else-->
+<!--                        autofocus-->
+<!--                        height="1em"-->
+<!--                        v-model="deal.is_cache"-->
+<!--                        :items="paymentTypes"-->
+<!--                        item-text="text"-->
+<!--                        item-value="value"-->
+<!--                        single-line-->
+<!--                        @focus="focused('is_cache')"-->
+<!--                        @blur="blur('is_cache')"-->
+<!--                        @change="updateDeal('is_cache')"-->
+<!--                    />-->
+<!--                </span>-->
+<!--            </span>-->
         </td>
         <new-customer-dialog
             :active="newCustomer"
@@ -159,6 +160,7 @@
     import CustomerUpdater from './CustomerUpdater'
     import PriceUpdater from './PriceUpdater'
     import UserAvatar from "../main/UserAvatar"
+    import DealPaymentUpdater from './DealPaymentUpdater'
 
     export default {
         name: 'Deal',
@@ -331,7 +333,8 @@
             DealUpdater,
             CustomerUpdater,
             PriceUpdater,
-            UserAvatar
+            UserAvatar,
+            DealPaymentUpdater
         }
     }
 </script>

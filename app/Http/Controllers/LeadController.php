@@ -145,7 +145,8 @@ class LeadController extends Controller
             'phone' => $request->phone,
             'name' => $request->name,
             'status' => 'process',
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'site' => $request->site
         ]);
         if ($request->comment) {
             $lead->addComment($request->comment, $request->user_id);

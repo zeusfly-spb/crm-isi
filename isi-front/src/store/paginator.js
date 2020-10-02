@@ -16,10 +16,10 @@ export default {
                 dispatch('setLeadsOnTimer')
                     .then(res => resolve(res))
                     .catch(e => reject(e))
-                    .finally(() => {
-                        commit('SET_PAGINATOR_LOADING', false)
-                        commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true})
-                    })
+                    // .finally(() => {
+                    //     commit('SET_PAGINATOR_LOADING', false)
+                    //     commit('SET_SCAN_MODE', {...rootState.scanMode, leads: true})
+                    // })
             })
         }
     },

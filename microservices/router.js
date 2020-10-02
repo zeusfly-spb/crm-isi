@@ -3,63 +3,92 @@ const DealController = require('./controllers/DealController')
 const AppointmentController = require('./controllers/AppointmentController')
 const SalaryController = require('./controllers/SalaryController')
 const LoaderController = require('./controllers/LoaderController')
+const LeadController = require('./controllers/LeadController')
 
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
-        const Instruction = ({name, data, info, conditions = []}) => {
-        let response ={
-            type: 'instruction',
-            model: {
-                mutations: [{name, data}]
+        const Instruction = ({mutations, info, conditions = []}) => {
+            let response ={
+                type: 'instruction',
+                model: {
+                    mutations: mutations
+                }
             }
+            if (frame.request && frame.request.id) {
+                response.response = {id: frame.request.id}
+            }
+            if (conditions.length) {
+                response.conditions = conditions
+            }
+            if (info) {
+                response.response.info = info
+            }
+            return JSON.stringify(response)
         }
-        if (frame.request && frame.request.id) {
-            response.response = {id: frame.request.id}
-        }
-        if (conditions.length) {
-            response.conditions = conditions
-        }
-        if (info) {
-            response.response.info = info
-        }
-        return JSON.stringify(response)
-    }
+
         let responseFrame
-        let mutation
+        let mutation, mutations
         switch (frame.type) {
-            case 'request_load_daily_page':
+            case 'request_get_leads':
+                const response = await LeadController.index({...frame.model})
+                mutations = [
+                    {name: 'SET_COUNTS', data: response.counts},
+                    {name: 'SYNC_PAGINATION', data: response.paginator_data},
+                    {name: 'SET_CALL_TODAY_LEADS', data: response.call_today},
+                    {name: 'SET_LEADS', data: response.leads}
+                ]
                 return Promise.resolve({
-                    response: Instruction({
-                        name: 'SET_DAILY_PAGE',
-                        data: await LoaderController.loadDailyPage({... frame.model})
-                    }),
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
+            case 'request_update_deal_payment':
+                mutations = [
+                    {name: 'UPDATE_DEAL', data: await DealController.updatePaymentType({...frame.model})}
+                ]
+                let instruction = Instruction({ mutations })
+                return Promise.resolve({
+                    response: null,
+                    broadcast: instruction
+                })
+            case 'request_load_daily_page':
+                mutations = [
+                    { name: 'SET_DAILY_PAGE', data: await LoaderController.loadDailyPage({... frame.model})}
+                ]
+                return Promise.resolve({
+                    response: Instruction({ mutations }),
                     broadcast: null
                 })
             case  'request_get_side_panel_events':
+                mutations = [
+                    { name: 'SET_SIDE_PANEL_EVENTS', data: await AppointmentController.index({...frame.model, mode: 'day'}) }
+                ]
                 return Promise.resolve({
-                    response: Instruction({
-                        name: 'SET_SIDE_PANEL_EVENTS', data: await AppointmentController.index({...frame.model, mode: 'day'})
-                    }),
+                    response: Instruction({ mutations }),
                     broadcast: null
                 })
             case 'request_get_month_data':
+                mutations = [
+                    { name: 'SET_MONTH_DATA', data: await SalaryController.retrieveMonthData({...frame.model})}
+                ]
                 return Promise.resolve({
-                    response: Instruction({
-                        name: 'SET_MONTH_DATA', data: await SalaryController.retrieveMonthData({...frame.model})
-                    }),
+                    response: Instruction({ mutations }),
                     broadcast: null
                 })
             case 'request_get_appointments':
+                mutations = [
+                    { name: 'SET_APPOINTMENTS', data: await AppointmentController.index({...frame.model}) }
+                ]
                 return Promise.resolve({
-                    response: Instruction({
-                        name: 'SET_APPOINTMENTS', data: await AppointmentController.index({...frame.model})
-                    }),
+                    response: Instruction({ mutations }),
                     broadcast: null
                 })
             case 'request_get_workdays':
+                mutations = [
+                    { name: 'SET_WORK_DAYS', data: await WorkDayController.index({...frame.model})}
+                ]
                 return Promise.resolve({
-                    response: Instruction({ name: 'SET_WORK_DAYS', data: await WorkDayController.index({...frame.model})}),
+                    response: Instruction({ mutations }),
                     broadcast: null
                 })
             case 'close_active_sessions':

@@ -4,6 +4,7 @@
         <v-data-table
                 hide-actions
                 :items="normalInsolesSizeIds"
+                :loading="$store.getters.busy || $store.getters.wsLoading"
                 class="elevation-1"
         >
             <template slot="headers" slot-scope="row">
