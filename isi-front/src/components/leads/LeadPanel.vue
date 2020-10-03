@@ -28,7 +28,7 @@
             :items="leads"
             :total-items="$store.state.paginator.total"
             :rows-per-page-items="rowOptions"
-            :hide-actions="todayPostpones || byQuery"
+            :hide-actions="byQuery"
             rows-per-page-text="Заявок на странице"
             @update:pagination="updatePagination"
         >
@@ -67,6 +67,7 @@
     export default {
         name: 'LeadsPanel',
         data: () => ({
+            switching: false,
             busy: false,
             searchString: '',
             rowOptions: [
@@ -89,6 +90,12 @@
             ]
         }),
         computed: {
+            perPage () {
+              return this.$store.state.paginator.per_page
+            },
+            page () {
+              return this.$store.state.paginator.page
+            },
             byQuery () {
                 return !!this.searchString.length
             },
@@ -116,15 +123,19 @@
                 return this.$store.getters.isSuperadmin
             },
             leads () {
-                let callToday = JSON.parse(JSON.stringify(this.callTodayLeads))
-                    .map(item => ({
-                        ...item,
-                        time: item.last_postpone.date.split(' ')[1] || null
-                    }))
-                    .sort(sortByTime)
-                let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
+              const getTime = date => {
+                let time = date.includes('T') ? date.split('T')[1] : date.split(' ')[1]
+                return time.includes('.') ? time.split('.')[0] : time
+              }
+              let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
+              if (this.todayPostpones) {
+                base = base.map(item => ({
+                  ...item,
+                  time: item.last_postpone ? getTime(item.last_postpone.date) : null
+                })).sort(sortByTime)
+              }
                 this.$store.getters.currentLeadStatus === 'wait' ? base = base.reverse() : null
-                return this.todayPostpones ? callToday : base
+              return base
             }
         },
         methods: {
@@ -138,6 +149,9 @@
             }
         },
         watch: {
+            todayPostpones () {
+              this.$store.commit('RESET_PAGINATOR')
+            },
             currentViewMode () {
                 this.$store.commit('SET_OPEN_LEAD_ID', null)
             }

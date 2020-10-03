@@ -179,7 +179,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Клиент</sub>
                         <v-text-field
-                            :readonly="!!lead"
+                            :readonly="!!lead && lead.name && lead.name.length"
                             :disabled="!!subscribe"
                             v-model="editedAppointment.client_name"
                             label="Имя"
@@ -307,9 +307,10 @@
                 if (!this.lead) {
                     return null
                 }
-                let createdDate = this.lead && this.lead.created_at.split(' ')[0] || null
-                let lastPostponeDate = this.lead && this.lead.last_postpone && this.lead.last_postpone.date.split(' ')[0] || null
-                let lastCommentDate = this.lead && this.lead.last_comment && this.lead.last_comment.created_at.split(' ')[0] || null
+                const getDate = str => str.includes('T') ? str.split('T')[0] : str.split(' ')[0]
+                let createdDate = this.lead && getDate(this.lead.created_at) || null
+                let lastPostponeDate = this.lead && this.lead.last_postpone && getDate(this.lead.last_postpone.date) || null
+                let lastCommentDate = this.lead && this.lead.last_comment && getDate(this.lead.last_comment.created_at) || null
                 let realDate = this.$store.state.realDate || null
                 let dates = [createdDate, lastPostponeDate, lastCommentDate, realDate].filter(item => !!item)
                 return dates.sort((a, b) => a < b ? 1 : a > b ? -1 : 0)[0]
@@ -397,11 +398,7 @@
                         this.$store.dispatch('createAppointment', data)
                             .then(res => {
                                 let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
-                                if (this.lead) {
-                                    this.$store.commit('SEND_LEAD_MESSAGE', {text: text, color: 'green'})
-                                } else {
-                                    this.$store.commit('SEND_EVENT_MESSAGE', {text: text, color: 'green'})
-                                }
+                                this.$store.dispatch('pushMessage', {text})
                                 this.reset()
                             })
                     })

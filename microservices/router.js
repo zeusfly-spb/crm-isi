@@ -35,7 +35,6 @@ const parse = async message => {
                 mutations = [
                     {name: 'SET_COUNTS', data: response.counts},
                     {name: 'SYNC_PAGINATION', data: response.paginator_data},
-                    {name: 'SET_CALL_TODAY_LEADS', data: response.call_today},
                     {name: 'SET_LEADS', data: response.leads}
                 ]
                 return Promise.resolve({

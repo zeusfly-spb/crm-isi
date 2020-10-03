@@ -1,6 +1,7 @@
 const CONFIG = require('./config')
 const moment = require('moment')
 const chalk = require('chalk')
+const cache = require('./cache')
 const { broadcast } = require('./transmitter')
 
 const salaryController = require('./controllers/SalaryController')
@@ -37,13 +38,31 @@ const performAppointment = event => {
     }
 }
 
+const clearCallTodayCache = async () => {
+    try {
+        const today = moment().format('YYYY-MM-DD')
+        const call_today_name = `call_today_${today}`
+        if (await cache.Has(call_today_name)) {
+            await cache.Del(call_today_name)
+            console.log(chalk.red.bold('Call today leads removed'))
+        }
+    } catch (e) {
+        return Promise.reject(new Error(`Error clear call_today cache: ${e}`))
+    }
+}
+
 const inspect = event => {
     if (event.schema !== CONFIG.db_name) {
         return
     }
+    /**
     if (['prepays', 'prizes', 'sicks', 'vacations'].includes(event.table)) {
         cacheSalary(event)
         return
+    }
+     */
+    if (['leads', 'lead_comments', 'postpones'].includes(event.table)) {
+        clearCallTodayCache().then(() => console.log('Executed postpones cache cleaner'))
     }
     switch (event.table) {
 /**

@@ -21,7 +21,7 @@
             :class="{'mini': mini}"
             align="center"
         >
-            {{ todayPostpones ? props.index + 1 : page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
+            {{ page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
         </td>
         <td nowrap
             :class="{'mini': mini}"
@@ -104,7 +104,10 @@
                                 v-if="props.item.last_postpone"
                                 class="clickable"
                                 @click="showLead"
-                                :class="{'today': props.item.last_postpone.date.split(' ')[0] === realDate, 'lost': props.item.last_postpone.date < realDate}"
+                                :class="{
+                                  'today': clearDate(props.item.last_postpone.date) === realDate,
+                                  'lost': clearDate(props.item.last_postpone.date) < realDate
+                                }"
                             >
                                 {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
                             </span>
@@ -266,6 +269,9 @@
             }
         },
         methods: {
+            clearDate(datetime) {
+              return datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
+            },
             leadUser (lead) {
                 return this.$store.state.users.find(item => +item.id === +lead.user_id) || null
             },

@@ -27,7 +27,7 @@ class LeadObserver
      */
     public function updated(Lead $lead)
     {
-        clearPostponesCache();
+//        clearPostponesCache();
     }
 
     /**
@@ -38,7 +38,7 @@ class LeadObserver
      */
     public function deleted(Lead $lead)
     {
-        clearPostponesCache();
+//        clearPostponesCache();
     }
 
     /**
