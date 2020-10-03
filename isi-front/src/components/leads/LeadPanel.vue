@@ -28,7 +28,7 @@
             :items="leads"
             :total-items="$store.state.paginator.total"
             :rows-per-page-items="rowOptions"
-            :hide-actions="todayPostpones || byQuery"
+            :hide-actions="byQuery"
             rows-per-page-text="Заявок на странице"
             @update:pagination="updatePagination"
         >
@@ -138,6 +138,9 @@
                     .finally(() => this.busy = false)
             },
             updatePagination (data) {
+                if (this.todayPostpones) {
+                  return
+                }
                 this.$store.dispatch('updatePagination', data)
             }
         },

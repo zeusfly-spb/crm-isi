@@ -21,7 +21,7 @@
             :class="{'mini': mini}"
             align="center"
         >
-            {{ todayPostpones ? props.index + 1 : page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
+            {{ page > 1 ? perPage * (page - 1) + props.index + 1 : props.index + 1 }}
         </td>
         <td nowrap
             :class="{'mini': mini}"
