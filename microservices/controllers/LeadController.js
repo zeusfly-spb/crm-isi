@@ -4,6 +4,7 @@ const Lead = models.Lead
 const Postpone = models.Postpone
 const { Op } = require("sequelize")
 const cache = require('../cache')
+const chalk = require('chalk')
 
 const index = async data => {
     try {
@@ -55,6 +56,7 @@ const index = async data => {
         let call_today
         if (await cache.Has(call_today_name)) {
             call_today = JSON.parse(await cache.Get(call_today_name))
+            console.log(chalk.blue.bold.inverse('Call today leads loads from cache'))
         } else {
             let todayPostpones = await Postpone.findAll({
                 where: {date: {[Op.startsWith]: today}},
@@ -67,7 +69,7 @@ const index = async data => {
             })
             call_today = call_today.filter(lead => lead.last_postpone_date === today)
             await cache.Set(call_today_name, JSON.stringify(call_today))
-            console.log('Call today cache saved')
+            console.log(chalk.green.bold.inverse('Call today cache saved'))
         }
 
         return Promise.resolve({

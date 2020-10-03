@@ -116,10 +116,14 @@
                 return this.$store.getters.isSuperadmin
             },
             leads () {
+              const getTime = date => {
+                let time = date.includes('T') ? date.split('T')[1] : date.split(' ')[1]
+                return time.includes('.') ? time.split('.')[0] : time
+              }
                 let callToday = JSON.parse(JSON.stringify(this.callTodayLeads))
                     .map(item => ({
                         ...item,
-                        time: item.last_postpone.date.split(' ')[1] || null
+                        time: getTime(item.last_postpone.date)
                     }))
                     .sort(sortByTime)
                 let base = JSON.parse(JSON.stringify(this.$store.state.loader.leads))
