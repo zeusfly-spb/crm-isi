@@ -43,7 +43,7 @@
             flat
             small
             :title="todayPostpones ? 'Показать общий список заявок' : `Показать заявки с перезвонами на ${$moment($store.state.realDate).format('D MMMM YYYY г.')}`"
-            @click="todayPostpones = !todayPostpones"
+            @click="todayPostpones = !todayPostpones; $store.dispatch('setLeadsOnTimer')"
         >
             {{ todayPostpones ? '   Общий список   ' : '   Перезвоны на сегодня   ' }}
         </v-btn>

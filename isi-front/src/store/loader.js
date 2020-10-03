@@ -60,7 +60,8 @@ export default {
                     page: getters.paginator_page,
                     per_page: getters.paginator_per_page,
                     status: state.leadStatus,
-                    name: state.leadName
+                    name: state.leadName,
+                    call_today: state.showTodayPostpones
                 }
             })
             /*

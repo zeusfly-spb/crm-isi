@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export default {
     state: {
+        switching: false,
         attemptToEvent: null,
         leadToDelete: null,
         leadCommentsId: null,
@@ -51,6 +52,9 @@ export default {
         }
     },
     mutations: {
+        SET_LEADS_SWITCHING (state, mode) {
+            state.switching = mode
+        },
         REMOVE_ATTEMPT_TO_EVENT (state) {
             state.attemptToEvent = null
         },
@@ -78,6 +82,7 @@ export default {
         }
     },
     getters: {
+        leadsSwitching: state => state.switching,
         postponesSort: state => state.sortByPostpones,
         dateTimeSort: state => state.sortByDateTime,
         futureDownSort: state => state.moveFutureDown
