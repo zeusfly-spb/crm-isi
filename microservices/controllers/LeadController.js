@@ -19,11 +19,6 @@ const index = async data => {
 
         let call_today
         if (data.call_today) {
-            const call_today_name = `call_today_${today}`
-            if (await cache.Has(call_today_name)) {
-                call_today = JSON.parse(await cache.Get(call_today_name))
-                console.log(chalk.blue.bold.inverse('Call today leads loads from cache'))
-            } else {
                 let todayPostpones = await Postpone.findAll({
                     where: {date: {[Op.startsWith]: today}},
                     attributes: ['lead_id']
@@ -31,12 +26,9 @@ const index = async data => {
                 let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
                 call_today = await Lead.findAll({
                     where: {id: todayLeadIds, status: 'process'},
-                    include: ['postpones', 'comments']
+                    include: {all: true}
                 })
                 call_today = call_today.filter(lead => lead.last_postpone_date === today)
-                await cache.Set(call_today_name, JSON.stringify(call_today))
-                console.log(chalk.green.bold.inverse('Call today cache saved'))
-            }
         } else {
             where = {status: data.status}
             data.sites && data.sites.length ? where.site = data.sites : null
