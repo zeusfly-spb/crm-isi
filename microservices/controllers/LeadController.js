@@ -11,7 +11,7 @@ const index = async data => {
         const today = moment().format('YYYY-MM-DD')
         const orders = [['id', 'DESC']]
         let include = {all: true}
-        let where
+        let where = {}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,
             pageSize: data.per_page || 15
@@ -30,7 +30,7 @@ const index = async data => {
                 })
                 call_today = call_today.filter(lead => lead.last_postpone_date === today)
         } else {
-            where = {status: data.status}
+            data.name ? null : where.status = data.status
             data.sites && data.sites.length ? where.site = data.sites : null
             if (data.name) {
                 where = {... where,[Op.or]: [
