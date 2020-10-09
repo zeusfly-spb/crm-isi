@@ -16,10 +16,7 @@ class SubscribeController extends Controller
         $island_id = $request->island_id;
         $subscribes = Subscribe::with('user')
             ->where('island_id', $island_id)
-            ->get()
-            ->filter(function ($subscribe) use ($start, $finish) {
-            return ($subscribe->start_date >= $start && $subscribe->start_date <= $finish) || ($subscribe->finish_date >= $start && $subscribe->finish_date <= $finish);
-        });
+            ->get();
         return response()->json($subscribes->toArray());
     }
 
