@@ -1099,7 +1099,7 @@ export const store = new Vuex.Store({
             state.accessRequests = accesses
         },
         SET_DEVICE_ID (state, deviceId) {
-            Cookies.set('isi-access', deviceId)
+            Cookies.set('isi-access', deviceId, { expires: 365 })
         },
         SET_ACCESS (state, access) {
             state.access = access
