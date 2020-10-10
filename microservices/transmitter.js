@@ -1,3 +1,4 @@
+const CONFIG = require('./config')
 const passport = require('./passport')
 const fs = require('fs')
 const router = require('./router')
@@ -37,7 +38,7 @@ const wss = createServerFrom(https, ws => {
             .catch(e => console.error(e))
     })
 })
-https.listen(8118)
+https.listen(CONFIG.ws_port)
 
 
 wss.on('connection', ws => {

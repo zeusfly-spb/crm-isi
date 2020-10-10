@@ -6,5 +6,6 @@ module.exports = {
     db_password: process.env.DB_PASSWORD,
     db_name: process.env.DB_NAME,
     base_url: process.env.BASE_URL,
-    redis_db: process.env.REDIS_DB
+    redis_db: process.env.REDIS_DB,
+    ws_port: process.env.WS_PORT
 }
