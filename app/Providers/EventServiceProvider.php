@@ -37,15 +37,15 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        $this->controller = new CacheController();
-        Event::listen('eloquent.created: *', function($eventName, $object) {
-            $this->controller->add($object[0]);
-        });
-        Event::listen('eloquent.updated: *', function($eventName, $object) {
-            $this->controller->update($object[0]);
-        });
-        Event::listen('eloquent.deleted: *', function($eventName, $object) {
-            $this->controller->delete($object[0]);
-        });
+//        $this->controller = new CacheController();
+//        Event::listen('eloquent.created: *', function($eventName, $object) {
+//            $this->controller->add($object[0]);
+//        });
+//        Event::listen('eloquent.updated: *', function($eventName, $object) {
+//            $this->controller->update($object[0]);
+//        });
+//        Event::listen('eloquent.deleted: *', function($eventName, $object) {
+//            $this->controller->delete($object[0]);
+//        });
     }
 }
