@@ -61,6 +61,7 @@
                     </v-btn>
                     <v-btn
                         v-for="item in additionalCodes"
+                        :key="item.value"
                         @click="makeCodeCall(item.value)"
                     >
                         <v-icon
