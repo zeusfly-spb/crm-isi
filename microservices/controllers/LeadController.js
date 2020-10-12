@@ -30,7 +30,7 @@ const index = async data => {
                 })
                 call_today = call_today.filter(lead => lead.last_postpone_date === today)
         } else {
-            data.name ? null : where.status = data.status
+            !data.name ? where.status = data.status : null
             data.sites && data.sites.length ? where.site = data.sites : null
             if (data.name) {
                 where = {... where,[Op.or]: [
