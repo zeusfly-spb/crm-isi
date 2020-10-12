@@ -3,8 +3,6 @@ const models = require('../models')
 const Lead = models.Lead
 const Postpone = models.Postpone
 const { Op } = require("sequelize")
-const cache = require('../cache')
-const chalk = require('chalk')
 
 const index = async data => {
     try {

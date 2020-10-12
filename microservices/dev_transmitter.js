@@ -1,6 +1,7 @@
+const CONFIG = require('./config')
 const passport = require('./passport')
 const WebSocket = require('ws')
-const wss = new WebSocket.Server({port: 8118})
+const wss = new WebSocket.Server({port: CONFIG.ws_port})
 const router = require('./router')
 const chalk = require('chalk')
 
