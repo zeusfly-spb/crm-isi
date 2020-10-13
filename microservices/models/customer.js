@@ -44,6 +44,18 @@ module.exports = (sequelize, DataTypes) => {
       set (val) {
         throw new Error('Do not try to set the `full_name` value!');
       }
+    },
+    sent_messages: {
+      type: DataTypes.VIRTUAL,
+      async get () {
+        if (!this.phones.length) {
+          return []
+        }
+        return []
+      },
+      set () {
+        throw new Error('Do not try to set the `sent_messages` value!');
+      }
     }
   }, {
     sequelize,

@@ -116,6 +116,24 @@ module.exports = (sequelize, DataTypes) => {
       set () {
         throw new Error('Do not try to set the `last_comment` value!')
       }
+    },
+    customer_name: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.customer.full_name || ''
+      },
+      set () {
+        throw new Error('Do not try to set the `customer_name` value!')
+      }
+    },
+    customer_phone: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.customer && this.customer.phones.length && this.customer.phones[this.customer.phones.length - 1].number || ''
+      },
+      set () {
+        throw new Error('Do not try to set the `customer_phone` value!')
+      }
     }
   }, {
     sequelize,
