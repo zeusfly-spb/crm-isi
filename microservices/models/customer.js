@@ -48,9 +48,6 @@ module.exports = (sequelize, DataTypes) => {
     sent_messages: {
       type: DataTypes.VIRTUAL,
       async get () {
-        if (!this.phones.length) {
-          return []
-        }
         return []
       },
       set () {
