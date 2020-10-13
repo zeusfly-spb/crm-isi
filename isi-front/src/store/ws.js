@@ -45,6 +45,9 @@ export default {
                         if (item.name === 'SET_LEADS') {
                             commit('SET_PAGINATOR_LOADING', false)
                         }
+                        if (item.name === 'SET_SUBSCRIBES') {
+                            commit('SET_SUBSCRIBES_LOADING', false)
+                        }
                     })
                 }
             }

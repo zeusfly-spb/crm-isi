@@ -15,6 +15,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'subscription_id',
         as: 'subscription'
       })
+      Subscribe.hasMany(models.Appointment, {
+        foreignKey: 'subscribe_id',
+        as: 'events'
+      })
+      Subscribe.belongsTo(models.Customer, {
+        foreignKey: 'customer_id',
+        as: 'customer'
+      })
+      Subscribe.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        as: 'user'
+      })
     }
   };
   Subscribe.init({
@@ -58,6 +70,51 @@ module.exports = (sequelize, DataTypes) => {
       },
       set () {
         throw new Error('Do not try to set the `finish_month` value!')
+      }
+    },
+    nominal: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.subscription && this.subscription.supply_amount || 0
+      },
+      set () {
+        throw new Error('Do not try to set the `nominal` value!')
+      }
+    },
+    scale: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        let scale = []
+        let eventsCount = this.events.length || 0
+        for (let i = 0; i < this.nominal; i++) {
+          let step = null
+          if (i <= eventsCount - 1) {
+            step = this.events[i].status
+          }
+          scale.push(step)
+        }
+        return scale
+      },
+      set () {
+        throw new Error('Do not try to set the `scale` value!')
+      }
+    },
+    last_event: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.events.length && this.events[this.events.length - 1] || null
+      },
+      set () {
+        throw new Error('Do not try to set the `last_event` value!')
+      }
+    },
+    last_comment: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.comments && this.comments.length && this.comments[this.comments.length - 1] || null
+      },
+      set () {
+        throw new Error('Do not try to set the `last_comment` value!')
       }
     }
   }, {

@@ -50,7 +50,8 @@ export default {
                     .finally(() => commit('SET_DESCRIBE_COMMENTS_UPDATING', false))
             })
         },
-        setSubscribes ({commit, rootState, getters}) {
+        setSubscribes ({commit, rootState, getters, dispatch}) {
+            /*
             const attachProperties = events => {
                 return events.map(event => ({
                     ... event,
@@ -59,7 +60,9 @@ export default {
                     island: getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
                 }))
             }
+             */
             commit('SET_SUBSCRIBES_LOADING', true)
+            /**
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/get_subscribes', {
                     island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
@@ -77,6 +80,15 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('SET_SUBSCRIBES_LOADING', false))
             })
+            */
+            dispatch('pushFrame', {
+                type: 'request_get_subscribes',
+                model: {
+                    island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
+                    date: getters.eventsDate
+                }
+            })
+
         }
     },
     mutations: {

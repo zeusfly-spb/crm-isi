@@ -2,7 +2,7 @@
     <v-flex>
         <v-dialog
             v-model="active"
-            max-width="1000px"
+            max-width="1200px"
         >
             <v-card
                 class="round-corner"

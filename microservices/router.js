@@ -4,6 +4,7 @@ const AppointmentController = require('./controllers/AppointmentController')
 const SalaryController = require('./controllers/SalaryController')
 const LoaderController = require('./controllers/LoaderController')
 const LeadController = require('./controllers/LeadController')
+const SubscribeController = require('./controllers/SubscribeController')
 
 const parse = async message => {
     try {
@@ -30,6 +31,12 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations
         switch (frame.type) {
+            case 'request_get_subscribes':
+                mutations = [{name: 'SET_SUBSCRIBES', data: await SubscribeController.index({...frame.model})}]
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_get_leads':
                 const response = await LeadController.index({...frame.model})
                 mutations = [
