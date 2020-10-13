@@ -45,16 +45,7 @@
                 return this.$store.state.subscribes.subscribesLoading
             },
             subscribes () {
-                const getters = this.$store.getters
-                const attachProperties = events => {
-                    return events.map(event => ({
-                        ... event,
-                        performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'},
-                        service: getters.workingIsland.services.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
-                        island: getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
-                    }))
-                }
-                return this.$store.state.subscribes.subscribes.map(item => ({...item, events: attachProperties(item.events)}))
+                return this.$store.state.subscribes.subscribes
             }
         },
         created () {

@@ -120,7 +120,16 @@
                 return this.subscribe && this.subscribe.start_date || ''
             },
             events () {
-                return this.subscribe && this.subscribe.events || []
+                const attachProperties = events => {
+                    return events.map(event => ({
+                        ... event,
+                        user: this.$store.getters.allUsers.find(user => +user.id === +event.user_id) || {full_name: 'Неизвестный администратор'},
+                        performer: this.$store.getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'},
+                        service: this.$store.getters.workingIsland.services.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
+                        island: this.$store.getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
+                    }))
+                }
+                return this.subscribe && this.subscribe.events && attachProperties(this.subscribe.events) || []
             },
             subscribe () {
                 return this.$store.getters.eventsOpenSubscribe
