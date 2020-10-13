@@ -192,7 +192,7 @@
                     <v-flex xs12 sm6 md4>
                         <sub>Телефон</sub>
                         <v-text-field
-                            v-if="!lead"
+                            v-if="!lead && !presetSubscribe"
                             :disabled="!!subscribe"
                             v-model="editedAppointment.client_phone"
                             label="Номер телефона"
@@ -202,8 +202,15 @@
                             v-validate="!!lead ? null : 'required|digits:10'"
                             mask="(###) ### - ####"
                         />
-                        <div v-else>
+                        <div
+                            v-if="lead"
+                        >
                           {{ lead && lead.phone | phone }}
+                        </div>
+                        <div
+                                v-if="presetSubscribe"
+                        >
+                            {{ subscribe && subscribe.customer_phone | phone }}
                         </div>
                     </v-flex>
                 </v-layout>
