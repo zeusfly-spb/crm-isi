@@ -100,22 +100,22 @@
                 />
             </template>
             <template v-else>
-                            <span
-                                v-if="props.item.last_postpone"
-                                class="clickable"
-                                @click="showLead"
-                                :class="{
-                                  'today': clearDate(props.item.last_postpone.date) === realDate,
-                                  'lost': clearDate(props.item.last_postpone.date) < realDate
-                                }"
-                            >
-                                {{ props.item.last_postpone.date | moment('DD MMMM YYYY г. HH:mm')}}
-                            </span>
+                <span
+                    v-if="props.item.last_postpone"
+                    class="clickable"
+                    @click="showLead"
+                    :class="{
+                      'today': clearDate(props.item.last_postpone.date) === realDate,
+                      'lost': clearDate(props.item.last_postpone.date) < realDate
+                    }"
+                >
+                    {{ lastPostponeDate }}
+                </span>
                 <v-icon
                     v-else
                     class="clickable"
                     title="Добавить дату перезвона по заявке"
-                    @click="showLead    "
+                    @click="showLead"
                 >
                     phone_forwarded
                 </v-icon>
@@ -191,15 +191,22 @@
     import PhoneViewer from '../main/PhoneViewer'
     import UserAvatar from '../main/UserAvatar'
     import SmsSender from './SmsSender'
+
     export default {
         name: 'Lead',
         props: ['props'],
         computed: {
+            lastPostponeDate () {
+                return this.$moment(this.withoutTZ(this.props.item.last_postpone.date))
+                    .format('D MMMM YYYY г. HH:mm') || ''
+            },
             eventControlTitle () {
                 if (!this.workingIsland) {
                     return 'Для управления записями заявок, выберите островок'
                 }
-                return this.props.item.event ? `Редактировать запись на ${this.$moment(this.props.item.event.date).format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'
+                return this.props.item.event ?
+                    `Редактировать запись на ${this.$moment(this.withoutTZ(this.props.item.event.date))
+                        .format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'
             },
             workingIsland () {
                 return this.$store.getters.workingIsland
@@ -269,6 +276,9 @@
             }
         },
         methods: {
+            withoutTZ (date) {
+                return date.split('.')[0]
+            },
             clearDate(datetime) {
               return datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
             },
