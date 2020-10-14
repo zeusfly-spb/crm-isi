@@ -60,7 +60,10 @@ export default {
              * Frame handlers
              */
             const insertExpense = expense => commit('ADD_EXPENSE', expense)
-            const insertAppointment = event => commit('ADD_APPOINTMENT', event)
+            const insertAppointment = event => {
+                commit('ADD_APPOINTMENT', event)
+                dispatch('setLeadsOnTimer')
+            }
 
             const updateDeal = deal => commit('UPDATE_DEAL', deal)
             const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
@@ -143,7 +146,7 @@ export default {
                         break
                     case 'appointment':
                         month(getters.eventsDate) !== month(obj.model.date) ? result = false : null
-                        getters.currentPage !== 'appointments' || obj.model.island_id !== targetIslandId() ? result = false : null
+                        obj.model.island_id !== targetIslandId() ? result = false : null
                         break
                 }
                 return result
