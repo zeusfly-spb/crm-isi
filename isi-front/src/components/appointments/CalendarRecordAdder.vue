@@ -304,8 +304,9 @@
                 if (!this.subscribe) {
                     return null
                 }
-                let createdDate = this.subscribe && this.subscribe.date && this.subscribe.date.split(' ')[0] || null
-                let lastEventDate = this.subscribe && this.subscribe.last_event && this.subscribe.last_event.date && this.subscribe.last_event.created_at.split(' ')[0] || null
+                let createdDate = this.subscribe && this.subscribe.date && this.subscribe.date.split('T')[0] || null
+                let lastEventDate = this.subscribe && this.subscribe.last_event && this.subscribe.last_event.date &&
+                    this.subscribe.last_event.created_at.split('T')[0] || null
                 let realDate = this.$store.state.realDate || null
                 let dates = [createdDate, lastEventDate, realDate].filter(item => !!item)
                 return dates.sort((a, b) => a < b ? 1 : a > b ? -1 : 0)[0]
