@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'lead_id',
             as: 'postpones'
         })
+        Lead.belongsTo(models.Phone, {
+            foreignKey: 'phone',
+            sourceKey: 'number',
+            as: 'number'
+        })
     }
   }
   Lead.init({
@@ -80,6 +85,15 @@ module.exports = (sequelize, DataTypes) => {
           },
           set () {
               throw new Error('Do not try to set the `last_comment` value!')
+          }
+      },
+      customer: {
+          type: DataTypes.VIRTUAL,
+          get () {
+              return this.number && this.number.customer || null
+          },
+          set () {
+              throw new Error('Do not try to set the `customer` value!')
           }
       }
   }, {

@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     sent_messages: {
       type: DataTypes.VIRTUAL,
-      async get () {
+      get () {
         return []
       },
       set () {

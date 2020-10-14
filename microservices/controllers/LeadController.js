@@ -2,13 +2,14 @@ const moment = require('moment')
 const models = require('../models')
 const Lead = models.Lead
 const Postpone = models.Postpone
+const Phone = models.Phone
 const { Op } = require("sequelize")
 
 const index = async data => {
     try {
         const today = moment().format('YYYY-MM-DD')
         const orders = [['id', 'DESC']]
-        let include = {all: true}
+        let include = ['comments', 'user', 'event', 'postpones', {model: Phone, as: 'number', include: ['customer']}]
         let where = {}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,
@@ -24,7 +25,7 @@ const index = async data => {
                 let todayLeadIds = todayPostpones.map(postpone => postpone.lead_id)
                 call_today = await Lead.findAll({
                     where: {id: todayLeadIds, status: 'process'},
-                    include: {all: true}
+                    include
                 })
                 call_today = call_today.filter(lead => lead.last_postpone_date === today)
         } else {

@@ -32,7 +32,12 @@
                     class="light-blue darken-3"
                 >
                     <span class="title white--text">
-                        Комментарии к заявке с номера {{ lead.phone | phone }} от {{ lead.created_at | moment('DD MMMM YYYY г. HH:mm') }}
+                        Комментарии к заявке с номера {{ lead.phone | phone }} от
+                        <span class="yellow--text">{{ lead.created_at | moment('DD/MM/YY') }}</span>
+                        <span class="lime--text accent-3 pl-2">{{ lead.created_at | moment('HH:mm') }}</span>
+                        <span class="orange--text lighten-5 pl-2" v-if="lead.name">
+                            {{ $store.getters.truncate(lead.name, 15, '...') }}
+                        </span>
                     </span>
                 </v-card-title>
                 <v-card-text>
