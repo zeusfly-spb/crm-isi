@@ -122,7 +122,7 @@ class LeadController extends Controller
     {
         $lead = Lead::find($request->lead_id);
         $lead->addComment($request->text, $request->user_id);
-        $lead->load('comments', 'user', 'postpones');
+        $lead->load('comments', 'user', 'postpones', 'event');
         return response()->json($lead->toArray());
     }
 
