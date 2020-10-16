@@ -96,7 +96,6 @@
                 <lead-postpones
                         :lead="props.item"
                         :open="props.item.id === openLeadId"
-                        @closed="openLeadId = null"
                 />
             </template>
             <template v-else>

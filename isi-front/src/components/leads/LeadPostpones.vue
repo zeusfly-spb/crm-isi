@@ -273,7 +273,7 @@
         watch: {
             active (val) {
                 if (!val) {
-                    this.$emit('close')
+                    this.$store.commit('SET_OPEN_LEAD_ID', false)
                 }
             }
         }
