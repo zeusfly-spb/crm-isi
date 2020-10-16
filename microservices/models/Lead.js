@@ -44,6 +44,8 @@ module.exports = (sequelize, DataTypes) => {
       name: { type: DataTypes.STRING },
       phone: {
           type: DataTypes.STRING,
+          allowNull: false
+          /*
           get () {
               let raw = this.getDataValue('phone')
               // raw = raw.replace('~\D~', '')
@@ -53,6 +55,8 @@ module.exports = (sequelize, DataTypes) => {
           set (val) {
               this.setDataValue('phone', val)
           }
+
+           */
       },
       site: { type: DataTypes.STRING },
       status: { type: DataTypes.ENUM('wait', 'process', 'moderate', 'done') },

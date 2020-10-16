@@ -9,7 +9,7 @@ const index = async data => {
     try {
         const today = moment().format('YYYY-MM-DD')
         const orders = [['id', 'DESC']]
-        let include = ['comments', 'user', 'event', 'postpones', {model: Phone, as: 'number', include: ['customer']}]
+        let include = ['comments', 'user', 'event', 'postpones', 'number']
         let where = {}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,
