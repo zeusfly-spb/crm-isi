@@ -141,8 +141,10 @@ class LeadController extends Controller
 
     public function addLead(Request $request)
     {
+        $modified = preg_replace("~\D~", "", $request->phone);
+        $phone = substr($modified, -10);
         $lead = Lead::create([
-            'phone' => $request->phone,
+            'phone' => $phone,
             'name' => $request->name,
             'status' => 'process',
             'user_id' => $request->user_id,
