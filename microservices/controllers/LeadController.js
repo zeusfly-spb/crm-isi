@@ -9,13 +9,12 @@ const index = async data => {
     try {
         const today = moment().format('YYYY-MM-DD')
         const orders = [['id', 'DESC']]
-        let include = ['comments', 'user', 'event', 'postpones', 'number']
+        let include = ['comments', 'user', 'event', 'postpones', {model: Phone, as: 'number', include: ['customer']}]
         let where = {}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,
             pageSize: data.per_page || 15
         }
-
         let call_today
         if (data.call_today) {
                 let todayPostpones = await Postpone.findAll({

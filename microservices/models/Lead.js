@@ -5,6 +5,7 @@ const options = {
     methodName: 'paginate',
     primaryKey: 'id'
 }
+
 const {
   Model
 } = require('sequelize');
@@ -34,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         })
         Lead.belongsTo(models.Phone, {
             foreignKey: 'phone',
-            sourceKey: 'number',
+            targetKey: 'number',
             as: 'number'
         })
     }
@@ -42,22 +43,7 @@ module.exports = (sequelize, DataTypes) => {
   Lead.init({
       id: { type: DataTypes.BIGINT.UNSIGNED, primaryKey: true, autoIncrement: true, allowNull: false },
       name: { type: DataTypes.STRING },
-      phone: {
-          type: DataTypes.STRING,
-          allowNull: false
-          /*
-          get () {
-              let raw = this.getDataValue('phone')
-              // raw = raw.replace('~\D~', '')
-              raw = raw.replace(/[^\d]/g, '')
-              return raw.substr(raw.length - 10)
-          },
-          set (val) {
-              this.setDataValue('phone', val)
-          }
-
-           */
-      },
+      phone: { type: DataTypes.STRING, allowNull: false },
       site: { type: DataTypes.STRING },
       status: { type: DataTypes.ENUM('wait', 'process', 'moderate', 'done') },
       user_id: { type: DataTypes.BIGINT.UNSIGNED },

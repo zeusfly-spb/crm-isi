@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    number: {type: DataTypes.STRING, allowNull: false},
+    number: {type: DataTypes.STRING, allowNull: false, unique: true},
     customer_id: {type: DataTypes.BIGINT, allowNull: false}
   }, {
     sequelize,
