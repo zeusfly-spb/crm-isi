@@ -22,7 +22,14 @@ class LeadController extends Controller
 
     public function save(Request $request)
     {
-        $lead = Lead::create($request->all());
+        function clear($number)
+        {
+            $modified = preg_replace("~\D~", "", $number);
+            return substr($modified, -10);
+        }
+        $options = $request->all();
+        $options['number'] = clear($options['number']);
+        $lead = Lead::create($options);
         if ($request->comment) {
             $lead->addComment($request->comment, null);
         }
@@ -141,10 +148,8 @@ class LeadController extends Controller
 
     public function addLead(Request $request)
     {
-        $modified = preg_replace("~\D~", "", $request->phone);
-        $phone = substr($modified, -10);
         $lead = Lead::create([
-            'phone' => $phone,
+            'phone' => $request->phone,
             'name' => $request->name,
             'status' => 'process',
             'user_id' => $request->user_id,
