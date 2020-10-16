@@ -22,13 +22,9 @@ class LeadController extends Controller
 
     public function save(Request $request)
     {
-        function clear($number)
-        {
-            $modified = preg_replace("~\D~", "", $number);
-            return substr($modified, -10);
-        }
         $options = $request->all();
-        $options['number'] = clear($options['number']);
+        $modified = preg_replace("~\D~", "", $options['phone']);
+        $options['phone'] = substr($modified, -10);
         $lead = Lead::create($options);
         if ($request->comment) {
             $lead->addComment($request->comment, null);
