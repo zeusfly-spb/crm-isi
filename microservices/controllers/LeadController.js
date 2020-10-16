@@ -3,13 +3,22 @@ const models = require('../models')
 const Lead = models.Lead
 const Postpone = models.Postpone
 const Phone = models.Phone
+const Customer = models.Customer
+const Deal = models.Deal
 const { Op } = require("sequelize")
 
 const index = async data => {
     try {
         const today = moment().format('YYYY-MM-DD')
         const orders = [['id', 'DESC']]
-        let include = ['comments', 'user', 'event', 'postpones', {model: Phone, as: 'number', include: ['customer']}]
+        let include = ['comments', 'user', 'event', 'postpones',
+            {model: Phone, as: 'number', include: [
+                {model: Customer, as: 'customer', include: [
+                        'phones',
+                        {model: Deal, as: 'deals', include: ['action', 'service', 'product', 'type', 'size']}
+                    ]}
+                ]}
+        ]
         let where = {}
         let paginatorOptions = {
             pageIndex: data.page && data.page - 1 || 0,

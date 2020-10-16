@@ -20,7 +20,7 @@
                             <img :src="basePath + '/img/default.jpg'" alt="Без фото" v-if="props.item.user && !props.item.user.avatar">
                             <img :src="basePath + '/img/www.png'" alt="Без фото" v-if="!props.item.user">
                         </v-avatar>
-                        {{ props.item.action.text }}
+                        {{ props.item.action && props.item.action.text || '' }}
                     </td>
                     <td
                         align="left"
