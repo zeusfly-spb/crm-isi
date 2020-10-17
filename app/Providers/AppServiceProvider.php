@@ -61,6 +61,6 @@ class AppServiceProvider extends ServiceProvider
 //        Lead::observe(LeadObserver::class);
 //        Postpone::observe(PostponeObserver::class);
 //        LeadComment::observe(LeadCommentObserver::class);
-//        Appointment::observe(AppointmentObserver::class);
+        Appointment::observe(AppointmentObserver::class);
     }
 }
