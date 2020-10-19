@@ -57,7 +57,6 @@
                                 <sub>Клиент</sub>
                                 <v-autocomplete
                                         label="Начните вводить данные для поиска..."
-                                        cache-items
                                         :search-input.sync="search"
                                         v-model="selectedCustomerId"
                                         :items="customers"
@@ -66,8 +65,6 @@
                                         single-line
                                         data-vv-name="customer"
                                         data-vv-as="Клиент"
-                                        :error-messages="errors.collect('customer')"
-                                        v-validate="'required'"
                                 >
                                     <template v-slot:item="data">
                                         <span :class="{'red--text': data.item.id === null, 'green--text': data.item.id === 0}">
@@ -492,6 +489,9 @@
             }
         },
         methods: {
+            clearLoadedCustomers () {
+                this.loadedCustomers = []
+            },
             setSubscriptionPrice () {
                 if (this.selectedSubscription) {
                     this.newDealIncome = this.selectedSubscription.base_price
@@ -594,6 +594,10 @@
                     })
             },
             querySelection (text) {
+                this.clearLoadedCustomers()
+                if (!text || !text.length) {
+                    return
+                }
                 this.loadingUsers = true
                 this.axios.post('/api/search_customer_by_text', {text: text})
                     .then(res => {
@@ -669,6 +673,9 @@
                 }
             },
             search (val) {
+                if (!val || !val.length) {
+                    this.clearLoadedCustomers()
+                }
                 val && val !== this.select && this.querySelection(val)
             },
             newDealProduct (value) {
