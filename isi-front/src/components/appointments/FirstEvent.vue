@@ -1,6 +1,5 @@
 <template>
     <v-menu
-            v-if="!$store.state.appointment.draggedEvent"
             v-model="menu"
             :close-on-content-click="false"
             transition="scale-transition"
