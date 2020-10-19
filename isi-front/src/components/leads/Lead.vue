@@ -204,7 +204,7 @@
                     return 'Для управления записями заявок, выберите островок'
                 }
                 return this.props.item.event ?
-                    `Редактировать запись на ${this.$moment(this.withoutTZ(this.props.item.event.date))
+                    `Редактировать запись на ${this.$moment(this.$store.getters.withoutTZ(this.props.item.event.date))
                         .format('D MMMM YYYY г. HH:mm')}` : 'Добавить запись по заявке'
             },
             workingIsland () {
