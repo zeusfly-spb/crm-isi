@@ -1,5 +1,6 @@
 <template>
     <v-flex>
+        <subscribe-mode-changer/>
         <v-data-table
             v-blur="subscribesLoading"
             :headers="headers"
@@ -26,6 +27,7 @@
     import Subscribe from './Subscribe'
     import SubscribeComments from './SubscribeComments'
     import SubscribeEvents from './SubscribeEvents'
+    import SubscribeModeChanger from './SubscribesModeChanger'
     export default {
         name: 'SubscribesTable',
         data: () => ({
@@ -41,20 +43,46 @@
             ]
         }),
         computed: {
+            subscribeViewMode () {
+                return this.$store.state.subscribes.subscribeViewMode
+            },
             subscribesLoading () {
                 return this.$store.state.subscribes.subscribesLoading
             },
             subscribes () {
-                return this.$store.state.subscribes.subscribes
+                switch (this.subscribeViewMode) {
+                    case null:
+                        return this.$store.state.subscribes.subscribes
+                    case 'inactive':
+                        return this.$store.state.subscribes.inactiveSubscribes
+                    case 'all':
+                        return this.$store.state.subscribes.allSubscribes
+                }
             }
         },
         created () {
             this.$store.dispatch('setSubscribes')
         },
+        watch: {
+            subscribeViewMode (val) {
+                switch (val) {
+                    case null:
+                        this.$store.dispatch('setSubscribes')
+                        break
+                    case 'inactive':
+                        this.$store.dispatch('setInactiveSubscribes')
+                        break
+                    case 'all':
+                        this.$store.dispatch('setAllSubscribes')
+                        break
+                }
+            }
+        },
         components: {
             Subscribe,
             SubscribeComments,
-            SubscribeEvents
+            SubscribeEvents,
+            SubscribeModeChanger
         }
     }
 </script>

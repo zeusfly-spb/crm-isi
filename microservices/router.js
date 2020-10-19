@@ -31,6 +31,18 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations
         switch (frame.type) {
+            case 'request_get_inactive_subscribes':
+                mutations = [{name: 'SET_INACTIVE_SUBSCRIBES', data: await SubscribeController.inactive({...frame.model})}]
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
+            case 'request_get_all_subscribes':
+                mutations = [{name: 'SET_ALL_SUBSCRIBES', data: await SubscribeController.all({...frame.model})}]
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_get_subscribes':
                 mutations = [{name: 'SET_SUBSCRIBES', data: await SubscribeController.index({...frame.model})}]
                 return Promise.resolve({

@@ -45,7 +45,7 @@ export default {
                         if (item.name === 'SET_LEADS') {
                             commit('SET_PAGINATOR_LOADING', false)
                         }
-                        if (item.name === 'SET_SUBSCRIBES') {
+                        if (['SET_SUBSCRIBES', 'SET_INACTIVE_SUBSCRIBES', 'SET_ALL_SUBSCRIBES'].includes(item.name)) {
                             commit('SET_SUBSCRIBES_LOADING', false)
                         }
                     })

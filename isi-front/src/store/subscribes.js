@@ -1,7 +1,16 @@
 import Vue from 'vue'
 
+const attachRate = subscribe => {
+    let completed = subscribe.events.filter(event => event.status === 'completed').length || 0
+    let rate = completed === 0 ? 0 : (completed / subscribe.nominal) * 100
+    return {... subscribe, rate: rate}
+}
+
 export default {
     state: {
+        inactiveSubscribes: [],
+        allSubscribes: [],
+        subscribeViewMode: null,
         commentsUpdating: false,
         commentsOpenId: null,
         eventsOpenId: null,
@@ -51,36 +60,7 @@ export default {
             })
         },
         setSubscribes ({commit, rootState, getters, dispatch}) {
-            /*
-            const attachProperties = events => {
-                return events.map(event => ({
-                    ... event,
-                    performer: getters.allUsers.find(user => +user.id === +event.performer_id) || {full_name: 'Неизвестный исполнитель'},
-                    service: getters.workingIsland.services.find(service => +service.id === +event.service_id) || {description: 'Неизвестная услуга'},
-                    island: getters.allIslands.find(island => +island.id === +event.island_id) || {name: 'Неизвестный остров'}
-                }))
-            }
-             */
             commit('SET_SUBSCRIBES_LOADING', true)
-            /**
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_subscribes', {
-                    island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
-                    date: getters.eventsDate
-                })
-                    .then(res => {
-                        let subscribes = res.data && Array.isArray(res.data) && res.data
-                            .map(item => item.events.length ? {
-                                ... item,
-                                events: attachProperties(item.events)
-                            } : item) || []
-                        commit('SET_SUBSCRIBES', subscribes)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-                    .finally(() => commit('SET_SUBSCRIBES_LOADING', false))
-            })
-            */
             dispatch('pushFrame', {
                 type: 'request_get_subscribes',
                 model: {
@@ -88,10 +68,38 @@ export default {
                     date: getters.eventsDate
                 }
             })
-
+        },
+        setInactiveSubscribes ({commit, rootState, getters, dispatch}) {
+            commit('SET_SUBSCRIBES_LOADING', true)
+            dispatch('pushFrame', {
+                type: 'request_get_inactive_subscribes',
+                model: {
+                    island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
+                    date: getters.eventsDate
+                }
+            })
+        },
+        setAllSubscribes ({commit, rootState, getters, dispatch}) {
+            commit('SET_SUBSCRIBES_LOADING', true)
+            dispatch('pushFrame', {
+                type: 'request_get_all_subscribes',
+                model: {
+                    island_id: getters.callCenter && getters.inspectingIsland.id || rootState.workingIslandId,
+                    date: getters.eventsDate
+                }
+            })
         }
     },
     mutations: {
+        SET_ALL_SUBSCRIBES (state, subscribes) {
+            state.allSubscribes = subscribes.map(item => attachRate(item))
+        },
+        SET_INACTIVE_SUBSCRIBES (state, subscribes) {
+            state.inactiveSubscribes = subscribes.map(item => attachRate(item))
+        },
+        SET_SUBSCRIBE_MODE (state, mode) {
+            state.subscribeViewMode = mode
+        },
         SET_SUBSCRIBE_EVENTS_OPEN_ID (state, val) {
             state.eventsOpenId = val
         },
@@ -108,11 +116,6 @@ export default {
             state.subscribesLoading = val
         },
         SET_SUBSCRIBES (state, subscribes) {
-            const attachRate = subscribe => {
-                let completed = subscribe.events.filter(event => event.status === 'completed').length || 0
-                let rate = completed === 0 ? 0 : (completed / subscribe.nominal) * 100
-                return {... subscribe, rate: rate}
-            }
             state.subscribes = subscribes.map(item => attachRate(item))
         }
     },

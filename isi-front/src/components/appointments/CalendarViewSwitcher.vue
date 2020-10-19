@@ -16,7 +16,6 @@
                 :class="{
                             'disabled': viewMode !== mode.name,
                             'current': viewMode === mode.name
-
                         }"
             >
                 {{ mode.description }}

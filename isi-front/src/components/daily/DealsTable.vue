@@ -11,6 +11,7 @@
         </v-snackbar>
 
         <v-data-table
+                :loading="$store.getters.busy || $store.getters.wsLoading"
                 :headers="headers"
                 :items="deals"
                 hide-actions
