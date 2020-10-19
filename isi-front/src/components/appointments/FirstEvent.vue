@@ -158,7 +158,7 @@
                 return this.event && this.event.service && this.event.service.highlight && this.$store.getters.colorValue(this.event.service.highlight) || ''
             },
             mainTitle () {
-                let details = `Запись на ${this.$moment(this.event.date).format('D MMMM YYYY г. H:m')}`
+                let details = `Запись на ${this.$moment(this.$store.getters.withoutTZ(this.event.date)).format('D MMMM YYYY г. HH:mm')}`
                 return this.compact ? details : 'Показать подробности'
             },
             displayedEvent: {
