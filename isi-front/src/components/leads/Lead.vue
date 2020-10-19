@@ -196,7 +196,7 @@
         props: ['props'],
         computed: {
             lastPostponeDate () {
-                return this.$moment(this.withoutTZ(this.props.item.last_postpone.date))
+                return this.$moment(this.$store.getters.withoutTZ(this.props.item.last_postpone.date))
                     .format('D MMMM YYYY г. HH:mm') || ''
             },
             eventControlTitle () {
@@ -275,9 +275,6 @@
             }
         },
         methods: {
-            withoutTZ (date) {
-                return date.split('.')[0]
-            },
             clearDate(datetime) {
               return datetime.includes('T') ? datetime.split('T')[0] : datetime.split(' ')[0]
             },

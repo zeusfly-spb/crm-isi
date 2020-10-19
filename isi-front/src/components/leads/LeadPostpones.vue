@@ -7,7 +7,7 @@
             title="Открыть календарь переноса звонков по заявке"
             :class="{today: lastPostpone.date.split(' ')[0] === accountingDate, lost: lastPostpone.date.split(' ')[0] < accountingDate}"
         >
-            {{ lastPostpone.date | moment('DD MMMM YYYY г. HH:mm') }}
+            {{ $store.getters.withoutTZ(lastPostpone.date)  | moment('DD MMMM YYYY г. HH:mm') }}
         </span>
         <v-icon
             v-else

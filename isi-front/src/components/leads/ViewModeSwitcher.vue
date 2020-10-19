@@ -1,16 +1,18 @@
 <template>
     <v-layout>
-        <v-btn
+        <div
                 v-if="!todayPostpones && !byQuery"
-                small
-                v-for="(mode, index) in viewModes"
-                @click="currentViewMode = mode"
-                :disabled="['done', 'all'].includes(mode)"
-                :key="index"
-                :depressed="mode === currentViewMode"
-                :color="mode === currentViewMode ? 'grey lighten-1' : null"
-                :title="(mode === 'done' || mode === 'all') && !doneMode ? 'Чтобы узнать количество завершенных заявок, переключите режим' : ''"
         >
+            <v-btn
+                    small
+                    v-for="(mode, index) in viewModes"
+                    @click="currentViewMode = mode"
+                    :disabled="['done', 'all'].includes(mode)"
+                    :key="index"
+                    :depressed="mode === currentViewMode"
+                    :color="mode === currentViewMode ? 'grey lighten-1' : null"
+                    :title="(mode === 'done' || mode === 'all') && !doneMode ? 'Чтобы узнать количество завершенных заявок, переключите режим' : ''"
+            >
             <span class="pl-1 pr-1">
                     {{ {wait: 'Ожидают', process: 'В работе', done: 'Завершенные', moderate: 'На модерации', all: 'Все'}[mode] }}
             (
@@ -21,7 +23,9 @@
             <span v-if="mode === 'done'">{{ doneMode && counts && counts.done || '*' }}</span>
             )
             </span>
-        </v-btn>
+            </v-btn>
+        </div>
+
         <span
             v-if="todayPostpones"
             class="pl-1 pt-2 title today"

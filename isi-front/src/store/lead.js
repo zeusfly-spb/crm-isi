@@ -49,7 +49,8 @@ export default {
             let timeA = a.last_postpone.date.split(' ')[1]
             let timeB = b.last_postpone.date.split(' ')[1]
             return timeA === timeB ? 0 : timeA < timeB ? -1 : 1
-        }
+        },
+        withoutTZ: date => date.includes('.') ? date.split('.')[0] : date
     },
     mutations: {
         SET_LEADS_SWITCHING (state, mode) {
@@ -82,6 +83,7 @@ export default {
         }
     },
     getters: {
+        withoutTZ: state => state.withoutTZ,
         leadsSwitching: state => state.switching,
         postponesSort: state => state.sortByPostpones,
         dateTimeSort: state => state.sortByDateTime,
