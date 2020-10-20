@@ -1,15 +1,5 @@
 <template>
     <v-flex xs 12 md6 offset-md3 justify-center class="mt-2">
-        <v-snackbar
-                v-model="snackbar"
-                auto-height
-                top
-                :timeout="3000"
-                :color="snackColor"
-        >
-            <span>{{ snackText }}</span>
-        </v-snackbar>
-
             <v-data-table
                 :headers="headers"
                 :items="workdays"
@@ -256,7 +246,7 @@
                     id: workday.id,
                     working_hours: workday.working_hours
                 })
-                    .then(() => this.showSnack('Количество часов изменено', 'green'))
+                    .then(() => this.$store.dispatch('pushMessage',{text: 'Количество часов изменено'}))
             },
             startScanWorkdays () {
                 this.$store.commit('SET_SCAN_MODE', {...this.$store.state.scanMode, workdays: true})
@@ -266,20 +256,16 @@
             },
             finishTimeBreak () {
                 this.$store.dispatch('finishTimeBreak')
-                    .then(() => this.showSnack('Закончили перерыв', 'green'))
+                    .then(() => this.$store.dispatch('pushMessage', {text: 'Закончили перерыв'}))
             },
             startTimeBreak () {
                 this.$store.dispatch('startTimeBreak')
-                    .then(() => this.showSnack('Начали перерыв', 'green'))
+                    .then(() => this.$store.dispatch('pushMessage', {text: 'Начали перерыв'}))
             },
             resumeDay () {
+                let text = `С возвращением, ${this.authUser.first_name} ${this.authUser.patronymic}`
                 this.$store.dispatch('resumeUserDay')
-                    .then(() => this.showSnack(`С возвращением, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
-            },
-            showSnack (text, color) {
-                this.snackColor = color
-                this.snackText = text
-                this.snackbar = true
+                    .then(() => this.$store.dispatch('pushMessage', {text}))
             },
             attemptToCloseDay () {
                 if (!this.currentWorkDay.working_hours) {
@@ -288,12 +274,14 @@
                     this.$store.dispatch('pushMessage', warning)
                     return
                 }
+                let text = `Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`
                 this.$store.dispatch('finishUserDay', {working_hours: this.currentWorkDay.working_hours})
-                    .then(() => this.showSnack(`Спасибо за работу, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
+                    .then(() => this.$store.dispatch('pushMessage', {text}))
             },
             startDay () {
+                let text = `Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`
                 this.$store.dispatch('startUserDay')
-                    .then(() => this.showSnack(`Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`, 'green'))
+                    .then(() => this.$store.dispatch('pushMessage', {text}))
             }
         },
         watch: {
