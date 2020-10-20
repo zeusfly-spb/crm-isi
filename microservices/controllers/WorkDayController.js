@@ -5,14 +5,13 @@ const moment = require('moment')
 
 const index = async data => {
     try {
+        const include = ['user']
+        const order = [['id', 'ASC']]
         let where
         data.island_id ?
             where = {[Op.and]: [{date: {[Op.startsWith]: data.date}}, {island_id: data.island_id}]} :
             where = {date: {[Op.startsWith]: data.date}}
-        let workdays = await WorkDay
-            .findAll({where:where, include: ['user']})
-        let result = workdays.sort((a, b) => a.id - b.id)
-        return Promise.resolve(result)
+        return Promise.resolve(await WorkDay.findAll({where, include, order}))
     } catch (e) {
         return Promise.reject(e)
     }
