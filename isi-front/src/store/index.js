@@ -345,34 +345,12 @@ export const store = new Vuex.Store({
                 type: 'request_get_deals',
                 island_id: state.workingIslandId || null
             })
-            // return new Promise((resolve,reject) => {
-            //     Vue.axios.post('/api/get_deals', {
-            //         date: this.state.accountingDate,
-            //         island_id: this.state.workingIslandId
-            //     })
-            //         .then(res => {
-            //             commit('SET_DEALS', res.data)
-            //         })
-            //         .catch(e => reject(e))
-            // })
         },
         startScanTimer ({dispatch, getters}) {
             setInterval(() => {
-                // if (this.state.scanMode.workdays && getters.isToday) {
-                //     dispatch('setWorkDays')
-                // }
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')
                 }
-                // if (this.state.scanMode.expenses && getters.isToday) {
-                //     dispatch('setExpenses')
-                // }
-                // if (this.state.scanMode.deals && getters.isToday) {
-                //     dispatch('setDeals')
-                // }
-                // if (this.state.scanMode.leads) {
-                //     dispatch('setLeadsOnTimer')
-                // }
             }, 5000)
         },
         resumeUserDay ({commit}) {

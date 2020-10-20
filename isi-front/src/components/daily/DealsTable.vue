@@ -11,7 +11,7 @@
         </v-snackbar>
 
         <v-data-table
-                :loading="$store.getters.busy || $store.getters.wsLoading"
+                :loading="loading"
                 :headers="headers"
                 :items="deals"
                 hide-actions
@@ -346,6 +346,9 @@
             ]
         }),
         computed: {
+            loading () {
+                return this.$store.getters.busy || this.$store.getters.wsLoading
+            },
             selectedService () {
                 return this.islandServices.find(item => +item.id === +this.selectedServiceId) || null
             },

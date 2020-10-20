@@ -64,28 +64,6 @@ export default {
                     call_today: state.showTodayPostpones
                 }
             })
-            /*
-            return new Promise((resolve ,reject) => {
-                Vue.axios.post('/api/get_leads', {
-                    accepted_sites: getters.acceptedSites,
-                    date: rootState.accountingDate,
-                    with_done: state.withDone,
-                    page: getters.paginator_page,
-                    per_page: getters.paginator_per_page,
-                    status: state.leadStatus,
-                    name: state.leadName
-                })
-                    .then(res => {
-                        res.data.counts ? commit('SET_COUNTS', res.data.counts) : null
-                        res.data.paginator_data ? commit('SYNC_PAGINATION', res.data.paginator_data) : null
-                        let callTodayLeads = Object.values(res.data.call_today)
-                        res.data.call_today ? commit('SET_CALL_TODAY_LEADS', callTodayLeads) : null
-                        commit('SET_LEADS', res.data.leads)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-             */
         },
         setLeadName ({commit, dispatch, rootState}, name) {
             return new Promise((resolve, reject) => {
@@ -287,7 +265,6 @@ export default {
                 Vue.axios.post('/api/delete_lead_postpone', {... data})
                     .then(res => {
                         let data = reverseLeadRelations(res.data)
-                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_postpone',
                             model: data
@@ -305,7 +282,6 @@ export default {
                 })
                     .then(res => {
                         let data = reverseLeadRelations(res.data)
-                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead_postpone',
                             model: data
@@ -322,7 +298,6 @@ export default {
                     user_id: rootState.authUser.id
                 })
                     .then(res => {
-                        // commit('ADD_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'add_lead',
                             model: res.data
@@ -337,7 +312,6 @@ export default {
                 Vue.axios.post('/api/delete_lead_comment', {comment_id: commentId})
                     .then(res => {
                         let data = reverseLeadRelations(res.data)
-                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead_comment',
                             model: res.data
@@ -355,7 +329,6 @@ export default {
                 })
                     .then(res => {
                         let data = reverseLeadRelations(res.data)
-                        // commit('UPDATE_LEAD', data)
                         dispatch('pushFrame', {
                             type: 'add_lead_comment',
                             model: data
@@ -375,7 +348,6 @@ export default {
                 })
                     .then(res => {
                         let data = reverseLeadRelations(res.data)
-                        // commit('UPDATE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'change_lead_status',
                             model: {
@@ -392,7 +364,6 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/delete_lead', {lead_id: leadId})
                     .then(res => {
-                        // commit('DELETE_LEAD', res.data)
                         dispatch('pushFrame', {
                             type: 'delete_lead',
                             model: res.data
@@ -465,7 +436,8 @@ export default {
                 request: {
                     id: uuidv4(),
                     title: 'Загрузка сделок текущей даты',
-                    page: 'daily'
+                    page: 'daily',
+                    action: 'get_deals'
                 }
             })
             dispatch('pushFrame', {

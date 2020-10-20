@@ -12,7 +12,7 @@
                 </v-card-title>
                 <v-card-text>
                     Завершить запись от <strong>{{ eventToDoneInfo.textDate }}</strong> клиента <strong>{{ eventToDoneInfo.clientName }}</strong>
-                    по услуге <strong>{{ eventToDoneInfo.service }}</strong> сделкой:
+                    по услуге <strong>{{ eventToDoneInfo && eventToDoneInfo.service || '' }}</strong> сделкой:
                     <v-select
                             v-model="eventDoneDealId"
                             :items="currentDeals"
@@ -82,6 +82,9 @@
                         if (['produce', 'correction', 'prodDefect', 'islandDefect', 'alteration', 'return'].includes(deal.action_type)) {
                             dealService = insolesService
                         }
+                    }
+                    if (deal.action.type === 'subscribe' && this.eventToDone && this.eventToDone.service.description === 'Оформление абонемента') {
+                        return true
                     }
                     return this.eventToDone && dealService && (dealService.id === this.eventToDone.service.id) || false
                 }

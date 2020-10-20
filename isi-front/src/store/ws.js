@@ -266,6 +266,7 @@ export default {
         }
     },
     getters: {
+        wsRequests: state => state.requests,
         wsLoading: (state, getters) => {
             return state.requests.filter(request => request.page === getters.currentPage).length > 0
         }

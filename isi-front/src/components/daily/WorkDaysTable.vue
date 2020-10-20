@@ -284,7 +284,8 @@
             attemptToCloseDay () {
                 if (!this.currentWorkDay.working_hours) {
                     this.$refs.hoursInput.focus()
-                    this.showSnack('Чтобы завершить рабочий день введите количество отработанных часов', 'red')
+                    let warning = {text: 'Чтобы завершить рабочий день, укажите количество отработанных часов', color: 'red'}
+                    this.$store.dispatch('pushMessage', warning)
                     return
                 }
                 this.$store.dispatch('finishUserDay', {working_hours: this.currentWorkDay.working_hours})
