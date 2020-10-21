@@ -1,3 +1,4 @@
+const moment = require('moment')
 const WorkDayController = require('./controllers/WorkDayController')
 const DealController = require('./controllers/DealController')
 const AppointmentController = require('./controllers/AppointmentController')
@@ -24,8 +25,19 @@ const parse = async message => {
         }
 
         let responseFrame
-        let mutation, mutations
+        let mutation, mutations, conditions
         switch (frame.type) {
+            case 'request_add_deal':
+                let deal = await DealController.create({...frame.model})
+                mutations = [{name: 'ADD_DEAL', data: deal}]
+                conditions = [
+                    {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},
+                    {name: 'workingIslandId', value: [0, deal.island_id], compare: 'includes'},
+                ]
+                return Promise.resolve({
+                    response: null,
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_get_inactive_subscribes':
                 mutations = [{name: 'SET_INACTIVE_SUBSCRIBES', data: await SubscribeController.inactive({...frame.model})}]
                 return Promise.resolve({

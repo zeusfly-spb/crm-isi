@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     customer_id: {type: DataTypes.BIGINT, allowNull: false},
     user_id: {type: DataTypes.BIGINT, allowNull: false},
     start_date: {type: DataTypes.DATEONLY, allowNull: false},
-    supply_count: {type: DataTypes.INTEGER, allowNull: false},
+    supply_count: {type: DataTypes.INTEGER, allowNull: false, defaultValue: 0},
     comments: DataTypes.JSON,
     finish_date: {
       type: DataTypes.VIRTUAL,

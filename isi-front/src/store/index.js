@@ -326,6 +326,11 @@ export const store = new Vuex.Store({
             })
         },
         addDeal ({commit, dispatch}, deal) {
+            dispatch('pushFrame', {
+                type: 'request_add_deal',
+                model: deal
+            })
+            /*
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/add_deal', {...deal})
                     .then(res => {
@@ -339,6 +344,8 @@ export const store = new Vuex.Store({
                     })
                     .catch(e => reject(e))
             })
+
+             */
         },
         setDeals ({commit, dispatch, state}) {
             dispatch('pushFrame', {

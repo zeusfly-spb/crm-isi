@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'deal_id',
         as: 'appointment'
       })
+      Deal.hasOne(models.StockAction, {
+        foreignKey: 'deal_id',
+        as: 'stockAction'
+      })
     }
   }
   Deal.init({
@@ -53,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {type: DataTypes.BIGINT, allowNull: false},
     island_id: {type: DataTypes.BIGINT, allowNull: false},
-    customer_id: {type: DataTypes.BIGINT, allowNull: false},
+    customer_id: DataTypes.BIGINT,
     income: {type: DataTypes.INTEGER, allowNull: false},
     expense: {type: DataTypes.INTEGER, allowNull: false},
     service_id: DataTypes.BIGINT,

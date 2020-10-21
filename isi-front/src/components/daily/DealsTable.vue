@@ -11,7 +11,6 @@
         </v-snackbar>
 
         <v-data-table
-                :loading="loading"
                 :headers="headers"
                 :items="deals"
                 hide-actions
@@ -253,7 +252,7 @@
                     <v-btn color="green darken-1"
                            flat
                            @click="createDeal"
-                           :disabled="pendingRequest || loadingUsers"
+                           :disabled="loadingUsers"
                     >
                         Сохранить
                     </v-btn>
@@ -581,6 +580,8 @@
                             start_date: this.newSubscribeStartDate,
                             service_id: this.newDealActionType === 'service' ? this.selectedServiceId : null
                         })
+                            .then(() => this.dialog = false)
+                            /*
                             .then(res => {
                                 this.$store.dispatch('pushMessage', {
                                     text: `Сделка №${res.data.id} добавлена`,
@@ -595,6 +596,7 @@
                                 })
                             })
                             .finally(() => this.pendingRequest = false)
+                             */
                     })
             },
             querySelection (text) {

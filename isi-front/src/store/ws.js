@@ -43,6 +43,7 @@ export default {
                             return rule.value < getters[rule.name]
                         case 'includes':
                             return Array.isArray(rule.value) && rule.value.includes(getters[rule.name])
+                        default: return true
                     }
                 }
                 return conditions.every(item => valid(item))
