@@ -32,7 +32,25 @@ export default {
             })
         },
         handleFrame ({dispatch, getters, commit, rootState}, frame) {
+            const validate = conditions => {
+                const valid = rule => {
+                    switch (rule.compare) {
+                        case 'equal':
+                            return rule.value ===  getters[rule.name]
+                        case 'more':
+                            return rule.value > getters[rule.name]
+                        case 'less':
+                            return rule.value < getters[rule.name]
+                        case 'includes':
+                            return Array.isArray(rule.value) && rule.value.includes(getters[rule.name])
+                    }
+                }
+                return conditions.every(item => valid(item))
+            }
             const handleInstruction = model => {
+                if (model.conditions && model.conditions.length && !validate(model.conditions)) {
+                    return
+                }
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
                         commit(item.name, item.data)

@@ -12,15 +12,10 @@ const parse = async message => {
         const Instruction = ({mutations, info, conditions = []}) => {
             let response ={
                 type: 'instruction',
-                model: {
-                    mutations: mutations
-                }
+                model: { mutations, conditions }
             }
             if (frame.request && frame.request.id) {
                 response.response = {id: frame.request.id}
-            }
-            if (conditions.length) {
-                response.conditions = conditions
             }
             if (info) {
                 response.response.info = info
