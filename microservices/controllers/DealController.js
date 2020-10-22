@@ -44,7 +44,7 @@ const create = async data => {
         let dealParams = JSON.parse(JSON.stringify(data))
         delete dealParams.start_date
         const {id} = await Deal.create({...dealParams})
-        const deal = await Deal.findByPk(id, {include: ['user', 'customer', 'action']})
+        const deal = await Deal.findByPk(id, {include: {all: true}})
         if (deal.action_type === 'subscribe') {
             await Subscribe.create({
                 island_id: data.island_id,
@@ -75,7 +75,7 @@ const create = async data => {
                 comment: comment
             })
         }
-        return Promise.resolve(deal)
+        return Promise.resolve({deal})
     } catch (e) {
         return Promise.reject(new Error(`Error creating deal: ${e}`))
     }

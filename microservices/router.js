@@ -35,7 +35,7 @@ const parse = async message => {
                     broadcast: null
                 })
             case 'request_add_deal':
-                let deal = await DealController.create({...frame.model})
+                const {deal, stockActions} = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
                 conditions = [
                     {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},
