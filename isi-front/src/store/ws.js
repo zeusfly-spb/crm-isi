@@ -55,17 +55,17 @@ export default {
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
                         commit(item.name, item.data)
-                        if (item.name === 'SET_MONTH_DATA') {
-                            dispatch('appendSalaryCharges')
-                            if (!rootState.workingIslandId) {
-                                commit('SET_STAT_DATA', item.data)
-                            }
-                        }
-                        if (item.name === 'SET_LEADS') {
-                            commit('SET_PAGINATOR_LOADING', false)
-                        }
-                        if (['SET_SUBSCRIBES', 'SET_INACTIVE_SUBSCRIBES', 'SET_ALL_SUBSCRIBES'].includes(item.name)) {
-                            commit('SET_SUBSCRIBES_LOADING', false)
+                        switch (item.name) {
+                            case 'SET_MONTH_DATA':
+                                dispatch('appendSalaryCharges')
+                                !rootState.workingIslandId ? commit('SET_STAT_DATA', item.data) : null
+                                break
+                            case 'SET_LEADS':
+                                commit('SET_PAGINATOR_LOADING', false)
+                                break
+                            default:
+                                ['SET_SUBSCRIBES', 'SET_INACTIVE_SUBSCRIBES', 'SET_ALL_SUBSCRIBES'].includes(item.name) ?
+                                    commit('SET_SUBSCRIBES_LOADING', false) : null
                         }
                     })
                 }
