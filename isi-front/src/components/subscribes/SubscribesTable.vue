@@ -2,6 +2,7 @@
     <v-flex>
         <subscribe-mode-changer/>
         <v-data-table
+            :pagination.sync="defSorting"
             v-blur="subscribesLoading"
             :headers="headers"
             :items="subscribes"
@@ -31,6 +32,7 @@
     export default {
         name: 'SubscribesTable',
         data: () => ({
+            defSorting: {'sortBy': 'start_date', 'ascending': false, 'rowsPerPage': -1},
             headers: [
                 {text: '#', value: null, sortable: false},
                 {text: 'Заказчик', value: 'customer_id'},
