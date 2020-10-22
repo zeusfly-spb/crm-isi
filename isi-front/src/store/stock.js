@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import {v4 as uuidv4} from "uuid";
 
 export default {
     state: {
@@ -71,7 +72,21 @@ export default {
                     .finally(() => commit('SET_LOADING_OFF'))
             })
         },
-        setStockActions ({commit, rootState}) {
+        setStockActions ({commit, rootState, dispatch, getters}) {
+            dispatch('pushFrame', {
+                type: 'request_get_stock_actions',
+                model: {
+                    date: getters.accountingDate,
+                    island_id: getters.workingIslandId
+                },
+                request: {
+                    id: uuidv4(),
+                    title: 'Загрузка операций по складу',
+                    page: 'stock',
+                    action: 'get_stock_actions'
+                }
+            })
+            /*
             commit('SET_LOADING_ON')
             commit('ADD_TASK', 'stock')
             return new Promise((resolve, reject) => {
@@ -87,6 +102,7 @@ export default {
                     .catch(e => reject(e))
                     .finally(() => commit('REMOVE_TASK', 'stock'))
             })
+             */
         },
         setReserves ({commit, rootState}) {
             commit('SET_LOADING_ON')

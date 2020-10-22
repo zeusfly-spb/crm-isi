@@ -6,6 +6,7 @@ const SalaryController = require('./controllers/SalaryController')
 const LoaderController = require('./controllers/LoaderController')
 const LeadController = require('./controllers/LeadController')
 const SubscribeController = require('./controllers/SubscribeController')
+const StockActionsController = require('./controllers/StockActionController')
 
 const parse = async message => {
     try {
@@ -27,6 +28,12 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions
         switch (frame.type) {
+            case 'request_get_stock_actions':
+                mutations = [{name: 'SET_STOCK_ACTIONS', data: await StockActionsController.index({...frame.model})}]
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_add_deal':
                 let deal = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
