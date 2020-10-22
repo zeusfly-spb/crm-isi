@@ -34,6 +34,7 @@ const updatePaymentType = async data => {
 
 const create = async data => {
     try {
+        let stockAction
         const newDealAction = await DealAction.findByPk(data.deal_action_id)
         if (['correction', 'prodDefect', 'islandDefect', 'alteration'].includes(newDealAction.type)) {
             data.income = data.expense = 0
@@ -45,6 +46,7 @@ const create = async data => {
         delete dealParams.start_date
         const {id} = await Deal.create({...dealParams})
         const deal = await Deal.findByPk(id, {include: {all: true}})
+        const info = `Сделка №${deal.id} добавлена`
         if (deal.action_type === 'subscribe') {
             await Subscribe.create({
                 island_id: data.island_id,
@@ -64,7 +66,7 @@ const create = async data => {
                 const size = await Size.findByPk(data.size_id)
                 comment = `${deal.action.text} ${product.name} ${type.name} ${size.name}`
             }
-            await deal.createStockAction({
+            stockAction = await deal.createStockAction({
                 user_id: data.user_id,
                 type: 'expense',
                 island_id: data.island_id,
@@ -75,7 +77,7 @@ const create = async data => {
                 comment: comment
             })
         }
-        return Promise.resolve({deal})
+        return Promise.resolve({deal, info, stockAction})
     } catch (e) {
         return Promise.reject(new Error(`Error creating deal: ${e}`))
     }

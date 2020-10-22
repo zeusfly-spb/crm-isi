@@ -35,14 +35,14 @@ const parse = async message => {
                     broadcast: null
                 })
             case 'request_add_deal':
-                const {deal, stockActions} = await DealController.create({...frame.model})
+                const {deal, stockActions, info} = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
                 conditions = [
                     {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},
                     {name: 'workingIslandId', value: [0, deal.island_id], compare: 'includes'},
                 ]
                 return Promise.resolve({
-                    response: null,
+                    response: Instruction({info}),
                     broadcast: Instruction({mutations, conditions})
                 })
             case 'request_get_inactive_subscribes':
