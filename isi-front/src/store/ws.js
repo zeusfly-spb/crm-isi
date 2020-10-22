@@ -20,11 +20,11 @@ export default {
             return new Promise((resolve, reject) => {
                 try {
                     const handle = () => {
-                        response.info ? dispatch('pushMessage', {text: response.info}) : null
                         commit('REMOVE_REQUEST', response.id)
                     }
-                    let awaitingIds = state.requests.map(item => item.id)
-                    awaitingIds.includes(response.id) ? handle() : null
+                    response.info ? dispatch('pushMessage', {text: response.info}) : null
+                    const awaitingIds = state.requests.map(item => item.id)
+                    response.id && awaitingIds.includes(response.id) ? handle() : null
                     resolve()
                 } catch (e) {
                     reject(e)
