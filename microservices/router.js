@@ -32,12 +32,13 @@ const parse = async message => {
                     broadcast: null
                 })
             case 'request_add_deal':
-                const {deal, info} = await DealController.create({...frame.model})
+                const {deal, info, stockAction} = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
                 conditions = [
                     {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},
                     {name: 'workingIslandId', value: [0, deal.island_id], compare: 'includes'},
                 ]
+                stockAction ? mutations.push({name: 'ADD_STOCK_ACTION', data: stockAction}) : null
                 return Promise.resolve({
                     response: Instruction({info}),
                     broadcast: Instruction({mutations, conditions})

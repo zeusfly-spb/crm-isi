@@ -86,23 +86,6 @@ export default {
                     action: 'get_stock_actions'
                 }
             })
-            /*
-            commit('SET_LOADING_ON')
-            commit('ADD_TASK', 'stock')
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_stock_actions', {
-                    date: rootState.accountingDate,
-                    island_id: rootState.workingIslandId
-                })
-                    .then(res => {
-                        commit('SET_STOCK_ACTIONS', res.data)
-                        commit('SET_LOADING_OFF')
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-                    .finally(() => commit('REMOVE_TASK', 'stock'))
-            })
-             */
         },
         setReserves ({commit, rootState}) {
             commit('SET_LOADING_ON')

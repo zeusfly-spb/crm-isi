@@ -6,6 +6,7 @@ const Subscribe = models.Subscribe
 const Product = models.Product
 const Type = models.Type
 const Size = models.Size
+const StockAction = models.StockAction
 
 
 const index = async data => {
@@ -66,7 +67,7 @@ const create = async data => {
                 const size = await Size.findByPk(data.size_id)
                 comment = `${deal.action.text} ${product.name} ${type.name} ${size.name}`
             }
-            stockAction = await deal.createStockAction({
+            const {id} = await deal.createStockAction({
                 user_id: data.user_id,
                 type: 'expense',
                 island_id: data.island_id,
@@ -76,6 +77,7 @@ const create = async data => {
                 count: 1,
                 comment: comment
             })
+            stockAction = await StockAction.findByPk(id, {include: {all: true}})
         }
         return Promise.resolve({deal, info, stockAction})
     } catch (e) {
