@@ -329,30 +329,14 @@ export const store = new Vuex.Store({
                 type: 'request_add_deal',
                 model: deal
             })
-            /*
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_deal', {...deal})
-                    .then(res => {
-                        // commit('ADD_DEAL', res.data)
-                        dispatch('pushFrame', {
-                            type: 'add_deal',
-                            model: res.data
-                        })
-                        dispatch('setStockActions')
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-
-             */
         },
-        setDeals ({commit, dispatch, state}) {
+        setDeals ({dispatch, state}) {
             dispatch('pushFrame', {
                 type: 'request_get_deals',
                 island_id: state.workingIslandId || null
             })
         },
-        startScanTimer ({dispatch, getters}) {
+        startScanTimer ({dispatch}) {
             setInterval(() => {
                 if (this.state.scanMode.accesses) {
                     dispatch('setAccesses')

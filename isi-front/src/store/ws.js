@@ -90,7 +90,6 @@ export default {
 
             const updateDeal = deal => commit('UPDATE_DEAL', deal)
             const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
-            const insertDeal = deal => commit('ADD_DEAL', deal)
 
             const insertLead = lead => {
                 if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
@@ -208,9 +207,6 @@ export default {
                             break
                         case 'delete_deal':
                             deleteDeal(obj.model)
-                            break
-                        case 'add_deal':
-                            insertDeal(obj.model)
                             break
                         case 'add_lead':
                             insertLead(obj.model)
