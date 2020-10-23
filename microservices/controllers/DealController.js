@@ -46,7 +46,7 @@ const create = async data => {
         delete dealParams.start_date
         const {id} = await Deal.create({...dealParams})
         const deal = await Deal.findByPk(id, {include: {all: true}})
-        const info = `Сделка №${deal.id} добавлена`
+        const info = {text: `Сделка №${deal.id} добавлена`}
         if (deal.action_type === 'subscribe') {
             await Subscribe.create({
                 island_id: data.island_id,

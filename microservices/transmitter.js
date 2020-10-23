@@ -8,7 +8,7 @@ const jsonSize = string => chalk.green.bold((Buffer.byteLength(string, 'utf8') /
 
 const frameType = frame => {
     let obj = JSON.parse(frame)
-    if (obj.type === 'instruction') {
+    if (obj.type === 'instruction'  && obj.model.mutations && obj.model.mutations.length) {
         return chalk.red.bold(`Instruction ${obj.model.mutations.map(item => item.name).join(', ')}`)
     }
     return chalk.red.bold(obj.type)

@@ -11,16 +11,13 @@ const StockActionsController = require('./controllers/StockActionController')
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
-        const Instruction = ({mutations, info, conditions = []}) => {
+        const Instruction = ({ mutations,conditions, info }) => {
             let response ={
                 type: 'instruction',
-                model: { mutations, conditions }
+                model: { mutations, conditions, info}
             }
             if (frame.request && frame.request.id) {
                 response.response = {id: frame.request.id}
-            }
-            if (info) {
-                response.response.info = info
             }
             return JSON.stringify(response)
         }
@@ -35,7 +32,7 @@ const parse = async message => {
                     broadcast: null
                 })
             case 'request_add_deal':
-                const {deal, stockActions, info} = await DealController.create({...frame.model})
+                const {deal, info} = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
                 conditions = [
                     {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},

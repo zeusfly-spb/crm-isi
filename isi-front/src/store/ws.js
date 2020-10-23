@@ -52,6 +52,7 @@ export default {
                 if (model.conditions && model.conditions.length && !validate(model.conditions)) {
                     return
                 }
+                model.info ? dispatch('pushMessage', {...model.info}) : null
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
                         commit(item.name, item.data)
