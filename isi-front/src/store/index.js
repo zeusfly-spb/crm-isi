@@ -382,19 +382,12 @@ export const store = new Vuex.Store({
             })
         },
         startUserDay ({dispatch, state}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/start_day', {
+            dispatch('pushFrame', {
+                type: 'request_start_user_day',
+                model: {
                     user_id: state.authUser.id,
-                    island_id: state.access.island_id || null
-                })
-                    .then(res => {
-                        dispatch('pushFrame', {
-                            type: 'add_workday',
-                            model: res.data
-                        })
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+                    island_id: state.access.island_id
+                }
             })
         },
         enterCRM ({dispatch, getters, commit}) {

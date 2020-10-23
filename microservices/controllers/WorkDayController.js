@@ -35,9 +35,33 @@ const create = async data => {
     }
 }
 
+const startUserDay = async data => {
+    try {
+        let info
+        let workday
+        const now = moment().format('YYYY-MM-DD HH:mm:ss')
+        const today = now.split(' ')[0]
+        const currentWorkDay = await WorkDay.findOne({
+            where: {island_id: data.island_id, date: {[Op.startsWith]: today}},
+            include: ['user']
+        })
+        if (currentWorkDay) {
+            workday = currentWorkDay
+            info = {text: `С возвращением, ${workday.user.first_name} ${workday.user.patronymic}!`}
+        } else {
+            workday = await create(data)
+            info = {text: `Добро пожаловать, ${workday.user.first_name} ${workday.user.patronymic}!`}
+        }
+        return Promise.resolve({workday, info})
+    } catch (e) {
+        return Promise.reject(new Error(`Error starting user work day: ${e}`))
+    }
+}
+
 
 module.exports = {
     index,
-    create
+    create,
+    startUserDay
 }
 

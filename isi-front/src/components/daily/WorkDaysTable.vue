@@ -279,9 +279,7 @@
                     .then(() => this.$store.dispatch('pushMessage', {text}))
             },
             startDay () {
-                let text = `Добро пожаловать, ${this.authUser.first_name} ${this.authUser.patronymic}`
                 this.$store.dispatch('startUserDay')
-                    .then(() => this.$store.dispatch('pushMessage', {text}))
             }
         },
         watch: {

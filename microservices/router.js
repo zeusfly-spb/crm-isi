@@ -25,6 +25,18 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions
         switch (frame.type) {
+            case 'request_start_user_day':
+                let data = await WorkDayController.startUserDay({...frame.model})
+                mutations = [{name: 'ADD_WORK_DAY', data: data.workday}]
+                conditions = [
+                    {name: 'isToday', value: true, compare: 'equal'},
+                    {name: 'currentPage', value: 'daily', compare: 'equal'},
+                    {name: 'workingIslandId', value: [0, data.workday.island_id], compare: 'includes'},
+                ]
+                return Promise.resolve({
+                    response: Instruction({info: data.info}),
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_get_stock_actions':
                 mutations = [{name: 'SET_STOCK_ACTIONS', data: await StockActionsController.index({...frame.model})}]
                 return Promise.resolve({
@@ -32,7 +44,7 @@ const parse = async message => {
                     broadcast: null
                 })
             case 'request_add_deal':
-                const {deal, info, stockAction} = await DealController.create({...frame.model})
+                let {deal, info, stockAction} = await DealController.create({...frame.model})
                 mutations = [{name: 'ADD_DEAL', data: deal}]
                 conditions = [
                     {name: 'accountingDate', value: moment(deal.created_at).format('YYYY-MM-DD'), compare: 'equal'},
