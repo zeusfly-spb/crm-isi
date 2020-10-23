@@ -45,13 +45,9 @@ const startUserDay = async data => {
             where: {island_id: data.island_id, date: {[Op.startsWith]: today}},
             include: ['user']
         })
-        if (currentWorkDay) {
-            workday = currentWorkDay
-            info = {text: `С возвращением, ${workday.user.first_name} ${workday.user.patronymic}!`}
-        } else {
-            workday = await create(data)
-            info = {text: `Добро пожаловать, ${workday.user.first_name} ${workday.user.patronymic}!`}
-        }
+        currentWorkDay ? await currentWorkDay.destroy() : null
+        workday = await create(data)
+        info = {text: `Добро пожаловать, ${workday.user.first_name} ${workday.user.patronymic}!`}
         return Promise.resolve({workday, info})
     } catch (e) {
         return Promise.reject(new Error(`Error starting user work day: ${e}`))
