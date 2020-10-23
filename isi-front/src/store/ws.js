@@ -48,28 +48,31 @@ export default {
                 }
                 return conditions.every(item => valid(item))
             }
+            const postMutation = mutation => {
+                switch (mutation.name) {
+                    case 'SET_MONTH_DATA':
+                        dispatch('appendSalaryCharges')
+                        !rootState.workingIslandId ? commit('SET_STAT_DATA', mutation.data) : null
+                        break
+                    case 'SET_LEADS':
+                        commit('SET_PAGINATOR_LOADING', false)
+                        break
+                    default:
+                        ['SET_SUBSCRIBES', 'SET_INACTIVE_SUBSCRIBES', 'SET_ALL_SUBSCRIBES'].includes(mutation.name) ?
+                            commit('SET_SUBSCRIBES_LOADING', false) : null
+                }
+            }
             const handleInstruction = model => {
                 if (model.conditions && model.conditions.length && !validate(model.conditions)) {
                     return
                 }
-                model.info ? dispatch('pushMessage', {...model.info}) : null
                 if (model.mutations && model.mutations.length) {
                     model.mutations.forEach(item => {
                         commit(item.name, item.data)
-                        switch (item.name) {
-                            case 'SET_MONTH_DATA':
-                                dispatch('appendSalaryCharges')
-                                !rootState.workingIslandId ? commit('SET_STAT_DATA', item.data) : null
-                                break
-                            case 'SET_LEADS':
-                                commit('SET_PAGINATOR_LOADING', false)
-                                break
-                            default:
-                                ['SET_SUBSCRIBES', 'SET_INACTIVE_SUBSCRIBES', 'SET_ALL_SUBSCRIBES'].includes(item.name) ?
-                                    commit('SET_SUBSCRIBES_LOADING', false) : null
-                        }
+                        postMutation(item)
                     })
                 }
+                model.info ? dispatch('pushMessage', {...model.info}) : null
             }
             const dealDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
             const displayed = lead => getters.currentLeads.map(item => +item.id).includes(lead.id)
