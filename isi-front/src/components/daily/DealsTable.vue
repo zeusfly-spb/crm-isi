@@ -424,7 +424,8 @@
                     this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id) &&
                     this.stockOptions.types.find(item => +item.id === +this.newDealData.type_id).name || null
                 return currentAction === 'produce' ? this.newDealSizes &&
-                    this.newDealSizes.map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true})) : this.newDealSizes
+                    this.newDealSizes
+                        .map(item => this.currentCount(productName, typeName, item.id) > 0 ? item : ({...item, disabled: true})) : this.newDealSizes
             },
             currentReserves () {
                 return this.$store.getters.currentReserves
@@ -435,7 +436,8 @@
             },
             newDealActionType () {
                 let actions = this.$store.state.stock.options.deal_actions || []
-                return actions.find(item => +item.id === +this.newDealData.deal_action_id) &&  actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null
+                return actions
+                    .find(item => +item.id === +this.newDealData.deal_action_id) &&  actions.find(item => +item.id === +this.newDealData.deal_action_id).type || null
             },
             newDealSizes () {
                 let currentProduct = this.stockOptions.products && this.stockOptions.products.find(product => product.id === this.newDealData.product_id) || {name: 'Стельки'}
@@ -443,7 +445,7 @@
                     this.$store.state.stock.options.sizes.filter(size => !['29-30', '31-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
             },
             stockOptions () {
-                return this.$store.state.stock.options
+                return JSON.parse(JSON.stringify(this.$store.state.stock.options))
             },
             isToday () {
                 return this.$store.state.accountingDate === this.realDate
@@ -522,7 +524,8 @@
                 return targetActions.reduce(calculate, initialCount)
             },
             currentCount (productName, typeName, sizeId) {
-                let target = this.currentReserves.find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
+                let target = this.currentReserves
+                    .find(reserve => reserve.size_id === sizeId && reserve.product.name === productName && reserve.type.name === typeName)
                 return target && target.count || 0
             },
             setDefaultDealData () {
@@ -581,22 +584,6 @@
                             service_id: this.newDealActionType === 'service' ? this.selectedServiceId : null
                         })
                             .then(() => this.dialog = false)
-                            /*
-                            .then(res => {
-                                this.$store.dispatch('pushMessage', {
-                                    text: `Сделка №${res.data.id} добавлена`,
-                                    color: 'green'
-                                })
-                                this.dialog = false
-                            })
-                            .catch(e => {
-                                this.$store.dispatch('pushMessage', {
-                                    text: e.data,
-                                    color: 'red'
-                                })
-                            })
-                            .finally(() => this.pendingRequest = false)
-                             */
                     })
             },
             querySelection (text) {
@@ -627,13 +614,8 @@
                 this.selectedInsoleId = null
                 this.newDealIncome = this.newDealActionType === 'subscribe' ? this.selectedSubscription.base_price : null
                 this.dialog = true
-            }
-        },
-        created () {
-            this.$store.dispatch('setCatalogs')
-        },
-        watch: {
-            'newDealData.deal_action_id': function () {
+            },
+            resetValidator () {
                 this.$validator.pause()
                 this.$nextTick(() => {
                     this.$validator.errors.clear()
@@ -641,6 +623,35 @@
                     this.$validator.fields.items.forEach(field => this.errors.remove(field))
                     this.$validator.resume()
                 })
+
+            }
+        },
+        created () {
+            this.$store.dispatch('setCatalogs')
+        },
+        watch: {
+            dialog (val) {
+                this.resetValidator()
+                if (!val) {
+                    return
+                }
+                switch (this.newDealActionType) {
+                    case 'sale':
+                        let availableGood = this.goods.filter(item => !item.disabled)[0]
+                        this.newDealData.product_id = availableGood && availableGood.id || null
+                        break
+                    case 'subscribe':
+                        this.setSubscriptionProduct()
+                        this.setSubscribeStartToday()
+                        this.setSubscriptionPrice()
+                        break
+                    default:
+                        this.newDealData.product_id = this.products[0] && this.products[0].id
+                        break
+                }
+            },
+            'newDealData.deal_action_id': function () {
+                this.resetValidator()
             },
             selectedSubscriptionId (val) {
                 if (!val) {
