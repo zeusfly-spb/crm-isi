@@ -282,7 +282,6 @@ export const store = new Vuex.Store({
                             type: 'add_expense',
                             model: res.data
                         })
-                        // commit('ADD_EXPENSE', res.data)
                         resolve(res)
                     })
                     .catch(e => reject(e))
@@ -398,14 +397,13 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        startUserDay ({dispatch, commit, state}) {
+        startUserDay ({dispatch, state}) {
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/start_day', {
                     user_id: state.authUser.id,
                     island_id: state.access.island_id || null
                 })
                     .then(res => {
-                        // commit('ADD_WORK_DAY', res.data)
                         dispatch('pushFrame', {
                             type: 'add_workday',
                             model: res.data
