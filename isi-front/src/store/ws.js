@@ -52,6 +52,7 @@ export default {
                 switch (mutation.name) {
                     case 'ADD_APPOINTMENT':
                         dispatch('setSubscribes')
+                        dispatch('setLeadsOnTimer')
                         break
                     case 'SET_MONTH_DATA':
                         dispatch('appendSalaryCharges')
@@ -79,16 +80,9 @@ export default {
             }
             const dealDate = deal => deal.created_at.includes('T') ? deal.created_at.split('T')[0] : deal.created_at.split(' ')[0]
             const displayed = lead => getters.currentLeads.map(item => +item.id).includes(lead.id)
-
-            const month = date => date.split(' ')[0].split('-')[1]
-            const targetIslandId = () => getters.callCenter && getters.inspectingIslandId || getters.workingIslandId
             /**
              * Frame handlers
              */
-            const insertAppointment = event => {
-                commit('ADD_APPOINTMENT', event)
-                dispatch('setLeadsOnTimer')
-            }
 
             const updateDeal = deal => commit('UPDATE_DEAL', deal)
             const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
@@ -160,10 +154,6 @@ export default {
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
                         getters.workingIslandId !== 0 && obj.model.island_id !== getters.workingIslandId ? result = false : null
                         break
-                    case 'appointment':
-                        month(getters.eventsDate) !== month(obj.model.date) ? result = false : null
-                        obj.model.island_id !== targetIslandId() ? result = false : null
-                        break
                 }
                 return result
             }
@@ -183,9 +173,6 @@ export default {
                             break
                         case 'instruction':
                             handleInstruction(obj.model)
-                            break
-                        case 'add_appointment':
-                            insertAppointment(obj.model)
                             break
                         case 'update_deal':
                             updateDeal(obj.model)
