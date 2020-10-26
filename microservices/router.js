@@ -28,6 +28,13 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_delete_expense':
+                data = await ExpenseController.remove({...frame.model})
+                mutations = [{name: 'DELETE_EXPENSE', data: data.expense.id}]
+                return Promise.resolve({
+                    response: Instruction({info: data.info}),
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_add_expense':
                 data = await ExpenseController.create({...frame.model})
                 mutations = [{name: 'ADD_EXPENSE', data: data.expense}]

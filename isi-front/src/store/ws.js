@@ -82,7 +82,6 @@ export default {
             /**
              * Frame handlers
              */
-            const insertExpense = expense => commit('ADD_EXPENSE', expense)
             const insertAppointment = event => {
                 commit('ADD_APPOINTMENT', event)
                 dispatch('setLeadsOnTimer')
@@ -154,17 +153,9 @@ export default {
             const mustHandle = obj => {
                 let result = true
                 switch (obj.type.split('_')[1]) {
-                    case 'workday':
-                        getters.currentPage !== 'daily' || !getters.isToday ? result = false : null
-                        break
-                    case 'expense':
-                        getters.currentPage !== 'daily' ? result = false : null
-                        !getters.isToday ? result = false : null
-                        break
                     case 'deal':
                         getters.accountingDate !== dealDate(obj.model) ? result = false : null
                         getters.workingIslandId !== 0 && obj.model.island_id !== getters.workingIslandId ? result = false : null
-                        // getters.currentPage !== 'daily' ? result = false : null
                         break
                     case 'appointment':
                         month(getters.eventsDate) !== month(obj.model.date) ? result = false : null
@@ -189,12 +180,6 @@ export default {
                             break
                         case 'instruction':
                             handleInstruction(obj.model)
-                            break
-                        case 'delete_expense':
-                            commit('DELETE_EXPENSE', obj.model.id)
-                            break
-                        case 'add_expense':
-                            insertExpense(obj.model)
                             break
                         case 'add_appointment':
                             insertAppointment(obj.model)

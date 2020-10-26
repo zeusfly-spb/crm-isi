@@ -163,11 +163,7 @@
         methods: {
             deleteExpense () {
                 this.$store.dispatch('deleteExpense', this.expenseToDelete.id)
-                    .then(() => {
-                        this.confirm = false
-                        this.$emit('snack', `Запись о расходе ${this.expenseToDelete.amount}р. ${this.expenseToDelete.comment} удалена`, 'green')
-                    })
-                    .catch(e => this.$emit('snack', e.data, 'red'))
+                    .then(() => this.confirm = false)
             },
             attemptToDelete (expense) {
                 if (expense.user_id !== this.authUser.id && !this.isSuperadmin) {
