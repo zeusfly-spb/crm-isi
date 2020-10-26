@@ -343,14 +343,13 @@ export const store = new Vuex.Store({
                 }
             }, 5000)
         },
-        resumeUserDay ({commit}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/resume_day', {user_id: this.state.authUser.id})
-                    .then(res => {
-                        commit('UPDATE_WORK_DAY', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+        resumeUserDay ({dispatch, state, getters}) {
+            dispatch('pushFrame', {
+                type: 'request_resume_user_day',
+                model: {
+                    user_id: state.authUser.id,
+                    island_id: getters.callCenter ? getters.inspectingIslandId : state.workingIslandId
+                }
             })
         },
         setRealDate ({commit}) {

@@ -42,7 +42,7 @@ const startUserDay = async data => {
         const now = moment().format('YYYY-MM-DD HH:mm:ss')
         const today = now.split(' ')[0]
         const currentWorkDay = await WorkDay.findOne({
-            where: {island_id: data.island_id, date: {[Op.startsWith]: today}},
+            where: {island_id: data.island_id, date: {[Op.startsWith]: today}, user_id: data.user_id},
             include: ['user']
         })
         currentWorkDay ? await currentWorkDay.destroy() : null
@@ -54,10 +54,35 @@ const startUserDay = async data => {
     }
 }
 
+const resumeUserDay = async data => {
+    try {
+        const now = moment().format('YYYY-MM-DD HH:mm:ss')
+        const today = now.split(' ')[0]
+        const workday = await WorkDay.findOne({
+            where: {island_id: data.island_id, date: {[Op.startsWith]: today}, user_id: data.user_id},
+            include: ['user']
+        })
+        await workday.update({time_finish: null})
+        const info = {text: `С возвращением, ${workday.user.first_name} ${workday.user.patronymic}!`}
+        return Promise.resolve({workday, info})
+    } catch (e) {
+        return Promise.reject(new Error(`Resume user workday failed: ${e}`))
+    }
+}
+
+finishUserDay = async data => {
+    try {
+        const workday = await WorkDay
+    } catch (e) {
+        return Promise.reject(new Error(`Finish user day failed: ${e}`))
+    }
+}
+
 
 module.exports = {
     index,
     create,
-    startUserDay
+    startUserDay,
+    resumeUserDay
 }
 
