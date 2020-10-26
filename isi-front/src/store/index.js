@@ -376,19 +376,6 @@ export const store = new Vuex.Store({
                     island_id: state.access.island_id
                 }
             })
-            /*
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/finish_day', {
-                    user_id: this.state.authUser.id,
-                    working_hours: data.working_hours
-                })
-                    .then(res => {
-                        commit('UPDATE_WORK_DAY', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-            })
-             */
         },
         startUserDay ({dispatch, state}) {
             dispatch('pushFrame', {

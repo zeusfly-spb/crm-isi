@@ -190,9 +190,6 @@ export default {
                         case 'instruction':
                             handleInstruction(obj.model)
                             break
-                        case 'add_workday':
-                            commit('ADD_WORK_DAY', obj.model)
-                            break
                         case 'delete_expense':
                             commit('DELETE_EXPENSE', obj.model.id)
                             break
