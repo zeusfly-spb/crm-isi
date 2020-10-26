@@ -12,11 +12,14 @@ const find = async (id, include = []) => {
     }
 }
 
-const create = async (inputs = {}) => {
+const create = async data => {
     try {
-        return await Expense.create(inputs)
+        const expense = await Expense.create({...data})
+        await expense.reload({include: ['user', 'island']})
+        const info = {text: `Добавлен расход на ${expense.amount}р.`}
+        return Promise.resolve({expense, info})
     } catch (e) {
-        Promise.reject(e)
+        return Promise.reject(new Error(`Expense create failed: ${e}`))
     }
 }
 

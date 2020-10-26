@@ -270,21 +270,14 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        addExpense ({commit, dispatch}, data) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/add_expense', {
+        addExpense ({commit, state, dispatch}, data) {
+            dispatch('pushFrame', {
+                type: 'request_add_expense',
+                model: {
                     ...data,
-                    island_id: this.state.workingIslandId,
-                    user_id: this.state.authUser.id
-                })
-                    .then(res => {
-                        dispatch('pushFrame', {
-                            type: 'add_expense',
-                            model: res.data
-                        })
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+                    island_id: state.workingIslandId,
+                    user_id: state.authUser.id
+                }
             })
         },
         setExpenses ({commit}) {

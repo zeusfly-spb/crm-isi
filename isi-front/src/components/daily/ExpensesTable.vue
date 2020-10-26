@@ -187,12 +187,6 @@
                             amount: this.amount,
                             comment: this.comment
                         })
-                            .then(() => {
-                                this.$store.dispatch('setDeals')
-                                this.$store.dispatch('setExpenses')
-                                this.$emit('snack', `Расход на сумму ${this.amount} р, ${this.comment} добавлен`, 'green')
-                            })
-                            .catch(e => this.$emit('snack', e.data, 'red'))
                     })
             },
             showDialog () {

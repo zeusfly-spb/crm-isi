@@ -7,6 +7,9 @@ const LoaderController = require('./controllers/LoaderController')
 const LeadController = require('./controllers/LeadController')
 const SubscribeController = require('./controllers/SubscribeController')
 const StockActionsController = require('./controllers/StockActionController')
+const ExpenseController = require('./controllers/ExpenseController')
+
+const clearDate = date => moment(date).format('YYYY-MM-DD')
 
 const parse = async message => {
     try {
@@ -25,6 +28,17 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_add_expense':
+                data = await ExpenseController.create({...frame.model})
+                mutations = [{name: 'ADD_EXPENSE', data: data.expense}]
+                conditions = [
+                    {name: 'accountingDate', value: clearDate(data.expense.created_at), compare: 'equal'},
+                    {name: 'workingIslandId', value: [0, data.expense.island_id], compare: 'includes'}
+                ]
+                return Promise.resolve({
+                    response: Instruction({info: data.info}),
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_finish_user_day':
                 data = await WorkDayController.finishUserDay({...frame.model})
                 mutations = [{name: 'UPDATE_WORK_DAY', data: data.workday}]
