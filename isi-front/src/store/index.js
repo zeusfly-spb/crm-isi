@@ -367,7 +367,16 @@ export const store = new Vuex.Store({
                     .finally(() => commit('REMOVE_TASK', 'daily'))
             })
         },
-        finishUserDay ({commit}, data) {
+        finishUserDay ({commit, dispatch, state}, data) {
+            dispatch('pushFrame', {
+                type: 'request_finish_user_day',
+                model: {
+                    user_id: state.authUser.id,
+                    working_hours: data.working_hours,
+                    island_id: state.access.island_id
+                }
+            })
+            /*
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/finish_day', {
                     user_id: this.state.authUser.id,
@@ -379,6 +388,7 @@ export const store = new Vuex.Store({
                     })
                     .catch(e => reject(e))
             })
+             */
         },
         startUserDay ({dispatch, state}) {
             dispatch('pushFrame', {

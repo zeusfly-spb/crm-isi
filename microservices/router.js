@@ -25,6 +25,17 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_finish_user_day':
+                data = await WorkDayController.finishUserDay({...frame.model})
+                mutations = [{name: 'UPDATE_WORK_DAY', data: data.workday}]
+                conditions = [
+                    {name: 'accountingDate', value: data.workday.date, compare: 'equal'},
+                    {name: 'workingIslandId', value: [0, data.workday.island_id], compare: 'includes'}
+                ]
+                return Promise.resolve({
+                    response: Instruction({info: data.info}),
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_resume_user_day':
                 data = await WorkDayController.resumeUserDay({...frame.model})
                 mutations = [{name: 'UPDATE_WORK_DAY', data: data.workday}]
