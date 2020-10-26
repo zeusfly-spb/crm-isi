@@ -404,11 +404,7 @@
                         if (!res) return
                         let data = this.lead ? {... this.editedAppointment, lead_id: this.lead.id} : this.editedAppointment
                         this.$store.dispatch('createAppointment', data)
-                            .then(res => {
-                                let text = `Запись на ${this.$moment(res.data.date).format('DD MMMM YYYY г.')} добавлена`
-                                this.$store.dispatch('pushMessage', {text})
-                                this.reset()
-                            })
+                            .then(() => this.active = false)
                     })
             },
             reset () {

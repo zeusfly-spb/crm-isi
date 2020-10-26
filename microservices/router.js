@@ -28,6 +28,14 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_add_appointment':
+                data = await AppointmentController.create({...frame.model})
+                mutations = [{name: 'ADD_APPOINTMENT', data: data.event}]
+                conditions = [{name: 'workingIslandId', value: data.event.island_id, compare: 'equal'}]
+                return Promise.resolve({
+                    response: Instruction({info: data.info}),
+                    broadcast: Instruction({mutations, conditions})
+                })
             case 'request_delete_expense':
                 data = await ExpenseController.remove({...frame.model})
                 mutations = [{name: 'DELETE_EXPENSE', data: data.expense.id}]

@@ -36,6 +36,19 @@ const index = async data => {
     }
 }
 
+const create = async data => {
+    try {
+        data.date = moment(data.date).format('YYYY-MM-DD HH:MM:ss')
+        const event = await Appointment.create({...data})
+        await event.reload({include: {all: true}})
+        const info = {text: `Запись на ${moment(event.date).format('DD-MM-YYYY HH:MM')} добавлена`}
+        return Promise.resolve({event, info})
+    } catch (e) {
+        return Promise.reject(new Error(`Creating appointment failed: ${e}`))
+    }
+}
+
 module.exports = {
-    index
+    index,
+    create
 }

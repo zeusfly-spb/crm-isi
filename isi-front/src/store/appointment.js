@@ -262,23 +262,13 @@ export default {
             })
         },
         createAppointment ({commit, dispatch}, data) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/create_appointment', {... data})
-                    .then(res => {
-                        // commit('ADD_APPOINTMENT', res.data)
-                        dispatch('pushFrame', {
-                            type: 'add_appointment',
-                            model: res.data
-                        })
-                        if (res.data.subscribe_id) {
-                            dispatch('setSubscribes')
-                        }
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+            console.log(data)
+            dispatch('pushFrame', {
+                type: 'request_add_appointment',
+                model: {...data}
             })
         },
-        setAppointments ({commit, rootState, state, getters, dispatch}) {
+        setAppointments ({rootState, state, getters, dispatch}) {
             dispatch('pushFrame', {
                 type: 'request_get_appointments',
                 model: {
@@ -292,21 +282,6 @@ export default {
                     page: 'appointments'
                 }
             })
-            /**
-            return new Promise((resolve, reject) => {
-                commit('ADD_TASK', 'appointments')
-                Vue.axios.post('/api/get_appointments', {
-                    date: state.date,
-                    island_id: getters.callCenter ? getters.inspectingIslandId : rootState.workingIslandId
-                })
-                    .then(res => {
-                        commit('SET_APPOINTMENTS', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
-                    .finally(() => commit('REMOVE_TASK', 'appointments'))
-            })
-            */
         }
     },
     mutations: {

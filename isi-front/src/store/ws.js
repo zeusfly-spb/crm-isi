@@ -50,6 +50,9 @@ export default {
             }
             const postMutation = mutation => {
                 switch (mutation.name) {
+                    case 'ADD_APPOINTMENT':
+                        dispatch('setSubscribes')
+                        break
                     case 'SET_MONTH_DATA':
                         dispatch('appendSalaryCharges')
                         !rootState.workingIslandId ? commit('SET_STAT_DATA', mutation.data) : null
