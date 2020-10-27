@@ -85,8 +85,27 @@ const create = async data => {
     }
 }
 
+const update = async data => {
+    try {
+        let inputs = {}
+        const fields = ['user_id', 'island_id', 'customer_id', 'income', 'expense', 'is_cache', 'deal_action_id',
+            'product_id', 'type_id', 'size_id', 'subscription_id', 'service_id']
+        for (let key in data) {
+            fields.includes(key) ? inputs[key] = data[key] : null
+        }
+        const deal = await Deal.findByPk(data.id)
+        await deal.update({...inputs})
+        await deal.reload({include: {all: true}})
+        const info = {text: 'Данные сделки обновлены'}
+        return Promise.resolve({deal, info})
+    } catch (e) {
+        return Promise.reject(new Error(`Update deal failed: ${e}`))
+    }
+}
+
 module.exports = {
     index,
     updatePaymentType,
-    create
+    create,
+    update
 }

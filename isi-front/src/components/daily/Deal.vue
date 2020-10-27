@@ -295,18 +295,7 @@
                     .then(valid => {
                         if (!valid) return
                         this.$store.dispatch('updateDeal', this.deal)
-                            .then(() => {
-                                this.blur(mode)
-                                this.$emit('snack', `Значение "${{
-                                    insole: 'Услуга',
-                                    income: 'Цена',
-                                    expense: 'Себестоимость',
-                                    is_cache: 'Форма оплаты',
-                                    customer: 'Клиент',
-                                    user: 'Сотрудник'
-                                }[mode]}" изменено.`, 'green')
-                            })
-                            .catch(e => console.error(e))
+                            .then(() => this.blur(mode))
                     })
             },
             blur (mode) {

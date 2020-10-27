@@ -243,17 +243,9 @@ export const store = new Vuex.Store({
             })
         },
         updateDeal ({commit, dispatch}, deal) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/update_deal', {...deal})
-                    .then(res => {
-                        // commit('UPDATE_DEAL', res.data)
-                        dispatch('pushFrame', {
-                            type: 'update_deal',
-                            model: res.data
-                        })
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+            dispatch('pushFrame', {
+                type: 'request_update_deal',
+                model: {...deal}
             })
         },
         deleteExpense ({commit, dispatch}, expenseId) {
