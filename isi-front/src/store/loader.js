@@ -22,6 +22,23 @@ export default {
         savedPage: null
     },
     actions: {
+        refreshCallTodayLeads ({state, getters, commit}, lead) {
+            try {
+                if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
+                    return
+                }
+                if (!getters.callTodayLeads.map(item => +item.id).includes(+lead.id)) {
+                    return
+                }
+                let data = JSON.parse(JSON.stringify(getters.callTodayLeads))
+                data = data
+                    .map(item => +item.id === +lead.id ? lead : item)
+                    .filter(item => item.last_postpone && item.last_postpone_date === getters.realDate)
+                commit('SET_CALL_TODAY_LEADS', data)
+            } catch (e) {
+                return Promise.reject(new Error(`Refresh call today leads failed: ${e}`))
+            }
+        },
         startAnotherUserDay ({dispatch}, data) {
             try {
                 let frame = {
