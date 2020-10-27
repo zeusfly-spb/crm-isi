@@ -32,6 +32,12 @@
                     return this.$store.getters.hideReminders
                 },
                 set (val) {
+                    let backup = this.$store.getters.showTodayPostpones
+                    if (val) {
+                        this.$store.commit('SET_TODAY_POSTPONES', true)
+                        this.$store.dispatch('setLeadsOnTimer')
+                            .finally(() => this.$store.commit('SET_TODAY_POSTPONES', backup))
+                    }
                     return this.$store.commit('SET_HIDE_REMINDERS_VALUE', val)
                 }
             },

@@ -14,7 +14,7 @@ const clearDate = date => moment(date).format('YYYY-MM-DD')
 const parse = async message => {
     try {
         const frame = JSON.parse(message)
-        const Instruction = ({ mutations,conditions, info }) => {
+        const Instruction = ({ mutations, conditions, info }) => {
             let response ={
                 type: 'instruction',
                 model: { mutations, conditions, info}
@@ -149,6 +149,7 @@ const parse = async message => {
                     {name: 'SYNC_PAGINATION', data: response.paginator_data},
                     {name: 'SET_LEADS', data: response.leads}
                 ]
+                frame.model.call_today ? mutations.push({name: 'SET_CALL_TODAY_LEADS', data: response.leads}) : null
                 return Promise.resolve({
                     response: Instruction({mutations}),
                     broadcast: null

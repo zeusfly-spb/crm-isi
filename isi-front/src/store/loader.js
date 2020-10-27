@@ -85,9 +85,6 @@ export default {
                 commit('CHANGE_LEAD_STATUS', status)
                 commit('RESET_PAGINATOR')
                 dispatch('setLeadsOnTimer')
-                    // .then(res => resolve(res))
-                    // .catch(e => reject(e))
-                    // .finally(() => commit('SET_PAGINATOR_LOADING', false))
             })
         },
         loadStockPage ({commit, rootState}) {
@@ -420,13 +417,6 @@ export default {
             })
         },
         loadDailyPage ({commit, rootState, dispatch}) {
-            /*
-            dispatch('pushFrame', {
-                type: 'request_load_daily_page',
-                model: {date: rootState.accountingDate, island_id: rootState.workingIslandId},
-                request: {id: uuidv4(), title: 'Загрузка данных дневного учета', page: 'daily'}
-            })
-             */
             dispatch('pushFrame', {
                 type: 'request_get_deals',
                 model: {
@@ -513,6 +503,7 @@ export default {
         }
     },
     getters: {
+        showTodayPostpones: state => state.showTodayPostpones,
         acceptedSites: (state, getters) => {
             if (!getters.workingIsland || !getters.filterLeads) {
                 return []
