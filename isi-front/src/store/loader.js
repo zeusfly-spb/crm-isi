@@ -475,6 +475,12 @@ export default {
         }
     },
     mutations: {
+        DECREASE_LEADS_COUNT (state, status) {
+            state.counts[status]--
+        },
+        INCREASE_LEADS_COUNT (state, status) {
+            state.counts[status]++
+        },
         BEEP (state) {
             state.beep = true
             setTimeout(() => state.beep = false, 2000)

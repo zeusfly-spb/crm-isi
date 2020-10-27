@@ -101,6 +101,18 @@ const index = async data => {
     }
 }
 
+const updateStatus = async data => {
+    const lead = await Lead.findByPk(data.lead_id)
+    const oldStatus = lead.status
+    await lead.update({status: data.status})
+    await lead.reload({include: {all: true}})
+    const mutations = [
+        {name: 'INCREASE_LEAD_COUNT', data: lead.status},
+        {name: 'DECREASE_LEAD_COUNT', data: oldStatus},
+    ]
+
+}
+
 module.exports = {
     index
 }
