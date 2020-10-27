@@ -84,9 +84,6 @@ export default {
              * Frame handlers
              */
 
-            const updateDeal = deal => commit('UPDATE_DEAL', deal)
-            const deleteDeal = deal => commit('DELETE_DEAL', deal.id)
-
             const insertLead = lead => {
                 if (getters.filterLeads && !getters.acceptedSites.includes(lead.site)) {
                     return
@@ -173,12 +170,6 @@ export default {
                             break
                         case 'instruction':
                             handleInstruction(obj.model)
-                            break
-                        case 'update_deal':
-                            updateDeal(obj.model)
-                            break
-                        case 'delete_deal':
-                            deleteDeal(obj.model)
                             break
                         case 'add_lead':
                             insertLead(obj.model)

@@ -103,9 +103,25 @@ const update = async data => {
     }
 }
 
+const remove = async data => {
+    try {
+        const deal = await Deal.findByPk(data.id, {include: {all: true}})
+        const info = {text: `Сделка ${deal.insole} на ${deal.income}р. удалена`}
+        const dealId = deal.id
+        if (deal.stock_action_id) {
+            const stockAction = await StockAction.findByPk(deal.stock_action_id)
+            await stockAction.destroy()
+        }
+        return Promise.resolve({info, dealId})
+    } catch (e) {
+        return Promise.reject(new Error(`Remove deal failed: ${e}`))
+    }
+}
+
 module.exports = {
     index,
     updatePaymentType,
     create,
-    update
+    update,
+    remove
 }
