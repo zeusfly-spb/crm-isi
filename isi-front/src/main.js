@@ -76,7 +76,7 @@ if (token) {
             }
         })
 
-        .then(() => {
+        .finally(() => {
             if (store.getters.isSuperadmin || store.getters.isAllowed) {
                 store.dispatch('enterCRM')
             } else {

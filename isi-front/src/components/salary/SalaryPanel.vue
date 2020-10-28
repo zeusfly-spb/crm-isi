@@ -31,6 +31,7 @@
             @mousemove="listMouseMove"
         >
             <v-data-table
+                :loading="loading"
                 :items="['', ...users]"
                 :headers="headers"
                 hide-actions
@@ -62,6 +63,9 @@
             dragMode: false
         }),
         computed: {
+            loading () {
+                return this.$store.getters.busy || this.$store.getters.wsLoading
+            },
             workingIslandId () {
                 return +this.$store.state.workingIslandId
             },
