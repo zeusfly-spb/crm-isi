@@ -21,7 +21,7 @@ const cacheSalary = event => {
         .then(() => console.timeEnd('Cache salary month data'))
 }
 
-const performLead = event => event.type === 'INSERT' ?
+const performLead = event => event.type === 'INSERT' && event.affectedRows[0].after.status === 'wait' ?
     broadcast(JSON.stringify({type: 'add_lead', model: event.affectedRows[0].after})) : null
 
 const performDeal = event => cacheSalary(event)
