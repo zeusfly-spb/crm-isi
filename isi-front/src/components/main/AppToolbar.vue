@@ -56,7 +56,9 @@
                                     >
                                         {{ authUser && authUser.full_name  || ''}}
                                     </span>
-                                    <span v-if="access && access.island" class="blue--text">({{ access && access.island && access.island.name }})</span>
+                                    <span v-if="access && access.island && !isSuperadmin" class="blue--text">
+                                        ({{ access && access.island && access.island.name }})
+                                    </span>
                                 </div>
                             </div>
                         </div>

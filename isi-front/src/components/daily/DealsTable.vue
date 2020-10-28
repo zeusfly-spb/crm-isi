@@ -11,6 +11,7 @@
         </v-snackbar>
 
         <v-data-table
+                :loading="loading"
                 :headers="headers"
                 :items="deals"
                 hide-actions
