@@ -50,6 +50,9 @@ export default {
             }
             const postMutation = mutation => {
                 switch (mutation.name) {
+                    case 'DELETE_DEAL':
+                        dispatch('setStockActions')
+                        break
                     case 'ADD_APPOINTMENT':
                         dispatch('setSubscribes')
                         dispatch('setLeadsOnTimer')
