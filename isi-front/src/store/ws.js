@@ -116,14 +116,8 @@ export default {
                 }
                 let oldStatus = lead.old_status
                 delete lead.old_status
-                dispatch('changeCount', {
-                    status: oldStatus,
-                    value: -1
-                })
-                dispatch('changeCount', {
-                    status: lead.status,
-                    value: 1
-                })
+                commit('DECREASE_LEADS_COUNT', oldStatus)
+                commit('INCREASE_LEADS_COUNT', lead.status)
                 getters.currentLeadStatus === oldStatus && displayed(lead) ? commit('DELETE_LEAD', lead) : null
                 getters.currentLeadStatus === lead.status ? commit('ADD_LEAD', lead) : null
             }

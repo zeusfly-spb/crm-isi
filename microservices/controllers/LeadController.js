@@ -114,8 +114,6 @@ const updateStatus = async data => {
     } catch (e) {
         return Promise.reject(new Error(`Lead status update failed: ${e}`))
     }
-
-
 }
 
 module.exports = {
