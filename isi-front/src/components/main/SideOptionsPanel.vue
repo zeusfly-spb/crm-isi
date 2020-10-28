@@ -33,7 +33,7 @@
                 },
                 set (val) {
                     let backup = this.$store.getters.showTodayPostpones
-                    if (val) {
+                    if (!val) {
                         this.$store.commit('SET_TODAY_POSTPONES', true)
                         this.$store.dispatch('setLeadsOnTimer')
                             .finally(() => this.$store.commit('SET_TODAY_POSTPONES', backup))
