@@ -11,6 +11,7 @@
         </v-snackbar>
 
         <v-data-table
+                v-blur="loading"
                 :loading="loading"
                 :headers="headers"
                 :items="deals"

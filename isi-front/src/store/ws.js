@@ -247,7 +247,8 @@ export default {
     getters: {
         wsRequests: state => state.requests,
         wsLoading: (state, getters) => {
-            return state.requests.filter(request => request.page === getters.currentPage).length > 0
+            const limit = getters.isSuperAdmin ? 0 : getters.currentPage === 'daily' ? 2 : 0
+            return state.requests.filter(request => request.page === getters.currentPage).length > limit
         }
     }
 }
