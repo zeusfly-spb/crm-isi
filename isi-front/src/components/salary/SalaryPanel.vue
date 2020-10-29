@@ -5,6 +5,8 @@
         <island-switcher/>
         <v-layout v-if="dates && dates.length < 12">
             <v-data-table
+                v-blur="loading"
+                :loading="loading"
                 :items="['', ...users]"
                 :headers="headers"
                 hide-actions
@@ -31,6 +33,7 @@
             @mousemove="listMouseMove"
         >
             <v-data-table
+                v-blur="loading"
                 :loading="loading"
                 :items="['', ...users]"
                 :headers="headers"
