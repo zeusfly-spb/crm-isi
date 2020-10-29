@@ -1,16 +1,5 @@
 <template>
     <v-flex align-center>
-        <v-snackbar
-            v-model="snackbar"
-            auto-height
-            top
-            :timeout="3000"
-            :color="snackColor"
-        >
-            <span>{{ snackText }}</span>
-        </v-snackbar>
-
-
         <div class="mb-2">
              <v-btn color="primary" flat dark class="mb-2" @click="showAddDialog">Добавить клиента</v-btn>
              <v-text-field
@@ -24,7 +13,6 @@
                  @input="lazyQuerySelection"
              />
         </div>
-
         <v-dialog persistent
                   v-model="dialog"
                   max-width="600px"
@@ -269,9 +257,6 @@
             interactionsOpenId: null,
             loadedCustomers: [],
             searchString: '',
-            snackbar: false,
-            snackText: '',
-            snackColor: '',
             customerToDelete: null,
             confirmText: '',
             confirm: false,
@@ -340,16 +325,12 @@
                     .then(res =>this.loadedCustomers = res.data)
                     .finally(() => this.$store.commit('REMOVE_TASK', 'customers'))
             },
-            showSnack (text, color) {
-                this.snackText = text
-                this.snackColor = color
-                this.snackbar = true
-            },
             deleteCustomer () {
                 this.$store.dispatch('deleteCustomer', this.customerToDelete.id)
                     .then(() => {
                         this.confirm = false
-                        this.showSnack(`Клиент ${this.customerToDelete.full_name} удален`, 'green')
+                        const text = `Клиент ${this.customerToDelete.full_name} удален`
+                        this.$store.dispatch('pushMessage', {text})
                         this.querySelection()
                     })
             },
@@ -374,11 +355,13 @@
                         this.$store.dispatch(action, this.editedCustomer)
                             .then((res) => {
                                 if (res.data.exists) {
-                                    this.showSnack('Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.', 'red')
+                                    const message = {text: 'Клиент с таким номером телефона уже присутствует в базе! Проверьте правильность ввода или повторите поиск.', color: 'red'}
+                                    this.$store.dispatch('pushMessage', message)
                                     return
                                 }
                                 this.dialog = false
-                                this.showSnack(`${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`, 'green')
+                                const text = `${this.mode === 'add' ? 'Добавлен новый клиент' : 'Данные клиента изменены'}`
+                                this.$store.dispatch('pushMessage', {text})
                                 this.querySelection()
                             })
                     })
