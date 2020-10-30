@@ -48,13 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     client_phone: DataTypes.STRING,
     date: {
       type: DataTypes.DATE,
-      allowNull: false,
-      get () {
-        return moment(this.getDataValue('date')).format('YYYY-MM-DD HH:MM:ss')
-      },
-      set (val) {
-        this.setDataValue('date', moment(val).format('YYYY-MM-DD HH:MM:ss'))
-      }
+      allowNull: false
     },
     client_name: {type: DataTypes.STRING, allowNull: false},
     cabinet_id: DataTypes.BIGINT,
