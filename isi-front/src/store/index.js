@@ -544,14 +544,10 @@ export const store = new Vuex.Store({
                     .catch(e => reject(e))
             })
         },
-        setCustomers ({commit, state}) {
-            return new Promise((resolve, reject) => {
-                Vue.axios.post('/api/get_customers', {date: state.accountingDate})
-                    .then(res => {
-                        commit('SET_CUSTOMERS', res.data)
-                        resolve(res)
-                    })
-                    .catch(e => reject(e))
+        setCustomers ({commit, state, dispatch}) {
+            dispatch('pushFrame', {
+                type: 'request_get_customers',
+                model: {date: state.accountingDate}
             })
         },
         deleteAccess ({commit}, accessId) {

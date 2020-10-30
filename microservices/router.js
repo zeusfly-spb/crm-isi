@@ -8,6 +8,7 @@ const LeadController = require('./controllers/LeadController')
 const SubscribeController = require('./controllers/SubscribeController')
 const StockActionsController = require('./controllers/StockActionController')
 const ExpenseController = require('./controllers/ExpenseController')
+const CustomerController = require('./controllers/CustomerController')
 
 const clearDate = date => moment(date).format('YYYY-MM-DD')
 
@@ -28,6 +29,12 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_get_customers':
+                mutations = await CustomerController.index({...frame.model})
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_delete_deal':
                 data = await DealController.remove({...frame.model})
                 mutations = [{name: 'DELETE_DEAL', data: data.dealId}]
