@@ -9,7 +9,7 @@ const index = async data => {
             include: {all: true}
         })
         const mutations = [{name: 'SET_CUSTOMERS', data: customers}]
-        return Promise.resolve(mutations)
+        return Promise.resolve({mutations})
     } catch (e) {
         return Promise.reject(new Error(`Load customers failed: ${e}`))
     }

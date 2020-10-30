@@ -30,11 +30,14 @@ const parse = async message => {
         let mutation, mutations, conditions, data
         switch (frame.type) {
             case 'request_get_customers':
-                mutations = await CustomerController.index({...frame.model})
-                return Promise.resolve({
-                    response: Instruction({mutations}),
-                    broadcast: null
-                })
+                const request_get_customers = async model => {
+                    const {mutations} = await CustomerController.index({...model})
+                    return Promise.resolve({
+                        response: Instruction({mutations}),
+                        broadcast: null
+                    })
+                }
+                return Promise.resolve(await request_get_customers({...frame.model}))
             case 'request_delete_deal':
                 data = await DealController.remove({...frame.model})
                 mutations = [{name: 'DELETE_DEAL', data: data.dealId}]
