@@ -1,6 +1,7 @@
 const { Op } = require("sequelize")
 const models = require('../models')
 const Customer = models.Customer
+const SmsReport = models.SmsReport
 
 const index = async data => {
     try {
@@ -15,6 +16,17 @@ const index = async data => {
     }
 }
 
+const sentMessages = async id => {
+    try {
+        const customer = await Customer.findByPk(id, {include: ['phones']})
+        const phoneNumbers = customer.phones.map(item => `+7${item.number}`)
+        return Promise.resolve(await SmsReport.findAll({where: {number: phoneNumbers}}))
+    } catch (e) {
+        return Promise.reject(new Error(`Load customers sent messages failed: ${e}`))
+    }
+}
+
 module.exports = {
-    index
+    index,
+    sentMessages
 }
