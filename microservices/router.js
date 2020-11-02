@@ -29,6 +29,12 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_get_customer_sent_messages':
+                mutations = await CustomerController.sentMessages({...frame.model})
+                return Promise.resolve({
+                    response: Instruction({mutations}),
+                    broadcast: null
+                })
             case 'request_get_customers':
                 const request_get_customers = async model => {
                     const {mutations} = await CustomerController.index({...model})

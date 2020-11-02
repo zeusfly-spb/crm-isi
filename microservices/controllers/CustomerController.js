@@ -16,11 +16,15 @@ const index = async data => {
     }
 }
 
-const sentMessages = async id => {
+const sentMessages = async data => {
     try {
-        const customer = await Customer.findByPk(id, {include: ['phones']})
+        const customer = await Customer.findByPk(data.customer_id, {include: ['phones']})
         const phoneNumbers = customer.phones.map(item => `+7${item.number}`)
-        return Promise.resolve(await SmsReport.findAll({where: {number: phoneNumbers}}))
+        const sent_messages = await SmsReport.findAll({where: {number: phoneNumbers}})
+        const lead_id = data.lead_id
+        const response = {lead_id, sent_messages}
+        const mutations = [{name: 'UPDATE_LEAD_CUSTOMER', data: response}]
+        return Promise.resolve(mutations)
     } catch (e) {
         return Promise.reject(new Error(`Load customers sent messages failed: ${e}`))
     }

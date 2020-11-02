@@ -475,6 +475,13 @@ export default {
         }
     },
     mutations: {
+        UPDATE_LEAD_CUSTOMER (state, data) {
+            let lead = state.leads.find(item => item.id === data.lead_id)
+            if (lead.customer) {
+                lead.customer.sent_messages = data.sent_messages
+            }
+            state.leads = state.leads.map(item => +item.id === +data.lead_id ? lead : item)
+        },
         DECREASE_LEADS_COUNT (state, status) {
             state.counts[status]--
         },

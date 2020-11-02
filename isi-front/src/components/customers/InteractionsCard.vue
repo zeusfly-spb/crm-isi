@@ -130,6 +130,17 @@
                 this.$emit('close')
             }
         },
+        mounted () {
+            if (this.lead && this.customer) {
+                this.$store.dispatch('pushFrame', {
+                    type: 'request_get_customer_sent_messages',
+                    model: {
+                        lead_id: this.lead.id,
+                        customer_id: this.customer.id
+                    }
+                })
+            }
+        },
         watch: {
             active (val) {
                 if (val && this.customer) {
