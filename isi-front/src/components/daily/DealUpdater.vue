@@ -5,7 +5,7 @@
              <span v-if="!active"
                    :class="{clickable: canUpdate && !loading}"
                    @click="activate"
-                   :title="canUpdate && !loading ? 'Клик чтобы изменить продукцию по сделке' : ''"
+                   :title="canUpdate && !loading && ready ? 'Клик чтобы изменить продукцию по сделке' : ''"
              >
                 {{ subscription ? subscription.name : deal.insole.name }}
             </span>
@@ -111,6 +111,9 @@
             active: false
         }),
         computed: {
+            ready () {
+                return [this.products, this.stockOptions.types, this.formattedSizes].every(item => !!item && item.length > 0)
+            },
             isSale () {
                 return this.deal.action_type === 'sale' || false
             },
@@ -201,7 +204,7 @@
                 this.active = false
             },
             activate () {
-                if (!this.canUpdate || this.loading) return
+                if (!this.canUpdate || this.loading || !this.ready) return
                 this.active = true
             }
         },

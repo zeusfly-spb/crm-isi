@@ -168,6 +168,9 @@ export default {
                         case 'instruction':
                             handleInstruction(obj.model)
                             break
+                        case 'update_deal':
+                            commit('UPDATE_DEAL', obj.model)
+                            break
                         case 'add_lead':
                             insertLead(obj.model)
                             break
