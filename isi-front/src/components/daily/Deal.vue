@@ -118,34 +118,6 @@
             :class="{'mini': mini}"
         >
             <deal-payment-updater :deal="deal"/>
-<!--            <span-->
-<!--                @click="switchEditMode('is_cache')"-->
-<!--            >-->
-<!--                <span-->
-<!--                    :title="canUpdate ? 'Чтобы изменить форму оплаты - клик мышкой' : ''"-->
-<!--                    :class="{clickable: canUpdate}"-->
-<!--                >-->
-<!--                    <span-->
-<!--                        v-if="!editMode.is_cache"-->
-<!--                    >-->
-<!--                        {{ deal.is_cache ? 'Наличный' : 'Безналичный' }}-->
-<!--                    </span>-->
-<!--                    <v-select-->
-<!--                        style="width: 3em"-->
-<!--                        v-else-->
-<!--                        autofocus-->
-<!--                        height="1em"-->
-<!--                        v-model="deal.is_cache"-->
-<!--                        :items="paymentTypes"-->
-<!--                        item-text="text"-->
-<!--                        item-value="value"-->
-<!--                        single-line-->
-<!--                        @focus="focused('is_cache')"-->
-<!--                        @blur="blur('is_cache')"-->
-<!--                        @change="updateDeal('is_cache')"-->
-<!--                    />-->
-<!--                </span>-->
-<!--            </span>-->
         </td>
         <new-customer-dialog
             :active="newCustomer"
@@ -212,7 +184,7 @@
                 return this.deal.id === null
             },
             users () {
-                let base = this.$store.state.users
+                let base = this.$store.state.users.filter(item => !item.fired_at)
                 if (this.isAdmin) {
                     let currentWorkingUserIds = this.$store.state.workdays
                         .filter(item => !item.time_finish)
@@ -294,7 +266,7 @@
                 this.$validator.validate()
                     .then(valid => {
                         if (!valid) return
-                        this.$store.dispatch('updateDeal', this.deal)
+                        this.$store.dispatch('updateDeal', mode === 'user' ? {id: this.deal.id, user_id: this.deal.user_id} :this.deal)
                             .then(() => this.blur(mode))
                     })
             },
