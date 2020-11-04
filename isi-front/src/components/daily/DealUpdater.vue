@@ -145,9 +145,13 @@
                     this.$store.state.stock.options.sizes && this.$store.state.stock.options.sizes.filter(size => !['29-30', '31-31.5', '32-33', '34-34.5', '46-46.5', '47'].includes(size.name))
             },
             formattedSizes () {
-                let currentAction = this.stockOptions.deal_actions &&
-                    this.stockOptions.deal_actions.find(item => +item.id === +this.deal.deal_action_id) &&
-                    this.stockOptions.deal_actions.find(item => +item.id === +this.deal.deal_action_id).type || null
+                const getCurrentAction = () => {
+                    if (!this.stockOptions || !this.stockOptions.deal_actions) {
+                        return null
+                    }
+                    return this.stockOptions.deal_actions.find(item => +item.id === +this.deal.deal_action_id).type || null
+                }
+                let currentAction = getCurrentAction()
                 let productName = this.currentProduct && this.currentProduct.name || 'Стельки'
                 let typeName = this.currentType && this.currentType.name || 'Кожа'
                 return currentAction === 'produce' ? this.sizes &&
@@ -185,7 +189,7 @@
                         if (!res) return
                         this.$store.dispatch('updateDealWithStock', this.deal)
                             .then(() => {
-                                this.$store.dispatch('pushMessage', {text: 'Данные сделки изменены'})
+                                this.$store.dispatch('pushMessage', {text: 'Данные продукции сделки изменены'})
                                 this.$store.dispatch('setStockActions')
                                 this.deactivate()
                             })
