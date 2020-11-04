@@ -185,6 +185,7 @@
                         if (!res) return
                         this.$store.dispatch('updateDealWithStock', this.deal)
                             .then(() => {
+                                this.$store.dispatch('pushMessage', {text: 'Данные сделки изменены'})
                                 this.$store.dispatch('setStockActions')
                                 this.deactivate()
                             })
@@ -213,14 +214,14 @@
                 this.loading = true
                 let enabledSizes = value.filter(item => !item.disabled)
                 if (!enabledSizes.length) {
-                    this.deal.size_id = null
+                    // this.deal.size_id = null
                     return
                 }
-                this.deal.size_id = enabledSizes[0].id
+                // this.deal.size_id = enabledSizes[0].id
                 this.loading = false
             },
             sizes (value) {
-                this.deal.size_id = value.length && value[0].id
+                // this.deal.size_id = value.length && value[0].id
             },
             deal () {
                 this.updateCurrentProduct()
