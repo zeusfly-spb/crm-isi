@@ -1,6 +1,8 @@
 <template>
     <v-toolbar
         app
+        scroll-off-screen
+
         clipped-left
         :class="{'p-0': isMobile, 'm-0': isMobile}"
     >
