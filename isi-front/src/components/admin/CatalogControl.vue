@@ -7,6 +7,7 @@
             <subscriptions-catalog/>
             <notifications-control/>
             <sites-catalog/>
+            <table-constructor/>
         </v-layout>
     </v-container>
 </template>
@@ -15,13 +16,15 @@
     import SubscriptionsCatalog from './catalogs/SubscriptionsCatalog'
     import NotificationsControl from './catalogs/NotificationsControl'
     import SitesCatalog from './catalogs/SitesCatalog'
+    import TableConstructor from './catalogs/TableConstructor'
     export default {
         name: 'CatalogControl',
         components: {
             ServicesCatalog,
             SubscriptionsCatalog,
             NotificationsControl,
-            SitesCatalog
+            SitesCatalog,
+            TableConstructor
         }
     }
 </script>
