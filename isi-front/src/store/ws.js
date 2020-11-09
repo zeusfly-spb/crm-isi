@@ -201,6 +201,9 @@ export default {
                             updateLead(obj.model)
                             refreshCallToday(obj.model)
                             break
+                        case 'add_workday':
+                            commit('ADD_WORK_DAY', obj.model)
+                            break;
                         default: break
                     }
                     if (obj.response) {

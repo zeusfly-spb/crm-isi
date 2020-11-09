@@ -48,15 +48,15 @@
                         <td
                             :class="{'mini': mini}"
                         >
-<!--                            <v-icon-->
-<!--                                class="clickable"-->
-<!--                                v-if="isAdmin && !props.item.time_finish && +props.item.user.id !== +authUser.id"-->
-<!--                                color="blue"-->
-<!--                                :title="`Закончить рабочий день сотрудника ${props.item.user.full_name}`"-->
-<!--                                @click="setClosingUser(props.item.user)"-->
-<!--                            >-->
-<!--                                directions_walk-->
-<!--                            </v-icon>-->
+                            <v-icon
+                                class="clickable"
+                                v-if="isAdmin && !props.item.time_finish && +props.item.user.id !== +authUser.id"
+                                color="blue"
+                                :title="`Закончить рабочий день сотрудника ${props.item.user.full_name}`"
+                                @click="setClosingUser(props.item.user)"
+                            >
+                                directions_walk
+                            </v-icon>
                             <span>{{ displayTime(props.item.time_finish) || '' }}</span>
                         </td>
                         <td align="center"
@@ -139,10 +139,16 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    ntcn
+                    <v-text-field
+                            style="width: 4em"
+                            type="number"
+                            step="0.01"
+                            max="12"
+                            min="0"
+                            v-model="anotherUserHours"
+                            label="Количество часов"
+                    />
                 </v-card-text>
-
-
             </v-card>
         </v-dialog>
     </v-flex>
@@ -154,6 +160,7 @@
     export default {
         name: 'WorkDaysTable',
         data: () => ({
+            anotherUserHours: 0,
             defSorting: {'sortBy': 'time_start', 'descending': false, 'rowsPerPage': -1},
             adminClosing: false,
             closingUser: null,
@@ -284,6 +291,8 @@
         },
         watch: {
             closingUser (val) {
+                const setAnotherUserHours = () => this.anotherUserHours = this.workdays.find(wd => wd.user_id === this.closingUser.id).working_hours || 0
+                val ? setAnotherUserHours() : null
                 this.adminClosing = !!val
             }
         },
