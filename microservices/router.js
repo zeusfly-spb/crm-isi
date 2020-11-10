@@ -29,12 +29,23 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'finish_another_user_day':
+                const finish_another_user_day = async model => {
+                    const {mutations, conditions, info} = await WorkDayController.finishAnotherUserDay({...model})
+                    return Promise.resolve({
+                        response: Instruction({info}),
+                        broadcast: Instruction({mutations, conditions})
+                    })
+                }
+                return Promise.resolve(await finish_another_user_day({...frame.model}))
+
             case 'request_get_customer_sent_messages':
                 mutations = await CustomerController.sentMessages({...frame.model})
                 return Promise.resolve({
                     response: Instruction({mutations}),
                     broadcast: null
                 })
+
             case 'request_get_customers':
                 const request_get_customers = async model => {
                     const {mutations} = await CustomerController.index({...model})
@@ -44,6 +55,7 @@ const parse = async message => {
                     })
                 }
                 return Promise.resolve(await request_get_customers({...frame.model}))
+
             case 'request_delete_deal':
                 data = await DealController.remove({...frame.model})
                 mutations = [{name: 'DELETE_DEAL', data: data.dealId}]

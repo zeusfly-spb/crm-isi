@@ -265,9 +265,15 @@
 
             },
             closeAnotherDay () {
-                const action = () => {
-                    
-                }
+                const closingWorkDayId = this.workdays.find(item => item.user_id === this.closingUser.id).id
+                const action = () => this.$store.dispatch('pushFrame', {
+                    type: 'finish_another_user_day',
+                    model: {
+                        id: closingWorkDayId,
+                        working_hours: this.anotherUserHours
+                    }
+                })
+                    .then(() => this.closeDialog())
                 this.$validator.validate().then(res => res ? action() : null)
             },
             closeDialog () {

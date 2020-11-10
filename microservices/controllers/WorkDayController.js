@@ -86,12 +86,26 @@ const finishUserDay = async data => {
     }
 }
 
+const finishAnotherUserDay = async data => {
+    try {
+        const workDay = await WorkDay.findByPk(data.id, {include: ['user']})
+        await workDay.update({working_hours: data.working_hours, time_finish: moment().format('HH:mm')})
+        const info = {text: `Завершен рабочий день сотрудника ${workDay.user.full_name}`}
+        const mutations = [{name: 'UPDATE_WORKDAY', data: workDay}]
+        const conditions = [{name: 'workingIslandId', compare: 'includes', value: [0, workDay.island_id]}]
+        return Promise.resolve({mutations, conditions, info})
+    } catch (e) {
+        return Promise.reject(new Error(`Finish another user day failed: ${e}`))
+    }
+}
+
 
 module.exports = {
     index,
     create,
     startUserDay,
     resumeUserDay,
-    finishUserDay
+    finishUserDay,
+    finishAnotherUserDay
 }
 
