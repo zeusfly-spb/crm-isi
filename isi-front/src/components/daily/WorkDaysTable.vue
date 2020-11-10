@@ -33,8 +33,6 @@
                                     height="1em"
                                     maxlength="5"
                                     style="width: 4em"
-                                    @focus="stopScanWorkdays"
-                                    @blur="startScanWorkdays"
                                     ref="hoursInput"
                                     @keyup.enter="updateHours(props.item)"
                             />
@@ -139,15 +137,37 @@
                     </v-icon>
                 </v-card-title>
                 <v-card-text>
-                    <v-text-field
-                            style="width: 4em"
-                            type="number"
-                            step="0.01"
-                            max="12"
-                            min="0"
-                            v-model="anotherUserHours"
-                            label="Количество часов"
-                    />
+                    <v-layout
+                            align-baseline
+                            align-content-center
+                            class="justify-center"
+                    >
+                        <span
+                                style="width: 7em"
+                        >
+                              <v-text-field
+                                      class="centered-input"
+                                      type="number"
+                                      step="0.01"
+                                      max="12"
+                                      min="0"
+                                      ref="closingUserHours"
+                                      v-model="anotherUserHours"
+                                      label="Часов"
+                                      data-vv-as="Часы"
+                                      data-vv-name="another-hours"
+                                      :error-messages="errors.collect('another-hours')"
+                                      v-validate="'required|greaterThanZero'"
+                              />
+                        </span>
+                        <v-btn
+                                style="margin-left: 1em"
+                                flat
+                                @click="closeAnotherDay"
+                        >
+                            Закончить рабочий день
+                        </v-btn>
+                    </v-layout>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -234,11 +254,26 @@
             }
         },
         methods: {
+            resetValidator () {
+                this.$validator.pause()
+                this.$nextTick(() => {
+                    this.$validator.errors.clear()
+                    this.$validator.fields.items.forEach(field => field.reset())
+                    this.$validator.fields.items.forEach(field => this.errors.remove(field))
+                    this.$validator.resume()
+                })
+
+            },
+            closeAnotherDay () {
+                const action = () => {
+                    
+                }
+                this.$validator.validate().then(res => res ? action() : null)
+            },
             closeDialog () {
                 this.closingUser = null
             },
             setClosingUser (user) {
-                console.log('Setting user ' + user)
                 this.closingUser = user
             },
             displayTime (fullTime) {
@@ -289,10 +324,23 @@
                 this.$store.dispatch('startUserDay')
             }
         },
+        created () {
+            this.$validator.extend(
+                'greaterThanZero',{
+                    getMessage: field =>  field + ' должно быть больше 0',
+                    validate: (value) => !!value
+                });
+        },
         watch: {
             closingUser (val) {
                 const setAnotherUserHours = () => this.anotherUserHours = this.workdays.find(wd => wd.user_id === this.closingUser.id).working_hours || 0
-                val ? setAnotherUserHours() : null
+                if (val) {
+                    setAnotherUserHours()
+                    setTimeout(() => this.$refs.closingUserHours.focus(), 100)
+
+                } else {
+                    this.resetValidator()
+                }
                 this.adminClosing = !!val
             }
         },
