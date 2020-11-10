@@ -50,7 +50,7 @@
                         >
                             <v-icon
                                 class="clickable"
-                                v-if="isAdmin && !props.item.time_finish && +props.item.user.id !== +authUser.id"
+                                v-if="isDayOpen && isAdmin && !props.item.time_finish && +props.item.user.id !== +authUser.id"
                                 color="blue"
                                 :title="`Закончить рабочий день сотрудника ${props.item.user.full_name}`"
                                 @click="setClosingUser(props.item.user)"
