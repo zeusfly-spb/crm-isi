@@ -55,6 +55,16 @@
                             >
                                 directions_walk
                             </v-icon>
+                            <v-icon
+                                    v-if="canContinue(props.item)"
+                                    class="clickable"
+                                    color="green"
+                                    style="-webkit-transform: scaleX(-1); transform: scaleX(-1);"
+                                    :title="`Продолжить рабочий день сотрудника ${props.item.user.full_name}`"
+                                    @click="resumeAnotherUserDay(props.item)"
+                            >
+                                directions_walk
+                            </v-icon>
                             <span>{{ displayTime(props.item.time_finish) || '' }}</span>
                         </td>
                         <td align="center"
@@ -254,6 +264,17 @@
             }
         },
         methods: {
+            resumeAnotherUserDay (workday) {
+                this.$store.dispatch('pushFrame', {
+                    type: 'request_resume_another_user_day',
+                    model: {
+                        id: workday.id
+                    }
+                })
+            },
+            canContinue (workday) {
+                return this.isDayOpen && this.isAdmin && this.isToday && workday.time_finish
+            },
             resetValidator () {
                 this.$validator.pause()
                 this.$nextTick(() => {
@@ -262,7 +283,6 @@
                     this.$validator.fields.items.forEach(field => this.errors.remove(field))
                     this.$validator.resume()
                 })
-
             },
             closeAnotherDay () {
                 const closingWorkDayId = this.workdays.find(item => item.user_id === this.closingUser.id).id

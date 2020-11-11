@@ -12,8 +12,24 @@ const CustomerController = require('./controllers/CustomerController')
 
 const clearDate = date => moment(date).format('YYYY-MM-DD')
 
+
+
 const parse = async message => {
     try {
+        const resume_another_user_day = async model => {
+            const {mutations, conditions, info} = await WorkDayController.resumeAnotherUserDay({...model})
+            return Promise.resolve({
+                response: Instruction({info}),
+                broadcast: Instruction({mutations, conditions})
+            })
+        }
+        const finish_another_user_day = async model => {
+            const {mutations, conditions, info} = await WorkDayController.finishAnotherUserDay({...model})
+            return Promise.resolve({
+                response: Instruction({info}),
+                broadcast: Instruction({mutations, conditions})
+            })
+        }
         const frame = JSON.parse(message)
         const Instruction = ({ mutations, conditions, info }) => {
             let response ={
@@ -29,14 +45,9 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_resume_another_user_day':
+                return  Promise.resolve(await resume_another_user_day({...frame.model}))
             case 'finish_another_user_day':
-                const finish_another_user_day = async model => {
-                    const {mutations, conditions, info} = await WorkDayController.finishAnotherUserDay({...model})
-                    return Promise.resolve({
-                        response: Instruction({info}),
-                        broadcast: Instruction({mutations, conditions})
-                    })
-                }
                 return Promise.resolve(await finish_another_user_day({...frame.model}))
 
             case 'request_get_customer_sent_messages':
