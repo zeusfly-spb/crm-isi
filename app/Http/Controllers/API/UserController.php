@@ -93,7 +93,10 @@ class UserController extends Controller
     public function details()
     {
         $user = Auth::user();
-        $user->load('islands');
+        $user->load('islands', 'group');
+        if ($user->group && $user->group->purpose === 'logistics') {
+            $user->logist = true;
+        }
         return response()->json(['success' => $user], $this-> successStatus);
     }
 
