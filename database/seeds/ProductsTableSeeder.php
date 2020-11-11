@@ -12,7 +12,7 @@ class ProductsTableSeeder extends Seeder
      */
 
 
-    private $protos = [
+    private $prototypes = [
         ['name' => 'Стельки', 'description' => null, 'price' => null],
         ['name' => 'Полустельки', 'description' => null, 'price' => null],
         ['name' => 'Подпяточник 1см.', 'description' => 'good', 'price' => 100],
@@ -26,7 +26,7 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         echo PHP_EOL;
-        foreach ($this->protos as $proto) {
+        foreach ($this->prototypes as $proto) {
             if (!Product::where('name', $proto['name'])->first()) {
                 Product::create(['name' => $proto['name'], 'description' => $proto['description'], 'price' => $proto['price']]);
                 echo "Product " . $proto['name'] . " created" . PHP_EOL;
