@@ -61,7 +61,7 @@
         name: 'IslandSwitcher',
         computed: {
             logistOnStock () {
-                return this.$store.getters.currentPage === 'stock' && this.$store.getters.logist
+                return ['daily', 'stock'].includes(this.$store.getters.currentPage) && this.$store.getters.logist
             },
             monthData () {
                 return this.$store.state.salary.monthData
@@ -85,9 +85,6 @@
                 return this.$store.state.basePath
             },
             tabs () {
-                if (this.$store.getters.logist) {
-                    return this.islands
-                }
                 return [{id: 0, name: 'Все', users: [{avatar: '/img/logo.png'}]}, ...this.islands]
             },
             islands () {

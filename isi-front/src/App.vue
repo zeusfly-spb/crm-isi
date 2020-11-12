@@ -50,7 +50,7 @@ export default {
             return this.$store.getters.workingIsland
         },
         authAllowed () {
-            return this.$store.getters.isAllowed
+            return this.$store.getters.isAllowed || this.$store.getters.logist
         },
         activeCabinetId () {
             return this.$store.state.appointment.activeCabinetId

@@ -70,7 +70,7 @@
                 text-xs-center
             >
                 <date-selector
-                    v-if="isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"
+                    v-if="isLogist || isAuth && ($store.getters.isAllowed || $store.state.access === 'allowed')"
                 />
                 <v-spacer v-else/>
             </v-flex>
@@ -102,6 +102,9 @@
     export default {
         name: 'AppToolbar',
         computed: {
+            isLogist() {
+                return this.$store.getters.logist
+            },
             sidePanel: {
                 get () {
                     return this.$store.state.layout.sidePanel && this.$store.state.layout.sidePanelMode === 'view-options'
