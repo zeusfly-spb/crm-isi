@@ -1085,6 +1085,7 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        logist: state => state.authUser && authUser.logist || false,
         usedLeadFilterSites: state => {
             let result = []
             state.islands.forEach(island => {
