@@ -42,6 +42,10 @@
                 {title: 'Запись', href: '/appointments'},
                 {title: 'Зарплата', href: '/salary'},
                 {title: 'Администрация', href: '/admin'}
+            ],
+            logistTabs: [
+                {title: 'Учет на день', href: '/daily'},
+                {title: 'Склад', href: '/stock'}
             ]
         }),
         computed: {
@@ -65,6 +69,9 @@
                 return base
             },
             tabs () {
+                if (this.$store.getters.logist) {
+                    return this.logistTabs
+                }
                 return this.isSuperadmin ? this.adminTabs : this.regularTabs
             },
             basePath () {
