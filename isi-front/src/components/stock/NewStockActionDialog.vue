@@ -1,6 +1,6 @@
 <template>
     <v-flex
-            v-if="isSuperadmin"
+            v-if="isSuperadmin || isLogist"
     >
         <v-dialog
             v-model="dialog"
@@ -129,6 +129,9 @@
             ]
         }),
         computed: {
+            isLogist () {
+                return this.$store.getters.logist
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },

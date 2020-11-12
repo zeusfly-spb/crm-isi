@@ -1,6 +1,6 @@
 <template>
     <span
-            v-if="isSuperadmin"
+            v-if="isSuperadmin || isLogist"
     >
         <v-btn icon
                title="Редактирование списка наименований товаров и цен"
@@ -204,6 +204,9 @@
             ]
         }),
         computed: {
+            isLogist () {
+                return this.$store.getters.logist
+            },
             isSuperadmin () {
                 return this.$store.getters.isSuperadmin
             },

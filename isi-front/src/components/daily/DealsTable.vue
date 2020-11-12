@@ -36,7 +36,7 @@
         >
             <template v-slot:activator="{ on }">
                 <v-btn color="primary" flat dark class="mb-2" @click="showDialog"
-                       :disabled="$store.state.workingIslandId === 0 || !isToday"
+                       :disabled="$store.state.workingIslandId === 0 || !isToday || isLogist"
                 >
                     Новая сделка
                 </v-btn>
@@ -347,6 +347,9 @@
             ]
         }),
         computed: {
+            isLogist () {
+                return this.$store.getters.logist
+            },
             loading () {
                 return this.$store.getters.busy || this.$store.getters.wsLoading
             },

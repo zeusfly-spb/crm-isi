@@ -1,6 +1,6 @@
 <template>
     <v-tabs
-        v-if="isSuperadmin"
+        v-if="isSuperadmin || logistOnStock"
         fixed-tabs
         centered
         slider-color="green"
@@ -60,6 +60,9 @@
     export default {
         name: 'IslandSwitcher',
         computed: {
+            logistOnStock () {
+                return this.$store.getters.currentPage === 'stock' && this.$store.getters.logist
+            },
             monthData () {
                 return this.$store.state.salary.monthData
             },
@@ -82,6 +85,9 @@
                 return this.$store.state.basePath
             },
             tabs () {
+                if (this.$store.getters.logist) {
+                    return this.islands
+                }
                 return [{id: 0, name: 'Все', users: [{avatar: '/img/logo.png'}]}, ...this.islands]
             },
             islands () {

@@ -78,13 +78,14 @@
                 }
             },
             access (value) {
-                if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id)) {
+                if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id) || this.$store.getters.logist) {
                     this.$store.dispatch('enterCRM')
                     this.$router.push({path: '/daily', query: this.$route.query})
                 }
             }
         },
         created () {
+            if (!this.$store.getters.logist)
                 setInterval(() => this.$store.dispatch('checkAccess'), 5000)
         }
     }
