@@ -25,7 +25,7 @@
                 <v-card flat v-if="access && access.status === 'denied'">
                     <div class="headline red--text">Доступ запрещен!</div>
                 </v-card>
-                <v-card flat v-if="access && access.status === 'allowed' && !userIslandsIds.includes(access.island_id)">
+                <v-card flat v-if="access && access.status === 'allowed' && !permittedIsland">
                     <div class="headline red--text">Отсутствует доступ к островку данного устройства!</div>
                 </v-card>
 
@@ -49,6 +49,9 @@
             comment: ''
         }),
         computed: {
+            permittedIsland () {
+                return this.userIslandsIds.includes(this.access.island_id) || this.authUser.logist
+            },
             userIslandsIds () {
                 return this.authUser.islands.length && this.authUser.islands.map(item => item.id) || []
             },
@@ -78,7 +81,7 @@
                 }
             },
             access (value) {
-                if (value && value.status === 'allowed' && this.userIslandsIds.includes(value.island_id) || this.$store.getters.logist) {
+                if (value && value.status === 'allowed' && this.permittedIsland) {
                     this.$store.dispatch('enterCRM')
                     this.$router.push({path: '/daily', query: this.$route.query})
                 }
