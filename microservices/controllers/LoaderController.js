@@ -8,6 +8,14 @@ const HandOver = models.HandOver
 const Setting = models.Setting
 const Island = models.Island
 
+const loadStockPage = async data => {
+    try {
+
+    } catch (e) {
+        return Promise.reject(new Error(`Error loading Stock Page data: ${e}`))
+    }
+}
+
 const loadDailyPage = async data => {
     try {
         let workDayWhere = data.island_id ?
@@ -48,6 +56,7 @@ const priorPrepare = async () => {
 }
 
 module.exports = {
+    loadStockPage,
     loadDailyPage,
     priorPrepare
 }
