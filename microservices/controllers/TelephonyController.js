@@ -2,6 +2,7 @@ const axios = require('axios')
 const moment = require('moment')
 const models = require('../models')
 const SmsReport = models.SmsReport
+const Island = models.Island
 
 const sendSms = async data => {
     try {
@@ -36,6 +37,10 @@ const substituteEventText = ({text = '', event = null}) => {
     const date = moment(event.date).format('DD/MM/YYYY')
     let result = text.replace('||TIME||', time)
     return result.replace('||DATE||', date)
+}
+
+const eventCreatedNotify = event => {
+
 }
 
 module.exports = {

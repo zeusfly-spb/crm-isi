@@ -1,4 +1,5 @@
 'use strict';
+const moment = require('moment')
 const {
   Model
 } = require('sequelize');
@@ -41,6 +42,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     comment: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    created_at: {
+      type: 'TIMESTAMP',
+      defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
+      allowNull: false
+    },
+    updated_at: {
+      type: 'TIMESTAMP',
+      defaultValue: moment().format('YYYY-MM-DD HH:mm:ss'),
       allowNull: false
     }
   }, {
