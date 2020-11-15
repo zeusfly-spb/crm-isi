@@ -1,5 +1,4 @@
 const axios = require('axios')
-const FormData = require('form-data')
 
 const sendSms = async data => {
     try {
@@ -11,7 +10,7 @@ const sendSms = async data => {
             text: data['text']
         }
         const response = await axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {...form_params})
-        return Promise.resolve(response.data)
+        return Promise.resolve(response.status)
     } catch (e) {
         return Promise.reject(new Error(`Send sms error: ${e}`))
     }
