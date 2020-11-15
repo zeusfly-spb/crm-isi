@@ -1,4 +1,5 @@
 const axios = require('axios')
+const moment = require('moment')
 
 const sendSms = async data => {
     try {
@@ -16,6 +17,17 @@ const sendSms = async data => {
     }
 }
 
+const substituteEventText = ({text, event = null}) => {
+    if (!event) {
+        return text
+    }
+    const time = moment(data.event.date).format('hh:mm')
+    const date = moment(data.event.date).format('DD/MM/YYYY')
+    let result = text.replace('||TIME||', time)
+    return result.replace('||DATE||', date)
+}
+
 module.exports = {
-    sendSms
+    sendSms,
+    substituteEventText
 }   
