@@ -1,16 +1,27 @@
 const axios = require('axios')
 const moment = require('moment')
+const models = require('../models')
+const SmsReport = models.SmsReport
 
 const sendSms = async data => {
     try {
         const form_params = {
             base_type: 'isi',
-            user_id: data['user_id'] ? $data['user_id'] : 0,
+            user_id: data['user_id'] || 0,
             extension: data['extension'],
             phone: data['phone'],
             text: data['text']
         }
         const response = await axios.post('https://crmkin.ru/tel/api/vpbx/sms/send', {...form_params})
+        if (response.status === 200) {
+            await SmsReport.create({
+                number: data['phone'],
+                text: data['text'],
+                user_id: data['user_id'] || 0,
+                island_id: data['island_id'] || 0
+            })
+            
+        }
         return Promise.resolve(response.status)
     } catch (e) {
         return Promise.reject(new Error(`Send sms error: ${e}`))
