@@ -7,10 +7,26 @@ const Expense = models.Expense
 const HandOver = models.HandOver
 const Setting = models.Setting
 const Island = models.Island
+const Reserve = models.Reserve
+const StockAction = models.StockAction
+const Product = models.Product
+const Type = models.Type
+const Size = models.Size
+const DealAction = models.DealAction
 
-const loadStockPage = async data => {
+const loadStockPage = async ({date, island_id = 0}) => {
     try {
-
+        let where = {created_at: {[Op.startsWith]: date}}
+        island_id ? where.island_id = island_id : null
+        const reserves = await Reserve.findAll({where, include: {all: true}})
+        const stock_actions = await StockAction.findAll({where, include: ['product', 'size', 'user']})
+        const stock_options = {
+            products: await Product.findAll(),
+            types: await Type.findAll(),
+            sizes: await Size.findAll(),
+            deal_actions: await DealAction.findAll()
+        }
+        return Promise.resolve({reserves, stock_actions, stock_options})
     } catch (e) {
         return Promise.reject(new Error(`Error loading Stock Page data: ${e}`))
     }
