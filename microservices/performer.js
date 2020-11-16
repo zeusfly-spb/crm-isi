@@ -1,4 +1,5 @@
 const CONFIG = require('./config')
+const TelephonyController = require('./controllers/TelephonyController')
 const { broadcast } = require('./transmitter')
 
 const performLead = event => event.type === 'INSERT' && event.affectedRows[0].after.status === 'wait' ?
@@ -8,7 +9,8 @@ const performAppointment = event => {
     if (event.type !== 'INSERT') {
         return;
     }
-
+    event = event.affectedRows[0].after
+    TelephonyController.eventCreatedNotify(event)
 }
 
 const inspect = event => {

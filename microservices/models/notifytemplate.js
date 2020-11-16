@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class NotifyTeplate extends Model {
+  class NotifyTemplate extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  NotifyTeplate.init({
+  NotifyTemplate.init({
     id: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
     text: {type: DataTypes.STRING, allowNull: false}
   }, {
     sequelize,
-    modelName: 'NotifyTeplate',
+    modelName: 'NotifyTemplate',
     tableName: 'notify_templates',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   });
-  return NotifyTeplate;
+  return NotifyTemplate;
 };
