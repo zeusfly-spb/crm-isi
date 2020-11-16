@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'island_id',
         as: 'workdays'
       })
+      Island.hasMany(models.Appointment, {
+        foreignKey: 'island_id',
+        as: 'events'
+      })
     }
   }
   Island.init({
@@ -44,5 +48,8 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   });
+  Island.prototype.sendReminders = function () {
+    console.log(this.options)
+  }
   return Island;
 };
