@@ -695,6 +695,9 @@
                 }
             },
             search (val) {
+                if (this.selectedCustomerId > 0) {
+                    return
+                }
                 if (!val || !val.length) {
                     this.clearLoadedCustomers()
                 }
