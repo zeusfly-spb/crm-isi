@@ -104,7 +104,15 @@ export default {
                 dispatch('setLeadsOnTimer')
             })
         },
-        loadStockPage ({commit, rootState}) {
+        loadStockPage ({commit, rootState, dispatch}) {
+            dispatch('pushFrame', {
+                type: 'request_load_stock_page',
+                model: {
+                    date: rootState.accountingDate,
+                    island_id: rootState.workingIslandId
+                }
+            })
+            /*
             commit('ADD_TASK', 'stock')
             return new Promise((resolve, reject) => {
                 Vue.axios.post('/api/load_stock_page', {
@@ -120,6 +128,8 @@ export default {
                     })
                     .catch(e => reject(e))
             })
+
+             */
         },
         priorPrepare ({commit, dispatch}) {
             return new Promise((resolve, reject) => {

@@ -17,7 +17,9 @@ const DealAction = models.DealAction
 const loadStockPage = async ({date, island_id = 0}) => {
     try {
         let where = {created_at: {[Op.startsWith]: date}}
-        island_id ? where.island_id = island_id : null
+        if (+island_id) {
+            where.island_id = island_id
+        }
         const reserves = await Reserve.findAll({where, include: {all: true}})
         const stock_actions = await StockAction.findAll({where, include: ['product', 'size', 'user']})
         const stock_options = {
@@ -26,7 +28,12 @@ const loadStockPage = async ({date, island_id = 0}) => {
             sizes: await Size.findAll(),
             deal_actions: await DealAction.findAll()
         }
-        return Promise.resolve({reserves, stock_actions, stock_options})
+        const mutations = [
+            {name: 'SET_RESERVES', data: reserves},
+            {name: 'SET_STOCK_ACTIONS', data: stock_actions},
+            {name: 'SET_STOCK_OPTIONS', data: stock_options}
+        ]
+        return Promise.resolve({mutations})
     } catch (e) {
         return Promise.reject(new Error(`Error loading Stock Page data: ${e}`))
     }

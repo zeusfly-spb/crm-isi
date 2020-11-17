@@ -30,6 +30,15 @@ const parse = async message => {
                 broadcast: Instruction({mutations, conditions})
             })
         }
+        const load_stock_page = async model => {
+            const {mutations} = await LoaderController.loadStockPage({...model})
+            return Promise.resolve({
+                response: Instruction({mutations}),
+                broadcast: null
+            })
+        }
+        // implementation
+
         const frame = JSON.parse(message)
         const Instruction = ({ mutations, conditions, info }) => {
             let response ={
@@ -45,6 +54,8 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_load_stock_page':
+                return Promise.resolve(await load_stock_page({...frame.model}))
             case 'request_resume_another_user_day':
                 return  Promise.resolve(await resume_another_user_day({...frame.model}))
             case 'finish_another_user_day':
