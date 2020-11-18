@@ -69,9 +69,34 @@ module.exports = (sequelize, DataTypes) => {
   }
   Certificate.prototype.deleteComment = function ({id = null}) {
     if (!id || !this.comments.length) {
-      return new Error('can`t delete')
+      return new Error('Can`t delete certificates comment')
     }
     this.update({history: {... this.history, comments: this.comments.filter(item => item.id !== id)}})
+  }
+  Certificate.prototype.addWriteoff = function ({amount, user_id}) {
+    try {
+      [amount, user_id].forEach(item => {
+        if (!item) {
+          throw new Error(`Not enough data item`)
+        }
+      })
+      const newWriteoff = {
+        amount,
+        user_id,
+        id: v4(),
+        created_at: moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.update({history: {... this.history, writeoffs: [...this.writeoffs, newWriteoff]}})
+    } catch (e) {
+      return new Error(`Error adding writeoff into certificate: ${e}`)
+    }
+  }
+  Certificate.prototype.deleteWriteoff = function ({id = null}) {
+    try {
+      this.update({history: {... this.history, writeoffs: this.writeoffs.filter(item => item.id !== id)}})
+    } catch (e) {
+      return new Error(`Error deleting writeoff from certificate ${e}`)
+    }
   }
   return Certificate;
 };
