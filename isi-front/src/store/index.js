@@ -293,10 +293,29 @@ export const store = new Vuex.Store({
             })
         },
         addDeal ({commit, dispatch}, deal) {
+            return new Promise((resolve, reject) => {
+                Vue.axios.post('/api/add_deal', {...deal})
+                    .then(res => {
+                        // commit('ADD_DEAL', res.data)
+                        const frame = {
+                            type: 'instruction',
+                            model: {
+                                mutations: [{name: 'ADD_DEAL', data: res.data}],
+                                conditions: [{name: 'workingIslandId', compare: 'includes', value: [0, res.data.island_id]}]
+                            }
+                        }
+                        dispatch('pushFrame', frame)
+                            .then(() => dispatch('setStockActions'))
+                            .finally(() => resolve(res))
+                    })
+                    .catch(e => reject(e))
+            })
+            /*
             dispatch('pushFrame', {
                 type: 'request_add_deal',
                 model: deal
             })
+             */
         },
         setDeals ({dispatch, state}) {
             dispatch('pushFrame', {
