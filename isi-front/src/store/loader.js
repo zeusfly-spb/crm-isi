@@ -105,6 +105,7 @@ export default {
             })
         },
         loadStockPage ({commit, rootState, dispatch}) {
+            commit('ADD_TASK', 'stock')
             dispatch('pushFrame', {
                 type: 'request_load_stock_page',
                 model: {
@@ -112,6 +113,7 @@ export default {
                     island_id: rootState.workingIslandId
                 }
             })
+
             /*
             commit('ADD_TASK', 'stock')
             return new Promise((resolve, reject) => {
@@ -130,6 +132,7 @@ export default {
             })
 
              */
+
         },
         priorPrepare ({commit, dispatch}) {
             return new Promise((resolve, reject) => {

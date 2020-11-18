@@ -31,7 +31,8 @@ const loadStockPage = async ({date, island_id = 0}) => {
         const mutations = [
             {name: 'SET_RESERVES', data: reserves},
             {name: 'SET_STOCK_ACTIONS', data: stock_actions},
-            {name: 'SET_STOCK_OPTIONS', data: stock_options}
+            {name: 'SET_STOCK_OPTIONS', data: stock_options},
+            {name: 'REMOVE_TASK', data: 'stock' }
         ]
         return Promise.resolve({mutations})
     } catch (e) {
