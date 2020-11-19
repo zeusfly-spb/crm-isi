@@ -8,6 +8,8 @@ const attachRate = subscribe => {
 
 export default {
     state: {
+        certificatesMode: 'active',
+        certificates: [],
         inactiveSubscribes: [],
         allSubscribes: [],
         subscribeViewMode: null,
@@ -24,6 +26,16 @@ export default {
         }
     },
     actions: {
+        setCertificates ({dispatch, getters, state}) {
+            const Frame = {
+                type: 'request_get_certificates',
+                model: {
+                    island_id: getters.workingIslandId,
+                    mode: state.certificatesMode
+                }
+            }
+            dispatch('pushFrame', Frame)
+        },
         deleteSubscribeComment ({commit, dispatch}, data) {
             return new Promise((resolve, reject) => {
                 commit('SET_DESCRIBE_COMMENTS_UPDATING', true)
@@ -91,6 +103,12 @@ export default {
         }
     },
     mutations: {
+        SET_CERTIFICATES_MODE (state, mode) {
+            state.certificatesMode = mode
+        },
+        SET_CERTIFICATES (state, certificates) {
+            state.certificates = certificates
+        },
         SET_ALL_SUBSCRIBES (state, subscribes) {
             state.allSubscribes = subscribes.map(item => attachRate(item))
         },

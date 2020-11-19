@@ -9,6 +9,7 @@ const SubscribeController = require('./controllers/SubscribeController')
 const StockActionsController = require('./controllers/StockActionController')
 const ExpenseController = require('./controllers/ExpenseController')
 const CustomerController = require('./controllers/CustomerController')
+const CertificateController = require('./controllers/CertificateController')
 
 const clearDate = date => moment(date).format('YYYY-MM-DD')
 
@@ -37,6 +38,14 @@ const parse = async message => {
                 broadcast: null
             })
         }
+        const get_certificates = async model => {
+            const {mutations} = await CertificateController.index({...model})
+            console.log(mutations)
+            return Promise.resolve({
+                response: Instruction({mutations}),
+                broadcast: null
+            })
+        }
         // implementation
 
         const frame = JSON.parse(message)
@@ -54,6 +63,8 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_get_certificates':
+                return Promise.resolve(await get_certificates({...frame.model}))
             case 'request_load_stock_page':
                 return Promise.resolve(await load_stock_page({...frame.model}))
             case 'request_resume_another_user_day':

@@ -242,6 +242,9 @@
                     <notification-table
                         v-if="viewMode === 'notifications'"
                     />
+                    <certificates-table
+                        v-if="viewMode === 'certificates'"
+                    />
                 </v-sheet>
             </v-flex>
 
@@ -302,6 +305,7 @@
     import SubscribesTable from '../subscribes/SubscribesTable'
     import NotificationTable from './NotificationTable'
     import CabinetSwitcher from '../main/CabinetSwitcher'
+    import CertificatesTable from '../certificates/CertificatesTable'
 
     export default {
         name: 'AppointmentCalendar',
@@ -493,7 +497,8 @@
             CalendarViewSwitcher,
             SubscribesTable,
             NotificationTable,
-            CabinetSwitcher
+            CabinetSwitcher,
+            CertificatesTable
         }
     }
 </script>
