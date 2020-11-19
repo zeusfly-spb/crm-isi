@@ -7,7 +7,9 @@
             {{ certificate.customer.full_name || '' }}
         </td>
         <td>
-            {{ certificate.user_id }}
+            <user-avatar
+                    :user="certificate.user"
+            />
         </td>
         <td>
             {{ certificate.start_date | moment('D MMMM YYYY г.') }}
@@ -30,9 +32,14 @@
 </template>
 
 <script>
+    import UserAvatar from '../main/UserAvatar'
+
     export default {
         name: 'Certificate',
-        props: ['index', 'certificate']
+        props: ['index', 'certificate'],
+        components: {
+            UserAvatar
+        }
     }
 </script>
 

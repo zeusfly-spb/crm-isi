@@ -42,7 +42,8 @@
         }),
         computed: {
             certificates () {
-                return this.$store.state.subscribes.certificates
+                const base = this.$store.state.subscribes.certificates
+                return base.map(item => ({...item, user: this.$store.getters.allUsers.find(user => +user.id === +item.user_id) || null}))
             }
         },
         created() {
