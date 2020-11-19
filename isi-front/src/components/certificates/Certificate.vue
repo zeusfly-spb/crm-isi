@@ -4,7 +4,7 @@
             {{ index + 1 }}
         </td>
         <td>
-            {{ certificate.customer_id }}
+            {{ certificate.customer.full_name || '' }}
         </td>
         <td>
             {{ certificate.user_id }}

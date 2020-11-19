@@ -13,7 +13,7 @@ const create = async data => {
 const index = async data => {
     try {
         let where = {island_id: data.island_id}
-        const certificates = await Certificate.findAll({where})
+        const certificates = await Certificate.findAll({where, include: ['customer']})
         const mutations = [{name: 'SET_CERTIFICATES', data: certificates}]
         return Promise.resolve({mutations})
     } catch (e) {

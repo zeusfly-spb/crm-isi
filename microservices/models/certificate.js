@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Certificate.belongsTo(models.Customer, {
+        foreignKey: 'customer_id',
+        as: 'customer'
+      })
     }
 
     static async create (values, options) {
