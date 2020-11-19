@@ -26,6 +26,10 @@ export default {
         }
     },
     actions: {
+        setCertificateMode ({commit, dispatch}, mode) {
+            commit('SET_CERTIFICATES_MODE', mode)
+            dispatch('setCertificates')
+        },
         setCertificates ({dispatch, getters, state}) {
             const Frame = {
                 type: 'request_get_certificates',

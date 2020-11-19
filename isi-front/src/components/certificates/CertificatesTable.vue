@@ -1,10 +1,11 @@
 <template>
     <v-flex>
-        certificates table
+        <certificate-mode-switcher/>
     </v-flex>
 </template>
 
 <script>
+    import CertificateModeSwitcher from './CertificateModeSwitcher'
     export default {
         name: 'CertificatesTable',
         computed: {
@@ -14,6 +15,9 @@
         },
         created() {
             this.$store.dispatch('setCertificates')
+        },
+        components: {
+            CertificateModeSwitcher
         }
     }
 </script>
