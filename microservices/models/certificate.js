@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
+    island_id: {type: DataTypes.BIGINT, allowNull: false},
     customer_id: {type: DataTypes.BIGINT, allowNull: false},
     nominal: {type: DataTypes.INTEGER, allowNull: false},
     start_date: {type: DataTypes.DATEONLY, allowNull: false},
