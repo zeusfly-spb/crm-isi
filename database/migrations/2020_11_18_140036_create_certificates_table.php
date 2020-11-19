@@ -20,7 +20,8 @@ class CreateCertificatesTable extends Migration
             $table->date('start_date');
             $table->integer('duration');
             $table->json('history')->nullable()->default(null);
-            $table->timestamps();
+            $table->string('created_at')->nullable()->default(null);
+            $table->string('updated_at')->nullable()->default(null);
         });
     }
 

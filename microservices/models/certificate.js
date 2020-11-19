@@ -14,6 +14,28 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
+    static async create (values, options) {
+      try {
+        return Promise.resolve(await super.create({
+          ...values,
+          created_at: moment().format('YYYY-MM-DD HH:mm:ss'),
+          updated_at: moment().format('YYYY-MM-DD HH:mm:ss')
+        }, options))
+      } catch (e) {
+        return Promise.reject(new Error(`Create Certificate error: ${e}`))
+      }
+    }
+    async update (values, options) {
+      try {
+        return Promise.resolve(await super.update({
+          ...values,
+          updated_at: moment().format('YYYY-MM-DD HH:mm:ss')
+        }, options))
+      } catch (e) {
+        return Promise.reject(new Error(`Certificate update error: ${e}`))
+      }
+    }
   };
   Certificate.init({
     id: {
@@ -44,14 +66,14 @@ module.exports = (sequelize, DataTypes) => {
       set () {
         throw new Error('Do not try to set the `writeoffs` value!')
       }
-    }
+    },
+    created_at:DataTypes.STRING,
+    updated_at: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Certificate',
     tableName: 'certificates',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    timestamps: false
   });
   Certificate.prototype.addComment = function ({text = '', user_id = 0}) {
     if (!text.length) {
