@@ -69,7 +69,16 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     created_at:DataTypes.STRING,
-    updated_at: DataTypes.STRING
+    updated_at: DataTypes.STRING,
+    finish_date: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return moment(this.start_date).add('days', this.duration).format('YYYY-MM-DD')
+      },
+      set () {
+        throw new Error('Do not try to set the `finish_date` value!')
+      }
+    }
   }, {
     sequelize,
     modelName: 'Certificate',

@@ -2,6 +2,7 @@
     <v-flex>
         <certificate-mode-switcher/>
         <v-data-table
+                :pagination.sync="defSorting"
                 :headers="headers"
                 :items="certificates"
                 hide-actions
@@ -27,11 +28,13 @@
     export default {
         name: 'CertificatesTable',
         data: () => ({
+            defSorting: {'sortBy': 'start_date', 'ascending': false, 'rowsPerPage': -1},
             headers: [
                 {text: '#', value: null, sortable: false},
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
                 {text: 'Начало периода', value: 'start_date'},
+                {text: 'Срок действия (дн.)', value: 'duration'},
                 {text: 'Окончание периода', value: 'finish_date'},
                 {text: 'Списания', value: null, sortable: false},
                 {text: 'Комментарии', value: null, sortable: false}
