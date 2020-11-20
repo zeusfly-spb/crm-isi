@@ -347,6 +347,9 @@
             ]
         }),
         computed: {
+            certificate () {
+                return this.newDealActionType === 'certificate'
+            },
             isLogist () {
                 return this.$store.getters.logist
             },
