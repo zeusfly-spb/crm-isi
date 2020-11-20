@@ -98,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'certificates',
     timestamps: false
   });
-  Certificate.prototype.addComment = async function ({text = '', user_id = 0}) {
+  Certificate.prototype.addComment = async function ({text = '', user_id}) {
     if (!text.length) {
       return new Error('Comment text length can`t be 0')
     }

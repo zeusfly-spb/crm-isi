@@ -90,7 +90,7 @@
                                 <v-avatar
                                         size="36px"
                                         v-else
-                                        title="Системный комментарий"
+                                        title="Админ"
                                 >
                                     <img
                                             :src="`${basePath}/img/logo.png`"
