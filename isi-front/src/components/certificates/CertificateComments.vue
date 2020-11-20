@@ -199,14 +199,11 @@
         },
         methods: {
             deleteComment () {
-                this.$store.dispatch('pushFrame', {
-                    type: 'request_delete_certificate_comment',
-                    model: {
-                        certificate_id: this.certificate.id,
-                        comment_id: this.commentToDelete.id
-                    }
-                })
-                    .then(() => this.hideConfirm())
+                const data = {
+                    certificate_id: this.certificate.id,
+                    comment_id: this.commentToDelete.id
+                }
+                this.$store.dispatch('deleteCertificateComment', data).then(() => this.hideConfirm())
             },
             confirmDelete (comment) {
                 this.commentToDelete = comment

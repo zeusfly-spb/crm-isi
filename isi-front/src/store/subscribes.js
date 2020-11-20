@@ -28,22 +28,25 @@ export default {
         }
     },
     actions: {
+        deleteCertificateComment ({dispatch, commit}, data) {
+            commit('SET_CERTIFICATES_UPDATES', true)
+            dispatch('pushFrame', {
+                type: 'request_delete_certificate_comment',
+                model: {... data}
+            })
+        },
         addCertificateComment ({dispatch, commit}, data) {
             commit('SET_CERTIFICATES_UPDATES', true)
             dispatch('pushFrame', {
                 type: 'request_add_certificate_comment',
-                model: {
-                    id: data.id,
-                    text: data.text,
-                    user_id: data.user_id
-                }
+                model: { ...data}
             })
         },
         setCertificateMode ({commit, dispatch}, mode) {
             commit('SET_CERTIFICATES_MODE', mode)
             dispatch('setCertificates')
         },
-        setCertificates ({dispatch, getters, state}) {
+        setCertificates ({dispatch, getters, state, commit}) {
             const Frame = {
                 type: 'request_get_certificates',
                 model: {
@@ -51,6 +54,7 @@ export default {
                     mode: state.certificatesMode
                 }
             }
+            commit('SET_CERTIFICATES_UPDATES', true)
             dispatch('pushFrame', Frame)
         },
         deleteSubscribeComment ({commit, dispatch}, data) {
