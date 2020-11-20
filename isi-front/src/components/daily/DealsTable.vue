@@ -93,6 +93,19 @@
                                 />
                             </v-flex>
                             <template
+                                    v-if="certificate"
+                            >
+                                <v-flex xs12 sm6 md4>
+                                    <sub>Начало периода</sub>
+
+
+                                </v-flex>
+                                <v-flex xs12 sm6 md4>
+                                    <sub>Срок действия (дн.)</sub>
+
+                                </v-flex>
+                            </template>
+                            <template
                                 v-if="service"
                             >
                                 <v-flex
@@ -112,7 +125,6 @@
                                     />
 
                                 </v-flex>
-
                             </template>
                             <template
                                 v-if="subscribe"
@@ -178,7 +190,7 @@
                             </template>
 
                             <v-flex xs12 sm6 md4
-                                    v-show="!subscribe && !service"
+                                    v-show="!subscribe && !service && !certificate"
                             >
                                 <sub>Продукция</sub>
                                 <v-select
@@ -194,7 +206,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale' && !subscribe && !service"
+                                    v-show="newDealActionType !== 'sale' && !subscribe && !service && !certificate"
                             >
                                 <sub>Материал</sub>
                                 <v-select
@@ -206,7 +218,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4
-                                    v-show="newDealActionType !== 'sale' && !subscribe && !service"
+                                    v-show="newDealActionType !== 'sale' && !subscribe && !service && !certificate"
                             >
                                 <sub>Размер</sub>
                                 <v-select
@@ -222,7 +234,7 @@
                                 />
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                <sub>Сумма</sub>
+                                <sub>Сумма{{ certificate ? '/Номинал' : ''}}</sub>
                                 <v-text-field
                                     :disabled="incomeDisabled"
                                     :readonly="incomeReadonly"
@@ -381,6 +393,9 @@
                 return ['prodDefect', 'islandDefect', 'correction', 'alteration'].includes(this.newDealActionType)
             },
             incomeValidate () {
+                if (this.certificate) {
+                    return 'required|integer'
+                }
                 if (this.newDealActionType === 'service') {
                     return 'required|integer'
                 }
