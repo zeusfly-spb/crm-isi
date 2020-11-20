@@ -82,6 +82,15 @@ module.exports = (sequelize, DataTypes) => {
       set () {
         throw new Error('Do not try to set the `finish_date` value!')
       }
+    },
+    last_comment: {
+      type: DataTypes.VIRTUAL,
+      get () {
+        return this.comments.length && this.comments[this.comments.length - 1] || null
+      },
+      set () {
+        throw new Error('Do not try to set the `last_comment` value!')
+      }
     }
   }, {
     sequelize,

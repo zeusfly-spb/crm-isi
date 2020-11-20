@@ -26,7 +26,29 @@
             {{ certificate.writeoffs }}
         </td>
         <td>
-            {{ certificate.comments }}
+            <span
+                    v-if="certificate.last_comment"
+                    class="last-comment clickable"
+                    title="Открыть панель комментариев"
+                    @click="openCertComments(certificate.id)"
+            >
+                    {{ certificate.last_comment.text || ''}}
+                <span
+                      v-if="certificate.comments.length > 1"
+                      class="green--text"
+                >
+                    <strong>({{ certificate.comments.length }})</strong>
+                </span>
+            </span>
+            <v-icon
+                    v-else
+                    color="green"
+                    class="clickable"
+                    title="Добавить комментарий"
+                    @click="openCertComments(certificate.id)"
+            >
+                add_circle_outline
+            </v-icon>
         </td>
     </tr>
 </template>
@@ -37,6 +59,11 @@
     export default {
         name: 'Certificate',
         props: ['index', 'certificate'],
+        methods: {
+            openCertComments (id) {
+                this.$store.commit('SET_CERT_COMMENTS_OPEN_ID', id)
+            }
+        },
         components: {
             UserAvatar
         }
@@ -44,5 +71,7 @@
 </script>
 
 <style scoped>
-
+    .last-comment:hover {
+        color: #03A9F4;
+    }
 </style>

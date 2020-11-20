@@ -8,6 +8,7 @@ const attachRate = subscribe => {
 
 export default {
     state: {
+        certCommentsOpenId: null,
         certificatesMode: 'active',
         certificates: [],
         inactiveSubscribes: [],
@@ -107,6 +108,9 @@ export default {
         }
     },
     mutations: {
+        SET_CERT_COMMENTS_OPEN_ID (state, id) {
+            state.certCommentsOpenId = id
+        },
         SET_CERTIFICATES_MODE (state, mode) {
             state.certificatesMode = mode
         },

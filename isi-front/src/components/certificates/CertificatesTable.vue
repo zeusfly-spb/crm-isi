@@ -19,12 +19,14 @@
                 <span class="red--text">Нет оформленных сертификатов</span>
             </template>
         </v-data-table>
+        <certificate-comments/>
     </v-flex>
 </template>
 
 <script>
     import CertificateModeSwitcher from './CertificateModeSwitcher'
     import Certificate from './Certificate'
+    import CertificateComments from './CertificateComments'
     export default {
         name: 'CertificatesTable',
         data: () => ({
@@ -34,7 +36,7 @@
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
                 {text: 'Начало периода', value: 'start_date'},
-                {text: 'Срок действия (дн.)', value: 'duration'},
+                {text: 'Срок действия (дн.)', value: 'duration', align: 'center'},
                 {text: 'Окончание периода', value: 'finish_date'},
                 {text: 'Списания', value: null, sortable: false},
                 {text: 'Комментарии', value: null, sortable: false}
@@ -51,6 +53,7 @@
         },
         components: {
             CertificateModeSwitcher,
+            CertificateComments,
             Certificate
         }
     }

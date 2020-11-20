@@ -40,7 +40,6 @@ const parse = async message => {
         }
         const get_certificates = async model => {
             const {mutations} = await CertificateController.index({...model})
-            console.log(mutations)
             return Promise.resolve({
                 response: Instruction({mutations}),
                 broadcast: null
