@@ -583,9 +583,10 @@
                 this.newCustomer = false
             },
             createDeal () {
-                if ((!this.selectedCustomerId || this.selectedCustomerId < 0) && this.subscribe) {
+                if ((!this.selectedCustomerId || this.selectedCustomerId < 0) && (this.subscribe || this.certificate)) {
+                    let text = `${this.certificate ? 'Сертификат' : this.subscribe ? 'Абонемент' : ''} не может быть оформлен на анонимного клиента!`
                     this.$store.dispatch('pushMessage', {
-                        text: 'Абонемент не может быть оформлен на анонимного клиента!',
+                        text,
                         color: 'red'
                     })
                     return
