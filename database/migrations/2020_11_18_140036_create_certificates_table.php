@@ -17,12 +17,13 @@ class CreateCertificatesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('island_id')->index();
             $table->bigInteger('customer_id')->index();
+            $table->bigInteger('user_id')->index();
             $table->integer('nominal');
             $table->date('start_date');
             $table->integer('duration');
             $table->json('history')->nullable()->default(null);
-            $table->string('created_at')->nullable()->default(null)->index();
-            $table->string('updated_at')->nullable()->default(null)->index();
+            $table->string('created_at', 19)->nullable()->default(null)->index();
+            $table->string('updated_at', 19)->nullable()->default(null)->index();
         });
     }
 
