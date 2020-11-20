@@ -29,6 +29,9 @@ export default {
         userRates: null
     }),
     computed: {
+        allUsers () {
+            return this.$store.getters.allUsers
+        },
         acceptedSites () {
             return this.$store.getters.acceptedSites
         },

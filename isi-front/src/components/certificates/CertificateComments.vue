@@ -90,7 +90,7 @@
                                 <v-avatar
                                         size="36px"
                                         v-else
-                                        title="Админ"
+                                        title="Системный комментарий"
                                 >
                                     <img
                                             :src="`${basePath}/img/logo.png`"
@@ -144,6 +144,8 @@
 </template>
 
 <script>
+    import UserAvatar from '../main/UserAvatar'
+
     export default {
         name: 'CertificateComments',
         data: () => ({
@@ -170,7 +172,11 @@
                 return !this.comments.length
             },
             comments () {
-                return this.certificate && this.certificate.comments || []
+                let base = this.certificate && this.certificate.comments || []
+                return base.map(item => ({
+                    ...item,
+                    user: this.$store.getters.allUsers.find(user => +user.id === +item.user_id) || null
+                }))
             },
             customerName () {
                 let full = this.certificate && this.certificate.customer && this.certificate.customer.full_name
@@ -248,6 +254,9 @@
             active (val) {
                 val && this.empty ? this.addModeOn() : null
             }
+        },
+        components: {
+            UserAvatar
         }
     }
 </script>
