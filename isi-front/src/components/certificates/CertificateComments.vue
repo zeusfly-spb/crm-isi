@@ -53,8 +53,62 @@
                             ref="addInput"
                             @keyup.esc="addModeOff"
                             @blur="addModeOff"
-                            @keyup.enter="saveNewComment"
+                            @keyup.enter="addComment"
                     />
+                    <v-data-table
+                            v-blur="updating"
+                            :items="comments"
+                            hide-headers
+                            hide-actions
+                    >
+                        <template v-slot:items="props">
+                            <td
+                                    style="width: 1em"
+                                    align="left"
+                            >
+                                <v-icon
+                                        v-if="canDelete(props.item)"
+                                        color="red"
+                                        class="clickable"
+                                        title="Удалить комментарий"
+                                        @click="confirmDelete(props.item)"
+                                >
+                                    close
+                                </v-icon>
+                            </td>
+                            <td>
+                                {{ props.item.text }}
+                            </td>
+                            <td
+                                    style="width: 3em"
+                                    align="right"
+                            >
+                                <user-avatar
+                                        v-if="props.item.user"
+                                        :user="props.item.user"
+                                />
+                                <v-avatar
+                                        size="36px"
+                                        v-else
+                                        title="Системный комментарий"
+                                >
+                                    <img
+                                            :src="`${basePath}/img/logo.png`"
+                                    />
+                                </v-avatar>
+                            </td>
+                            <td
+                                    style="width: 15em"
+                                    align="right"
+                            >
+                                {{ props.item.created_at | moment('D MMMM YYYY г. H:m')}}
+                            </td>
+                        </template>
+                        <template v-slot:no-data>
+                            <span class="red--text">Нет комментариев</span>
+                        </template>
+
+                    </v-data-table>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -69,6 +123,9 @@
             newCommentText: ''
         }),
         computed: {
+            basePath () {
+                return this.$store.state.basePath
+            },
             updating () {
                 return false
             },
@@ -76,7 +133,7 @@
                 return !this.comments.length
             },
             comments () {
-                return this.certificate && this.certificate.comments || []
+                return this.certificate && this.certificate.comments.reverse() || []
             },
             customerName () {
                 let full = this.certificate && this.certificate.customer && this.certificate.customer.full_name
@@ -103,6 +160,37 @@
                 }
             }
         },
+        methods: {
+            confirmDelete (comment) {
+
+            },
+            canDelete (comment) {
+                return +comment.user_id === +this.$store.state.authUser.id
+            },
+            addComment () {
+                if (!this.newCommentText.length || !this.certificate) {
+                    return
+                }
+                this.$store.dispatch('pushFrame', {
+                    type: 'request_add_certificate_comment',
+                    model: {
+                        id: this.certificate.id,
+                        text: this.newCommentText,
+                        user_id: this.$store.state.authUser.id
+                    }
+                })
+                    .then(() => this.addModeOff())
+            },
+            close () {
+                this.active = false
+            },
+            addModeOn () {
+                this.addMode = true
+            },
+            addModeOff () {
+                this.addMode = false
+            }
+        },
         watch: {
             addMode (val) {
                 val ? this.newCommentText = '' : null
@@ -112,17 +200,6 @@
             },
             active (val) {
                 val && this.empty ? this.addModeOn() : null
-            }
-        },
-        methods: {
-            close () {
-                this.active = false
-            },
-            addModeOn () {
-                this.addMode = true
-            },
-            addModeOff () {
-                this.addMode = false
             }
         }
     }

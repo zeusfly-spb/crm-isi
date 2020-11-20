@@ -45,6 +45,13 @@ const parse = async message => {
                 broadcast: null
             })
         }
+        const add_certificate_comment = async model => {
+            const {mutations, conditions, info} = await CertificateController.addComment({...model})
+            return Promise.resolve({
+                response: Instruction({info}),
+                broadcast: Instruction({mutations, conditions})
+            })
+        }
         // implementation
 
         const frame = JSON.parse(message)
@@ -62,6 +69,8 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_add_certificate_comment':
+                return Promise.resolve(await add_certificate_comment({...frame.model}))
             case 'request_get_certificates':
                 return Promise.resolve(await get_certificates({...frame.model}))
             case 'request_load_stock_page':

@@ -98,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'certificates',
     timestamps: false
   });
-  Certificate.prototype.addComment = function ({text = '', user_id = 0}) {
+  Certificate.prototype.addComment = async function ({text = '', user_id = 0}) {
     if (!text.length) {
       return new Error('Comment text length can`t be 0')
     }
@@ -112,7 +112,7 @@ module.exports = (sequelize, DataTypes) => {
     const after = [...before, comment]
     this.update({history: {... this.history, comments: after}})
   }
-  Certificate.prototype.deleteComment = function ({id = null}) {
+  Certificate.prototype.deleteComment = async function ({id = null}) {
     if (!id || !this.comments.length) {
       return new Error('Can`t delete certificates comment')
     }

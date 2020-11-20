@@ -108,6 +108,9 @@ export default {
         }
     },
     mutations: {
+        UPDATE_CERTIFICATE (state, certificate) {
+            state.certificates = state.certificates.map(item => +item.id === +certificate.id ? certificate : item)
+        },
         SET_CERT_COMMENTS_OPEN_ID (state, id) {
             state.certCommentsOpenId = id
         },
