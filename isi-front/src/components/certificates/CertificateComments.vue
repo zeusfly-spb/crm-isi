@@ -112,6 +112,34 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <v-dialog
+                v-model="confirm"
+                max-width="500px"
+        >
+            <v-card
+                    class="round-corner"
+            >
+                <v-card-title
+                        class="red darken-3"
+                >
+                <span class="white--text title">
+                    Подтверждение
+                </span>
+                </v-card-title>
+                <v-card-text>
+                <span
+                        class="subheading"
+                >
+                    Удалить комментарий <strong>"{{ commentToDelete && commentToDelete.text || ''}}"</strong> ?
+                </span>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="darken-1" flat @click="hideConfirm">Отмена</v-btn>
+                    <v-btn color="red darken-1" flat @click="deleteComment">Удалить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-flex>
 </template>
 
@@ -120,20 +148,29 @@
         name: 'CertificateComments',
         data: () => ({
             addMode: false,
-            newCommentText: ''
+            newCommentText: '',
+            commentToDelete: null
         }),
         computed: {
+            confirm: {
+                get () {
+                    return !!this.commentToDelete
+                },
+                set (val) {
+                    !val ? this.commentToDelete = null : null
+                }
+            },
             basePath () {
                 return this.$store.state.basePath
             },
             updating () {
-                return false
+                return this.$store.state.subscribes.certUpdates
             },
             empty () {
                 return !this.comments.length
             },
             comments () {
-                return this.certificate && this.certificate.comments.reverse() || []
+                return this.certificate && this.certificate.comments || []
             },
             customerName () {
                 let full = this.certificate && this.certificate.customer && this.certificate.customer.full_name
@@ -161,25 +198,35 @@
             }
         },
         methods: {
+            deleteComment () {
+                this.$store.dispatch('pushFrame', {
+                    type: 'request_delete_certificate_comment',
+                    model: {
+                        certificate_id: this.certificate.id,
+                        comment_id: this.commentToDelete.id
+                    }
+                })
+                    .then(() => this.hideConfirm())
+            },
             confirmDelete (comment) {
-
+                this.commentToDelete = comment
             },
             canDelete (comment) {
                 return +comment.user_id === +this.$store.state.authUser.id
+            },
+            hideConfirm () {
+                this.confirm = false
             },
             addComment () {
                 if (!this.newCommentText.length || !this.certificate) {
                     return
                 }
-                this.$store.dispatch('pushFrame', {
-                    type: 'request_add_certificate_comment',
-                    model: {
-                        id: this.certificate.id,
-                        text: this.newCommentText,
-                        user_id: this.$store.state.authUser.id
-                    }
-                })
-                    .then(() => this.addModeOff())
+                const data = {
+                    id: this.certificate.id,
+                    text: this.newCommentText,
+                    user_id: this.$store.state.authUser.id
+                }
+                this.$store.dispatch('addCertificateComment', data).then(() => this.addModeOff())
             },
             close () {
                 this.active = false
@@ -192,9 +239,12 @@
             }
         },
         watch: {
+            empty (val) {
+                val ? this.close() : null
+            },
             addMode (val) {
                 val ? this.newCommentText = '' : null
-                if (!val && this.empty) {
+                if (!val && this.empty && !this.updating) {
                     this.close()
                 }
             },

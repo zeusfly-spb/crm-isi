@@ -86,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
     last_comment: {
       type: DataTypes.VIRTUAL,
       get () {
-        return this.comments.length && this.comments[this.comments.length - 1] || null
+        return this.comments.length && this.comments[0] || null
       },
       set () {
         throw new Error('Do not try to set the `last_comment` value!')
@@ -109,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
       user_id,
       created_at: moment().format('YYYY-MM-DD HH:mm:ss')
     }
-    const after = [...before, comment]
+    const after = [comment, ...before]
     this.update({history: {... this.history, comments: after}})
   }
   Certificate.prototype.deleteComment = async function ({id = null}) {

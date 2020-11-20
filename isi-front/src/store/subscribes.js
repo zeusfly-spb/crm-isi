@@ -8,6 +8,7 @@ const attachRate = subscribe => {
 
 export default {
     state: {
+        certUpdates: false,
         certCommentsOpenId: null,
         certificatesMode: 'active',
         certificates: [],
@@ -27,6 +28,17 @@ export default {
         }
     },
     actions: {
+        addCertificateComment ({dispatch, commit}, data) {
+            commit('SET_CERTIFICATES_UPDATES', true)
+            dispatch('pushFrame', {
+                type: 'request_add_certificate_comment',
+                model: {
+                    id: data.id,
+                    text: data.text,
+                    user_id: data.user_id
+                }
+            })
+        },
         setCertificateMode ({commit, dispatch}, mode) {
             commit('SET_CERTIFICATES_MODE', mode)
             dispatch('setCertificates')
@@ -108,6 +120,9 @@ export default {
         }
     },
     mutations: {
+        SET_CERTIFICATES_UPDATES (state, value) {
+            state.certUpdates = value
+        },
         UPDATE_CERTIFICATE (state, certificate) {
             state.certificates = state.certificates.map(item => +item.id === +certificate.id ? certificate : item)
         },
