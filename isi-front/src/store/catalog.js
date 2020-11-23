@@ -574,6 +574,7 @@ export default {
         }
     },
     getters: {
+        allSubscriptions: state => state.subscriptions,
         colorValue: state => classname => {
             if (!classname.length) {
                 return ''

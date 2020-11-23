@@ -121,7 +121,7 @@
                 return this.deal && this.deal.is_service || false
             },
             subscription () {
-                return !this.deal.product && this.subscriptions.find(item => item.id === this.deal.subscription_id) || null
+                return this.deal.subscription_id && this.subscriptions.find(item => +item.id === +this.deal.subscription_id) || null
             },
             subscriptions () {
                 return this.$store.state.catalog.subscriptions

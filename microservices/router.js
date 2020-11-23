@@ -59,6 +59,13 @@ const parse = async message => {
                 broadcast: Instruction({mutations, conditions})
             })
         }
+        const create_certificate = async model => {
+            const {mutations, conditions, info} = await CertificateController.create({...model})
+            return Promise.resolve({
+                response: Instruction({info}),
+                broadcast: Instruction({mutations, conditions})
+            })
+        }
         // implementation
 
         const frame = JSON.parse(message)
@@ -76,6 +83,8 @@ const parse = async message => {
         let responseFrame
         let mutation, mutations, conditions, data
         switch (frame.type) {
+            case 'request_create_certificate':
+                return Promise.resolve(await create_certificate({...frame.model}))
             case 'request_delete_certificate_comment':
                 return Promise.resolve(await delete_certificate_comment({...frame.model}))
             case 'request_add_certificate_comment':

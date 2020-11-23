@@ -297,7 +297,21 @@ export const store = new Vuex.Store({
                 Vue.axios.post('/api/add_deal', {...deal})
                     .then(res => {
                         // commit('ADD_DEAL', res.data)
-                        console.dir(res.data)
+                        if (res.data.action_type === 'certificate') {
+                            const newCertData = {
+                                island_id: res.data.island_id,
+                                user_id: res.data.user_id,
+                                customer_id: res.data.customer_id,
+                                deal_id: res.data.id,
+                                nominal: res.data.income,
+                                start_date: res.data.cert_start_date,
+                                duration: res.data.cert_duration
+                            }
+                            dispatch('pushFrame', {
+                                type: 'request_create_certificate',
+                                model: newCertData
+                            })
+                        }
                         const frame = {
                             type: 'instruction',
                             model: {

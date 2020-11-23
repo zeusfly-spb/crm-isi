@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     island_id: {type: DataTypes.BIGINT, allowNull: false},
     user_id: {type: DataTypes.BIGINT, allowNull: false},
     customer_id: {type: DataTypes.BIGINT, allowNull: false},
+    deal_id: {type: DataTypes.BIGINT, allowNull: false},
     nominal: {type: DataTypes.INTEGER, allowNull: false},
     start_date: {type: DataTypes.DATEONLY, allowNull: false},
     duration: {type: DataTypes.INTEGER, allowNull: false},

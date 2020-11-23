@@ -84,9 +84,8 @@ module.exports = (sequelize, DataTypes) => {
         let size = this.size && this.size.name || ''
         if (this.product && this.product.description === 'good') {
           return {name: product}
-        } else {
-          return {name: `${product} ${type} ${size}`}
         }
+        return {name: `${product} ${type} ${size}`}
       },
       set (val) {
         throw new Error('Do not try to set the `insole` value!')

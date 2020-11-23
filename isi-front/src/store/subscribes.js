@@ -124,6 +124,9 @@ export default {
         }
     },
     mutations: {
+        ADD_CERTIFICATE (state, cert) {
+            state.certificates.unshift(cert)
+        },
         SET_CERTIFICATES_UPDATES (state, value) {
             state.certUpdates = value
         },
