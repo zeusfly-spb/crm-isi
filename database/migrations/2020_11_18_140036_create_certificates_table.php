@@ -18,6 +18,7 @@ class CreateCertificatesTable extends Migration
             $table->bigInteger('island_id')->index();
             $table->bigInteger('customer_id')->index();
             $table->bigInteger('user_id')->index();
+            $table->bigInteger('deal_id')->index();
             $table->integer('nominal');
             $table->date('start_date');
             $table->integer('duration');

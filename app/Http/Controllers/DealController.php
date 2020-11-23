@@ -75,9 +75,14 @@ class DealController extends Controller
             $inputs['income'] = 0;
         }
 
-        $inputs = Arr::except($inputs, ['start_date']);
+        $inputs = Arr::except($inputs, ['start_date', 'cert_start_date', 'cert_duration']);
         $deal = Deal::create($inputs);
         $deal->load('user', 'customer', 'action');
+
+        if ($deal->action_type === 'certificate') {
+            $deal->cert_start_date = $request->cert_start_date;
+            $deal->cert_duration = $request->cert_duration;
+        }
 
         if ($deal->action_type === 'subscribe') {
             $data = [

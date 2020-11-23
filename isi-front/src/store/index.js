@@ -297,6 +297,7 @@ export const store = new Vuex.Store({
                 Vue.axios.post('/api/add_deal', {...deal})
                     .then(res => {
                         // commit('ADD_DEAL', res.data)
+                        console.dir(res.data)
                         const frame = {
                             type: 'instruction',
                             model: {

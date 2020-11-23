@@ -654,6 +654,8 @@
                             is_cache: this.selectedPaymentType,
                             subscription_id: this.subscribe ? this.selectedSubscriptionId : null,
                             start_date: this.newSubscribeStartDate,
+                            cert_start_date: this.newCertificateStartDate,
+                            cert_duration: this.newCertificateDuration,
                             service_id: this.newDealActionType === 'service' ? this.selectedServiceId : null
                         })
                             .then(() => this.dialog = false)
