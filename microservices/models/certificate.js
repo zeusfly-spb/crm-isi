@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     finish_date: {
       type: DataTypes.VIRTUAL,
       get () {
-        return moment(this.start_date).add('days', this.duration).format('YYYY-MM-DD')
+        return moment(this.start_date).add(this.duration, 'days').format('YYYY-MM-DD')
       },
       set () {
         throw new Error('Do not try to set the `finish_date` value!')

@@ -46,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'deal_id',
         as: 'stockAction'
       })
+      Deal.hasOne(models.Certificate, {
+        foreignKey: 'deal_id',
+        as: 'certificate'
+      })
     }
   }
   Deal.init({
@@ -82,6 +86,9 @@ module.exports = (sequelize, DataTypes) => {
         let product = this.product && this.product.name || ''
         let type = this.type && this.type.name || ''
         let size = this.size && this.size.name || ''
+        if (this.certificate) {
+          return {name: `На ${this.certificate.duration} дн.`}
+        }
         if (this.product && this.product.description === 'good') {
           return {name: product}
         }
