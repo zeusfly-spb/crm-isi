@@ -35,6 +35,7 @@
                 {text: '#', value: null, sortable: false},
                 {text: 'Заказчик', value: 'customer_id'},
                 {text: 'Оформил', value: 'user_id'},
+                {text: 'Номинал', value: 'nominal'},
                 {text: 'Начало периода', value: 'start_date'},
                 {text: 'Срок действия (дн.)', value: 'duration', align: 'center'},
                 {text: 'Окончание периода', value: 'finish_date'},

@@ -12,6 +12,9 @@
             />
         </td>
         <td>
+            {{ certificate.nominal }}
+        </td>
+        <td>
             {{ certificate.start_date | moment('D MMMM YYYY г.') }}
         </td>
         <td

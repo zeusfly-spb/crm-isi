@@ -111,6 +111,9 @@
             active: false
         }),
         computed: {
+            isCertificate () {
+                return this.deal.action_type === 'certificate'
+            },
             ready () {
                 return [this.products, this.stockOptions.types, this.formattedSizes].every(item => !!item && item.length > 0)
             },
@@ -167,7 +170,7 @@
                 return this.$store.state.realDate
             },
             canUpdate () {
-                if (this.subscription) {
+                if (this.subscription || this.isCertificate) {
                     return false
                 }
                 return this.isSuperadmin ? true :  this.deal.user_id === this.authUser.id && this.isToday
