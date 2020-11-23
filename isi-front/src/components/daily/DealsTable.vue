@@ -97,6 +97,43 @@
                             >
                                 <v-flex xs12 sm6 md4>
                                     <sub>Начало периода</sub>
+                                    <v-menu
+                                            :close-on-content-click="false"
+                                            :nudge-right="40"
+                                            lazy
+                                            transition="scale-transition"
+                                            offset-y
+                                            full-width
+                                            min-width="290px"
+                                            v-model="certMenu"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <div
+                                                    class="date-input"
+                                            >
+                                                <v-text-field
+                                                        :label="newCertificateStartDate | moment('D MMMM YYYY г.')"
+                                                        prepend-inner-icon="event"
+                                                        readonly
+                                                        v-on="on"
+                                                >
+                                                    <template
+                                                            slot="label"
+                                                    >
+                                                        <span>
+                                                            {{ newCertificateStartDate | moment('D MMMM YYYY г.') }}
+                                                        </span>
+                                                    </template>
+                                                </v-text-field>
+                                            </div>
+                                        </template>
+                                        <v-date-picker
+                                                v-model="newCertificateStartDate" no-title scrollable
+                                                @change="certDatePicked"
+                                                locale="ru"
+                                                first-day-of-week="1"
+                                        />
+                                    </v-menu>
 
 
                                 </v-flex>
@@ -316,6 +353,9 @@
     export default {
         name: 'DealsTable',
         data: () => ({
+            certMenu: false,
+            newCertificateDuration: 0,
+            newCertificateStartDate: null,
             selectedServiceId: null,
             menu: false,
             newSubscribeStartDate: null,
@@ -525,6 +565,10 @@
                     this.newDealIncome = this.selectedSubscription.base_price
                 }
             },
+            certDatePicked (date) {
+                this.newCertificateStartDate = date
+                this.certMenu = false
+            },
             datePicked (date) {
                 this.newSubscribeStartDate = date
                 this.menu = false
@@ -654,6 +698,9 @@
             this.$store.dispatch('setCatalogs')
         },
         watch: {
+            certificate (val) {
+              this.newCertificateStartDate = val ? this.$store.state.realDate : null
+            },
             dialog (val) {
                 this.resetValidator()
                 if (!val) {
