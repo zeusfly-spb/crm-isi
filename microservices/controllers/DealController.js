@@ -109,6 +109,7 @@ const remove = async data => {
         const info = {text: `Сделка ${deal.insole} на ${deal.income}р. удалена`}
         const dealId = deal.id
         deal.stockAction ? await deal.stockAction.destroy() : null
+        deal.certificate ? await deal.certificate.destroy() : null
         await deal.destroy()
         return Promise.resolve({info, dealId})
     } catch (e) {

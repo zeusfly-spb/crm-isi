@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         let type = this.type && this.type.name || ''
         let size = this.size && this.size.name || ''
         if (this.certificate) {
-          return {name: `На ${this.certificate.duration} дн.`}
+          return {name: `Сертификат на ${this.certificate.duration} дн.`}
         }
         if (this.product && this.product.description === 'good') {
           return {name: product}
