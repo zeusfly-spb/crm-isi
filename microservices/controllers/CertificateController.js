@@ -1,12 +1,17 @@
 const moment = require('moment')
 const models = require('../models')
 const Certificate = models.Certificate
+const Deal = models.Deal
 
 const create = async data => {
     try {
         const cert = await Certificate.create({...data})
         await cert.reload({include: ['customer']})
-        const mutations = [{name: 'ADD_CERTIFICATE', data: cert}]
+        const deal = await Deal.findByPk(cert.deal_id, {include: {all: true}})
+        const mutations = [
+            {name: 'ADD_CERTIFICATE', data: cert},
+            {name: 'UPDATE_DEAL', data: deal}
+        ]
         const conditions = [{name: 'workingIslandId', compare: 'includes', value: [0, cert.island_id]}]
         const info = {text: `Оформлен сертификат номиналом ${cert.nominal}р. на ${cert.duration} дн. от ${moment(cert.start_date).format('DD/MM/YYYY')}`}
         return Promise.resolve({mutations, conditions, info})
