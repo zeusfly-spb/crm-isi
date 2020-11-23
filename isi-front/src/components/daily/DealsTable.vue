@@ -134,12 +134,17 @@
                                                 first-day-of-week="1"
                                         />
                                     </v-menu>
-
-
                                 </v-flex>
                                 <v-flex xs12 sm6 md4>
                                     <sub>Срок действия (дн.)</sub>
-
+                                    <v-text-field
+                                            type="number"
+                                            v-model="newCertificateDuration"
+                                            data-vv-as="Дней"
+                                            data-vv-name="new-cert-duration"
+                                            :error-messages="errors.collect('new-cert-duration')"
+                                            v-validate="'required|greaterThanZero'"
+                                    />
                                 </v-flex>
                             </template>
                             <template
@@ -696,10 +701,16 @@
         },
         created () {
             this.$store.dispatch('setCatalogs')
+            this.$validator.extend(
+                'greaterThanZero',{
+                    getMessage: field =>  field + ' должно быть больше 0',
+                    validate: (value) => !!value
+                });
         },
         watch: {
             certificate (val) {
-              this.newCertificateStartDate = val ? this.$store.state.realDate : null
+                this.newCertificateStartDate = val ? this.$store.state.realDate : null
+                this.newCertificateDuration = 0
             },
             dialog (val) {
                 this.resetValidator()
