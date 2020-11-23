@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'deal_id',
         as: 'certificate'
       })
+      Deal.belongsTo(models.Subscription, {
+        foreignKey: 'subscription_id',
+        as: 'subscription'
+      })
     }
   }
   Deal.init({
@@ -86,6 +90,9 @@ module.exports = (sequelize, DataTypes) => {
         let product = this.product && this.product.name || ''
         let type = this.type && this.type.name || ''
         let size = this.size && this.size.name || ''
+        if (this.subscription) {
+          return {name: this.subscription.name}
+        }
         if (this.certificate) {
           return {name: `Сертификат на ${this.certificate.duration} дн.`}
         }
