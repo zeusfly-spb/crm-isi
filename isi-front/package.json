@@ -13,7 +13,7 @@
     "favico.js": "^0.3.10",
     "jquery": "^3.4.1",
     "js-cookie": "^2.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "uuid": "^8.3.0",
     "v-blur": "^1.0.4",
     "vee-validate": "^2.2.10",
